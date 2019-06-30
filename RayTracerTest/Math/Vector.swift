@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Vector: Equatable, AdditiveArithmetic {
+struct Vector: Equatable  { AdditiveArithmetic {
     static var zero = Vector(x: 0.0, y: 0.0, z: 0.0, w: 0.0)
     
     static func *= (lhs: inout Vector, rhs: Double) {
@@ -121,9 +121,50 @@ struct Vector: Equatable, AdditiveArithmetic {
             return sqrt((x * x) + (y * y) + (z * z) + (w * w))
         }
     }
+
+    subscript(index:Int) -> Double {
+        get {
+            assert(index >= 0 && index < backing.count, "Index out of range")
+            return backing[index]
+        }
+        set {
+            assert(index >= 0 && index < backing.count, "Index out of range")
+            backing[index] = newValue
+        }
+    }
     
-    var x: Double
-    var y: Double
-    var z: Double
-    var w: Double
+    var x: Double {
+        get {
+            return backing[0]
+        }
+        set {
+            backing[0] = newValue
+        }
+    }
+    var y: Double {
+        get {
+            return backing[1]
+        }
+        set {
+            backing[1] = newValue
+        }
+    }
+    var z: Double {
+        get {
+            return backing[2]
+        }
+        set {
+            backing[2] = newValue
+        }
+    }
+    var w: Double {
+        get {
+            return backing[3]
+        }
+        set {
+            backing[3] = newValue
+        }
+    }
+
+    private var backing = Array<Double>(repeating: 0.0, count: 4)
 }
