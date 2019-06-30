@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Matrix4x4 : Equatable AdditiveArithmetic {
+struct Matrix4x4 : Equatable, AdditiveArithmetic {
     static var identity = Matrix4x4(a0: 1, a1: 0, a2: 0, a3: 0, 
          b0: 0, b1: 1, b2: 0, b3: 0, 
          c0: 0, c1: 0, c2: 1, c3: 0, 
@@ -98,12 +98,13 @@ struct Matrix4x4 : Equatable AdditiveArithmetic {
     }
 
     static func *= (lhs: inout Matrix4x4, rhs: Matrix4x4) {
-        for row in 0...3 {
-            for col in 0...3 {
-                lhs[col, row] = lhs[row, 0] * rhs[0, col] +
-                                lhs[row, 1] * rhs[1, col] +
-                                lhs[row, 2] * rhs[2, col] +
-                                lhs[row, 3] * rhs[3, col]
+        let a = lhs
+        for i in 0...3 {
+            for j in 0...3 {
+                lhs[i, j] = 0
+                for k in 0...3 {
+                    lhs[i, j] += a[i, k] * rhs[k, j]
+                }
             }
         }
     }

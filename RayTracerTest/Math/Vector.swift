@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Vector: Equatable  { AdditiveArithmetic {
+struct Vector: Equatable, AdditiveArithmetic {
     static var zero = Vector(x: 0.0, y: 0.0, z: 0.0, w: 0.0)
     
     static func *= (lhs: inout Vector, rhs: Double) {

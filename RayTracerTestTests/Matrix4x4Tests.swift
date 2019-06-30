@@ -32,41 +32,62 @@ class Matrix4x4Tests: XCTestCase {
 
         XCTAssertEqual(m1, m2)
 
-        let m2 = Matrix4x4(a0: 2, a1: 3, a2: 4, a3: 5, 
+        let m3 = Matrix4x4(a0: 2, a1: 3, a2: 4, a3: 5,
          b0: 6, b1: 7, b2: 8, b3: 9, 
          c0: 8, c1: 7, c2: 6, c3: 5, 
          d0: 4, d1: 3, d2: 2, d3: 1)
 
-        XCTAssertNotEuqal(m1, m3)
+        XCTAssertNotEqual(m1, m3)
     }
 
     func testMatrixMultiplicate() {
-        let m1 = Matrix4x4(a0: 1, a1: 2, a2: 3, a3: 4, 
-         b0: 5, b1: 6, b2: 7, b3: 8, 
-         c0: 9, c1: 8, c2: 7, c3: 6, 
+        let m1 = Matrix4x4(a0: 1, a1: 2, a2: 3, a3: 4,
+         b0: 5, b1: 6, b2: 7, b3: 8,
+         c0: 9, c1: 8, c2: 7, c3: 6,
          d0: 5, d1: 4, d2: 3, d3: 2)
 
-        let m2 = Matrix4x4(a0: -2, a1: 1, a2: 2, a3: 3, 
-         b0: 3, b1: 2, b2: 1, b3: -1, 
-         c0: 4, c1: 3, c2: 6, c3: 5, 
+        let m2 = Matrix4x4(a0: -2, a1: 1, a2: 2, a3: 3,
+         b0: 3, b1: 2, b2: 1, b3: -1,
+         c0: 4, c1: 3, c2: 6, c3: 5,
          d0: 1, d1: 2, d2: 7, d3: 8)
 
-        let product = Matrix4x4(a0: 20, a1: 22, a2: 50, a3: 48, 
-         b0: 44, b1: 54, b2: 114, b3: 108, 
-         c0: 40, c1: 58, c2: 110, c3: 102, 
+        let product = Matrix4x4(a0: 20, a1: 22, a2: 50, a3: 48,
+         b0: 44, b1: 54, b2: 114, b3: 108,
+         c0: 40, c1: 58, c2: 110, c3: 102,
          d0: 16, d1: 26, d2: 46, d3: 42)
-
+        
         XCTAssertEqual(m1 * m2, product)
     }
 
     func testMatrixIdentiy() {
-        let m1 = Matrix4x4(a0: 0 a1: 1, a2: 2, a3: 4, 
+        let m1 = Matrix4x4(a0: 0, a1: 1, a2: 2, a3: 4,
          b0: 1, b1: 2, b2: 4, b3: 8, 
          c0: 2, c1: 4, c2: 8, c3: 16, 
          d0: 4, d1: 8, d2: 16, d3: 32)
 
-        let v1 = Vector(x: 1, y: 2, z: 3, w: 4)
+        // let v1 = Vector(x: 1, y: 2, z: 3, w: 4)
 
-        XCTAssertEqual(m1 * v1, v1)
+        XCTAssertEqual(m1 * Matrix4x4.identity, m1)
+    }
+    
+    func testMatrixVectorMultiplication() {
+//        cenario: A matrix multiplied by a tuple
+//        Given the following matrix A:
+//        | 1 | 2 | 3 | 4 |
+//        | 2 | 4 | 4 | 2 |
+//        | 8 | 6 | 4 | 1 |
+//        | 0 | 0 | 0 | 1 |
+//        And b â† tuple(1, 2, 3, 1)
+//        Then A * b = tuple(18, 24, 33, 1)
+        
+        let m1 = Matrix4x4(a0: 1, a1: 2, a2: 3, a3: 4,
+                           b0: 2, b1: 4, b2: 4, b3: 2,
+                           c0: 8, c1: 6, c2: 4, c3: 1,
+                           d0: 0, d1: 0, d2: 0, d3: 1)
+        
+        let v1 = Vector(x: 1, y: 2, z: 3, w: 1)
+        let product = Vector(x: 18, y: 24, z: 33, w: 1)
+        
+        XCTAssertEqual(m1 * v1, product)
     }
 }
