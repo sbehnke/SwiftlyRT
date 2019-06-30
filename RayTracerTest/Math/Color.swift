@@ -11,7 +11,7 @@ import Foundation
 struct Color: Equatable, AdditiveArithmetic {
     static var zero = Color(r: 0.0, g: 0.0, b: 0.0/*, a: 1.0 */)
     
-    static func *= (lhs: inout Color, rhs: Double) {
+    static func *= (lhs: inout Color, rhs: Float) {
         lhs.r *= rhs;
         lhs.g *= rhs;
         lhs.b *= rhs;
@@ -24,7 +24,7 @@ struct Color: Equatable, AdditiveArithmetic {
         lhs.b *= rhs.b
     }
     
-    static func /= (lhs: inout Color, rhs: Double) {
+    static func /= (lhs: inout Color, rhs: Float) {
         lhs.r /= rhs;
         lhs.g /= rhs;
         lhs.b /= rhs;
@@ -57,7 +57,7 @@ struct Color: Equatable, AdditiveArithmetic {
         return lhs
     }
     
-    static func * (lhs: Color, rhs: Double) -> Color {
+    static func * (lhs: Color, rhs: Float) -> Color {
         var lhs = lhs
         lhs *= rhs
         return lhs
@@ -69,7 +69,7 @@ struct Color: Equatable, AdditiveArithmetic {
         return lhs
     }
     
-    static func / (lhs: Color, rhs: Double) -> Color {
+    static func / (lhs: Color, rhs: Float) -> Color {
         var lhs = lhs
         lhs /= rhs
         return lhs
@@ -82,12 +82,12 @@ struct Color: Equatable, AdditiveArithmetic {
             almostEqual(lhs: lhs.a, rhs: rhs.a) */
     }
     
-    static func almostEqual(lhs: Double, rhs: Double) -> Bool {
-        let epsilon = 0.00001
+    static func almostEqual(lhs: Float, rhs: Float) -> Bool {
+        let epsilon = Float(0.00001)
         return abs(lhs - rhs) < epsilon
     }
     
-    init(r: Double = 0.0, g: Double = 0.0, b: Double = 0.0) {
+    init(r: Float = 0.0, g: Float = 0.0, b: Float = 0.0) {
         self.r = r
         self.g = g
         self.b = b
@@ -107,14 +107,14 @@ struct Color: Equatable, AdditiveArithmetic {
 //        a /= mag
     }
     
-    static func dot(lhs: Color, rhs: Color) -> Double {
+    static func dot(lhs: Color, rhs: Color) -> Float {
         return lhs.r * rhs.r +
             lhs.g * rhs.g +
             lhs.b * rhs.b /* +
             lhs.a * rhs.a */
     }
     
-    func dot(rhs: Color) -> Double {
+    func dot(rhs: Color) -> Float {
         return Color.dot(lhs: self, rhs: rhs)
     }
     
@@ -128,14 +128,42 @@ struct Color: Equatable, AdditiveArithmetic {
         return Color.cross(lhs: self, rhs: rhs)
     }
     
-    var magnitude : Double {
+    var magnitude : Float {
         get {
             return sqrt((r * r) + (g * g) + (b * b)/* + (a * a) */)
         }
     }
     
-    var r: Double
-    var g: Double
-    var b: Double
-//    var a: Double
+    var rByte : UInt8 {
+        get {
+            return UInt8(round(255.0 * clamp(value: r)))
+        }
+    }
+    
+    var bByte : UInt8 {
+        get {
+            return UInt8(round(255.0 * clamp(value: b)))
+        }
+    }
+    
+    var gByte : UInt8 {
+        get {
+            return UInt8(round(255.0 * clamp(value: g)))
+        }
+    }
+    
+    private func clamp(value : Float) -> Float {
+        if (value > 1.0) {
+            return 1.0
+        } else if (value < 0.0) {
+            return 0
+        }
+        
+        return value
+    }
+    
+    var r: Float
+    var g: Float
+    var b: Float
+//    var a: Float
 }

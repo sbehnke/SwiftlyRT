@@ -9,11 +9,11 @@
 import Foundation
 
 class Environment {
-    init(gravity: Vector, wind: Vector) {
+    init(gravity: Vector4, wind: Vector4) {
         self.gravity = gravity
         self.wind = wind
     }
     
-    var gravity = Vector()
-    var wind = Vector()
+    var gravity = Vector4()
+    var wind = Vector4()
 }

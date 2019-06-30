@@ -47,9 +47,9 @@ class Canvas {
         var row = String()
         
         for pixel in pixels {
-            let r = Int(round(255.0 * clamp(value: pixel.r)))
-            let g = Int(round(255.0 * clamp(value: pixel.g)))
-            let b = Int(round(255.0 * clamp(value: pixel.b)))
+            let r = pixel.rByte
+            let g = pixel.gByte
+            let b = pixel.bByte
             
             if (row.count + String(r).count >= maxRow) {
                 row.removeLast()

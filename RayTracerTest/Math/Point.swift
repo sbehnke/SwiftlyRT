@@ -32,7 +32,7 @@ struct Point: Equatable, AdditiveArithmetic {
         lhs.w += rhs.w
     }
     
-    static func += (lhs: inout Point, rhs: Vector) {
+    static func += (lhs: inout Point, rhs: Vector4) {
         lhs.x += rhs.x
         lhs.y += rhs.y
         lhs.z += rhs.z
@@ -51,7 +51,7 @@ struct Point: Equatable, AdditiveArithmetic {
         return lhs
     }
     
-    static func + (lhs: Point, rhs: Vector) -> Point {
+    static func + (lhs: Point, rhs: Vector4) -> Point {
         var lhs = lhs
         lhs += rhs
         return lhs

@@ -8,62 +8,62 @@
 
 import Foundation
 
-struct Vector: Equatable, AdditiveArithmetic {
-    static var zero = Vector(x: 0.0, y: 0.0, z: 0.0, w: 0.0)
+struct Vector4: Equatable, AdditiveArithmetic {
+    static var zero = Vector4(x: 0.0, y: 0.0, z: 0.0, w: 0.0)
     
-    static func *= (lhs: inout Vector, rhs: Double) {
+    static func *= (lhs: inout Vector4, rhs: Double) {
         lhs.x *= rhs;
         lhs.y *= rhs;
         lhs.z *= rhs;
         lhs.w *= rhs;
     }
     
-    static func /= (lhs: inout Vector, rhs: Double) {
+    static func /= (lhs: inout Vector4, rhs: Double) {
         lhs.x /= rhs;
         lhs.y /= rhs;
         lhs.z /= rhs;
         lhs.w /= rhs;
     }
     
-    static func += (lhs: inout Vector, rhs: Vector) {
+    static func += (lhs: inout Vector4, rhs: Vector4) {
         lhs.x += rhs.x
         lhs.y += rhs.y
         lhs.z += rhs.z
         lhs.w += rhs.w
     }
     
-    static func -= (lhs: inout Vector, rhs: Vector) {
+    static func -= (lhs: inout Vector4, rhs: Vector4) {
         lhs.x -= rhs.x
         lhs.y -= rhs.y
         lhs.z -= rhs.z
         lhs.w -= rhs.w
     }
     
-    static func + (lhs: Vector, rhs: Vector) -> Vector {
+    static func + (lhs: Vector4, rhs: Vector4) -> Vector4 {
         var lhs = lhs
         lhs += rhs
         return lhs
     }
     
-    static func - (lhs: Vector, rhs: Vector) -> Vector {
+    static func - (lhs: Vector4, rhs: Vector4) -> Vector4 {
         var lhs = lhs
         lhs -= rhs
         return lhs
     }
     
-    static func * (lhs: Vector, rhs: Double) -> Vector {
+    static func * (lhs: Vector4, rhs: Double) -> Vector4 {
         var lhs = lhs
         lhs *= rhs
         return lhs
     }
     
-    static func / (lhs: Vector, rhs: Double) -> Vector {
+    static func / (lhs: Vector4, rhs: Double) -> Vector4 {
         var lhs = lhs
         lhs /= rhs
         return lhs
     }
     
-    static func == (lhs: Vector, rhs: Vector) -> Bool {
+    static func == (lhs: Vector4, rhs: Vector4) -> Bool {
         return almostEqual(lhs: lhs.x, rhs: rhs.x) &&
             almostEqual(lhs: lhs.y, rhs: rhs.y) &&
             almostEqual(lhs: lhs.z, rhs: rhs.z) &&
@@ -82,9 +82,9 @@ struct Vector: Equatable, AdditiveArithmetic {
         self.w = w
     }
     
-    static func normalize(rhs: Vector) -> Vector {
+    static func normalize(rhs: Vector4) -> Vector4 {
         let mag = rhs.magnitude;
-        return Vector(x: rhs.x / mag, y: rhs.y / mag, z: rhs.z / mag, w: rhs.w / mag)
+        return Vector4(x: rhs.x / mag, y: rhs.y / mag, z: rhs.z / mag, w: rhs.w / mag)
     }
     
     mutating func normalize() {
@@ -95,25 +95,25 @@ struct Vector: Equatable, AdditiveArithmetic {
         w /= mag
     }
     
-    static func dot(lhs: Vector, rhs: Vector) -> Double {
+    static func dot(lhs: Vector4, rhs: Vector4) -> Double {
         return lhs.x * rhs.x +
                lhs.y * rhs.y +
                lhs.z * rhs.z +
                lhs.w * rhs.w
     }
     
-    func dot(rhs: Vector) -> Double {
-        return Vector.dot(lhs: self, rhs: rhs)
+    func dot(rhs: Vector4) -> Double {
+        return Vector4.dot(lhs: self, rhs: rhs)
     }
     
-    static func cross(lhs: Vector, rhs: Vector) -> Vector {
-        return Vector(x: lhs.y * rhs.z - lhs.z * rhs.y,
+    static func cross(lhs: Vector4, rhs: Vector4) -> Vector4 {
+        return Vector4(x: lhs.y * rhs.z - lhs.z * rhs.y,
                      y: lhs.z * rhs.x - lhs.x * rhs.z,
                      z: lhs.x * rhs.y - lhs.y * rhs.x)
     }
     
-    func cross(rhs: Vector) -> Vector {
-        return Vector.cross(lhs: self, rhs: rhs)
+    func cross(rhs: Vector4) -> Vector4 {
+        return Vector4.cross(lhs: self, rhs: rhs)
     }
     
     var magnitude : Double {

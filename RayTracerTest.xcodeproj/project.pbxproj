@@ -9,13 +9,17 @@
 /* Begin PBXBuildFile section */
 		64D1FB2022C8731700AA05AE /* Matrix4x4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB1F22C8731700AA05AE /* Matrix4x4.swift */; };
 		64D1FB2222C8732200AA05AE /* Matrix4x4Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB2122C8732200AA05AE /* Matrix4x4Tests.swift */; };
+		64D1FB2422C9035100AA05AE /* Matrix2x2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB2322C9035100AA05AE /* Matrix2x2.swift */; };
+		64D1FB2622C9035C00AA05AE /* Matrix3x3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB2522C9035C00AA05AE /* Matrix3x3.swift */; };
+		64D1FB2822C90F4D00AA05AE /* Matrix2x2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB2722C90F4D00AA05AE /* Matrix2x2Tests.swift */; };
+		64D1FB2B22C911FD00AA05AE /* Matrix3x3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB2A22C911FD00AA05AE /* Matrix3x3Tests.swift */; };
 		64EE917922C7D18700FB2699 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE917822C7D18700FB2699 /* AppDelegate.swift */; };
 		64EE917B22C7D18700FB2699 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE917A22C7D18700FB2699 /* ViewController.swift */; };
 		64EE917D22C7D18900FB2699 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64EE917C22C7D18900FB2699 /* Assets.xcassets */; };
 		64EE918022C7D18900FB2699 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64EE917E22C7D18900FB2699 /* Main.storyboard */; };
 		64EE918C22C7D18900FB2699 /* RayTracerTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE918B22C7D18900FB2699 /* RayTracerTestTests.swift */; };
 		64EE919722C7D18900FB2699 /* RayTracerTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE919622C7D18900FB2699 /* RayTracerTestUITests.swift */; };
-		64EE91A522C7D1B000FB2699 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91A422C7D1B000FB2699 /* Vector.swift */; };
+		64EE91A522C7D1B000FB2699 /* Vector4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91A422C7D1B000FB2699 /* Vector4.swift */; };
 		64EE91A722C7EE2A00FB2699 /* VectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91A622C7EE2900FB2699 /* VectorTests.swift */; };
 		64EE91A922C7EF9A00FB2699 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91A822C7EF9A00FB2699 /* Point.swift */; };
 		64EE91AB22C7F04300FB2699 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91AA22C7F04300FB2699 /* Color.swift */; };
@@ -46,6 +50,10 @@
 /* Begin PBXFileReference section */
 		64D1FB1F22C8731700AA05AE /* Matrix4x4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix4x4.swift; sourceTree = "<group>"; };
 		64D1FB2122C8732200AA05AE /* Matrix4x4Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix4x4Tests.swift; sourceTree = "<group>"; };
+		64D1FB2322C9035100AA05AE /* Matrix2x2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix2x2.swift; sourceTree = "<group>"; };
+		64D1FB2522C9035C00AA05AE /* Matrix3x3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix3x3.swift; sourceTree = "<group>"; };
+		64D1FB2722C90F4D00AA05AE /* Matrix2x2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix2x2Tests.swift; sourceTree = "<group>"; };
+		64D1FB2A22C911FD00AA05AE /* Matrix3x3Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix3x3Tests.swift; sourceTree = "<group>"; };
 		64EE917522C7D18700FB2699 /* RayTracerTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RayTracerTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64EE917822C7D18700FB2699 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64EE917A22C7D18700FB2699 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -59,7 +67,7 @@
 		64EE919222C7D18900FB2699 /* RayTracerTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RayTracerTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		64EE919622C7D18900FB2699 /* RayTracerTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RayTracerTestUITests.swift; sourceTree = "<group>"; };
 		64EE919822C7D18900FB2699 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		64EE91A422C7D1B000FB2699 /* Vector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
+		64EE91A422C7D1B000FB2699 /* Vector4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector4.swift; sourceTree = "<group>"; };
 		64EE91A622C7EE2900FB2699 /* VectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorTests.swift; sourceTree = "<group>"; };
 		64EE91A822C7EF9A00FB2699 /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
 		64EE91AA22C7F04300FB2699 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -135,10 +143,12 @@
 		64EE918A22C7D18900FB2699 /* RayTracerTestTests */ = {
 			isa = PBXGroup;
 			children = (
-				64D1FB2122C8732200AA05AE /* Matrix4x4Tests.swift */,
 				64EE91B022C7F49F00FB2699 /* CanvasTests.swift */,
 				64EE91AC22C7F21F00FB2699 /* ColorTests.swift */,
 				64EE918D22C7D18900FB2699 /* Info.plist */,
+				64D1FB2722C90F4D00AA05AE /* Matrix2x2Tests.swift */,
+				64D1FB2A22C911FD00AA05AE /* Matrix3x3Tests.swift */,
+				64D1FB2122C8732200AA05AE /* Matrix4x4Tests.swift */,
 				64EE918B22C7D18900FB2699 /* RayTracerTestTests.swift */,
 				64EE91A622C7EE2900FB2699 /* VectorTests.swift */,
 			);
@@ -157,10 +167,12 @@
 		64EE91B222C8125200FB2699 /* Math */ = {
 			isa = PBXGroup;
 			children = (
-				64D1FB1F22C8731700AA05AE /* Matrix4x4.swift */,
-				64EE91A422C7D1B000FB2699 /* Vector.swift */,
-				64EE91A822C7EF9A00FB2699 /* Point.swift */,
 				64EE91AA22C7F04300FB2699 /* Color.swift */,
+				64D1FB2322C9035100AA05AE /* Matrix2x2.swift */,
+				64D1FB2522C9035C00AA05AE /* Matrix3x3.swift */,
+				64D1FB1F22C8731700AA05AE /* Matrix4x4.swift */,
+				64EE91A822C7EF9A00FB2699 /* Point.swift */,
+				64EE91A422C7D1B000FB2699 /* Vector4.swift */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -299,9 +311,11 @@
 				64D1FB2022C8731700AA05AE /* Matrix4x4.swift in Sources */,
 				64EE91B622C813AF00FB2699 /* Environment.swift in Sources */,
 				64EE917B22C7D18700FB2699 /* ViewController.swift in Sources */,
-				64EE91A522C7D1B000FB2699 /* Vector.swift in Sources */,
+				64EE91A522C7D1B000FB2699 /* Vector4.swift in Sources */,
 				64EE91AB22C7F04300FB2699 /* Color.swift in Sources */,
 				64EE917922C7D18700FB2699 /* AppDelegate.swift in Sources */,
+				64D1FB2422C9035100AA05AE /* Matrix2x2.swift in Sources */,
+				64D1FB2622C9035C00AA05AE /* Matrix3x3.swift in Sources */,
 				64EE91B422C8139C00FB2699 /* Projecile.swift in Sources */,
 				64EE91AF22C7F2F000FB2699 /* Canvas.swift in Sources */,
 			);
@@ -311,11 +325,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64D1FB2B22C911FD00AA05AE /* Matrix3x3Tests.swift in Sources */,
 				64EE91A722C7EE2A00FB2699 /* VectorTests.swift in Sources */,
 				64EE91AD22C7F21F00FB2699 /* ColorTests.swift in Sources */,
 				64EE918C22C7D18900FB2699 /* RayTracerTestTests.swift in Sources */,
 				64D1FB2222C8732200AA05AE /* Matrix4x4Tests.swift in Sources */,
 				64EE91B122C7F49F00FB2699 /* CanvasTests.swift in Sources */,
+				64D1FB2822C90F4D00AA05AE /* Matrix2x2Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

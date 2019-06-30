@@ -16,13 +16,18 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         
     static var zero = Matrix4x4()
 
-    let rows = 4
-    let columns = 4
-
+    static let rows = 4
+    static let columns = 4
+    
     init() {
 
     }
 
+    init(values: Array<Double>) {
+        assert(values.count == Matrix4x4.rows * Matrix4x4.columns)
+        backing = values
+    }
+    
     init(a0: Double, a1: Double, a2: Double, a3: Double, 
          b0: Double, b1: Double, b2: Double, b3: Double, 
          c0: Double, c1: Double, c2: Double, c3: Double, 
@@ -57,9 +62,9 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
     }
 
     static func *= (lhs: inout Matrix4x4, rhs: Double) {
-        for row in 0...3 {
-            for col in 0...3 {
-                lhs[col, row] = lhs[row, col] * rhs
+        for row in 0..<rows {
+            for col in 0..<columns {
+                lhs[col, row] *= rhs
             }
         }
     }
@@ -71,9 +76,9 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
     }
     
     static func /= (lhs: inout Matrix4x4, rhs: Double) {
-        for row in 0...3 {
-            for col in 0...3 {
-                lhs[col, row] = lhs[row, col] / rhs
+        for row in 0..<rows {
+            for col in 0..<columns {
+                lhs[row, col] /= rhs
             }
         }
     }
@@ -84,14 +89,15 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return lhs
     }
 
-    static func * (lhs: Matrix4x4, rhs: Vector) -> Vector {
-        var value = Vector()
+    static func * (lhs: Matrix4x4, rhs: Vector4) -> Vector4 {
+        var value = Vector4()
 
-        for row in 0...3 {
-                value[row] = lhs[0, row] * rhs[0] +
-                             lhs[1, row] * rhs[1] +
-                             lhs[2, row] * rhs[2] +
-                             lhs[3, row] * rhs[3]
+        for row in 0..<rows {
+            var sum = 0.0
+            for col in 0..<columns {
+                sum += lhs[row, col] * rhs[col]
+            }
+            value[row] = sum
         }
 
         return value
@@ -99,10 +105,10 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
 
     static func *= (lhs: inout Matrix4x4, rhs: Matrix4x4) {
         let a = lhs
-        for i in 0...3 {
-            for j in 0...3 {
+        for i in 0..<rows {
+            for j in 0..<columns {
                 lhs[i, j] = 0
-                for k in 0...3 {
+                for k in 0..<rows {
                     lhs[i, j] += a[i, k] * rhs[k, j]
                 }
             }
@@ -116,8 +122,8 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
     }
 
     static func += (lhs: inout Matrix4x4, rhs: Matrix4x4) {
-        for row in 0...3 {
-            for col in 0...3 {
+        for row in 0..<rows {
+            for col in 0..<columns {
                 lhs[col, row] = lhs[row, col] + rhs[row, col]
             }
         }
@@ -130,8 +136,8 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
     }
 
     static func -= (lhs: inout Matrix4x4, rhs: Matrix4x4) {
-        for row in 0...3 {
-            for col in 0...3 {
+        for row in 0..<rows {
+            for col in 0..<columns {
                 lhs[col, row] = lhs[row, col] - rhs[row, col]
             }
         }
@@ -144,7 +150,79 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
     }
 
     func indexIsValid(row: Int, column: Int) -> Bool {
-        return row >= 0 && row < rows && column >= 0 && column < columns
+        return row >= 0 && row < Matrix4x4.rows && column >= 0 && column < Matrix4x4.columns
+    }
+    
+    func transpose() -> Matrix4x4 {
+        var output = Matrix4x4()
+        
+        for row in 0..<Matrix4x4.rows {
+            for col in 0..<Matrix4x4.columns {
+                output[row,col] = self[col,row]
+            }
+        }
+        
+        return output
+    }
+    
+    func subMatrix(row: Int, column: Int) -> Matrix3x3 {
+        assert(indexIsValid(row: row, column: column))
+        var values = Array<Double>()
+        
+        for i in 0..<Matrix4x4.rows {
+            for j in 0..<Matrix4x4.columns {
+                if (i == row || column == j) {
+                    continue
+                }
+                
+                values.append(self[i, j])
+            }
+        }
+        
+        return Matrix3x3(values: values)
+    }
+    
+    func minor(row: Int, column: Int) -> Double {
+        assert(indexIsValid(row: row, column: column))
+        return subMatrix(row: row, column: column).determinate()
+    }
+    
+    func cofactor(row: Int, column: Int) -> Double {
+        let m1 = Matrix4x4(a0: 1, a1: -1, a2: 1, a3: -1,
+                           b0: -1, b1: 1, b2: -1, b3: 1,
+                           c0: 1, c1: -1, c2: 1, c3: -1,
+                           d0: -1, d1: 1, d2: -1, d3: 1)
+        
+        assert(indexIsValid(row: row, column: column))
+        return subMatrix(row: row, column: column).determinate() * m1[row, column]
+    }
+    
+    func determinate() -> Double {
+        var sum = 0.0
+        for i in 0..<Matrix4x4.columns {
+            sum += self[0, i] * cofactor(row: 0, column: i)
+        }
+        return sum
+    }
+    
+    func canInvert() -> Bool {
+        return determinate() != 0
+    }
+    
+    func invert() -> Matrix4x4 {
+        assert(canInvert())
+        var result = Matrix4x4()
+        let d = determinate()
+
+        for i in 0..<Matrix4x4.rows {
+            for j in 0..<Matrix4x4.columns {
+                let c = cofactor(row: i, column: j)
+                result[j, i] = c
+            }
+        }
+                
+        result /= d
+        return result
     }
 
     subscript(index:Int) -> Double {
@@ -161,12 +239,28 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
     subscript(row: Int, column: Int) -> Double {
         get {
             assert(indexIsValid(row: row, column: column), "Index out of range")
-            return backing[(row * columns) + column]
+            return backing[(row * Matrix4x4.columns) + column]
         }
         set {
             assert(indexIsValid(row: row, column: column), "Index out of range")
-            backing[(row * columns) + column] = newValue
+            backing[(row * Matrix4x4.columns) + column] = newValue
         }
+    }
+    
+    func describe() -> String {
+        var output = String()
+        
+        output += "[ "
+        for row in 0..<Matrix4x4.rows {
+            for col in 0..<Matrix4x4.columns {
+                output += String(self[row, col]) + ", "
+            }
+            output += "\n  "
+        }
+        output.removeLast(5)
+        output += " ]"
+        
+        return output
     }
 
     var ma_0 : Double {
@@ -301,5 +395,5 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         }
     }
 
-    private var backing = Array<Double>(repeating: 0.0, count: 4 * 4)
+    private var backing = Array<Double>(repeating: 0.0, count: rows * columns)
 }
