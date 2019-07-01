@@ -18,7 +18,7 @@ class Matrix2x2Tests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
+    
     func testDeterminate() {
         let m1 = Matrix2x2(a0: 1, a1: 5,
                            b0: -3, b1: 2)
