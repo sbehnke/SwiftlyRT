@@ -55,7 +55,7 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
 
     static func == (lhs: Matrix4x4, rhs: Matrix4x4) -> Bool {
         for i in 0..<(Matrix4x4.rows * Matrix4x4.columns) {
-            if (!Vector4.almostEqual(lhs: lhs[i], rhs: rhs[i])) {
+            if (!Tuple.almostEqual(lhs: lhs[i], rhs: rhs[i])) {
                 return false
             }
         }
@@ -91,8 +91,8 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return lhs
     }
 
-    static func * (lhs: Matrix4x4, rhs: Vector4) -> Vector4 {
-        var value = Vector4()
+    static func * (lhs: Matrix4x4, rhs: Tuple) -> Tuple {
+        var value = Tuple.zero
 
         for row in 0..<rows {
             var sum = 0.0

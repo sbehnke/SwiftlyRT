@@ -8,63 +8,101 @@
 
 import Foundation
 
-struct Vector4: Equatable, AdditiveArithmetic {
-    static var zero = Vector4(x: 0.0, y: 0.0, z: 0.0, w: 0.0)
-    static var pointZero = Vector4(x: 0.0, y: 0.0, z: 0.0, w: 1.0)
+struct Tuple: Equatable, AdditiveArithmetic {
+    static var zero = Tuple(x: 0.0, y: 0.0, z: 0.0, w: 0.0)
     
-    static func *= (lhs: inout Vector4, rhs: Double) {
+    public static func Vector() -> Tuple {
+        return Tuple(x: 0, y: 0, z: 0, w: 0)
+    }
+    
+    public static func Vector(x: Double, y: Double, z: Double) -> Tuple {
+        return Tuple(x: x, y: y, z: z, w: 0)
+    }
+    
+    public static func Vector(x: Double, y: Double, z: Double, w: Double) -> Tuple {
+        return Tuple(x: x, y: y, z: z, w: w)
+    }
+    
+    public static func Point() -> Tuple {
+        return Tuple(x: 0, y: 0, z: 0, w: 1)
+    }
+    
+    public static func Point(x: Double, y: Double, z: Double) -> Tuple {
+        return Tuple(x: x, y: y, z: z, w: 1.0)
+    }
+    
+    public static func Point(x: Double, y: Double, z: Double, w: Double) -> Tuple {
+        return Tuple(x: x, y: y, z: z, w: w)
+    }
+    
+    func isVector() -> Bool {
+        return w == 0.0
+    }
+    
+    func isPoint() -> Bool {
+        return w == 1.0
+    }
+    
+    internal init(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0, w: Double = 0.0) {
+        self.x = x
+        self.y = y
+        self.z = z
+        self.w = w
+    }
+    
+    static func *= (lhs: inout Tuple, rhs: Double) {
         lhs.x *= rhs;
         lhs.y *= rhs;
         lhs.z *= rhs;
         lhs.w *= rhs;
     }
     
-    static func /= (lhs: inout Vector4, rhs: Double) {
+    static func /= (lhs: inout Tuple, rhs: Double) {
         lhs.x /= rhs;
         lhs.y /= rhs;
         lhs.z /= rhs;
         lhs.w /= rhs;
     }
     
-    static func += (lhs: inout Vector4, rhs: Vector4) {
+    static func += (lhs: inout Tuple, rhs: Tuple) {
         lhs.x += rhs.x
         lhs.y += rhs.y
         lhs.z += rhs.z
         lhs.w += rhs.w
     }
     
-    static func -= (lhs: inout Vector4, rhs: Vector4) {
+    static func -= (lhs: inout Tuple, rhs: Tuple) {
         lhs.x -= rhs.x
         lhs.y -= rhs.y
         lhs.z -= rhs.z
         lhs.w -= rhs.w
     }
     
-    static func + (lhs: Vector4, rhs: Vector4) -> Vector4 {
+    static func + (lhs: Tuple, rhs: Tuple) -> Tuple {
         var lhs = lhs
         lhs += rhs
         return lhs
     }
     
-    static func - (lhs: Vector4, rhs: Vector4) -> Vector4 {
+    static func - (lhs: Tuple, rhs: Tuple) -> Tuple {
         var lhs = lhs
         lhs -= rhs
         return lhs
     }
     
-    static func * (lhs: Vector4, rhs: Double) -> Vector4 {
+    static func * (lhs: Tuple, rhs: Double) -> Tuple {
         var lhs = lhs
         lhs *= rhs
         return lhs
     }
     
-    static func / (lhs: Vector4, rhs: Double) -> Vector4 {
+    static func / (lhs: Tuple, rhs: Double) -> Tuple {
         var lhs = lhs
         lhs /= rhs
         return lhs
     }
     
-    static func == (lhs: Vector4, rhs: Vector4) -> Bool {
+    static func == (lhs: Tuple, rhs: Tuple) -> Bool {
         return almostEqual(lhs: lhs.x, rhs: rhs.x) &&
             almostEqual(lhs: lhs.y, rhs: rhs.y) &&
             almostEqual(lhs: lhs.z, rhs: rhs.z) &&
@@ -76,16 +114,9 @@ struct Vector4: Equatable, AdditiveArithmetic {
         return abs(lhs - rhs) < epsilon
     }
     
-    init(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0, w: Double = 0.0) {
-        self.x = x
-        self.y = y
-        self.z = z
-        self.w = w
-    }
-    
-    static func normalize(rhs: Vector4) -> Vector4 {
+    static func normalize(rhs: Tuple) -> Tuple {
         let mag = rhs.magnitude;
-        return Vector4(x: rhs.x / mag, y: rhs.y / mag, z: rhs.z / mag, w: rhs.w / mag)
+        return Tuple(x: rhs.x / mag, y: rhs.y / mag, z: rhs.z / mag, w: rhs.w / mag)
     }
     
     mutating func normalize() {
@@ -96,25 +127,25 @@ struct Vector4: Equatable, AdditiveArithmetic {
         w /= mag
     }
     
-    static func dot(lhs: Vector4, rhs: Vector4) -> Double {
+    static func dot(lhs: Tuple, rhs: Tuple) -> Double {
         return lhs.x * rhs.x +
                lhs.y * rhs.y +
                lhs.z * rhs.z +
                lhs.w * rhs.w
     }
     
-    func dot(rhs: Vector4) -> Double {
-        return Vector4.dot(lhs: self, rhs: rhs)
+    func dot(rhs: Tuple) -> Double {
+        return Tuple.dot(lhs: self, rhs: rhs)
     }
     
-    static func cross(lhs: Vector4, rhs: Vector4) -> Vector4 {
-        return Vector4(x: lhs.y * rhs.z - lhs.z * rhs.y,
+    static func cross(lhs: Tuple, rhs: Tuple) -> Tuple {
+        return Tuple(x: lhs.y * rhs.z - lhs.z * rhs.y,
                      y: lhs.z * rhs.x - lhs.x * rhs.z,
                      z: lhs.x * rhs.y - lhs.y * rhs.x)
     }
     
-    func cross(rhs: Vector4) -> Vector4 {
-        return Vector4.cross(lhs: self, rhs: rhs)
+    func cross(rhs: Tuple) -> Tuple {
+        return Tuple.cross(lhs: self, rhs: rhs)
     }
     
     var magnitude : Double {

@@ -38,7 +38,7 @@ struct Matrix2x2 : Equatable, AdditiveArithmetic {
     
     static func == (lhs: Matrix2x2, rhs: Matrix2x2) -> Bool {
         for i in 0..<(Matrix2x2.rows * Matrix2x2.columns) {
-            if (!Vector4.almostEqual(lhs: lhs[i], rhs: rhs[i])) {
+            if (!Tuple.almostEqual(lhs: lhs[i], rhs: rhs[i])) {
                 return false
             }
         }
@@ -179,6 +179,24 @@ struct Matrix2x2 : Equatable, AdditiveArithmetic {
     
     func canInvert() -> Bool {
         return determinate() != 0
+    }
+    
+    var description: String {
+        get {
+            var output = String()
+            
+            output += "[ "
+            for row in 0..<Matrix2x2.rows {
+                for col in 0..<Matrix2x2.columns {
+                    output += String(self[row, col]) + ", "
+                }
+                output += "\n  "
+            }
+            output.removeLast(5)
+            output += " ]"
+            
+            return output
+        }
     }
     
     private var backing = Array<Double>(repeating: 0.0, count: Matrix2x2.rows * Matrix2x2.columns)

@@ -28,7 +28,7 @@ class RayTracerTestTests: XCTestCase {
         let canvas = Canvas(width: 300, height: 300)
         let magnitude = 300.0 * (3.0/8.0)
 
-        let midnight = Vector4(x: 0, y: 0, z: 1, w: 1)
+        let midnight = Tuple.Point(x: 0, y: 0, z: 1)
         for hour in 1...12 {
             let rotateY = Matrix4x4.rotateY(Double(hour) * Double.pi / 6)
             let output = rotateY * midnight
@@ -49,12 +49,12 @@ class RayTracerTestTests: XCTestCase {
     }
     
     func testProjectile() {
-        let start = Vector4(x: 0, y: 1, z: 0, w: 1.0)
-        let velocity = Vector4.normalize(rhs: Vector4(x: 1, y: 1.8, z: 0, w: 0.0)) * 11.25
+        let start = Tuple.Point(x: 0, y: 1, z: 0)
+        let velocity = Tuple.normalize(rhs: Tuple.Vector(x: 1, y: 1.8, z: 0)) * 11.25
         let projectile = Projectile(position: start, velocity: velocity)
 
-        let gravity = Vector4(x: 0, y: -0.1, z: 0, w: 0)
-        let wind = Vector4(x: -0.01, y: 0, z: 0, w: 0)
+        let gravity = Tuple.Vector(x: 0, y: -0.1, z: 0)
+        let wind = Tuple.Vector(x: -0.01, y: 0, z: 0)
         let environment = Environment(gravity: gravity, wind: wind)
 
         let canvas = Canvas(width: 900, height: 550)

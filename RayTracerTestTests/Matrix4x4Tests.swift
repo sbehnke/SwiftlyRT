@@ -83,8 +83,8 @@ class Matrix4x4Tests: XCTestCase {
                            c0: 8, c1: 6, c2: 4, c3: 1,
                            d0: 0, d1: 0, d2: 0, d3: 1)
         
-        let v1 = Vector4(x: 1, y: 2, z: 3, w: 1)
-        let product = Vector4(x: 18, y: 24, z: 33, w: 1)
+        let v1 = Tuple.Point(x: 1, y: 2, z: 3)
+        let product = Tuple.Point(x: 18, y: 24, z: 33)
         
         XCTAssertEqual(m1 * v1, product)
     }
@@ -315,7 +315,7 @@ class Matrix4x4Tests: XCTestCase {
                                  0.17778,  0.06667, -0.26667,  0.33333])
         
         for i in 0..<16 {
-            XCTAssertTrue(Vector4.almostEqual(lhs: m2[i], rhs: inverse[i]))
+            XCTAssertTrue(Tuple.almostEqual(lhs: m2[i], rhs: inverse[i]))
         }
     }
     
@@ -358,9 +358,9 @@ class Matrix4x4Tests: XCTestCase {
 //        And p ← point(-3, 4, 5)
 //        Then transform * p = point(2, 1, 7)
         
-        let point = Vector4(x: -3, y: 4, z: 5, w: 1.0)
+        let point = Tuple.Point(x: -3, y: 4, z: 5)
         let transformed = Matrix4x4.translate(x: 5, y: -3, z: 2) * point
-        let result = Vector4(x: 2, y: 1, z: 7, w: 1.0)
+        let result = Tuple.Point(x: 2, y: 1, z: 7)
         XCTAssertEqual(transformed, result)
     }
     
@@ -370,11 +370,11 @@ class Matrix4x4Tests: XCTestCase {
 //        And inv ← inverse(transform)
 //        And p ← point(-3, 4, 5)
 //        Then inv * p = point(-8, 7, 3)
-        let point = Vector4(x: -3, y: 4, z: 5, w: 1.0)
+        let point = Tuple.Point(x: -3, y: 4, z: 5)
         let translate = Matrix4x4.translate(x: 5, y: -3, z: 2)
         let inverse = translate.invert()
         let translated = inverse * point
-        let result = Vector4(x: -8, y: 7, z: 3, w: 1.0)
+        let result = Tuple.Point(x: -8, y: 7, z: 3)
         XCTAssertEqual(result, translated)
     }
     
@@ -384,7 +384,7 @@ class Matrix4x4Tests: XCTestCase {
 //        And v ← vector(-3, 4, 5)
 //        Then transform * v = v
 
-        let vector = Vector4(x: -3, y: 4, z: 5, w: 0)
+        let vector = Tuple.Vector(x: -3, y: 4, z: 5)
         let transform = Matrix4x4.translate(x: 5, y: -3, z: 2)
         XCTAssertEqual(transform * vector, vector)
     }
@@ -397,9 +397,9 @@ class Matrix4x4Tests: XCTestCase {
 //
         
         let transform = Matrix4x4.scale(x: 2, y: 3, z: 4)
-        let point = Vector4(x: -4, y: 6, z: 8, w: 1.0)
+        let point = Tuple.Point(x: -4, y: 6, z: 8)
         let transformed = transform * point
-        let result = Vector4(x: -8, y: 18, z: 32, w: 1.0)
+        let result = Tuple.Point(x: -8, y: 18, z: 32)
         
         XCTAssertEqual(result, transformed)
     }
@@ -411,9 +411,9 @@ class Matrix4x4Tests: XCTestCase {
 //        Then transform * v = vector(-8, 18, 32)
 //
         let transform = Matrix4x4.scale(x: 2, y: 3, z: 4)
-        let v = Vector4(x: -4, y: 6, z: 8, w: 0)
+        let v = Tuple.Vector(x: -4, y: 6, z: 8)
         let transformed = transform * v
-        let result = Vector4(x: -8, y: 18, z: 32, w: 0)
+        let result = Tuple.Vector(x: -8, y: 18, z: 32)
         XCTAssertEqual(result, transformed)
     }
     
@@ -426,9 +426,9 @@ class Matrix4x4Tests: XCTestCase {
 //
         let transform = Matrix4x4.scale(x: 2, y: 3, z: 4)
         let inverse = transform.invert()
-        let v = Vector4(x: -4, y: 6, z: 8, w: 0)
+        let v = Tuple.Vector(x: -4, y: 6, z: 8)
         let transformed = inverse * v
-        let result = Vector4(x: -2, y: 2, z: 2, w: 0)
+        let result = Tuple.Vector(x: -2, y: 2, z: 2)
         XCTAssertEqual(result, transformed)
     }
     
@@ -438,9 +438,9 @@ class Matrix4x4Tests: XCTestCase {
 //        And p ← point(2, 3, 4)
 //        Then transform * p = point(-2, 3, 4)
         let transform = Matrix4x4.scale(x: -1, y: 1, z: 1)
-        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
+        let point = Tuple.Point(x: 2, y: 3, z: 4)
         let transformed = transform * point
-        let result = Vector4(x: -2, y: 3, z: 4, w: 1)
+        let result = Tuple.Point(x: -2, y: 3, z: 4)
         XCTAssertEqual(result, transformed)
     }
     
@@ -452,13 +452,13 @@ class Matrix4x4Tests: XCTestCase {
 //        Then half_quarter * p = point(0, √2/2, √2/2)
 //        And full_quarter * p = point(0, 0, 1)
         
-        let p = Vector4(x: 0, y: 1, z: 0, w: 1)
+        let p = Tuple.Point(x: 0, y: 1, z: 0)
         let halfQuarter = Matrix4x4.rotateX(Double.pi / 4)
         let fullQuarter = Matrix4x4.rotateX(Double.pi / 2)
         
         let sqrt2Over2 = sqrt(2) / 2.0
-        let rotatedHalf = Vector4(x: 0, y: sqrt2Over2, z: sqrt2Over2, w: 1.0)
-        let rotatedFull = Vector4(x: 0, y: 0, z: 1, w: 1.0)
+        let rotatedHalf = Tuple.Point(x: 0, y: sqrt2Over2, z: sqrt2Over2)
+        let rotatedFull = Tuple.Point(x: 0, y: 0, z: 1)
         
         let t1 = halfQuarter * p
         let t2 = fullQuarter * p
@@ -474,11 +474,11 @@ class Matrix4x4Tests: XCTestCase {
 //        And inv ← inverse(half_quarter)
 //        Then inv * p = point(0, √2/2, -√2/2)
 
-        let p = Vector4(x: 0, y: 1, z: 0, w: 1)
+        let p = Tuple.Point(x: 0, y: 1, z: 0)
         let halfQuarter = Matrix4x4.rotateX(Double.pi / 4).invert()
         
         let sqrt2Over2 = sqrt(2) / 2.0
-        let rotatedHalf = Vector4(x: 0, y: sqrt2Over2, z: -sqrt2Over2, w: 1.0)
+        let rotatedHalf = Tuple.Point(x: 0, y: sqrt2Over2, z: -sqrt2Over2)
         
         let t1 = halfQuarter * p
         
@@ -493,13 +493,13 @@ class Matrix4x4Tests: XCTestCase {
 //        Then half_quarter * p = point(√2/2, 0, √2/2)
 //        And full_quarter * p = point(1, 0, 0)
         
-        let p = Vector4(x: 0, y: 0, z: 1, w: 1)
+        let p = Tuple.Point(x: 0, y: 0, z: 1)
         let halfQuarter = Matrix4x4.rotateY(Double.pi / 4)
         let fullQuarter = Matrix4x4.rotateY(Double.pi / 2)
         
         let sqrt2Over2 = sqrt(2) / 2.0
-        let rotatedHalf = Vector4(x: sqrt2Over2, y: 0, z: sqrt2Over2, w: 1.0)
-        let rotatedFull = Vector4(x: 1, y: 0, z: 0, w: 1.0)
+        let rotatedHalf = Tuple.Point(x: sqrt2Over2, y: 0, z: sqrt2Over2)
+        let rotatedFull = Tuple.Point(x: 1, y: 0, z: 0)
         
         let t1 = halfQuarter * p
         let t2 = fullQuarter * p
@@ -516,13 +516,13 @@ class Matrix4x4Tests: XCTestCase {
 //        Then half_quarter * p = point(-√2/2, √2/2, 0)
 //        And full_quarter * p = point(-1, 0, 0)
         
-        let p = Vector4(x: 0, y: 1, z: 0, w: 1)
+        let p = Tuple.Point(x: 0, y: 1, z: 0, w: 1)
         let halfQuarter = Matrix4x4.rotateZ(Double.pi / 4)
         let fullQuarter = Matrix4x4.rotateZ(Double.pi / 2)
         
         let sqrt2Over2 = sqrt(2) / 2.0
-        let rotatedHalf = Vector4(x: -sqrt2Over2, y: sqrt2Over2, z: 0, w: 1.0)
-        let rotatedFull = Vector4(x: -1, y: 0, z: 0, w: 1.0)
+        let rotatedHalf = Tuple.Point(x: -sqrt2Over2, y: sqrt2Over2, z: 0)
+        let rotatedFull = Tuple.Point(x: -1, y: 0, z: 0)
         
         let t1 = halfQuarter * p
         let t2 = fullQuarter * p
@@ -538,8 +538,8 @@ class Matrix4x4Tests: XCTestCase {
 //        Then transform * p = point(5, 3, 4)
         
         let transform = Matrix4x4.shear(xy: 1, xz: 0, yx: 0, yz: 0, zx: 0, zy: 0)
-        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
-        let transformed = Vector4(x: 5, y: 3, z: 4, w: 1)
+        let point = Tuple.Point(x: 2, y: 3, z: 4)
+        let transformed = Tuple.Point(x: 5, y: 3, z: 4)
         let result = transform * point
         XCTAssertEqual(result, transformed)
     }
@@ -551,8 +551,8 @@ class Matrix4x4Tests: XCTestCase {
 //        Then transform * p = point(6, 3, 4)
         
         let transform = Matrix4x4.shear(xy: 0, xz: 1, yx: 0, yz: 0, zx: 0, zy: 0)
-        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
-        let transformed = Vector4(x: 6, y: 3, z: 4, w: 1)
+        let point = Tuple.Point(x: 2, y: 3, z: 4)
+        let transformed = Tuple.Point(x: 6, y: 3, z: 4)
         let result = transform * point
         XCTAssertEqual(result, transformed)
     }
@@ -564,8 +564,8 @@ class Matrix4x4Tests: XCTestCase {
 //        Then transform * p = point(2, 5, 4)
         
         let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 1, yz: 0, zx: 0, zy: 0)
-        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
-        let transformed = Vector4(x: 2, y: 5, z: 4, w: 1)
+        let point = Tuple.Point(x: 2, y: 3, z: 4)
+        let transformed = Tuple.Point(x: 2, y: 5, z: 4)
         let result = transform * point
         XCTAssertEqual(result, transformed)
     }
@@ -577,8 +577,8 @@ class Matrix4x4Tests: XCTestCase {
 //        Then transform * p = point(2, 7, 4)
         
         let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 0, yz: 1, zx: 0, zy: 0)
-        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
-        let transformed = Vector4(x: 2, y: 7, z: 4, w: 1)
+        let point = Tuple.Point(x: 2, y: 3, z: 4)
+        let transformed = Tuple.Point(x: 2, y: 7, z: 4)
         let result = transform * point
         XCTAssertEqual(result, transformed)
     }
@@ -590,8 +590,8 @@ class Matrix4x4Tests: XCTestCase {
 //        Then transform * p = point(2, 3, 6)
         
         let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 0, yz: 0, zx: 1, zy: 0)
-        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
-        let transformed = Vector4(x: 2, y: 3, z: 6, w: 1)
+        let point = Tuple.Point(x: 2, y: 3, z: 4)
+        let transformed = Tuple.Point(x: 2, y: 3, z: 6)
         let result = transform * point
         XCTAssertEqual(result, transformed)
     }
@@ -603,8 +603,8 @@ class Matrix4x4Tests: XCTestCase {
 //        Then transform * p = point(2, 3, 7)
         
         let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 0, yz: 0, zx: 0, zy: 1)
-        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
-        let transformed = Vector4(x: 2, y: 3, z: 7, w: 1)
+        let point = Tuple.Point(x: 2, y: 3, z: 4)
+        let transformed = Tuple.Point(x: 2, y: 3, z: 7)
         let result = transform * point
         XCTAssertEqual(result, transformed)
     }
@@ -612,7 +612,7 @@ class Matrix4x4Tests: XCTestCase {
     func testMultipleTransformsInSequence() {
 //        Scenario: Individual transformations are applied in sequence
 //        Given p ← point(1, 0, 1)
-        let p = Vector4(x: 1, y: 0, z: 1, w: 1)
+        let p = Tuple.Point(x: 1, y: 0, z: 1)
 //        And A ← rotation_x(π / 2)
         let A = Matrix4x4.rotateX(Double.pi / 2)
 //        And B ← scaling(5, 5, 5)
@@ -623,23 +623,23 @@ class Matrix4x4Tests: XCTestCase {
 //        When p2 ← A * p
         let p2 = A * p
 //        Then p2 = point(1, -1, 0)
-        XCTAssertEqual(p2, Vector4(x: 1, y: -1, z: 0, w: 1))
+        XCTAssertEqual(p2, Tuple.Point(x: 1, y: -1, z: 0))
 //        # then apply scaling
 //        When p3 ← B * p2
         let p3 = B * p2
 //        Then p3 = point(5, -5, 0)
-        XCTAssertEqual(p3, Vector4(x: 5, y: -5, z: 0, w: 1))
+        XCTAssertEqual(p3, Tuple.Point(x: 5, y: -5, z: 0))
 //        # then apply translation
 //        When p4 ← C * p3
         let p4 = C * p3
 //        Then p4 = point(15, 0, 7)
-        XCTAssertEqual(p4, Vector4(x: 15, y: 0, z: 7, w: 1))
+        XCTAssertEqual(p4, Tuple.Point(x: 15, y: 0, z: 7))
     }
     
     func testChainedTransforms() {
 //        Scenario: Chained transformations must be applied in reverse order
 //        Given p ← point(1, 0, 1)
-        let p = Vector4(x: 1, y: 0, z: 1, w: 1)
+        let p = Tuple.Point(x: 1, y: 0, z: 1)
 //        And A ← rotation_x(π / 2)
         let A = Matrix4x4.rotateX(Double.pi / 2)
 //        And B ← scaling(5, 5, 5)
@@ -651,7 +651,7 @@ class Matrix4x4Tests: XCTestCase {
 //        Then T * p = point(15, 0, 7)
         let p2 = T * p
         
-        XCTAssertEqual(p2, Vector4(x: 15, y: 0, z: 7, w: 1))
+        XCTAssertEqual(p2, Tuple.Point(x: 15, y: 0, z: 7))
         
         XCTAssertEqual(Matrix4x4.identity.rotateX(Double.pi / 2), A)
         XCTAssertEqual(Matrix4x4.identity.scale(x: 5, y: 5, z: 5), B)
@@ -663,48 +663,50 @@ class Matrix4x4Tests: XCTestCase {
         let transform = Matrix4x4.identity.rotateX(Double.pi / 2).scale(x: 5, y: 5, z: 5).translate(x: 10, y: 5, z: 7)
         XCTAssertEqual(T, transform)
     }
-    
-    func testDefaultOrientationTransform() {
-//        Scenario: The transformation matrix for the default orientation
-//        Given from ← point(0, 0, 0)
-//        And to ← point(0, 0, -1)
-//        And up ← vector(0, 1, 0)
-//        When t ← view_transform(from, to, up)
-//        Then t = identity_matrix
-        XCTFail()
-    }
-    
-    func testTransformLookingPositiveZ() {
-//        Scenario: A view transformation matrix looking in positive z direction
-//        Given from ← point(0, 0, 0)
-//        And to ← point(0, 0, 1)
-//        And up ← vector(0, 1, 0)
-//        When t ← view_transform(from, to, up)
-//        Then t = scaling(-1, 1, -1)
-        XCTFail()
-    }
-    
-    func testViewTransformMovesWorld() {
-//        Scenario: The view transformation moves the world
-//        Given from ← point(0, 0, 8)
-//        And to ← point(0, 0, 0)
-//        And up ← vector(0, 1, 0)
-//        When t ← view_transform(from, to, up)
-//        Then t = translation(0, 0, -8)
-        XCTFail()
-    }
-    
-    func testArbitraryViewTransform() {
-//        Scenario: An arbitrary view transformation
-//        Given from ← point(1, 3, 2)
-//        And to ← point(4, -2, 8)
-//        And up ← vector(1, 1, 0)
-//        When t ← view_transform(from, to, up)
-//        Then t is the following 4x4 matrix:
-//        | -0.50709 | 0.50709 |  0.67612 | -2.36643 |
-//        |  0.76772 | 0.60609 |  0.12122 | -2.82843 |
-//        | -0.35857 | 0.59761 | -0.71714 |  0.00000 |
-//        |  0.00000 | 0.00000 |  0.00000 |  1.00000 |
-        XCTFail()
-    }
+   
+    /* Future Implementationm */
+//    
+//    func testDefaultOrientationTransform() {
+////        Scenario: The transformation matrix for the default orientation
+////        Given from ← point(0, 0, 0)
+////        And to ← point(0, 0, -1)
+////        And up ← vector(0, 1, 0)
+////        When t ← view_transform(from, to, up)
+////        Then t = identity_matrix
+//        XCTFail()
+//    }
+//    
+//    func testTransformLookingPositiveZ() {
+////        Scenario: A view transformation matrix looking in positive z direction
+////        Given from ← point(0, 0, 0)
+////        And to ← point(0, 0, 1)
+////        And up ← vector(0, 1, 0)
+////        When t ← view_transform(from, to, up)
+////        Then t = scaling(-1, 1, -1)
+//        XCTFail()
+//    }
+//    
+//    func testViewTransformMovesWorld() {
+////        Scenario: The view transformation moves the world
+////        Given from ← point(0, 0, 8)
+////        And to ← point(0, 0, 0)
+////        And up ← vector(0, 1, 0)
+////        When t ← view_transform(from, to, up)
+////        Then t = translation(0, 0, -8)
+//        XCTFail()
+//    }
+//    
+//    func testArbitraryViewTransform() {
+////        Scenario: An arbitrary view transformation
+////        Given from ← point(1, 3, 2)
+////        And to ← point(4, -2, 8)
+////        And up ← vector(1, 1, 0)
+////        When t ← view_transform(from, to, up)
+////        Then t is the following 4x4 matrix:
+////        | -0.50709 | 0.50709 |  0.67612 | -2.36643 |
+////        |  0.76772 | 0.60609 |  0.12122 | -2.82843 |
+////        | -0.35857 | 0.59761 | -0.71714 |  0.00000 |
+////        |  0.00000 | 0.00000 |  0.00000 |  1.00000 |
+//        XCTFail()
+//    }
 }

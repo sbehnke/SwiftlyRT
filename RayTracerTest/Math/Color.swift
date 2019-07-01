@@ -197,6 +197,12 @@ struct Color: Equatable, AdditiveArithmetic {
             backing[3] = newValue
         }
     }
+    
+    var description : String {
+        get {
+            return "(\(rByte), \(gByte), \(bByte))"
+        }
+    }
 
     
     private var backing = Array<Float>(repeating: 0.0, count: 4)
