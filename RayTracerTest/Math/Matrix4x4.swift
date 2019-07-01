@@ -20,10 +20,9 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
     static let columns = 4
     
     init() {
-
     }
 
-    init(values: Array<Double>) {
+    init(_ values: Array<Double>) {
         assert(values.count == Matrix4x4.rows * Matrix4x4.columns)
         backing = values
     }
@@ -55,10 +54,13 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
     }
 
     static func == (lhs: Matrix4x4, rhs: Matrix4x4) -> Bool {
-        return lhs.ma_0 == rhs.ma_0 && lhs.ma_1 == rhs.ma_1 && lhs.ma_2 == rhs.ma_2 && lhs.ma_3 == rhs.ma_3 &&
-               lhs.ma_0 == rhs.ma_0 && lhs.ma_1 == rhs.ma_1 && lhs.ma_2 == rhs.ma_2 && lhs.ma_3 == rhs.ma_3 &&
-               lhs.ma_0 == rhs.ma_0 && lhs.ma_1 == rhs.ma_1 && lhs.ma_2 == rhs.ma_2 && lhs.ma_3 == rhs.ma_3 &&
-               lhs.ma_0 == rhs.ma_0 && lhs.ma_1 == rhs.ma_1 && lhs.ma_2 == rhs.ma_2 && lhs.ma_3 == rhs.ma_3
+        for i in 0..<(Matrix4x4.rows * Matrix4x4.columns) {
+            if (!Vector4.almostEqual(lhs: lhs[i], rhs: rhs[i])) {
+                return false
+            }
+        }
+        
+        return true
     }
 
     static func *= (lhs: inout Matrix4x4, rhs: Double) {
@@ -102,7 +104,7 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
 
         return value
     }
-
+    
     static func *= (lhs: inout Matrix4x4, rhs: Matrix4x4) {
         let a = lhs
         for i in 0..<rows {
@@ -192,6 +194,14 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
                            b0: -1, b1: 1, b2: -1, b3: 1,
                            c0: 1, c1: -1, c2: 1, c3: -1,
                            d0: -1, d1: 1, d2: -1, d3: 1)
+
+//        let index = row * Matrix4x4.columns + column
+//        if (index % 2 == 0) {
+//            assert(m1[row, column] == 1)
+//        }
+//        else {
+//            assert(m1[row, column] == -1)
+//        }
         
         assert(indexIsValid(row: row, column: column))
         return subMatrix(row: row, column: column).determinate() * m1[row, column]
@@ -245,6 +255,49 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
             assert(indexIsValid(row: row, column: column), "Index out of range")
             backing[(row * Matrix4x4.columns) + column] = newValue
         }
+    }
+    
+    static func translate(x: Double, y: Double, z: Double) -> Matrix4x4 {
+        var m = Matrix4x4.identity
+        m[0, 3] = x
+        m[1, 3] = y
+        m[2, 3] = z
+        return m
+    }
+    
+    static func scale(x: Double, y: Double, z: Double) -> Matrix4x4 {
+        var m = Matrix4x4.identity
+        m[0,0] = x
+        m[1,1] = y
+        m[2,2] = z
+        return m
+    }
+    
+    static func rotateX(_ radians: Double) -> Matrix4x4{
+        var matrix = Matrix4x4.identity
+        matrix[1, 1] = cos(radians)
+        matrix[1, 2] = -sin(radians)
+        matrix[2, 1] = sin(radians)
+        matrix[2, 2] = cos(radians)
+        return matrix
+    }
+
+    static func rotateY(_ radians: Double) -> Matrix4x4{
+        var matrix = Matrix4x4.identity
+        matrix[0, 0] = cos(radians)
+        matrix[0, 2] = sin(radians)
+        matrix[2, 0] = -sin(radians)
+        matrix[2, 2] = cos(radians)
+        return matrix
+    }
+    
+    static func rotateZ(_ radians: Double) -> Matrix4x4{
+        var matrix = Matrix4x4.identity
+        matrix[0, 0] = cos(radians)
+        matrix[0, 1] = -sin(radians)
+        matrix[1, 0] = sin(radians)
+        matrix[1, 1] = cos(radians)
+        return matrix
     }
     
     func describe() -> String {

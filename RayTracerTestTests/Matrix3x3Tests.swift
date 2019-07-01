@@ -51,7 +51,7 @@ class Matrix3x3Tests: XCTestCase {
                            b0: 2, b1: -1, b2: -7,
                            c0: 6, c1: -1, c2: 5)
         
-//        And B â† submatrix(A, 1, 0)
+//        And B ← submatrix(A, 1, 0)
 //        Then determinant(B) = 25
 //        And minor(A, 1, 0) = 25
         

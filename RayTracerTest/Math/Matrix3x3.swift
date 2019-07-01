@@ -45,9 +45,13 @@ struct Matrix3x3 : Equatable, AdditiveArithmetic {
     }
     
     static func == (lhs: Matrix3x3, rhs: Matrix3x3) -> Bool {
-        return lhs.ma_0 == rhs.ma_0 && lhs.ma_1 == rhs.ma_1 && lhs.ma_2 == rhs.ma_2 &&
-            lhs.ma_0 == rhs.ma_0 && lhs.ma_1 == rhs.ma_1 && lhs.ma_2 == rhs.ma_2 &&
-            lhs.ma_0 == rhs.ma_0 && lhs.ma_1 == rhs.ma_1 && lhs.ma_2 == rhs.ma_2
+        for i in 0..<(Matrix3x3.rows * Matrix3x3.columns) {
+            if (!Vector4.almostEqual(lhs: lhs[i], rhs: rhs[i])) {
+                return false
+            }
+        }
+        
+        return true
     }
     
     static func *= (lhs: inout Matrix3x3, rhs: Double) {

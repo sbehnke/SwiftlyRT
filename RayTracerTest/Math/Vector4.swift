@@ -10,6 +10,7 @@ import Foundation
 
 struct Vector4: Equatable, AdditiveArithmetic {
     static var zero = Vector4(x: 0.0, y: 0.0, z: 0.0, w: 0.0)
+    static var pointZero = Vector4(x: 0.0, y: 0.0, z: 0.0, w: 1.0)
     
     static func *= (lhs: inout Vector4, rhs: Double) {
         lhs.x *= rhs;

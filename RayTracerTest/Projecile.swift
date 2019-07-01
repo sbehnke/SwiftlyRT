@@ -10,7 +10,7 @@ import Foundation
 
 class Projectile {
     
-    init(position: Point, velocity: Vector4) {
+    init(position: Vector4, velocity: Vector4) {
         self.position = position
         self.velocity = velocity
     }
@@ -20,6 +20,6 @@ class Projectile {
         velocity = velocity + environment.gravity + environment.wind
     }
     
-    var position = Point()
+    var position = Vector4()
     var velocity = Vector4()
 }

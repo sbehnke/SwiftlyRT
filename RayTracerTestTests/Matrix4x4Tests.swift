@@ -75,7 +75,7 @@ class Matrix4x4Tests: XCTestCase {
 //        | 2 | 4 | 4 | 2 |
 //        | 8 | 6 | 4 | 1 |
 //        | 0 | 0 | 0 | 1 |
-//        And b â† tuple(1, 2, 3, 1)
+//        And b ← tuple(1, 2, 3, 1)
 //        Then A * b = tuple(18, 24, 33, 1)
         
         let m1 = Matrix4x4(a0: 1, a1: 2, a2: 3, a3: 4,
@@ -220,7 +220,7 @@ class Matrix4x4Tests: XCTestCase {
                            c0: 7, c1: 7, c2: -6, c3: -7,
                            d0: 1, d1: -3, d2: 7, d3: 4)
         
-        //        And B â† inverse(A)
+        //        And B ← inverse(A)
         //        Then determinant(A) = 532
         //        And cofactor(A, 2, 3) = -160
         //        And B[3,2] = -160/532
@@ -251,19 +251,283 @@ class Matrix4x4Tests: XCTestCase {
 
         let m2 = m1.invert()
         
-        let values = [0.21805, 0.45113,  0.24060, -0.04511,
-                      -0.80827, -1.45677, -0.44361, 0.52068,
-                      -0.07895, -0.22368, -0.05263, 0.19737,
-                      -0.52256, -0.81391, -0.30075, 0.30639]
+        let values = Matrix4x4([0.21805, 0.45113,  0.24060, -0.04511,
+                                -0.80827, -1.45677, -0.44361, 0.52068,
+                                -0.07895, -0.22368, -0.05263, 0.19737,
+                                -0.52256, -0.81391, -0.30075, 0.30639])
         
         //        And B is the following 4x4 matrix:
         //        |  0.21805 |  0.45113 |  0.24060 | -0.04511 |
         //        | -0.80827 | -1.45677 | -0.44361 |  0.52068 |
         //        | -0.07895 | -0.22368 | -0.05263 |  0.19737 |
         //        | -0.52256 | -0.81391 | -0.30075 |  0.30639 |
+        XCTAssertEqual(m2, values)
+    }
+    
+    
+    func testInverse2() {
+//        Scenario: Calculating the inverse of another matrix
+//        Given the following 4x4 matrix A:
+//        |  8 | -5 |  9 |  2 |
+//        |  7 |  5 |  6 |  1 |
+//        | -6 |  0 |  9 |  6 |
+//        | -3 |  0 | -9 | -4 |
+//
+        let m1 = Matrix4x4([8, -5,  9,  2,
+                            7,  5,  6,  1,
+                            -6,  0,  9,  6,
+                            -3,  0, -9, -4])
+
+        //Then inverse(A) is the following 4x4 matrix:
+        
+        let inverse = Matrix4x4([-0.15385, -0.15385, -0.28205, -0.53846,
+                                 -0.07692,  0.12308,  0.02564,  0.03077,
+                                 0.35897,  0.35897,  0.43590,  0.92308,
+                                 -0.69231, -0.69231, -0.76923, -1.92308])
+        
+        let m2 = m1.invert()
+        XCTAssertEqual(m2, inverse)
+    }
+    
+    func testInverse3() {
+//        Scenario: Calculating the inverse of a third matrix
+//        Given the following 4x4 matrix A:
+//        |  9 |  3 |  0 |  9 |
+//        | -5 | -2 | -6 | -3 |
+//        | -4 |  9 |  6 |  4 |
+//        | -7 |  6 |  6 |  2 |
+        
+        let m1 = Matrix4x4([9,  3,  0,  9,
+                            -5, -2, -6, -3,
+                            -4,  9,  6,  4,
+                            -7,  6,  6,  2])
+        
+        let m2 = m1.invert()
+//        Then inverse(A) is the following 4x4 matrix:
+//        | -0.04074 | -0.07778 |  0.14444 | -0.22222 |
+//        | -0.07778 |  0.03333 |  0.36667 | -0.33333 |
+//        | -0.02901 | -0.14630 | -0.10926 |  0.12963 |
+//        |  0.17778 |  0.06667 | -0.26667 |  0.33333 |
+
+        let inverse = Matrix4x4([-0.04074, -0.07778,  0.14444, -0.22222,
+                                 -0.07778,  0.03333,  0.36667, -0.33333,
+                                 -0.02901, -0.14630, -0.10926,  0.12963,
+                                 0.17778,  0.06667, -0.26667,  0.33333])
         
         for i in 0..<16 {
-            XCTAssertTrue(Point.almostEqual(lhs: m2[i], rhs: values[i]))
+            XCTAssertTrue(Vector4.almostEqual(lhs: m2[i], rhs: inverse[i]))
         }
+    }
+    
+    func testInverseMultliplication() {
+//        Scenario: Multiplying a product by its inverse
+//        Given the following 4x4 matrix A:
+//        |  3 | -9 |  7 |  3 |
+//        |  3 | -8 |  2 | -9 |
+//        | -4 |  4 |  4 |  1 |
+//        | -6 |  5 | -1 |  1 |
+        
+    
+        let a = Matrix4x4([3, -9,  7,  3,
+                           3, -8,  2, -9,
+                           -4,  4,  4,  1,
+                           -6,  5, -1,  1])
+        
+//        And the following 4x4 matrix B:
+//        |  8 |  2 |  2 |  2 |
+//        |  3 | -1 |  7 |  0 |
+//        |  7 |  0 |  5 |  4 |
+//        |  6 | -2 |  0 |  5 |
+//        And C ← A * B
+//        Then C * inverse(B) = A
+        
+        let b = Matrix4x4([8,  2, 2, 2,
+                           3, -1, 7, 0,
+                           7,  0, 5, 4,
+                           6, -2, 0, 5])
+        
+        let bInverse = b.invert()
+        let m2 = a * b * bInverse
+        
+        XCTAssertEqual(m2, a)
+    }
+    
+    func testTranslate() {
+//        Scenario: Multiplying by a translation matrix
+//        Given transform ← translation(5, -3, 2)
+//        And p ← point(-3, 4, 5)
+//        Then transform * p = point(2, 1, 7)
+        
+        let point = Vector4(x: -3, y: 4, z: 5, w: 1.0)
+        let transformed = Matrix4x4.translate(x: 5, y: -3, z: 2) * point
+        let result = Vector4(x: 2, y: 1, z: 7, w: 1.0)
+        XCTAssertEqual(transformed, result)
+    }
+    
+    func testInverseTranslate() {
+//        Scenario: Multiplying by the inverse of a translation matrix
+//        Given transform ← translation(5, -3, 2)
+//        And inv ← inverse(transform)
+//        And p ← point(-3, 4, 5)
+//        Then inv * p = point(-8, 7, 3)
+        let point = Vector4(x: -3, y: 4, z: 5, w: 1.0)
+        let translate = Matrix4x4.translate(x: 5, y: -3, z: 2)
+        let inverse = translate.invert()
+        let translated = inverse * point
+        let result = Vector4(x: -8, y: 7, z: 3, w: 1.0)
+        XCTAssertEqual(result, translated)
+    }
+    
+    func testVector() {
+//        Scenario: Translation does not affect vectors
+//        Given transform ← translation(5, -3, 2)
+//        And v ← vector(-3, 4, 5)
+//        Then transform * v = v
+
+        let vector = Vector4(x: -3, y: 4, z: 5, w: 0)
+        let transform = Matrix4x4.translate(x: 5, y: -3, z: 2)
+        XCTAssertEqual(transform * vector, vector)
+    }
+    
+    func testScaling() {
+//        Scenario: A scaling matrix applied to a point
+//        Given transform ← scaling(2, 3, 4)
+//        And p ← point(-4, 6, 8)
+//        Then transform * p = point(-8, 18, 32)
+//
+        
+        let transform = Matrix4x4.scale(x: 2, y: 3, z: 4)
+        let point = Vector4(x: -4, y: 6, z: 8, w: 1.0)
+        let transformed = transform * point
+        let result = Vector4(x: -8, y: 18, z: 32, w: 1.0)
+        
+        XCTAssertEqual(result, transformed)
+    }
+    
+    func testScalingVector() {
+//        Scenario: A scaling matrix applied to a vector
+//        Given transform ← scaling(2, 3, 4)
+//        And v ← vector(-4, 6, 8)
+//        Then transform * v = vector(-8, 18, 32)
+//
+        let transform = Matrix4x4.scale(x: 2, y: 3, z: 4)
+        let v = Vector4(x: -4, y: 6, z: 8, w: 0)
+        let transformed = transform * v
+        let result = Vector4(x: -8, y: 18, z: 32, w: 0)
+        XCTAssertEqual(result, transformed)
+    }
+    
+    func testInverseScaling() {
+//        Scenario: Multiplying by the inverse of a scaling matrix
+//        Given transform ← scaling(2, 3, 4)
+//        And inv ← inverse(transform)
+//        And v ← vector(-4, 6, 8)
+//        Then inv * v = vector(-2, 2, 2)
+//
+        let transform = Matrix4x4.scale(x: 2, y: 3, z: 4)
+        let inverse = transform.invert()
+        let v = Vector4(x: -4, y: 6, z: 8, w: 0)
+        let transformed = inverse * v
+        let result = Vector4(x: -2, y: 2, z: 2, w: 0)
+        XCTAssertEqual(result, transformed)
+    }
+    
+    func testReflection() {
+//        Scenario: Reflection is scaling by a negative value
+//        Given transform ← scaling(-1, 1, 1)
+//        And p ← point(2, 3, 4)
+//        Then transform * p = point(-2, 3, 4)
+        let transform = Matrix4x4.scale(x: -1, y: 1, z: 1)
+        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
+        let transformed = transform * point
+        let result = Vector4(x: -2, y: 3, z: 4, w: 1)
+        XCTAssertEqual(result, transformed)
+    }
+    
+    func testRotateX() {
+//        Scenario: Rotating a point around the x axis
+//        Given p ← point(0, 1, 0)
+//        And half_quarter ← rotation_x(π / 4)
+//        And full_quarter ← rotation_x(π / 2)
+//        Then half_quarter * p = point(0, √2/2, √2/2)
+//        And full_quarter * p = point(0, 0, 1)
+        
+        let p = Vector4(x: 0, y: 1, z: 0, w: 1)
+        let halfQuarter = Matrix4x4.rotateX(Double.pi / 4)
+        let fullQuarter = Matrix4x4.rotateX(Double.pi / 2)
+        
+        let sqrt2Over2 = sqrt(2) / 2.0
+        let rotatedHalf = Vector4(x: 0, y: sqrt2Over2, z: sqrt2Over2, w: 1.0)
+        let rotatedFull = Vector4(x: 0, y: 0, z: 1, w: 1.0)
+        
+        let t1 = halfQuarter * p
+        let t2 = fullQuarter * p
+        
+        XCTAssertEqual(t1, rotatedHalf)
+        XCTAssertEqual(t2, rotatedFull)
+    }
+    
+    func testRotateXBackward() {
+//        Scenario: The inverse of an x-rotation rotates in the opposite direction
+//        Given p ← point(0, 1, 0)
+//        And half_quarter ← rotation_x(π / 4)
+//        And inv ← inverse(half_quarter)
+//        Then inv * p = point(0, √2/2, -√2/2)
+
+        let p = Vector4(x: 0, y: 1, z: 0, w: 1)
+        let halfQuarter = Matrix4x4.rotateX(Double.pi / 4).invert()
+        
+        let sqrt2Over2 = sqrt(2) / 2.0
+        let rotatedHalf = Vector4(x: 0, y: sqrt2Over2, z: -sqrt2Over2, w: 1.0)
+        
+        let t1 = halfQuarter * p
+        
+        XCTAssertEqual(t1, rotatedHalf)
+    }
+    
+    func testRotateY() {
+//        Scenario: Rotating a point around the y axis
+//        Given p ← point(0, 0, 1)
+//        And half_quarter ← rotation_y(π / 4)
+//        And full_quarter ← rotation_y(π / 2)
+//        Then half_quarter * p = point(√2/2, 0, √2/2)
+//        And full_quarter * p = point(1, 0, 0)
+        
+        let p = Vector4(x: 0, y: 0, z: 1, w: 1)
+        let halfQuarter = Matrix4x4.rotateY(Double.pi / 4)
+        let fullQuarter = Matrix4x4.rotateY(Double.pi / 2)
+        
+        let sqrt2Over2 = sqrt(2) / 2.0
+        let rotatedHalf = Vector4(x: sqrt2Over2, y: 0, z: sqrt2Over2, w: 1.0)
+        let rotatedFull = Vector4(x: 1, y: 0, z: 0, w: 1.0)
+        
+        let t1 = halfQuarter * p
+        let t2 = fullQuarter * p
+        
+        XCTAssertEqual(t1, rotatedHalf)
+        XCTAssertEqual(t2, rotatedFull)
+    }
+    
+    func testRotateZ() {
+//        Scenario: Rotating a point around the z axis
+//        Given p ← point(0, 1, 0)
+//        And half_quarter ← rotation_z(π / 4)
+//        And full_quarter ← rotation_z(π / 2)
+//        Then half_quarter * p = point(-√2/2, √2/2, 0)
+//        And full_quarter * p = point(-1, 0, 0)
+        
+        let p = Vector4(x: 0, y: 1, z: 0, w: 1)
+        let halfQuarter = Matrix4x4.rotateZ(Double.pi / 4)
+        let fullQuarter = Matrix4x4.rotateZ(Double.pi / 2)
+        
+        let sqrt2Over2 = sqrt(2) / 2.0
+        let rotatedHalf = Vector4(x: -sqrt2Over2, y: sqrt2Over2, z: 0, w: 1.0)
+        let rotatedFull = Vector4(x: -1, y: 0, z: 0, w: 1.0)
+        
+        let t1 = halfQuarter * p
+        let t2 = fullQuarter * p
+        
+        XCTAssertEqual(t1, rotatedHalf)
+        XCTAssertEqual(t2, rotatedFull)
     }
 }

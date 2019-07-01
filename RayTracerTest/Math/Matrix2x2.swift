@@ -37,8 +37,13 @@ struct Matrix2x2 : Equatable, AdditiveArithmetic {
     }
     
     static func == (lhs: Matrix2x2, rhs: Matrix2x2) -> Bool {
-        return lhs.ma_0 == rhs.ma_0 && lhs.ma_1 == rhs.ma_1 &&
-            lhs.ma_0 == rhs.ma_0 && lhs.ma_1 == rhs.ma_1
+        for i in 0..<(Matrix2x2.rows * Matrix2x2.columns) {
+            if (!Vector4.almostEqual(lhs: lhs[i], rhs: rhs[i])) {
+                return false
+            }
+        }
+        
+        return true
     }
     
     static func *= (lhs: inout Matrix2x2, rhs: Double) {

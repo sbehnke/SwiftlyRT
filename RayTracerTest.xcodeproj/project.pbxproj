@@ -21,7 +21,6 @@
 		64EE919722C7D18900FB2699 /* RayTracerTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE919622C7D18900FB2699 /* RayTracerTestUITests.swift */; };
 		64EE91A522C7D1B000FB2699 /* Vector4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91A422C7D1B000FB2699 /* Vector4.swift */; };
 		64EE91A722C7EE2A00FB2699 /* VectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91A622C7EE2900FB2699 /* VectorTests.swift */; };
-		64EE91A922C7EF9A00FB2699 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91A822C7EF9A00FB2699 /* Point.swift */; };
 		64EE91AB22C7F04300FB2699 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91AA22C7F04300FB2699 /* Color.swift */; };
 		64EE91AD22C7F21F00FB2699 /* ColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91AC22C7F21F00FB2699 /* ColorTests.swift */; };
 		64EE91AF22C7F2F000FB2699 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE91AE22C7F2F000FB2699 /* Canvas.swift */; };
@@ -69,7 +68,6 @@
 		64EE919822C7D18900FB2699 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		64EE91A422C7D1B000FB2699 /* Vector4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector4.swift; sourceTree = "<group>"; };
 		64EE91A622C7EE2900FB2699 /* VectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorTests.swift; sourceTree = "<group>"; };
-		64EE91A822C7EF9A00FB2699 /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
 		64EE91AA22C7F04300FB2699 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		64EE91AC22C7F21F00FB2699 /* ColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTests.swift; sourceTree = "<group>"; };
 		64EE91AE22C7F2F000FB2699 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
@@ -171,7 +169,6 @@
 				64D1FB2322C9035100AA05AE /* Matrix2x2.swift */,
 				64D1FB2522C9035C00AA05AE /* Matrix3x3.swift */,
 				64D1FB1F22C8731700AA05AE /* Matrix4x4.swift */,
-				64EE91A822C7EF9A00FB2699 /* Point.swift */,
 				64EE91A422C7D1B000FB2699 /* Vector4.swift */,
 			);
 			path = Math;
@@ -307,7 +304,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				64EE91A922C7EF9A00FB2699 /* Point.swift in Sources */,
 				64D1FB2022C8731700AA05AE /* Matrix4x4.swift in Sources */,
 				64EE91B622C813AF00FB2699 /* Environment.swift in Sources */,
 				64EE917B22C7D18700FB2699 /* ViewController.swift in Sources */,
