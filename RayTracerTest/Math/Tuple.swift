@@ -109,6 +109,10 @@ struct Tuple: Equatable, AdditiveArithmetic {
             almostEqual(lhs: lhs.w, rhs: rhs.w)
     }
     
+    static prefix func - (lhs: Tuple) ->Tuple {
+        return lhs * -1.0
+    }
+    
     static func almostEqual(lhs: Double, rhs: Double) -> Bool {
         let epsilon = 0.00001
         return abs(lhs - rhs) < epsilon
@@ -119,12 +123,9 @@ struct Tuple: Equatable, AdditiveArithmetic {
         return Tuple(x: rhs.x / mag, y: rhs.y / mag, z: rhs.z / mag, w: rhs.w / mag)
     }
     
-    mutating func normalize() {
+    func normalize() -> Tuple {
         let mag = magnitude;
-        x /= mag
-        y /= mag
-        z /= mag
-        w /= mag
+        return Tuple(x: x/mag, y: y/mag, z: z/mag, w: w/mag)
     }
     
     static func dot(lhs: Tuple, rhs: Tuple) -> Double {
