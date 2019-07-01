@@ -9,10 +9,10 @@
 import Foundation
 
 struct Matrix4x4 : Equatable, AdditiveArithmetic {
-    static var identity = Matrix4x4(a0: 1, a1: 0, a2: 0, a3: 0, 
-         b0: 0, b1: 1, b2: 0, b3: 0, 
-         c0: 0, c1: 0, c2: 1, c3: 0, 
-         d0: 0, d1: 0, d2: 0, d3: 1)
+    static var identity = Matrix4x4(a0: 1, a1: 0, a2: 0, a3: 0,
+                                    b0: 0, b1: 1, b2: 0, b3: 0,
+                                    c0: 0, c1: 0, c2: 1, c3: 0,
+                                    d0: 0, d1: 0, d2: 0, d3: 1)
         
     static var zero = Matrix4x4()
 
@@ -32,25 +32,25 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
          c0: Double, c1: Double, c2: Double, c3: Double, 
          d0: Double, d1: Double, d2: Double, d3: Double) {
                 
-        ma_0 = a0
-        ma_1 = a1
-        ma_2 = a2
-        ma_3 = a3
+        self[0,0] = a0
+        self[0,1] = a1
+        self[0,2] = a2
+        self[0,3] = a3
 
-        mb_0 = b0
-        mb_1 = b1
-        mb_2 = b2
-        mb_3 = b3
+        self[1,0] = b0
+        self[1,1] = b1
+        self[1,2] = b2
+        self[1,3] = b3
 
-        mc_0 = c0
-        mc_1 = c1
-        mc_2 = c2
-        mc_3 = c3
+        self[2,0] = c0
+        self[2,1] = c1
+        self[2,2] = c2
+        self[2,3] = c3
 
-        md_0 = d0
-        md_1 = d1
-        md_2 = d2
-        md_3 = d3
+        self[3,0] = d0
+        self[3,1] = d1
+        self[3,2] = d2
+        self[3,3] = d3
     }
 
     static func == (lhs: Matrix4x4, rhs: Matrix4x4) -> Bool {
@@ -195,14 +195,6 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
                            c0: 1, c1: -1, c2: 1, c3: -1,
                            d0: -1, d1: 1, d2: -1, d3: 1)
 
-//        let index = row * Matrix4x4.columns + column
-//        if (index % 2 == 0) {
-//            assert(m1[row, column] == 1)
-//        }
-//        else {
-//            assert(m1[row, column] == -1)
-//        }
-        
         assert(indexIsValid(row: row, column: column))
         return subMatrix(row: row, column: column).determinate() * m1[row, column]
     }
@@ -265,6 +257,10 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return m
     }
     
+    func translate(x: Double, y: Double, z: Double) -> Matrix4x4 {
+        return Matrix4x4.translate(x: x, y: y, z: z) * self
+    }
+    
     static func scale(x: Double, y: Double, z: Double) -> Matrix4x4 {
         var m = Matrix4x4.identity
         m[0,0] = x
@@ -273,7 +269,11 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return m
     }
     
-    static func rotateX(_ radians: Double) -> Matrix4x4{
+    func scale(x: Double, y: Double, z: Double) -> Matrix4x4 {
+        return Matrix4x4.scale(x: x, y: y, z: z) * self
+    }
+    
+    static func rotateX(_ radians: Double) -> Matrix4x4 {
         var matrix = Matrix4x4.identity
         matrix[1, 1] = cos(radians)
         matrix[1, 2] = -sin(radians)
@@ -281,8 +281,12 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         matrix[2, 2] = cos(radians)
         return matrix
     }
+    
+    func rotateX(_ radians: Double) -> Matrix4x4 {
+        return Matrix4x4.rotateX(radians) * self
+    }
 
-    static func rotateY(_ radians: Double) -> Matrix4x4{
+    static func rotateY(_ radians: Double) -> Matrix4x4 {
         var matrix = Matrix4x4.identity
         matrix[0, 0] = cos(radians)
         matrix[0, 2] = sin(radians)
@@ -291,7 +295,11 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return matrix
     }
     
-    static func rotateZ(_ radians: Double) -> Matrix4x4{
+    func rotateY(_ radians: Double) -> Matrix4x4 {
+        return Matrix4x4.rotateY(radians) * self
+    }
+    
+    static func rotateZ(_ radians: Double) -> Matrix4x4 {
         var matrix = Matrix4x4.identity
         matrix[0, 0] = cos(radians)
         matrix[0, 1] = -sin(radians)
@@ -300,151 +308,42 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return matrix
     }
     
-    func describe() -> String {
-        var output = String()
-        
-        output += "[ "
-        for row in 0..<Matrix4x4.rows {
-            for col in 0..<Matrix4x4.columns {
-                output += String(self[row, col]) + ", "
-            }
-            output += "\n  "
-        }
-        output.removeLast(5)
-        output += " ]"
-        
-        return output
-    }
-
-    var ma_0 : Double {
-        get {
-            return backing[0]
-        }
-        set {
-            backing[0] = newValue
-        }
-    }
-    var ma_1 : Double {
-        get {
-            return backing[1]
-        }
-        set {
-            backing[1] = newValue
-        }
-    }
-    var ma_2 : Double {
-        get {
-            return backing[2]
-        }
-        set {
-            backing[2] = newValue
-        }
-    }
-    var ma_3 : Double {
-        get {
-            return backing[3]
-        }
-        set {
-            backing[3] = newValue
-        }
+    func rotateZ(_ radians: Double) -> Matrix4x4 {
+        return Matrix4x4.rotateZ(radians) * self
     }
     
-    var mb_0 : Double {
-        get {
-            return backing[4]
-        }
-        set {
-            backing[4] = newValue
-        }
-    }
-    var mb_1 : Double {
-        get {
-            return backing[5]
-        }
-        set {
-            backing[5] = newValue
-        }
-    }
-    var mb_2 : Double {
-        get {
-            return backing[6]
-        }
-        set {
-            backing[6] = newValue
-        }
-    }
-    var mb_3 : Double {
-        get {
-            return backing[7]
-        }
-        set {
-            backing[7] = newValue
-        }
-    }
+    static func shear(xy: Double, xz: Double, yx: Double, yz: Double, zx: Double, zy: Double) -> Matrix4x4 {
+        var matrix = Matrix4x4.identity
 
-    var mc_0 : Double {
-        get {
-            return backing[8]
-        }
-        set {
-            backing[8] = newValue
-        }
+        matrix[0, 1] = xy
+        matrix[0, 2] = xz
+        matrix[1, 0] = yx
+        matrix[1, 2] = yz
+        matrix[2, 0] = zx
+        matrix[2, 1] = zy
+        
+        return matrix
     }
-    var mc_1 : Double {
-        get {
-            return backing[9]
-        }
-        set {
-            backing[9] = newValue
-        }
+    
+    func shear(xy: Double, xz: Double, yx: Double, yz: Double, zx: Double, zy: Double) -> Matrix4x4 {
+        return Matrix4x4.shear(xy: xy, xz: xz, yx: yx, yz: yz, zx: zx, zy: zy) * self
     }
-    var mc_2 : Double {
+    
+    var description: String {
         get {
-            return backing[10]
-        }
-        set {
-            backing[10] = newValue
-        }
-    }
-    var mc_3 : Double {
-        get {
-            return backing[11]
-        }
-        set {
-            backing[11] = newValue
-        }
-    }
-
-    var md_0 : Double {
-        get {
-            return backing[12]
-        }
-        set {
-            backing[12] = newValue
-        }
-    }
-    var md_1 : Double {
-        get {
-            return backing[13]
-        }
-        set {
-            backing[13] = newValue
-        }
-    }
-    var md_2 : Double {
-        get {
-            return backing[14]
-        }
-        set {
-            backing[14] = newValue
-        }
-    }
-    var md_3 : Double {
-        get {
-            return backing[0]
-        }
-        set {
-            backing[15] = newValue
+            var output = String()
+            
+            output += "[ "
+            for row in 0..<Matrix4x4.rows {
+                for col in 0..<Matrix4x4.columns {
+                    output += String(self[row, col]) + ", "
+                }
+                output += "\n  "
+            }
+            output.removeLast(5)
+            output += " ]"
+            
+            return output
         }
     }
 

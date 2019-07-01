@@ -31,17 +31,17 @@ struct Matrix3x3 : Equatable, AdditiveArithmetic {
          b0: Double, b1: Double, b2: Double,
          c0: Double, c1: Double, c2: Double) {
         
-        ma_0 = a0
-        ma_1 = a1
-        ma_2 = a2
+        self[0,0] = a0
+        self[0,1] = a1
+        self[0,2] = a2
         
-        mb_0 = b0
-        mb_1 = b1
-        mb_2 = b2
+        self[1,0] = b0
+        self[1,1] = b1
+        self[1,2] = b2
         
-        mc_0 = c0
-        mc_1 = c1
-        mc_2 = c2
+        self[2,0] = c0
+        self[2,1] = c1
+        self[2,2] = c2
     }
     
     static func == (lhs: Matrix3x3, rhs: Matrix3x3) -> Bool {
@@ -221,81 +221,6 @@ struct Matrix3x3 : Equatable, AdditiveArithmetic {
     
     func canInvert() -> Bool {
         return determinate() != 0
-    }
-    
-    var ma_0 : Double {
-        get {
-            return backing[0]
-        }
-        set {
-            backing[0] = newValue
-        }
-    }
-    var ma_1 : Double {
-        get {
-            return backing[1]
-        }
-        set {
-            backing[1] = newValue
-        }
-    }
-    var ma_2 : Double {
-        get {
-            return backing[2]
-        }
-        set {
-            backing[2] = newValue
-        }
-    }
-    
-    var mb_0 : Double {
-        get {
-            return backing[3]
-        }
-        set {
-            backing[3] = newValue
-        }
-    }
-    var mb_1 : Double {
-        get {
-            return backing[4]
-        }
-        set {
-            backing[4] = newValue
-        }
-    }
-    var mb_2 : Double {
-        get {
-            return backing[5]
-        }
-        set {
-            backing[5] = newValue
-        }
-    }
-    
-    var mc_0 : Double {
-        get {
-            return backing[6]
-        }
-        set {
-            backing[6] = newValue
-        }
-    }
-    var mc_1 : Double {
-        get {
-            return backing[7]
-        }
-        set {
-            backing[7] = newValue
-        }
-    }
-    var mc_2 : Double {
-        get {
-            return backing[8]
-        }
-        set {
-            backing[8] = newValue
-        }
     }
     
     private var backing = Array<Double>(repeating: 0.0, count: Matrix3x3.rows * Matrix3x3.columns)

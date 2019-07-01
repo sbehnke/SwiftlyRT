@@ -530,4 +530,181 @@ class Matrix4x4Tests: XCTestCase {
         XCTAssertEqual(t1, rotatedHalf)
         XCTAssertEqual(t2, rotatedFull)
     }
+    
+    func testShearingXY() {
+//        Scenario: A shearing transformation moves x in proportion to y
+//        Given transform ← shearing(1, 0, 0, 0, 0, 0)
+//        And p ← point(2, 3, 4)
+//        Then transform * p = point(5, 3, 4)
+        
+        let transform = Matrix4x4.shear(xy: 1, xz: 0, yx: 0, yz: 0, zx: 0, zy: 0)
+        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
+        let transformed = Vector4(x: 5, y: 3, z: 4, w: 1)
+        let result = transform * point
+        XCTAssertEqual(result, transformed)
+    }
+    
+    func testShearingXZ() {
+//        Scenario: A shearing transformation moves x in proportion to z
+//        Given transform ← shearing(0, 1, 0, 0, 0, 0)
+//        And p ← point(2, 3, 4)
+//        Then transform * p = point(6, 3, 4)
+        
+        let transform = Matrix4x4.shear(xy: 0, xz: 1, yx: 0, yz: 0, zx: 0, zy: 0)
+        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
+        let transformed = Vector4(x: 6, y: 3, z: 4, w: 1)
+        let result = transform * point
+        XCTAssertEqual(result, transformed)
+    }
+    
+    func testShearingYX() {
+//        Scenario: A shearing transformation moves y in proportion to x
+//        Given transform ← shearing(0, 0, 1, 0, 0, 0)
+//        And p ← point(2, 3, 4)
+//        Then transform * p = point(2, 5, 4)
+        
+        let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 1, yz: 0, zx: 0, zy: 0)
+        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
+        let transformed = Vector4(x: 2, y: 5, z: 4, w: 1)
+        let result = transform * point
+        XCTAssertEqual(result, transformed)
+    }
+    
+    func testShearingYZ() {
+//        Scenario: A shearing transformation moves y in proportion to z
+//        Given transform ← shearing(0, 0, 0, 1, 0, 0)
+//        And p ← point(2, 3, 4)
+//        Then transform * p = point(2, 7, 4)
+        
+        let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 0, yz: 1, zx: 0, zy: 0)
+        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
+        let transformed = Vector4(x: 2, y: 7, z: 4, w: 1)
+        let result = transform * point
+        XCTAssertEqual(result, transformed)
+    }
+    
+    func testShearingZX() {
+//        Scenario: A shearing transformation moves z in proportion to x
+//        Given transform ← shearing(0, 0, 0, 0, 1, 0)
+//        And p ← point(2, 3, 4)
+//        Then transform * p = point(2, 3, 6)
+        
+        let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 0, yz: 0, zx: 1, zy: 0)
+        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
+        let transformed = Vector4(x: 2, y: 3, z: 6, w: 1)
+        let result = transform * point
+        XCTAssertEqual(result, transformed)
+    }
+    
+    func testShearingZY() {
+//        Scenario: A shearing transformation moves z in proportion to y
+//        Given transform ← shearing(0, 0, 0, 0, 0, 1)
+//        And p ← point(2, 3, 4)
+//        Then transform * p = point(2, 3, 7)
+        
+        let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 0, yz: 0, zx: 0, zy: 1)
+        let point = Vector4(x: 2, y: 3, z: 4, w: 1)
+        let transformed = Vector4(x: 2, y: 3, z: 7, w: 1)
+        let result = transform * point
+        XCTAssertEqual(result, transformed)
+    }
+    
+    func testMultipleTransformsInSequence() {
+//        Scenario: Individual transformations are applied in sequence
+//        Given p ← point(1, 0, 1)
+        let p = Vector4(x: 1, y: 0, z: 1, w: 1)
+//        And A ← rotation_x(π / 2)
+        let A = Matrix4x4.rotateX(Double.pi / 2)
+//        And B ← scaling(5, 5, 5)
+        let B = Matrix4x4.scale(x: 5, y: 5, z: 5)
+//        And C ← translation(10, 5, 7)
+        let C = Matrix4x4.translate(x: 10, y: 5, z: 7)
+//        # apply rotation first
+//        When p2 ← A * p
+        let p2 = A * p
+//        Then p2 = point(1, -1, 0)
+        XCTAssertEqual(p2, Vector4(x: 1, y: -1, z: 0, w: 1))
+//        # then apply scaling
+//        When p3 ← B * p2
+        let p3 = B * p2
+//        Then p3 = point(5, -5, 0)
+        XCTAssertEqual(p3, Vector4(x: 5, y: -5, z: 0, w: 1))
+//        # then apply translation
+//        When p4 ← C * p3
+        let p4 = C * p3
+//        Then p4 = point(15, 0, 7)
+        XCTAssertEqual(p4, Vector4(x: 15, y: 0, z: 7, w: 1))
+    }
+    
+    func testChainedTransforms() {
+//        Scenario: Chained transformations must be applied in reverse order
+//        Given p ← point(1, 0, 1)
+        let p = Vector4(x: 1, y: 0, z: 1, w: 1)
+//        And A ← rotation_x(π / 2)
+        let A = Matrix4x4.rotateX(Double.pi / 2)
+//        And B ← scaling(5, 5, 5)
+        let B = Matrix4x4.scale(x: 5, y: 5, z: 5)
+//        And C ← translation(10, 5, 7)
+        let C = Matrix4x4.translate(x: 10, y: 5, z: 7)
+//        When T ← C * B * A
+        let T = C * B * A
+//        Then T * p = point(15, 0, 7)
+        let p2 = T * p
+        
+        XCTAssertEqual(p2, Vector4(x: 15, y: 0, z: 7, w: 1))
+        
+        XCTAssertEqual(Matrix4x4.identity.rotateX(Double.pi / 2), A)
+        XCTAssertEqual(Matrix4x4.identity.scale(x: 5, y: 5, z: 5), B)
+        XCTAssertEqual(Matrix4x4.identity.translate(x: 10, y: 5, z: 7), C)
+        
+        let T2 = Matrix4x4.identity.rotateX(Double.pi / 2).scale(x: 5, y: 5, z: 5)
+        XCTAssertEqual(T2, B * A)
+        
+        let transform = Matrix4x4.identity.rotateX(Double.pi / 2).scale(x: 5, y: 5, z: 5).translate(x: 10, y: 5, z: 7)
+        XCTAssertEqual(T, transform)
+    }
+    
+    func testDefaultOrientationTransform() {
+//        Scenario: The transformation matrix for the default orientation
+//        Given from ← point(0, 0, 0)
+//        And to ← point(0, 0, -1)
+//        And up ← vector(0, 1, 0)
+//        When t ← view_transform(from, to, up)
+//        Then t = identity_matrix
+        XCTFail()
+    }
+    
+    func testTransformLookingPositiveZ() {
+//        Scenario: A view transformation matrix looking in positive z direction
+//        Given from ← point(0, 0, 0)
+//        And to ← point(0, 0, 1)
+//        And up ← vector(0, 1, 0)
+//        When t ← view_transform(from, to, up)
+//        Then t = scaling(-1, 1, -1)
+        XCTFail()
+    }
+    
+    func testViewTransformMovesWorld() {
+//        Scenario: The view transformation moves the world
+//        Given from ← point(0, 0, 8)
+//        And to ← point(0, 0, 0)
+//        And up ← vector(0, 1, 0)
+//        When t ← view_transform(from, to, up)
+//        Then t = translation(0, 0, -8)
+        XCTFail()
+    }
+    
+    func testArbitraryViewTransform() {
+//        Scenario: An arbitrary view transformation
+//        Given from ← point(1, 3, 2)
+//        And to ← point(4, -2, 8)
+//        And up ← vector(1, 1, 0)
+//        When t ← view_transform(from, to, up)
+//        Then t is the following 4x4 matrix:
+//        | -0.50709 | 0.50709 |  0.67612 | -2.36643 |
+//        |  0.76772 | 0.60609 |  0.12122 | -2.82843 |
+//        | -0.35857 | 0.59761 | -0.71714 |  0.00000 |
+//        |  0.00000 | 0.00000 |  0.00000 |  1.00000 |
+        XCTFail()
+    }
 }

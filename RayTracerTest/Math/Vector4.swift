@@ -134,6 +134,12 @@ struct Vector4: Equatable, AdditiveArithmetic {
         }
     }
     
+    var description : String {
+        get {
+            return "[ \(x), \(y), \(z), \(w) ]"
+        }
+    }
+    
     var x: Double {
         get {
             return backing[0]
