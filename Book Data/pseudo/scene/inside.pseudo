@@ -1,0 +1,6 @@
+if dot(comps.normalv, comps.eyev) < 0
+  comps.inside ← true
+  comps.normalv ← -comps.normalv
+else
+  comps.inside ← false
+end if

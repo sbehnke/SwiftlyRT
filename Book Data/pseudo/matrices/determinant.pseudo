@@ -1,0 +1,14 @@
+function determinant(M)
+  det ← 0
+
+  if M.size = 2
+    det ← M[0, 0] * M[1, 1] - M[0, 1] * M[1, 0]
+
+  else
+    for column ← 0 to M.size - 1
+      det ← det + M[0, column] * cofactor(M, 0, column)
+    end for
+  end if
+
+  return det
+end function

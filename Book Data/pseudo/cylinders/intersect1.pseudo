@@ -1,0 +1,24 @@
+function local_intersect(cylinder, ray)
+  a ← ray.direction.x² + ray.direction.z²
+
+  # ray is parallel to the y axis
+  return () if a is approximately zero
+
+  b ← 2 * ray.origin.x * ray.direction.x +
+       2 * ray.origin.z * ray.direction.z
+  c ← ray.origin.x² + ray.origin.z² - 1
+
+  disc ← b² - 4 * a * c
+
+  # ray does not intersect the cylinder
+  return () if disc < 0
+
+  # this is just a placeholder, to ensure the tests
+  # pass that expect the ray to miss.
+  return ( intersection(1, cylinder) )
+
+  t0 ← (-b - √(disc)) / (2 * a)
+  t1 ← (-b + √(disc)) / (2 * a)
+
+  return ( intersection(t0, cylinder), intersection(t1, cylinder) )
+end function

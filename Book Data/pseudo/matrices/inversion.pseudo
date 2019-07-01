@@ -1,0 +1,17 @@
+function inverse(M)
+  fail if M is not invertible
+
+  M2 ← new matrix of same size as M
+
+  for row ← 0 to M.size - 1
+    for col ← 0 to M.size - 1
+      c ← cofactor(M, row, col)
+
+      # note that "col, row" here, instead of "row, col",
+      # accomplishes the transpose operation!
+      M2[col, row] ← c / determinant(M)
+    end for
+  end for
+
+  return M2
+end function

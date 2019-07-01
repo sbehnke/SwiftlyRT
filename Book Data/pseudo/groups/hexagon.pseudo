@@ -1,0 +1,38 @@
+function hexagon_corner()
+  corner ← sphere()
+  set_transform(corner, translation(0, 0, -1) *
+                        scaling(0.25, 0.25, 0.25))
+  return corner
+end function
+
+function hexagon_edge()
+  edge ← cylinder()
+  edge.minimum ← 0
+  edge.maximum ← 1
+  set_transform(edge, translation(0, 0, -1) *
+                      rotation_y(-π/6) *
+                      rotation_z(-π/2) *
+                      scaling(0.25, 1, 0.25))
+  return edge
+end function
+
+function hexagon_side()
+  side ← group()
+
+  add_child(side, hexagon_corner())
+  add_child(side, hexagon_edge())
+
+  return side
+end function
+
+function hexagon()
+  hex ← group()
+
+  for n ← 0 to 5
+    side ← hexagon_side()
+    set_transform(side, rotation_y(n*π/3))
+    add_child(hex, side)
+  end for
+
+  return hex
+end function

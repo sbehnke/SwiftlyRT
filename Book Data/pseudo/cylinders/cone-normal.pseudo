@@ -1,0 +1,4 @@
+y ← √(point.x² + point.z²)
+y ← -y if point.y > 0
+
+return vector(point.x, y, point.z)

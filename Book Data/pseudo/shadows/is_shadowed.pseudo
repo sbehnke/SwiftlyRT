@@ -1,0 +1,15 @@
+function is_shadowed(world, point)
+  v ← world.light.position - point
+  distance ← magnitude(v)
+  direction ← normalize(v)
+
+  r ← ray(point, direction)
+  intersections ← intersect_world(world, r)
+
+  h ← hit(intersections)
+  if h is present and h.t < distance
+    return true
+  else
+    return false
+  end if
+end function

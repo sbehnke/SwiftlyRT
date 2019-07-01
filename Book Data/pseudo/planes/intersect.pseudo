@@ -1,0 +1,4 @@
+function intersect(shape, ray)
+  local_ray ← transform(ray, inverse(shape.transform))
+  return local_intersect(shape, local_ray)
+end function

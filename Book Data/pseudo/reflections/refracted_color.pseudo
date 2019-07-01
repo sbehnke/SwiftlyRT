@@ -1,0 +1,7 @@
+function refracted_color(world, comps, remaining)
+  if comps.object.material.transparency = 0
+    return color(0, 0, 0)
+  end if
+
+  return color(1, 1, 1)
+end function

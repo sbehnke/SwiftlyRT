@@ -1,0 +1,11 @@
+function local_normal_at(cube, point)
+  maxc ← max(abs(point.x), abs(point.y), abs(point.z))
+
+  if maxc = abs(point.x) then
+    return vector(point.x, 0, 0)
+  else if maxc = abs(point.y) then
+    return vector(0, point.y, 0)
+  end if
+
+  return vector(0, 0, point.z)
+end function

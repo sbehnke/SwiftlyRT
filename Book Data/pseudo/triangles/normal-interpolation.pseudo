@@ -1,0 +1,5 @@
+function local_normal_at(tri, point, hit)
+  return tri.n2 * hit.u +
+         tri.n3 * hit.v +
+         tri.n1 * (1 - hit.u - hit.v)
+end function

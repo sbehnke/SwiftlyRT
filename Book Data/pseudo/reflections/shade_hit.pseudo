@@ -1,0 +1,13 @@
+function shade_hit(world, comps)
+  shadowed ← is_shadowed(world, comps.over_point)
+
+  surface ← lighting(comps.object.material,
+                     comps.object,
+                     world.light,
+                     comps.over_point, comps.eyev, comps.normalv,
+                     shadowed)
+
+  reflected ← reflected_color(world, comps)
+
+  return surface + reflected
+end function

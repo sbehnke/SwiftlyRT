@@ -1,0 +1,19 @@
+# rotate the teapot to be right-side up
+A ← rotation_x(π / 2)
+teapot ← A * teapot
+
+# next, make the teapot 5x larger
+B ← scaling(5, 5, 5)
+teapot ← B * teapot
+
+# finally, move the teapot onto a table
+C ← translation(10, 5, 7)
+teapot ← C * teapot
+
+A ← rotation_x(π / 2)
+B ← scaling(5, 5, 5)
+C ← translation(10, 5, 7)
+
+teapot ← C * (B * (A * teapot))
+
+teapot ← (C * B * A) * teapot

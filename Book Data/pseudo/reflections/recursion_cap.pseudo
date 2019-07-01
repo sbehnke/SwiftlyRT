@@ -1,0 +1,21 @@
+function color_at(world, ray, remaining)
+  # ...
+  color ← shade_hit(world, comps, remaining)
+  # ...
+end function
+
+function shade_hit(world, comps, remaining)
+  # ...
+  reflected ← reflected_color(world, comps, remaining)
+  # ...
+end function
+
+function reflected_color(world, comps, remaining)
+  if remaining <= 0
+    return color(0, 0, 0)
+  end if
+
+  # ...
+  color ← color_at(world, reflect_ray, remaining - 1)
+  # ...
+end function

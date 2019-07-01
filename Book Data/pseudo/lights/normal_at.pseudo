@@ -1,0 +1,7 @@
+function normal_at(sphere, world_point)
+  object_point ← inverse(sphere.transform) * world_point
+  object_normal ← object_point - point(0, 0, 0)
+  world_normal ← transpose(inverse(sphere.transform)) * object_normal
+  world_normal.w ← 0
+  return normalize(world_normal)
+end function

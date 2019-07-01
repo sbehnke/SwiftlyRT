@@ -1,0 +1,6 @@
+function hadamard_product(c1, c2)
+  r ← c1.red * c2.red
+  g ← c1.green * c2.green
+  b ← c1.blue * c2.blue
+  return color(r, g, b)
+end function

@@ -1,0 +1,54 @@
+# start the ray at z = -5
+ray_origin ← point(0, 0, -5)
+
+# put the wall at z = 10
+wall_z ← 10
+
+wall_size ← 7.0
+
+canvas_pixels ← 100
+
+pixel_size ← wall_size / canvas_pixels
+
+half ← wall_size / 2
+
+canvas ← canvas(canvas_pixels, canvas_pixels)
+
+sphere.material ← material()
+sphere.material.color ← color(1, 0.2, 1)
+
+light_position ← point(-10, 10, -10)
+light_color    ← color(1, 1, 1)
+light          ← point_light(light_position, light_color)
+
+# for each row of pixels in the canvas
+for y ← 0 to canvas_pixels - 1
+
+  # compute the world y coordinate (top = +half, bottom = -half)
+  world_y ← half - pixel_size * y
+
+  # for each pixel in the row
+  for x ← 0 to canvas_pixels - 1
+
+    # compute the world x coordinate (left = -half, right = half)
+    world_x ← -half + pixel_size * x
+
+    # describe the point on the wall that the ray will target
+    position ← point(world_x, world_y, wall_z)
+
+    ray ← ray(ray_origin, normalize(position - ray_origin))
+    xs ← intersect(sphere, ray)
+
+    if hit(xs) is defined
+      point  ← position(ray, hit.t)
+      normal ← normal_at(hit.object, point)
+      eye    ← -ray.direction
+
+      color ← lighting(hit.object.material, light, point, eye, normal)
+
+      write_pixel(canvas, x, y, color)
+    end if
+
+  end for
+
+end for

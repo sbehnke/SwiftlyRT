@@ -1,0 +1,27 @@
+containers ← empty list
+
+for i ← each intersection in xs
+  if i = hit then
+    if containers is empty
+      comps.n1 ← 1.0
+    else
+      comps.n1 ← last(containers).material.refractive_index
+    end if
+  end if
+
+  if containers includes i.object then
+    remove i.object from containers
+  else
+    append i.object onto containers
+  end if
+
+  if i = hit then
+    if containers is empty
+      comps.n2 ← 1.0
+    else
+      comps.n2 ← last(containers).material.refractive_index
+    end if
+
+    terminate loop
+  end if
+end for

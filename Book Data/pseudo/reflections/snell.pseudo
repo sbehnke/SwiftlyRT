@@ -1,0 +1,24 @@
+# Find the ratio of first index of refraction to the second.
+# (Yup, this is inverted from the definition of Snell's Law.)
+n_ratio ← comps.n1 / comps.n2
+
+# cos(theta_i) is the same as the dot product of the two vectors
+cos_i ← dot(comps.eyev, comps.normalv)
+
+# Find sin(theta_t)^2 via trigonometric identity
+sin2_t ← n_ratio^2 * (1 - cos_i^2)
+
+# Find cos(theta_t) via trigonometric identity
+cos_t ← sqrt(1.0 - sin2_t)
+
+# Compute the direction of the refracted ray
+direction ← comps.normalv * (n_ratio * cos_i - cos_t) -
+             comps.eyev * n_ratio
+
+# Create the refracted ray
+refract_ray ← ray(comps.under_point, direction)
+
+# Find the color of the refracted ray, making sure to multiply
+# by the transparency value to account for any opacity
+color ← color_at(world, refract_ray, remaining - 1) *
+         comps.object.material.transparency

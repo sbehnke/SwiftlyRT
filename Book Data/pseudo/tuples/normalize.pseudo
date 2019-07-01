@@ -1,0 +1,6 @@
+function normalize(v)
+  return tuple(v.x / magnitude(v),
+               v.y / magnitude(v),
+               v.z / magnitude(v),
+               v.w / magnitude(v))
+end function

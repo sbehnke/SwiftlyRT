@@ -1,0 +1,20 @@
+function intersect(sphere, ray)
+  # the vector from the sphere's center, to the ray origin
+  # remember: the sphere is centered at the world origin
+  sphere_to_ray ← ray.origin - point(0, 0, 0)
+
+  a ← dot(ray.direction, ray.direction)
+  b ← 2 * dot(ray.direction, sphere_to_ray)
+  c ← dot(sphere_to_ray, sphere_to_ray) - 1
+
+  discriminant ← b² - 4 * a * c
+
+  if discriminant < 0 then
+    return ()
+  end if
+
+  t1 ← (-b - √(discriminant)) / (2 * a)
+  t2 ← (-b + √(discriminant)) / (2 * a)
+
+  return (t1, t2)
+end function

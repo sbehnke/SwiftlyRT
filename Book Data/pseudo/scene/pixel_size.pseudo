@@ -1,0 +1,12 @@
+half_view ← tan(camera.field_of_view / 2)
+aspect ← camera.hsize / camera.vsize
+
+if aspect >= 1 then
+  camera.half_width ← half_view
+  camera.half_height ← half_view / aspect
+else
+  camera.half_width ← half_view * aspect
+  camera.half_height ← half_view
+end if
+
+camera.pixel_size ← (camera.half_width * 2) / camera.hsize

@@ -1,0 +1,12 @@
+function lighting(material, light, point, eyev, normalv, in_shadow)
+  if material has a pattern
+    color ← stripe_at(material.pattern, point)
+  else
+    color ← material.color
+  end if
+
+  # then, compute the lighting as usual, using `color`
+  # instead of `material.color`
+
+  # ...
+end function

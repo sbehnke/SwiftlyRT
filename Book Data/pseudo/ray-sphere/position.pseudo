@@ -1,0 +1,3 @@
+function position(ray, t)
+  return ray.origin + ray.direction * t
+end function

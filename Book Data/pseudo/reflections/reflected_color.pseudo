@@ -1,0 +1,10 @@
+function reflected_color(world, comps)
+  if comps.object.material.reflective = 0
+    return color(0, 0, 0)
+  end if
+
+  reflect_ray ← ray(comps.over_point, comps.reflectv)
+  color ← color_at(world, reflect_ray)
+
+  return color * comps.object.material.reflective
+end function

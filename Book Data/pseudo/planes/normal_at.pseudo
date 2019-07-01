@@ -1,0 +1,8 @@
+function normal_at(shape, point)
+  local_point  ← inverse(shape.transform) * point
+  local_normal ← local_normal_at(shape, local_point)
+  world_normal ← transpose(inverse(shape.transform)) * local_normal
+  world_normal.w ← 0
+
+  return normalize(world_normal)
+end function

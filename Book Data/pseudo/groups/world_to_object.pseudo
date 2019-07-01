@@ -1,0 +1,7 @@
+function world_to_object(shape, point)
+  if shape has parent
+    point ← world_to_object(shape.parent, point)
+  end if
+
+  return inverse(shape.transform) * point
+end function

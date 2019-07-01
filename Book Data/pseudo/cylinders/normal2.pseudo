@@ -1,0 +1,14 @@
+function local_normal_at(cylinder, point)
+  # compute the square of the distance from the y axis
+  dist ← point.x² + point.z²
+
+  if dist < 1 and point.y >= cylinder.maximum - EPSILON
+    return vector(0, 1, 0)
+
+  else if dist < 1 and point.y <= cylinder.minimum + EPSILON
+    return vector(0, -1, 0)
+
+  else
+    return vector(point.x, 0, point.z)
+  end if
+end function

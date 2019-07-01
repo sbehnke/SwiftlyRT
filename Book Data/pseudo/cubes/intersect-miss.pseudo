@@ -1,0 +1,25 @@
+function check_axis(origin, direction)
+  if abs(direction) > EPSILON
+    tmin ← (-1 - origin) / direction
+    tmax ← (1 - origin) / direction
+    if tmin > tmax then swap(tmin, tmax)
+  else
+    tmin ← (-1 - origin) * INFINITY
+    tmax ← (1 - origin) * INFINITY
+  end if
+
+  return tmin, tmax
+end function
+
+function local_intersect(cube, ray)
+  xtmin, xtmax ← check_axis(ray.origin.x, ray.direction.x)
+  ytmin, ytmax ← check_axis(ray.origin.y, ray.direction.y)
+  ztmin, ztmax ← check_axis(ray.origin.z, ray.direction.z)
+
+  tmin ← max(xtmin, ytmin, ztmin)
+  tmax ← min(xtmax, ytmax, ztmax)
+
+  return () if tmin > tmax
+
+  return ( intersection(tmin, cube), intersection(tmax, cube) )
+end function

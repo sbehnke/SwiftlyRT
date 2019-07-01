@@ -1,0 +1,17 @@
+t0 ← (-b - √(disc)) / (2 * a)
+t1 ← (-b + √(disc)) / (2 * a)
+if t0 > t1 then swap(t0, t1)
+
+xs = ()
+
+y0 ← ray.origin.y + t0 * ray.direction.y
+if cylinder.minimum < y0 and y0 < cylinder.maximum
+  add intersection(t0, cylinder) to xs
+end if
+
+y1 ← ray.origin.y + t1 * ray.direction.y
+if cylinder.minimum < y1 and y1 < cylinder.maximum
+  add intersection(t1, cylinder) to xs
+end if
+
+return xs

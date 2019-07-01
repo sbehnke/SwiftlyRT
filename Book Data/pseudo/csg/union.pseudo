@@ -1,0 +1,8 @@
+function intersection_allowed(op, lhit, inl, inr)
+  if op is "union"
+    return (lhit and not inr) or (not lhit and not inl)
+  end if
+
+  # default answer
+  return false
+end function

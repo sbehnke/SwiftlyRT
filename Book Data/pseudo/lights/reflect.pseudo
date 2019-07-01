@@ -1,0 +1,3 @@
+function reflect(in, normal)
+  return in - normal * 2 * dot(in, normal)
+end function

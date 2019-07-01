@@ -1,0 +1,11 @@
+# vertices is a 1-based array of at least three vertices
+function fan_triangulation(vertices)
+  triangles ← empty list
+
+  for index ← 2 to length(vertices) - 1
+    tri ← triangle(vertices[1], vertices[index], vertices[index+1])
+    add tri to triangles
+  end for
+
+  return triangles
+end function

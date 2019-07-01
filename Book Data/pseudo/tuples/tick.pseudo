@@ -1,0 +1,5 @@
+function tick(env, proj)
+  position ← proj.position + proj.velocity
+  velocity ← proj.velocity + env.gravity + env.wind
+  return projectile(position, velocity)
+end function

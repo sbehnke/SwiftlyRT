@@ -1,0 +1,20 @@
+function schlick(comps)
+  # find the cosine of the angle between the eye and normal vectors
+  cos ← dot(comps.eyev, comps.normalv)
+
+  # total internal reflection can only occur if n1 > n2
+  if comps.n1 > comps.n2
+    n ← comps.n1 / comps.n2
+    sin2_t = n^2 * (1.0 - cos^2)
+    return 1.0 if sin2_t > 1.0
+
+    # compute cosine of theta_t using trig identity
+    cos_t ← sqrt(1.0 - sin2_t)
+
+    # when n1 > n2, use cos(theta_t) instead
+    cos ← cos_t
+  end if
+
+  r0 ← ((comps.n1 - comps.n2) / (comps.n1 + comps.n2))^2
+  return r0 + (1 - r0) * (1 - cos)^5
+end function

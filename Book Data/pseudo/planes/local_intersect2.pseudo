@@ -1,0 +1,8 @@
+function local_intersect(ray, plane)
+  if abs(ray.direction.y) < EPSILON
+    return () # empty set -- no intersections
+  end if
+
+  t ← -ray.origin.y / ray.direction.y
+  return ( intersection(t, plane) )
+end function

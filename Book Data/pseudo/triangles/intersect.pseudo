@@ -1,0 +1,21 @@
+function local_intersect(triangle, ray)
+  dir_cross_e2 ← cross(ray.direction, triangle.e2)
+  det ← dot(triangle.e1, dir_cross_e2)
+  return () if abs(det) < EPSILON
+
+  f ← 1.0 / det
+
+  p1_to_origin ← ray.origin - triangle.p1
+  u ← f * dot(p1_to_origin, dir_cross_e2)
+  return () if u < 0 or u > 1
+
+  origin_cross_e1 ← cross(p1_to_origin, triangle.e1)
+  v ← f * dot(ray.direction, origin_cross_e1)
+  return () if v < 0 or (u + v) > 1
+
+  t = f * dot(triangle.e2, origin_cross_e1)
+  return ( intersection(t, triangle) )
+
+  # a bogus intersection to ensure the result isn't a false positive
+  return ( intersection(1, triangle) )
+end function

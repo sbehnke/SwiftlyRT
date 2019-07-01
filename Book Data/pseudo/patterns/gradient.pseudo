@@ -1,0 +1,6 @@
+function pattern_at(gradient, point)
+  distance ← gradient.b - gradient.a
+  fraction ← point.x - floor(point.x)
+
+  return gradient.a + distance * fraction
+end

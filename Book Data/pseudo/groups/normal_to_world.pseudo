@@ -1,0 +1,11 @@
+function normal_to_world(shape, normal)
+  normal ← transpose(inverse(shape.transform)) * normal
+  normal.w ← 0
+  normal ← normalize(normal)
+
+  if shape has parent
+    normal ← normal_to_world(shape.parent, normal)
+  end if
+
+  return normal
+end function

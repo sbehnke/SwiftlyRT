@@ -1,0 +1,3 @@
+# after computing and (if appropriate) negating
+# the normal vector...
+comps.over_point ← comps.point + comps.normalv * EPSILON

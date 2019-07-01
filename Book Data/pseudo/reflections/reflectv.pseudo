@@ -1,0 +1,2 @@
+# after negating the normal, if necessary
+comps.reflectv ← reflect(ray.direction, comps.normalv)

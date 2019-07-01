@@ -1,0 +1,26 @@
+function filter_intersections(csg, xs)
+  # begin outside of both children
+  inl ← false
+  inr ← false
+
+  # prepare a list to receive the filtered intersections
+  result ← empty intersection list
+
+  for each intersection "i" in xs
+    # if i.object is part of the "left" child, then lhit is true
+    lhit ← csg.left includes i.object
+
+    if intersection_allowed(csg.operation, lhit, inl, inr) then
+      add i to result
+    end if
+
+    # depending on which object was hit, toggle either inl or inr
+    if lhit then
+      inl ← not inl
+    else
+      inr ← not inr
+    end if
+  end for
+
+  return result
+end function

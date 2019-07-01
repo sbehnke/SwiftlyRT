@@ -1,0 +1,5 @@
+function normal_at(shape, world_point)
+  local_point ← world_to_object(shape, world_point)
+  local_normal ← local_normal_at(shape, local_point)
+  return normal_to_world(shape, local_normal)
+end function

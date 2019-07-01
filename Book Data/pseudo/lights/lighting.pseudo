@@ -1,0 +1,40 @@
+function lighting(material, light, point, eyev, normalv)
+  # combine the surface color with the light's color/intensity
+  effective_color ← material.color * light.intensity
+
+  # find the direction to the light source
+  lightv ← normalize(light.position - point)
+
+  # compute the ambient contribution
+  ambient ← effective_color * material.ambient
+
+  # light_dot_normal represents the cosine of the angle between the
+  # light vector and the normal vector. A negative number means the
+  # light is on the other side of the surface.
+  light_dot_normal ← dot(lightv, normalv)
+  if light_dot_normal < 0
+    diffuse ← black
+    specular ← black
+
+  else
+    # compute the diffuse contribution
+    diffuse ← effective_color * material.diffuse * light_dot_normal
+
+    # reflect_dot_eye represents the cosine of the angle between the
+    # reflection vector and the eye vector. A negative number means the
+    # light reflects away from the eye.
+    reflectv ← reflect(-lightv, normalv)
+    reflect_dot_eye ← dot(reflectv, eyev)
+
+    if reflect_dot_eye <= 0
+      specular ← black
+    else
+      # compute the specular contribution
+      factor ← pow(reflect_dot_eye, material.shininess)
+      specular ← light.intensity * material.specular * factor
+    end if
+  end if
+
+  # Add the three contributions together to get the final shading
+  return ambient + diffuse + specular
+end function

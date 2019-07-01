@@ -1,0 +1,7 @@
+comps.point ← position(ray, comps.t)
+
+# and then, after computing and possibly negating
+# the normal vector...
+
+comps.over_point ← comps.point + comps.normalv * EPSILON
+comps.under_point ← comps.point - comps.normalv * EPSILON

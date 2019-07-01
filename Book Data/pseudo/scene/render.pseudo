@@ -1,0 +1,13 @@
+function render(camera, world)
+  image ← canvas(camera.hsize, camera.vsize)
+
+  for y ← 0 to camera.vsize - 1
+    for x ← 0 to camera.hsize - 1
+      ray ← ray_for_pixel(camera, x, y)
+      color ← color_at(world, ray)
+      write_pixel(image, x, y, color)
+    end for
+  end for
+
+  return image
+end function

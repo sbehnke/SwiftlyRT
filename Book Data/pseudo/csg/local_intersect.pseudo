@@ -1,0 +1,9 @@
+function local_intersect(csg, ray)
+  leftxs ← intersect(csg.left, ray)
+  rightxs ← intersect(csg.right, ray)
+
+  xs ← combine leftxs and rightxs
+  xs ← sort xs by t
+
+  return filter_intersections(csg, xs)
+end function

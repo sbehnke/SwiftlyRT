@@ -1,0 +1,9 @@
+constant EPSILON ← 0.00001
+
+function equal(a, b)
+  if abs(a - b) < EPSILON
+    return true
+  else
+    return false
+  end if
+end function

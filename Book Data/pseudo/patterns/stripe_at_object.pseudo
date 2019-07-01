@@ -1,0 +1,6 @@
+function stripe_at_object(pattern, object, world_point)
+  object_point  ← inverse(object.transform) * world_point
+  pattern_point ← inverse(pattern.transform) * object_point
+
+  return stripe_at(pattern, pattern_point)
+end function

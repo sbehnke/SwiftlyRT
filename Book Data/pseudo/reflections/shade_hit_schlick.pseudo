@@ -1,0 +1,21 @@
+function shade_hit(world, comps, remaining)
+  shadowed ← is_shadowed(world, comps.over_point)
+
+  surface ← lighting(comps.object.material,
+                     comps.object,
+                     world.light,
+                     comps.over_point, comps.eyev, comps.normalv,
+                     shadowed)
+
+  reflected ← reflected_color(world, comps, remaining)
+  refracted ← refracted_color(world, comps, remaining)
+
+  material ← comps.object.material
+  if material.reflective > 0 && material.transparency > 0
+    reflectance ← schlick(comps)
+    return surface + reflected * reflectance +
+                     refracted * (1 - reflectance)
+  else
+    return surface + reflected + refracted
+  end
+end function

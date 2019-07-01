@@ -1,0 +1,15 @@
+function prepare_computations(intersection, ray)
+  # instantiate a data structure for storing some precomputed values
+  comps ← new computations data structure
+
+  # copy the intersection's properties, for convenience
+  comps.t       ← intersection.t
+  comps.object  ← intersection.object
+
+  # precompute some useful values
+  comps.point   ← position(ray, comps.t)
+  comps.eyev    ← -ray.direction
+  comps.normalv ← normal_at(comps.object, comps.point)
+
+  return comps
+end function
