@@ -153,11 +153,11 @@ struct Color: Equatable, AdditiveArithmetic {
         }
     }
     
-    private func clamp(value : Float) -> Float {
-        if (value > 1.0) {
-            return 1.0
-        } else if (value < 0.0) {
-            return 0
+    private func clamp(value : Float, min: Float = 0.0, max: Float = 1.0) -> Float {
+        if (value > max) {
+            return max
+        } else if (value < min) {
+            return min
         }
         
         return value
