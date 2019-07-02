@@ -18,6 +18,38 @@ class Canvas {
         pixels = Array<Color>(repeating: Color(), count: width * height)
     }
     
+    func indexIsValid(x: Int, y: Int) -> Bool {
+        return x >= 0 && x < width && y >= 0 && y < height
+    }
+    
+    var count : Int {
+        get {
+            return pixels.count
+        }
+    }
+    
+    subscript(_ index: Int) -> Color {
+        get {
+            assert(index >= 0 && index < pixels.count)
+            return pixels[index]
+        }
+        set {
+            assert(index >= 0 && index < pixels.count)
+            pixels[index] = newValue
+        }
+    }
+    
+    subscript(x: Int, y: Int) -> Color {
+        get {
+            assert(indexIsValid(x: x, y: y), "Index out of range")
+            return pixels[(y * width) + x]
+        }
+        set {
+            assert(indexIsValid(x: x, y: y), "Index out of range")
+            pixels[(y * width) + x] = newValue
+        }
+    }
+    
     func setPixel(x: Int, y: Int, color: Color) {
         pixels[x + (y * width)] = color;
     }

@@ -21,7 +21,7 @@ struct Matrix2x2 : Equatable, AdditiveArithmetic {
         
     }
 
-    init(values: Array<Double>) {
+    init(_ values: Array<Double>) {
         assert(values.count == Matrix2x2.rows * Matrix2x2.columns)
         backing = values
     }

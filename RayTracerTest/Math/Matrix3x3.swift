@@ -22,7 +22,7 @@ struct Matrix3x3 : Equatable, AdditiveArithmetic {
         
     }
     
-    init(values: Array<Double>) {
+    init(_ values: Array<Double>) {
         assert(values.count == Matrix3x3.rows * Matrix3x3.columns)
         backing = values
     }
@@ -194,7 +194,7 @@ struct Matrix3x3 : Equatable, AdditiveArithmetic {
             }
         }
         
-        return Matrix2x2(values: values)
+        return Matrix2x2(values)
     }
     
     func minor(row: Int, column: Int) -> Double {

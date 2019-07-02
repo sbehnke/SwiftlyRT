@@ -18,6 +18,92 @@ class TupleTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
+    func testPoint() {
+        //    Scenario: A tuple with w=1.0 is a point
+        //    Given a ← tuple(4.3, -4.2, 3.1, 1.0)
+        //    Then a.x = 4.3
+        //    And a.y = -4.2
+        //    And a.z = 3.1
+        //    And a.w = 1.0
+        //    And a is a point
+        //    And a is not a vector
+        
+        let a = Tuple.Point(x: 4.3, y: -4.2, z: 3.1, w: 1.0)
+        XCTAssertEqual(a.x, 4.3)
+        XCTAssertEqual(a.y, -4.2)
+        XCTAssertEqual(a.z, 3.1)
+        XCTAssertEqual(a.w, 1.0)
+        XCTAssertTrue(a.isPoint())
+        XCTAssertFalse(a.isVector())
+    }
+    
+    func testVector() {
+        //    Scenario: A tuple with w=0 is a vector
+        //    Given a ← tuple(4.3, -4.2, 3.1, 0.0)
+        //    Then a.x = 4.3
+        //    And a.y = -4.2
+        //    And a.z = 3.1
+        //    And a.w = 0.0
+        //    And a is not a point
+        //    And a is a vector
+        
+        let a = Tuple.Vector(x: 4.3, y: -4.2, z: 3.1, w: 0.0)
+        XCTAssertEqual(a.x, 4.3)
+        XCTAssertEqual(a.y, -4.2)
+        XCTAssertEqual(a.z, 3.1)
+        XCTAssertEqual(a.w, 0.0)
+        XCTAssertFalse(a.isPoint())
+        XCTAssertTrue(a.isVector())
+    }
+    
+    func testAddition() {
+//        Scenario: Adding two tuples
+//        Given a1 ← tuple(3, -2, 5, 1)
+//        And a2 ← tuple(-2, 3, 1, 0)
+//        Then a1 + a2 = tuple(1, 1, 6, 1)
+        
+        let a1 = Tuple.Point(x: 3, y: -2, z: 5)
+        let a2 = Tuple.Vector(x: -2, y: 3, z: 1)
+        let sum = Tuple.Point(x: 1, y: 1, z: 6)
+        XCTAssertEqual(a1 + a2, sum)
+    }
+    
+    func testSubtraction() {
+//        Scenario: Subtracting two points
+//        Given p1 ← point(3, 2, 1)
+//        And p2 ← point(5, 6, 7)
+//        Then p1 - p2 = vector(-2, -4, -6)
+        
+        let p1 = Tuple.Vector(x: 3, y: 2, z: 1)
+        let p2 = Tuple.Vector(x: 5, y: 6, z: 7)
+        let difference = Tuple.Vector(x:-2, y: -4, z: -6)
+        XCTAssertEqual(p1 - p2, difference)
+    }
+    
+    func testPointDefaultConstructor() {
+        //    Scenario: point() creates tuples with w=1
+        //    Given p ← point(4, -4, 3)
+        //    Then p = tuple(4, -4, 3, 1)
+        
+        let p = Tuple.Point(x: 4, y: -4, z: 3)
+        XCTAssertEqual(p.x, 4)
+        XCTAssertEqual(p.y, -4)
+        XCTAssertEqual(p.z, 3)
+        XCTAssertEqual(p.w, 1)
+    }
+    
+    func testVectorDefaultConstructor() {
+        //    Scenario: vector() creates tuples with w=0
+        //    Given v ← vector(4, -4, 3)
+        //    Then v = tuple(4, -4, 3, 0)
+        
+        let v = Tuple.Vector(x: 4, y: -4, z: 3)
+        XCTAssertEqual(v.x, 4)
+        XCTAssertEqual(v.y, -4)
+        XCTAssertEqual(v.z, 3)
+        XCTAssertEqual(v.w, 0)
+    }
+    
     func testInit() {
         let b = Tuple.Vector()
         XCTAssertEqual(b, Tuple.zero)
@@ -40,19 +126,7 @@ class TupleTests: XCTestCase {
         XCTAssertNotEqual(a, b)
     }
     
-    func testAddition() {
-        let a1 = Tuple.Point(x: 3, y: -2, z: 5)
-        let a2 = Tuple.Vector(x: -2, y: 3, z: 1)
-        let sum = Tuple.Point(x: 1, y: 1, z: 6)
-        XCTAssertEqual(a1 + a2, sum)
-    }
     
-    func testSubtraction() {
-        let p1 = Tuple.Vector(x: 3, y: 2, z: 1)
-        let p2 = Tuple.Vector(x: 5, y: 6, z: 7)
-        let difference = Tuple.Vector(x:-2, y: -4, z: -6)
-        XCTAssertEqual(p1 - p2, difference)
-    }
     
     func testMultiplyByScalar() {
         let a = Tuple.Vector(x: 1, y: -2, z: 3, w: -4)
@@ -106,73 +180,16 @@ class TupleTests: XCTestCase {
     }
     
     func testCrossProduct() {
+//        Scenario: The cross product of two vectors
+//        Given a ← vector(1, 2, 3)
+//        And b ← vector(2, 3, 4)
+//        Then cross(a, b) = vector(-1, 2, -1)
+//        And cross(b, a) = vector(1, -2, 1)
+
         let a = Tuple.Vector(x: 1, y: 2, z: 3)
         let b = Tuple.Vector(x: 2, y: 3, z: 4)
         XCTAssertEqual(a.cross(rhs: b), Tuple.Vector(x: -1, y: 2, z: -1))
         XCTAssertEqual(b.cross(rhs: a), Tuple.Vector(x: 1, y: -2, z: 1))
-    }
-    
-    
-    func testPoint() {
-        //    Scenario: A tuple with w=1.0 is a point
-        //    Given a ← tuple(4.3, -4.2, 3.1, 1.0)
-        //    Then a.x = 4.3
-        //    And a.y = -4.2
-        //    And a.z = 3.1
-        //    And a.w = 1.0
-        //    And a is a point
-        //    And a is not a vector
-        
-        let a = Tuple.Point(x: 4.3, y: -4.2, z: 3.1, w: 1.0)
-        XCTAssertEqual(a.x, 4.3)
-        XCTAssertEqual(a.y, -4.2)
-        XCTAssertEqual(a.z, 3.1)
-        XCTAssertEqual(a.w, 1.0)
-        XCTAssertTrue(a.isPoint())
-        XCTAssertFalse(a.isVector())
-    }
-    
-    func testVector() {
-        //    Scenario: A tuple with w=0 is a vector
-        //    Given a ← tuple(4.3, -4.2, 3.1, 0.0)
-        //    Then a.x = 4.3
-        //    And a.y = -4.2
-        //    And a.z = 3.1
-        //    And a.w = 0.0
-        //    And a is not a point
-        //    And a is a vector
-        
-        let a = Tuple.Vector(x: 4.3, y: -4.2, z: 3.1, w: 0.0)
-        XCTAssertEqual(a.x, 4.3)
-        XCTAssertEqual(a.y, -4.2)
-        XCTAssertEqual(a.z, 3.1)
-        XCTAssertEqual(a.w, 0.0)
-        XCTAssertFalse(a.isPoint())
-        XCTAssertTrue(a.isVector())
-    }
-    
-    func testPointDefaultConstructor() {
-        //    Scenario: point() creates tuples with w=1
-        //    Given p ← point(4, -4, 3)
-        //    Then p = tuple(4, -4, 3, 1)
-        
-        let p = Tuple.Point(x: 4, y: -4, z: 3)
-        XCTAssertEqual(p.x, 4)
-        XCTAssertEqual(p.y, -4)
-        XCTAssertEqual(p.z, 3)
-        XCTAssertEqual(p.w, 1)
-    }
-    
-    func testVectorDefaultConstructor() {
-        //    Scenario: vector() creates tuples with w=0
-        //    Given v ← vector(4, -4, 3)
-        //    Then v = tuple(4, -4, 3, 0)
-        
-        let v = Tuple.Vector(x: 4, y: -4, z: 3)
-        XCTAssertEqual(v.x, 4)
-        XCTAssertEqual(v.y, -4)
-        XCTAssertEqual(v.z, 3)
-        XCTAssertEqual(v.w, 0)
     }
     
     func testAddTuples() {

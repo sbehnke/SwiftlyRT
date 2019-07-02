@@ -185,7 +185,7 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
             }
         }
         
-        return Matrix3x3(values: values)
+        return Matrix3x3(values)
     }
     
     func minor(row: Int, column: Int) -> Double {
