@@ -105,6 +105,10 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return value
     }
     
+    static func * (lhs: Matrix4x4, rhs: Ray) -> Ray {
+        return Ray(origin: lhs * rhs.origin, direction: lhs * rhs.direction)
+    }
+    
     static func *= (lhs: inout Matrix4x4, rhs: Matrix4x4) {
         let a = lhs
         for i in 0..<rows {

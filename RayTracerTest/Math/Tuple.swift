@@ -10,6 +10,7 @@ import Foundation
 
 struct Tuple: Equatable, AdditiveArithmetic {
     static var zero = Tuple(x: 0.0, y: 0.0, z: 0.0, w: 0.0)
+    static var pointZero = Tuple(x: 0.0, y: 0.0, z: 0.0, w: 1.0)
     
     public static func Vector() -> Tuple {
         return Tuple(x: 0, y: 0, z: 0, w: 0)
