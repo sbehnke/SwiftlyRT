@@ -115,6 +115,7 @@ class ViewController: NSViewController {
         let filename = getDocumentsDirectory().appendingPathComponent("rayTracingSphere.ppm")
         do {
             try data.write(to: filename)
+            NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: getDocumentsDirectory().absoluteString)
         } catch {
             // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
         }
