@@ -66,7 +66,7 @@ class ViewController: NSViewController {
         //        canvas ← canvas(canvas_pixels, canvas_pixels)
         let canvas = Canvas(width: canvasSize, height: canvasSize)
         //        color  ← color(1, 0, 0) # red
-        let color = Color(r: 1, g: 0, b: 0)
+        // let color = Color(r: 1, g: 0, b: 0)
         //        shape  ← sphere()
         let shape = Sphere()
         
