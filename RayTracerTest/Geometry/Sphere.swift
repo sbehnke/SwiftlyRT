@@ -33,7 +33,19 @@ class Sphere : BaseObject {
                 Intersection(t: intersection2, object: object)]
     }
     
-    func intersects(ray: Ray) -> [Intersection] {
+    static func normalAt(sphere: Sphere, p : Tuple) -> Tuple {
+        let objectPoint = sphere.transform.invert() * p
+        let objectNormal = objectPoint - Tuple.pointZero
+        var worldNormal = sphere.transform.invert().transpose() * objectNormal
+        worldNormal.w = 0
+        return worldNormal.normalize()
+    }
+    
+    override func intersects(ray: Ray) -> [Intersection] {
         return Sphere.intersects(object: self, ray: ray)
+    }
+    
+    override func normalAt(p : Tuple) -> Tuple {
+        return Sphere.normalAt(sphere: self, p: p)
     }
 }

@@ -11,8 +11,14 @@ import XCTest
 
 class MaterialsTests: XCTestCase {
 
+    //    Background:
+    //    Given m ← material()
+    //    And position ← point(0, 0, 0)
+    
+    var m = Material()
+    var position = Tuple.pointZero
+    
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
     override func tearDown() {
@@ -20,10 +26,6 @@ class MaterialsTests: XCTestCase {
     }
 
     func testDefaultMaterial() {
-//    Background:
-//    Given m ← material()
-//    And position ← point(0, 0, 0)
-//
 //    Scenario: The default material
 //    Given m ← material()
 //    Then m.color = color(1, 1, 1)
@@ -32,7 +34,11 @@ class MaterialsTests: XCTestCase {
 //    And m.specular = 0.9
 //    And m.shininess = 200.0
     
-        XCTFail()
+        XCTAssertEqual(m.color, Color.white)
+        XCTAssertEqual(m.ambient, 0.1)
+        XCTAssertEqual(m.diffuse, 0.9)
+        XCTAssertEqual(m.specular, 0.9)
+        XCTAssertEqual(m.shininess, 200.0)
     }
     
     func testDefaultMaterialReflectivity() {
@@ -60,7 +66,11 @@ class MaterialsTests: XCTestCase {
 //    When result ← lighting(m, light, position, eyev, normalv)
 //    Then result = color(1.9, 1.9, 1.9)
         
-        XCTFail()
+        let eyev = Tuple.Vector(x: 0, y: 0, z: -1)
+        let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
+        let light = PointLight(position: Tuple.Point(x: 0, y: 0, z: -10), intensity: Color.white)
+        let result = light.lighting(material: m, position: position, eyeVector: eyev, normalVector: normalv)
+        XCTAssertEqual(result, Color(r: 1.9, g: 1.9, b: 1.9))
     }
     
     func testLightBetweenEyeAndSurface() {
@@ -71,7 +81,11 @@ class MaterialsTests: XCTestCase {
 //    When result ← lighting(m, light, position, eyev, normalv)
 //    Then result = color(1.0, 1.0, 1.0)
         
-        XCTFail()
+        let eyev = Tuple.Vector(x: 0, y: sqrt(2.0)/2.0, z: -sqrt(2.0)/2.0)
+        let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
+        let light = PointLight(position: Tuple.Point(x: 0, y: 0, z: -10), intensity: Color.white)
+        let result = light.lighting(material: m, position: position, eyeVector: eyev, normalVector: normalv)
+        XCTAssertEqual(result, Color.white)
     }
     
     func testLightWithEyeOppositeSurface() {
@@ -82,7 +96,11 @@ class MaterialsTests: XCTestCase {
 //    When result ← lighting(m, light, position, eyev, normalv)
 //    Then result = color(0.7364, 0.7364, 0.7364)
         
-        XCTFail()
+        let eyev = Tuple.Vector(x: 0, y: 0, z: -1)
+        let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
+        let light = PointLight(position: Tuple.Point(x: 0, y: 10, z: -10), intensity: Color.white)
+        let result = light.lighting(material: m, position: position, eyeVector: eyev, normalVector: normalv)
+        XCTAssertEqual(result, Color.init(r: 0.7364, g: 0.7364, b: 0.7364))
     }
     
     func testLightWithEyeInPathOfReflectionVector() {
@@ -93,9 +111,13 @@ class MaterialsTests: XCTestCase {
 //    When result ← lighting(m, light, position, eyev, normalv)
 //    Then result = color(1.6364, 1.6364, 1.6364)
         
-        XCTFail()
+        let eyev = Tuple.Vector(x: 0, y: -sqrt(2.0)/2.0, z: -sqrt(2.0)/2.0)
+        let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
+        let light = PointLight(position: Tuple.Point(x: 0, y: 10, z: -10), intensity: Color.white)
+        let result = light.lighting(material: m, position: position, eyeVector: eyev, normalVector: normalv)
+        XCTAssertEqual(result, Color.init(r: 1.6364, g: 1.6364, b: 1.6364))
     }
-
+    
     func testLightingBehindSurface() {
 //    Scenario: Lighting with the light behind the surface
 //    Given eyev ← vector(0, 0, -1)
@@ -104,7 +126,11 @@ class MaterialsTests: XCTestCase {
 //    When result ← lighting(m, light, position, eyev, normalv)
 //    Then result = color(0.1, 0.1, 0.1)
         
-        XCTFail()
+        let eyev = Tuple.Vector(x: 0, y: 0, z: -1)
+        let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
+        let light = PointLight(position: Tuple.Point(x: 0, y: 0, z: 10), intensity: Color.white)
+        let result = light.lighting(material: m, position: position, eyeVector: eyev, normalVector: normalv)
+        XCTAssertEqual(result, Color.init(r: 0.1, g: 0.1, b: 0.1))
     }
 
     func testLightingWithSurfaceInShadow() {

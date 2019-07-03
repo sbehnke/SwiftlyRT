@@ -11,6 +11,7 @@ import Foundation
 struct Color: Equatable, AdditiveArithmetic {
     static var zero = Color(r: 0.0, g: 0.0, b: 0.0/*, a: 1.0 */)
     static var white = Color(r: 1.0, g: 1.0, b: 1.0)
+    static var black = Color(r: 0.0, g: 0.0, b: 0)
     
     static func *= (lhs: inout Color, rhs: Float) {
         lhs.r *= rhs;
@@ -61,6 +62,12 @@ struct Color: Equatable, AdditiveArithmetic {
     static func * (lhs: Color, rhs: Float) -> Color {
         var lhs = lhs
         lhs *= rhs
+        return lhs
+    }
+    
+    static func * (lhs: Color, rhs: Double) -> Color {
+        var lhs = lhs
+        lhs *= Float(rhs)
         return lhs
     }
     

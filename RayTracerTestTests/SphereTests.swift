@@ -177,7 +177,9 @@ class SphereTests: XCTestCase {
 //    Given s ← sphere()
 //    When n ← normal_at(s, point(1, 0, 0))
 //    Then n = vector(1, 0, 0)
-        XCTFail()
+        let s = Sphere()
+        let n = s.normalAt(p: Tuple.Point(x: 1, y: 0, z: 0))
+        XCTAssertEqual(n, Tuple.Vector(x: 1, y: 0, z: 0))
     }
     
     func testSphereNormalOnPointOnYAxis() {
@@ -185,7 +187,9 @@ class SphereTests: XCTestCase {
 //    Given s ← sphere()
 //    When n ← normal_at(s, point(0, 1, 0))
 //    Then n = vector(0, 1, 0)
-        XCTFail()
+        let s = Sphere()
+        let n = s.normalAt(p: Tuple.Point(x: 0, y: 1, z: 0))
+        XCTAssertEqual(n, Tuple.Vector(x: 0, y: 1, z: 0))
     }
     
     func testSphereNormalOnPointOnZAxis() {
@@ -193,7 +197,10 @@ class SphereTests: XCTestCase {
 //    Given s ← sphere()
 //    When n ← normal_at(s, point(0, 0, 1))
 //    Then n = vector(0, 0, 1)
-        XCTFail()
+
+        let s = Sphere()
+        let n = s.normalAt(p: Tuple.Point(x: 0, y: 0, z: 1))
+        XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0, z: 1))
     }
     
     func testNormalOnSphereAtNonAxialPoint() {
@@ -201,7 +208,11 @@ class SphereTests: XCTestCase {
 //    Given s ← sphere()
 //    When n ← normal_at(s, point(√3/3, √3/3, √3/3))
 //    Then n = vector(√3/3, √3/3, √3/3)
-        XCTFail()
+       
+        let value = sqrt(3.0) / 3.0
+        let s = Sphere()
+        let n = s.normalAt(p: Tuple.Point(x: value, y: value, z: value))
+        XCTAssertEqual(n, Tuple.Vector(x: value, y: value, z: value))
     }
     
     func testNormalIsANormalizedVector() {
@@ -209,7 +220,11 @@ class SphereTests: XCTestCase {
 //    Given s ← sphere()
 //    When n ← normal_at(s, point(√3/3, √3/3, √3/3))
 //    Then n = normalize(n)
-        XCTFail()
+        
+        let value = sqrt(3.0) / 3.0
+        let s = Sphere()
+        let n = s.normalAt(p: Tuple.Point(x: value, y: value, z: value))
+        XCTAssertEqual(n, n.normalize())
     }
     
     func testComputingTheNormalOnTranslatedSphere() {
@@ -218,7 +233,10 @@ class SphereTests: XCTestCase {
 //    And set_transform(s, translation(0, 1, 0))
 //    When n ← normal_at(s, point(0, 1.70711, -0.70711))
 //    Then n = vector(0, 0.70711, -0.70711)
-        XCTFail()
+        let s = Sphere()
+        s.transform = Matrix4x4.translate(x: 0, y: 1, z: 0)
+        let n = s.normalAt(p: Tuple.Point(x: 0, y: 1.70711, z: -0.70711))
+        XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0.70711, z: -0.70711))
     }
     
     func testComputingTheNormalOnTransformedSphere() {
@@ -228,7 +246,12 @@ class SphereTests: XCTestCase {
 //    And set_transform(s, m)
 //    When n ← normal_at(s, point(0, √2/2, -√2/2))
 //    Then n = vector(0, 0.97014, -0.24254)
-        XCTFail()
+
+        let s = Sphere()
+        let m = Matrix4x4.rotateZ(Double.pi/5.0).scale(x: 1, y: 0.5, z: 1)
+        s.transform = m
+        let n = s.normalAt(p: Tuple.Point(x: 0, y: sqrt(2.0)/2.0, z: -sqrt(2.0)/2.0))
+        XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0.97014, z: -0.24254))
     }
     
     func testSphereHasDefaultMaterial() {
@@ -236,7 +259,9 @@ class SphereTests: XCTestCase {
 //    Given s ← sphere()
 //    When m ← s.material
 //    Then m = material()
-        XCTFail()
+
+        let s = Sphere()
+        XCTAssertEqual(s.material, Material())
     }
     
     func testSphereMayBeAssignedMaterial() {
@@ -246,7 +271,12 @@ class SphereTests: XCTestCase {
 //    And m.ambient ← 1
 //    When s.material ← m
 //    Then s.material = m
-        XCTFail()
+
+        let s = Sphere()
+        var m = Material()
+        m.ambient = 1.0
+        s.material = m
+        XCTAssertEqual(s.material, m)
     }
     
     func testSphereHelperWithGlassyMaterial() {

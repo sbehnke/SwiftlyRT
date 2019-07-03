@@ -17,5 +17,14 @@ class BaseObject : Equatable {
         return []
     }
     
+    func intersects(ray: Ray) -> [Intersection] {
+        return []
+    }
+    
+    func normalAt(p : Tuple) -> Tuple {
+        return Tuple.zero
+    }
+    
     var transform = Matrix4x4.identity
+    var material = Material()
 }

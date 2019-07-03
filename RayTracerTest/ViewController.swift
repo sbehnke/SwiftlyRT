@@ -70,6 +70,12 @@ class ViewController: NSViewController {
         //        shape  ← sphere()
         let shape = Sphere()
         
+        shape.material.color = Color(r: 1, g: 0.2, b: 1)
+        
+        let lightPosition = Tuple.Point(x: -10, y: 10, z: -10)
+        let lightColor = Color.white
+        let light = PointLight(position: lightPosition, intensity: lightColor)
+        
         shape.transform = transform
         
         //        # for each row of pixels in the canvas
@@ -92,9 +98,15 @@ class ViewController: NSViewController {
                 //        xs ← intersect(shape, r)
                 let xs = shape.intersects(ray: ray)
                 //        if hit(xs) is defined
-                if (Intersection.hit(xs) != nil) {
+                
+                let hit = Intersection.hit(xs)
+                if (hit != nil) {
                     //        write_pixel(canvas, x, y, color)
-                    canvas.setPixel(x: x, y: y, color: color)
+                    let point = ray.position(time: hit!.t)
+                    let normal = hit!.object?.normalAt(p: point)
+                    let eyeVector = -ray.direction
+                    let coloredLight = light.lighting(material: hit!.object!.material, position: position, eyeVector: eyeVector, normalVector: normal!)
+                    canvas.setPixel(x: x, y: y, color: coloredLight)
                 }
             }
         }

@@ -150,6 +150,14 @@ struct Tuple: Equatable, AdditiveArithmetic {
         return Tuple.cross(lhs: self, rhs: rhs)
     }
     
+    static func reflect(lhs: Tuple, normal: Tuple) -> Tuple {
+        return lhs - normal * 2 * Tuple.dot(lhs: lhs, rhs: normal)
+    }
+
+    func reflect(normal: Tuple) -> Tuple {
+        return Tuple.reflect(lhs: self, normal: normal)
+    }
+    
     var magnitude : Double {
         get {
             return sqrt((x * x) + (y * y) + (z * z) + (w * w))

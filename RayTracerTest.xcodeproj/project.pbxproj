@@ -33,6 +33,8 @@
 		64D1FB3622CAE4CF00AA05AE /* BaseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3522CAE4CF00AA05AE /* BaseObject.swift */; };
 		64D1FB3822CAEB2F00AA05AE /* IntersectionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3722CAEB2F00AA05AE /* IntersectionsTest.swift */; };
 		64D1FB3A22CAF0B600AA05AE /* Intersection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3922CAF0B600AA05AE /* Intersection.swift */; };
+		64D1FB3D22CC2B8200AA05AE /* PointLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3C22CC2B8200AA05AE /* PointLight.swift */; };
+		64D1FB3F22CC2C3500AA05AE /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3E22CC2C3500AA05AE /* Material.swift */; };
 		64EE917922C7D18700FB2699 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE917822C7D18700FB2699 /* AppDelegate.swift */; };
 		64EE917B22C7D18700FB2699 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE917A22C7D18700FB2699 /* ViewController.swift */; };
 		64EE917D22C7D18900FB2699 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64EE917C22C7D18900FB2699 /* Assets.xcassets */; };
@@ -114,6 +116,8 @@
 		64D1FB3522CAE4CF00AA05AE /* BaseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseObject.swift; sourceTree = "<group>"; };
 		64D1FB3722CAEB2F00AA05AE /* IntersectionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntersectionsTest.swift; sourceTree = "<group>"; };
 		64D1FB3922CAF0B600AA05AE /* Intersection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intersection.swift; sourceTree = "<group>"; };
+		64D1FB3C22CC2B8200AA05AE /* PointLight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointLight.swift; sourceTree = "<group>"; };
+		64D1FB3E22CC2C3500AA05AE /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		64EE917522C7D18700FB2699 /* RayTracerTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RayTracerTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64EE917822C7D18700FB2699 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64EE917A22C7D18700FB2699 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -207,6 +211,15 @@
 			path = Geometry;
 			sourceTree = "<group>";
 		};
+		64D1FB3B22CC2B6D00AA05AE /* Lights */ = {
+			isa = PBXGroup;
+			children = (
+				64D1FB3C22CC2B8200AA05AE /* PointLight.swift */,
+				64D1FB3E22CC2C3500AA05AE /* Material.swift */,
+			);
+			path = Lights;
+			sourceTree = "<group>";
+		};
 		64EE916C22C7D18700FB2699 = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +250,7 @@
 				64EE91B522C813AF00FB2699 /* Environment.swift */,
 				64D1FB2E22CADCC400AA05AE /* Geometry */,
 				64EE918122C7D18900FB2699 /* Info.plist */,
+				64D1FB3B22CC2B6D00AA05AE /* Lights */,
 				64EE917E22C7D18900FB2699 /* Main.storyboard */,
 				64EE91B222C8125200FB2699 /* Math */,
 				64EE91B322C8139C00FB2699 /* Projecile.swift */,
@@ -437,9 +451,11 @@
 				64EE91AB22C7F04300FB2699 /* Color.swift in Sources */,
 				64D1FB3622CAE4CF00AA05AE /* BaseObject.swift in Sources */,
 				64EE917922C7D18700FB2699 /* AppDelegate.swift in Sources */,
+				64D1FB3F22CC2C3500AA05AE /* Material.swift in Sources */,
 				64D1FB2422C9035100AA05AE /* Matrix2x2.swift in Sources */,
 				64D1FB2622C9035C00AA05AE /* Matrix3x3.swift in Sources */,
 				64EE91B422C8139C00FB2699 /* Projecile.swift in Sources */,
+				64D1FB3D22CC2B8200AA05AE /* PointLight.swift in Sources */,
 				64D1FB2D22CADCB500AA05AE /* Ray.swift in Sources */,
 				64D1FB3A22CAF0B600AA05AE /* Intersection.swift in Sources */,
 				64EE91AF22C7F2F000FB2699 /* Canvas.swift in Sources */,
@@ -633,7 +649,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = RQ8D6VAUV5;
+				DEVELOPMENT_TEAM = S5CDMXC69X;
 				INFOPLIST_FILE = RayTracerTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -654,7 +670,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = RQ8D6VAUV5;
+				DEVELOPMENT_TEAM = S5CDMXC69X;
 				INFOPLIST_FILE = RayTracerTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

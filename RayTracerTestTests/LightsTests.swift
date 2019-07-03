@@ -26,7 +26,11 @@ class LightsTests: XCTestCase {
 //        When light ← point_light(position, intensity)
 //        Then light.position = position
 //        And light.intensity = intensity
-        
-        XCTFail()
+
+        let intensity = Color(r: 1, g: 1, b: 1)
+        let position = Tuple.Point(x: 0, y: 0, z: 0)
+        let light = PointLight(position: position, intensity: intensity)
+        XCTAssertEqual(light.position, position)
+        XCTAssertEqual(light.intensity, intensity)
     }
 }

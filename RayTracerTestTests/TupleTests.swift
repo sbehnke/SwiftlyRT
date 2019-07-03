@@ -438,7 +438,11 @@ class TupleTests: XCTestCase {
         //    When r ← reflect(v, n)
         //    Then r = vector(1, 1, 0)
         
-        XCTFail()
+
+        let v = Tuple.Vector(x: 1, y: -1, z: 0)
+        let n = Tuple.Vector(x: 0, y: 1, z: 0)
+        let r = v.reflect(normal: n)
+        XCTAssertEqual(r, Tuple.Vector(x: 1, y: 1, z: 0))
     }
     
     func testReflectionSlantedSurface() {
@@ -447,7 +451,11 @@ class TupleTests: XCTestCase {
         //    And n ← vector(√2/2, √2/2, 0)
         //    When r ← reflect(v, n)
         //    Then r = vector(1, 0, 0)
-        
-        XCTFail()
+
+        let v = Tuple.Vector(x: 0, y: -1, z: 0)
+        let n = Tuple.Vector(x: sqrt(2.0)/2.0, y: sqrt(2.0)/2.0, z: 0)
+        let r = v.reflect(normal: n)
+        XCTAssertEqual(r, Tuple.Vector(x: 1, y: 0, z: 0))
+
     }
 }
