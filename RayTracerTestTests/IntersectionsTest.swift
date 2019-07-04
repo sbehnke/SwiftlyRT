@@ -26,7 +26,10 @@ class IntersectionsTest: XCTestCase {
 //    Then i.t = 3.5
 //    And i.object = s
         
-        XCTFail()
+        let s = Sphere()
+        let i = Intersection(t: 3.5, object: s)
+        XCTAssertEqual(i.t, 3.5)
+        XCTAssertEqual(i.object, s)
     }
     
     func testPrecomputingStateOfIntersection() {
@@ -40,8 +43,16 @@ class IntersectionsTest: XCTestCase {
 //    And comps.point = point(0, 0, -1)
 //    And comps.eyev = vector(0, 0, -1)
 //    And comps.normalv = vector(0, 0, -1)
-        
-        XCTFail()
+
+        let r = Ray(origin: Tuple.Point(x: 0, y: 0, z: -5), direction: Tuple.Vector(x: 0, y: 0, z: 1))
+        let shape = Sphere()
+        let i = shape.intersects(ray: r)
+        let comps = i[0].prepareCopmutation(ray: r)
+        XCTAssertEqual(comps.t, i[0].t)
+        XCTAssertEqual(comps.object, i[0].object)
+        XCTAssertEqual(comps.point, Tuple.Point(x: 0, y: 0, z: -1))
+        XCTAssertEqual(comps.eyeVector, Tuple.Vector(x: 0, y: 0, z: -1))
+        XCTAssertEqual(comps.normalVector, Tuple.Vector(x: 0, y: 0, z: -1))
     }
     
     func testPrecomputingReflectionVector() {
@@ -63,7 +74,12 @@ class IntersectionsTest: XCTestCase {
 //    When comps ← prepare_computations(i, r)
 //    Then comps.inside = false
         
-        XCTFail()
+        let r = Ray(origin: Tuple.Point(x: 0, y: 0, z: -5), direction: Tuple.Vector(x: 0, y: 0, z: 1))
+        let shape = Sphere()
+        let i = shape.intersects(ray: r)
+        let hit = Intersection.hit(i)
+        let comps = hit!.prepareCopmutation(ray: r)
+        XCTAssertFalse(comps.inside)
     }
     
     func testIntersectionOnInside() {
@@ -78,7 +94,15 @@ class IntersectionsTest: XCTestCase {
 //    # normal would have been (0, 0, 1), but is inverted!
 //    And comps.normalv = vector(0, 0, -1)
         
-        XCTFail()
+        let r = Ray(origin: Tuple.Point(x: 0, y: 0, z: 0), direction: Tuple.Vector(x: 0, y: 0, z: 1))
+        let shape = Sphere()
+        let i = shape.intersects(ray: r)
+        let hit = Intersection.hit(i)
+        let comps = hit!.prepareCopmutation(ray: r)
+        XCTAssertEqual(comps.point, Tuple.Point(x: 0, y: 0, z: 1))
+        XCTAssertEqual(comps.eyeVector, Tuple.Vector(x: 0, y: 0, z: -1))
+        XCTAssertTrue(comps.inside)
+        XCTAssertEqual(comps.normalVector, Tuple.Vector(x: 0, y: 0, z: -1))
     }
     
     func testHitShouldOffsetThePoint() {

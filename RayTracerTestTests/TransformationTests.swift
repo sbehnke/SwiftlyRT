@@ -337,7 +337,12 @@ class TransformationTests: XCTestCase {
         //        And up ← vector(0, 1, 0)
         //        When t ← view_transform(from, to, up)
         //        Then t = identity_matrix
-        XCTFail()
+
+        let from = Tuple.Point(x: 0, y: 0, z: 0)
+        let to = Tuple.Point(x: 0, y: 0, z: -1)
+        let up = Tuple.Vector(x: 0, y: 1, z: 0)
+        let t = Matrix4x4.viewTransform(from: from, to: to, up: up)
+        XCTAssertEqual(t, Matrix4x4.identity)
     }
     
     func testTransformLookingPositiveZ() {
@@ -347,7 +352,12 @@ class TransformationTests: XCTestCase {
         //        And up ← vector(0, 1, 0)
         //        When t ← view_transform(from, to, up)
         //        Then t = scaling(-1, 1, -1)
-        XCTFail()
+
+        let from = Tuple.Point(x: 0, y: 0, z: 0)
+        let to = Tuple.Point(x: 0, y: 0, z: 1)
+        let up = Tuple.Vector(x: 0, y: 1, z: 0)
+        let t = Matrix4x4.viewTransform(from: from, to: to, up: up)
+        XCTAssertEqual(t, Matrix4x4.scale(x: -1, y: 1, z: -1))
     }
     
     func testViewTransformMovesWorld() {
@@ -357,7 +367,12 @@ class TransformationTests: XCTestCase {
         //        And up ← vector(0, 1, 0)
         //        When t ← view_transform(from, to, up)
         //        Then t = translation(0, 0, -8)
-        XCTFail()
+        
+        let from = Tuple.Point(x: 0, y: 0, z: 8)
+        let to = Tuple.Point(x: 0, y: 0, z: 0)
+        let up = Tuple.Vector(x: 0, y: 1, z: 0)
+        let t = Matrix4x4.viewTransform(from: from, to: to, up: up)
+        XCTAssertEqual(t, Matrix4x4.translate(x: 0, y: 0, z: -8))
     }
     
     func testArbitraryViewTransform() {
@@ -371,6 +386,18 @@ class TransformationTests: XCTestCase {
         //        |  0.76772 | 0.60609 |  0.12122 | -2.82843 |
         //        | -0.35857 | 0.59761 | -0.71714 |  0.00000 |
         //        |  0.00000 | 0.00000 |  0.00000 |  1.00000 |
-        XCTFail()
+
+        let from = Tuple.Point(x: 1, y: 3, z: 2)
+        let to = Tuple.Point(x: 4, y: -2, z: 8)
+        let up = Tuple.Vector(x: 1, y: 1, z: 0)
+        let t = Matrix4x4.viewTransform(from: from, to: to, up: up)
+        
+        let result = Matrix4x4([-0.50709, 0.50709,  0.67612, -2.36643,
+                                0.76772, 0.60609,  0.12122, -2.82843,
+                                -0.35857, 0.59761, -0.71714,  0.00000,
+                                0.00000, 0.00000,  0.00000,  1.00000])
+        
+        XCTAssertEqual(t, result)
+        
     }
 }

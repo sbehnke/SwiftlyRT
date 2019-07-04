@@ -557,7 +557,7 @@ class MatrixTests: XCTestCase {
                                  0.17778,  0.06667, -0.26667,  0.33333])
         
         for i in 0..<16 {
-            XCTAssertTrue(Tuple.almostEqual(lhs: m2[i], rhs: inverse[i]))
+            XCTAssertEqual(m2[i], inverse[i], accuracy: 0.00001)
         }
     }
     

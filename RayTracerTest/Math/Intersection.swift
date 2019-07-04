@@ -31,16 +31,41 @@ struct Intersection : Equatable, Comparable {
         return nil
     }
     
+    static func prepareComputation(i: Intersection, ray: Ray) -> Computation {
+        assert(i.object != nil)
+        
+        var comps = Computation()
+        comps.t = i.t
+        comps.object = i.object
+        
+        comps.point = ray.position(time: i.t)
+        comps.eyeVector = -ray.direction
+        comps.normalVector = i.object!.normalAt(p: comps.point)
+        
+        if (comps.normalVector.dot(rhs: comps.eyeVector) < 0) {
+            comps.inside = true
+            comps.normalVector = -comps.normalVector
+        } else {
+            comps.inside = false
+        }
+        
+        return comps
+    }
+    
+    func prepareCopmutation(ray: Ray) -> Computation {
+        return Intersection.prepareComputation(i: self, ray: ray)
+    }
+    
     init() {
         t = 0
         object = nil
     }
     
-    init(t: Double, object: BaseObject?) {
+    init(t: Double, object: Shape?) {
         self.t = t
         self.object = object
     }
     
     var t : Double
-    var object : BaseObject?
+    var object : Shape?
 }

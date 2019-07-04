@@ -26,6 +26,65 @@ class ViewController: NSViewController {
         renderScene()
     }
     
+    @IBAction func renderFullScene(_ sender: Any) {
+        let floor = Sphere()
+        floor.transform = .scale(x: 10, y: 0.01, z: 10)
+        floor.material.color = Color(r: 1, g: 0.9, b: 0.9)
+        floor.material.specular = 0
+        
+        let leftWall = Sphere()
+        leftWall.transform = .translate(x: 0, y: 0, z: 5) *
+            .rotateY(-.pi / 4) *
+            .rotateX(.pi / 2) *
+            .scale(x: 10, y: 0.01, z: 10)
+        
+        leftWall.material = floor.material
+        
+        let rightWall = Sphere()
+        rightWall.transform = .translate(x: 0, y: 0, z: 5) *
+            .rotateY(.pi / 4) *
+            .rotateX(.pi / 2) *
+            .scale(x: 10, y: 0.01, z: 10)
+        
+        rightWall.material = floor.material
+        
+        let right = Sphere()
+        right.transform = .translate(x: 1.5, y: 0.5, z: -0.5) * .scale(x: 0.5, y: 0.5, z: 0.5)
+        right.material.color = Color(r: 0.5, g: 1, b: 0.1)
+        right.material.diffuse = 0.7
+        right.material.specular = 0.3
+        
+        let middle = Sphere()
+        middle.transform = .translate(x: -0.5, y: 1, z: 0.5)
+        middle.material.color = Color(r: 0.1, g: 1, b: 0.5)
+        middle.material.diffuse = 0.7
+        middle.material.specular = 0.3
+        
+        let left = Sphere()
+        left.transform = .translate(x: -1.5, y: 0.33, z: -0.75) * .scale(x: 0.33, y: 0.33, z: 0.33)
+        left.material.color = Color(r: 1, g: 0.8, b: 0.1)
+        left.material.diffuse = 0.7
+        left.material.specular = 0.3
+        
+        let world = World()
+        world.light = PointLight(position: .Point(x: -10, y: 10, z: -10), intensity: .white)
+        world.objects.append(contentsOf: [floor, leftWall, rightWall, right, middle, left])
+        
+        var camera = Camera(w: 100, h: 50, fieldOfView: .pi / 3)
+        camera.transform = .viewTransform(from: .Point(x: 0, y: 1.5, z: -5),
+                                          to: .Point(x: 0, y: 1, z: 0),
+                                          up: .Vector(x: 0, y: 1, z: 0))
+        
+        let canvas = camera.render(world: world)
+        let data = canvas.getPPM()
+        let filename = getDocumentsDirectory().appendingPathComponent("rayTracingScene.ppm")
+        do {
+            try data.write(to: filename)
+            NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: getDocumentsDirectory().absoluteString)
+        } catch {
+            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+        }
+    }
     
     @IBAction func renderShrinkY(_ sender: Any) {
         renderScene(transform: Matrix4x4.scale(x: 1.0, y: 0.5, z: 1))

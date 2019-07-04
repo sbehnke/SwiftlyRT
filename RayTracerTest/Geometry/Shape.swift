@@ -8,12 +8,12 @@
 
 import Foundation
 
-class BaseObject : Equatable {
-    static func == (lhs: BaseObject, rhs: BaseObject) -> Bool {
+class Shape : Equatable {
+    static func == (lhs: Shape, rhs: Shape) -> Bool {
         return lhs === rhs
     }
     
-    static func intersects(object: BaseObject, ray: Ray) -> [Intersection] {
+    static func intersects(object: Shape, ray: Ray) -> [Intersection] {
         return []
     }
     
@@ -27,4 +27,5 @@ class BaseObject : Equatable {
     
     var transform = Matrix4x4.identity
     var material = Material()
+    var name = ""
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Sphere : BaseObject {
+class Sphere : Shape {
     
     static func intersects(object: Sphere, ray: Ray) -> [Intersection] {
         let ray2 = object.transform.invert() * ray

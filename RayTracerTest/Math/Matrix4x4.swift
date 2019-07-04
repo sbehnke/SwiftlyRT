@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import simd
 
 struct Matrix4x4 : Equatable, AdditiveArithmetic {
     static var identity = Matrix4x4(a0: 1, a1: 0, a2: 0, a3: 0,
@@ -331,6 +332,42 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
     
     func shear(xy: Double, xz: Double, yx: Double, yz: Double, zx: Double, zy: Double) -> Matrix4x4 {
         return Matrix4x4.shear(xy: xy, xz: xz, yx: yx, yz: yz, zx: zx, zy: zy) * self
+    }
+    
+    func viewTransformSIMD(from: vector_float3, to: vector_float3, up: vector_float3) -> matrix_float4x4 {
+        let forward = simd_normalize(to - from)
+        let upn = simd_normalize(up)
+        let left = simd_cross(forward, upn)
+        let true_up = simd_cross(left, forward)
+        
+        let orientation = matrix_float4x4(vector_float4(arrayLiteral: left.x, left.y, left.z, 0),
+                                          vector_float4(arrayLiteral: true_up.x, true_up.y, true_up.z, 0),
+                                          vector_float4(arrayLiteral: -forward.x, -forward.y, -forward.z, 0),
+                                          vector_float4(arrayLiteral: 0, 0, 0, 1))
+        
+        var translation = matrix_identity_float4x4
+        translation[0, 3] = -from.x
+        translation[1, 3] = -from.y
+        translation[2, 3] = -from.z
+        return orientation * translation
+    }
+    
+    static func viewTransform(from: Tuple, to: Tuple, up: Tuple) -> Matrix4x4 {
+        assert(from.isPoint())
+        assert(to.isPoint())
+        assert(up.isVector())
+        
+        let forward = (to - from).normalize()
+        let upn = up.normalize()
+        let left = forward.cross(rhs: upn)
+        let trueUp = left.cross(rhs: forward)
+        
+        let orientation = Matrix4x4([left.x,     left.y,     left.z,     0,
+                                     trueUp.x,   trueUp.y,   trueUp.z,   0,
+                                     -forward.x, -forward.y, -forward.z, 0,
+                                     0,          0,          0,          1])
+        
+        return orientation * Matrix4x4.translate(x: -from.x, y: -from.y, z: -from.z)
     }
     
     var description: String {

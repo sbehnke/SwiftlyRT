@@ -140,6 +140,8 @@ class ShapeTests: XCTestCase {
 //    And add_child(g2, s)
 //    When n ← normal_to_world(s, vector(√3/3, √3/3, √3/3))
 //    Then n = vector(0.2857, 0.4286, -0.8571)
+        
+        XCTFail()
     }
     
     func testFindingNormalOnChildObject() {

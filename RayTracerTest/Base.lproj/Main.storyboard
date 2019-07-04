@@ -764,6 +764,17 @@
                                     <action selector="renderShrinkXAndShear:" target="XfG-lQ-9wD" id="TcR-jl-eOS"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bc5-cN-nuV">
+                                <rect key="frame" x="178" y="13" width="125" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Render Scene" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1l5-Yl-35Z">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="renderFullScene:" target="XfG-lQ-9wD" id="1Wc-xA-TdM"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                 </viewController>

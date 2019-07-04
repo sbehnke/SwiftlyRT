@@ -30,11 +30,14 @@
 		64D1FB3022CADCD700AA05AE /* Sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB2F22CADCD700AA05AE /* Sphere.swift */; };
 		64D1FB3222CADDE700AA05AE /* RayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3122CADDE700AA05AE /* RayTests.swift */; };
 		64D1FB3422CAE0CA00AA05AE /* SphereTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3322CAE0CA00AA05AE /* SphereTests.swift */; };
-		64D1FB3622CAE4CF00AA05AE /* BaseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3522CAE4CF00AA05AE /* BaseObject.swift */; };
+		64D1FB3622CAE4CF00AA05AE /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3522CAE4CF00AA05AE /* Shape.swift */; };
 		64D1FB3822CAEB2F00AA05AE /* IntersectionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3722CAEB2F00AA05AE /* IntersectionsTest.swift */; };
 		64D1FB3A22CAF0B600AA05AE /* Intersection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3922CAF0B600AA05AE /* Intersection.swift */; };
 		64D1FB3D22CC2B8200AA05AE /* PointLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3C22CC2B8200AA05AE /* PointLight.swift */; };
 		64D1FB3F22CC2C3500AA05AE /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB3E22CC2C3500AA05AE /* Material.swift */; };
+		64D1FB4322CD72F200AA05AE /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB4222CD72F200AA05AE /* World.swift */; };
+		64D1FB4522CD78FE00AA05AE /* Computation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB4422CD78FE00AA05AE /* Computation.swift */; };
+		64D1FB4722CD975700AA05AE /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB4622CD975700AA05AE /* Camera.swift */; };
 		64EE917922C7D18700FB2699 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE917822C7D18700FB2699 /* AppDelegate.swift */; };
 		64EE917B22C7D18700FB2699 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE917A22C7D18700FB2699 /* ViewController.swift */; };
 		64EE917D22C7D18900FB2699 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64EE917C22C7D18900FB2699 /* Assets.xcassets */; };
@@ -113,11 +116,14 @@
 		64D1FB2F22CADCD700AA05AE /* Sphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sphere.swift; sourceTree = "<group>"; };
 		64D1FB3122CADDE700AA05AE /* RayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RayTests.swift; sourceTree = "<group>"; };
 		64D1FB3322CAE0CA00AA05AE /* SphereTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SphereTests.swift; sourceTree = "<group>"; };
-		64D1FB3522CAE4CF00AA05AE /* BaseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseObject.swift; sourceTree = "<group>"; };
+		64D1FB3522CAE4CF00AA05AE /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		64D1FB3722CAEB2F00AA05AE /* IntersectionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntersectionsTest.swift; sourceTree = "<group>"; };
 		64D1FB3922CAF0B600AA05AE /* Intersection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intersection.swift; sourceTree = "<group>"; };
 		64D1FB3C22CC2B8200AA05AE /* PointLight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointLight.swift; sourceTree = "<group>"; };
 		64D1FB3E22CC2C3500AA05AE /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
+		64D1FB4222CD72F200AA05AE /* World.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = World.swift; sourceTree = "<group>"; };
+		64D1FB4422CD78FE00AA05AE /* Computation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Computation.swift; sourceTree = "<group>"; };
+		64D1FB4622CD975700AA05AE /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		64EE917522C7D18700FB2699 /* RayTracerTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RayTracerTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64EE917822C7D18700FB2699 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64EE917A22C7D18700FB2699 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -204,8 +210,10 @@
 		64D1FB2E22CADCC400AA05AE /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				64D1FB4222CD72F200AA05AE /* World.swift */,
 				64D1FB2F22CADCD700AA05AE /* Sphere.swift */,
-				64D1FB3522CAE4CF00AA05AE /* BaseObject.swift */,
+				64D1FB3522CAE4CF00AA05AE /* Shape.swift */,
+				64D1FB4622CD975700AA05AE /* Camera.swift */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -307,6 +315,7 @@
 				64D1FB1F22C8731700AA05AE /* Matrix4x4.swift */,
 				64D1FB2C22CADCB500AA05AE /* Ray.swift */,
 				64EE91A422C7D1B000FB2699 /* Tuple.swift */,
+				64D1FB4422CD78FE00AA05AE /* Computation.swift */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -442,15 +451,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				64D1FB2022C8731700AA05AE /* Matrix4x4.swift in Sources */,
+				64D1FB4522CD78FE00AA05AE /* Computation.swift in Sources */,
+				64D1FB4322CD72F200AA05AE /* World.swift in Sources */,
 				64EE91B622C813AF00FB2699 /* Environment.swift in Sources */,
 				64D1FB3022CADCD700AA05AE /* Sphere.swift in Sources */,
 				64EE917B22C7D18700FB2699 /* ViewController.swift in Sources */,
 				64EE91A522C7D1B000FB2699 /* Tuple.swift in Sources */,
 				64EE91AB22C7F04300FB2699 /* Color.swift in Sources */,
-				64D1FB3622CAE4CF00AA05AE /* BaseObject.swift in Sources */,
+				64D1FB3622CAE4CF00AA05AE /* Shape.swift in Sources */,
 				64EE917922C7D18700FB2699 /* AppDelegate.swift in Sources */,
 				64D1FB3F22CC2C3500AA05AE /* Material.swift in Sources */,
 				64D1FB2422C9035100AA05AE /* Matrix2x2.swift in Sources */,
+				64D1FB4722CD975700AA05AE /* Camera.swift in Sources */,
 				64D1FB2622C9035C00AA05AE /* Matrix3x3.swift in Sources */,
 				64EE91B422C8139C00FB2699 /* Projecile.swift in Sources */,
 				64D1FB3D22CC2B8200AA05AE /* PointLight.swift in Sources */,
