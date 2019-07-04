@@ -41,6 +41,7 @@ class Shape : Equatable {
     
     var name = ""
     var parent: Shape? = nil
+    var children: [Shape] = []
     var transform = Matrix4x4.identity
     var material = Material()
     var savedRay = Ray(origin: .pointZero, direction: .zero)
