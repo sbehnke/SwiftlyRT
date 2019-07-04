@@ -29,9 +29,18 @@ class ViewController: NSViewController {
         renderScene()
     }
     
-    @IBAction func renderFullScene(_ sender: Any) {
-        let start = Date()
+    func format(duration: TimeInterval) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute, .second]
+        formatter.unitsStyle = .abbreviated
+        formatter.maximumUnitCount = 1
         
+        return formatter.string(from: duration)!
+    }
+    
+    @IBAction func renderFullScene(_ sender: Any) {
+        let startTime = CACurrentMediaTime()
+
         let floor = Sphere()
         floor.transform = .scale(x: 10, y: 0.01, z: 10)
         floor.material.color = Color(r: 1, g: 0.9, b: 0.9)
@@ -98,8 +107,8 @@ class ViewController: NSViewController {
             }
             
             DispatchQueue.main.async {
-                let timeDiff = Date.timeIntervalSince(start)
-                self.progressLabel.stringValue = "Finished in: \(String(describing: timeDiff))"
+                let timeElapsed = CACurrentMediaTime() - startTime
+                self.progressLabel.stringValue = "Finished in: " + self.format(duration: timeElapsed)
             }
         }
     }
