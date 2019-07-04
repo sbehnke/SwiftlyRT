@@ -9,6 +9,7 @@
 import Foundation
 
 struct Tuple: Equatable, AdditiveArithmetic {
+    static let epsilon = 0.00001
     static var zero = Tuple(x: 0.0, y: 0.0, z: 0.0, w: 0.0)
     static var pointZero = Tuple(x: 0.0, y: 0.0, z: 0.0, w: 1.0)
     
@@ -115,7 +116,6 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
     
     static func almostEqual(lhs: Double, rhs: Double) -> Bool {
-        let epsilon = 0.00001
         return abs(lhs - rhs) < epsilon
     }
     

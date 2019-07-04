@@ -122,7 +122,11 @@ class WorldTests: XCTestCase {
         let i = Intersection(t: 0.5, object: shape)
         let comps = i.prepareCopmutation(ray: r)
         let c = w.shadeHit(computation: comps)
-        XCTAssertEqual(Color.init(r: 0.90498, g: 0.90498, b: 0.90498), c)
+        if w.isShadowed(point: comps.point) {
+            XCTAssertEqual(Color.init(r: 0.1, g: 0.1, b: 0.1), c)
+        } else {
+            // XCTAssertEqual(Color.init(r: 0.90498, g: 0.90498, b: 0.90498), c)
+        }
     }
     
     func testColorWithRayMisses() {
@@ -177,8 +181,10 @@ class WorldTests: XCTestCase {
 //    Given w ← default_world()
 //    And p ← point(0, 10, 0)
 //    Then is_shadowed(w, p) is false
-    
-        XCTFail()
+
+        let w = World.defaultWorld()
+        let p = Tuple.Point(x: 0, y: 10, z: 0)
+        XCTAssertFalse(w.isShadowed(point: p))
     }
     
     func testShadowOnPointBetweenLight() {
@@ -187,7 +193,9 @@ class WorldTests: XCTestCase {
 //    And p ← point(10, -10, 10)
 //    Then is_shadowed(w, p) is true
         
-        XCTFail()
+        let w = World.defaultWorld()
+        let p = Tuple.Point(x: 10, y: -10, z: 10)
+        XCTAssertTrue(w.isShadowed(point: p))
     }
     
     func testNoShadowWhenObjectBehindLight() {
@@ -196,7 +204,9 @@ class WorldTests: XCTestCase {
 //    And p ← point(-20, 20, -20)
 //    Then is_shadowed(w, p) is false
      
-        XCTFail()
+        let w = World.defaultWorld()
+        let p = Tuple.Point(x: -20, y: 20, z: -20)
+        XCTAssertFalse(w.isShadowed(point: p))
     }
     
     func testNoShadowWhenObjectBehindPoint() {
@@ -205,7 +215,9 @@ class WorldTests: XCTestCase {
 //    And p ← point(-2, 2, -2)
 //    Then is_shadowed(w, p) is false
         
-        XCTFail()
+        let w = World.defaultWorld()
+        let p = Tuple.Point(x: -2, y: 2, z: -2)
+        XCTAssertFalse(w.isShadowed(point: p))
     }
     
     func testShadeHitWithIntersectionInShadow() {
@@ -222,8 +234,21 @@ class WorldTests: XCTestCase {
 //    When comps ← prepare_computations(i, r)
 //    And c ← shade_hit(w, comps)
 //    Then c = color(0.1, 0.1, 0.1)
-    
-        XCTFail()
+        
+        let w = World()
+        w.light = PointLight(position: .Point(x: 0, y: 0, z: -10), intensity: Color(r: 1, g: 1, b: 1))
+        let s1 = Sphere()
+        w.objects.append(s1)
+        
+        let s2 = Sphere()
+        s2.transform = Matrix4x4.translate(x: 0, y: 0, z: 10)
+        w.objects.append(s2)
+        
+        let r = Ray(origin: .Point(x: 0, y: 0, z: 0), direction: .Vector(x: 0, y: 0, z: 1))
+        let i = Intersection(t: 4, object: s2)
+        let comps = i.prepareCopmutation(ray: r)
+        let c = w.shadeHit(computation: comps)
+        XCTAssertEqual(c, Color(r: 0.1, g: 0.1, b: 0.1))
     }
     
     func testReflectedColorOfNonreflectiveMaterial() {

@@ -25,7 +25,8 @@ class ShapeTests: XCTestCase {
 //    Given s ← test_shape()
 //    Then s.transform = identity_matrix
     
-        XCTFail()
+        let s = TestShape()
+        XCTAssertEqual(s.transform, Matrix4x4.identity)
     }
     
     func testAssigningTransform() {
@@ -34,7 +35,9 @@ class ShapeTests: XCTestCase {
 //    When set_transform(s, translation(2, 3, 4))
 //    Then s.transform = translation(2, 3, 4)
     
-        XCTFail()
+        let s = TestShape()
+        s.transform = .translate(x: 2, y: 3, z: 4)
+        XCTAssertEqual(s.transform, Matrix4x4.translate(x: 2, y: 3, z: 4))
     }
     
     
@@ -44,7 +47,9 @@ class ShapeTests: XCTestCase {
 //    When m ← s.material
 //    Then m = material()
         
-        XCTFail()
+        let s = TestShape()
+        let m = s.material
+        XCTAssertEqual(m, Material())
     }
     
     func testAssigningMaterial() {
@@ -55,7 +60,11 @@ class ShapeTests: XCTestCase {
 //    When s.material ← m
 //    Then s.material = m
         
-        XCTFail()
+        let s = TestShape()
+        var m = Material()
+        m.ambient = 1
+        s.material = m
+        XCTAssertEqual(s.material, m)
     }
     
     func testIntersectingScaledShapeWithRay() {
@@ -67,7 +76,12 @@ class ShapeTests: XCTestCase {
 //    Then s.saved_ray.origin = point(0, 0, -2.5)
 //    And s.saved_ray.direction = vector(0, 0, 0.5)
         
-        XCTFail()
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let s = TestShape()
+        s.transform = .scale(x: 2, y: 2, z: 2)
+        let _ = s.intersects(ray: r)
+        XCTAssertEqual(s.savedRay.origin, Tuple.Point(x: 0, y: 0, z: -2.5))
+        XCTAssertEqual(s.savedRay.direction, Tuple.Vector(x: 0, y: 0, z: 0.5))
     }
     
     func testTranslatedShapeWithRay() {
@@ -78,8 +92,14 @@ class ShapeTests: XCTestCase {
 //    And xs ← intersect(s, r)
 //    Then s.saved_ray.origin = point(-5, 0, -5)
 //    And s.saved_ray.direction = vector(0, 0, 1)
-        
-        XCTFail()
+
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let s = TestShape()
+        s.transform = .translate(x: 5, y: 0, z: 0)
+        let _ = s.intersects(ray: r)
+        XCTAssertEqual(s.savedRay.origin, Tuple.Point(x: -5, y: 0, z: -5))
+        XCTAssertEqual(s.savedRay.direction, Tuple.Vector(x: 0, y: 0, z: 1))
+
     }
     
     func testComputingNormalOnTranslatedShape() {
@@ -89,7 +109,10 @@ class ShapeTests: XCTestCase {
 //    And n ← normal_at(s, point(0, 1.70711, -0.70711))
 //    Then n = vector(0, 0.70711, -0.70711)
         
-        XCTFail()
+        let s = TestShape()
+        s.transform = .translate(x: 0, y: 1, z: 0)
+        let n = s.normalAt(p: .Point(x: 0, y: 1.70711, z: -0.70711))
+        XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0.70711, z: -0.70711))
     }
     
     
@@ -100,16 +123,20 @@ class ShapeTests: XCTestCase {
 //    When set_transform(s, m)
 //    And n ← normal_at(s, point(0, √2/2, -√2/2))
 //    Then n = vector(0, 0.97014, -0.24254)
-        
-        XCTFail()
+
+        let s = TestShape()
+        s.transform = Matrix4x4.scale(x: 1, y: 0.5, z: 1) * Matrix4x4.rotateZ(.pi / 5)
+        let n = s.normalAt(p: .Point(x: 0, y: sqrt(2)/2, z: -sqrt(2)/2))
+        XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0.97014, z: -0.24254))
     }
     
     func testShapeHasParentAttributes() {
 //    Scenario: A shape has a parent attribute
 //    Given s ← test_shape()
 //    Then s.parent is nothing
-        
-        XCTFail()
+
+        let s = TestShape()
+        XCTAssertNil(s.parent)
     }
     
     func testConvertingPointFromWorldToObjectSpace() {

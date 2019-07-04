@@ -115,7 +115,13 @@ class IntersectionsTest: XCTestCase {
 //    Then comps.over_point.z < -EPSILON/2
 //    And comps.point.z > comps.over_point.z
         
-        XCTFail()
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let shape = Sphere()
+        shape.transform = Matrix4x4.translate(x: 0, y: 0, z: 1)
+        let i = Intersection(t: 5, object: shape)
+        let comps = i.prepareCopmutation(ray: r)
+        XCTAssertTrue(comps.overPoint.z < -Tuple.epsilon / 2)
+        XCTAssertTrue(comps.point.z > comps.overPoint.z)
     }
     
     func testUnderPointOffsetBelowSurface() {
@@ -128,7 +134,12 @@ class IntersectionsTest: XCTestCase {
 //    When comps ← prepare_computations(i, r, xs)
 //    Then comps.under_point.z > EPSILON/2
 //    And comps.point.z < comps.under_point.z
-        
+//
+//        let r = Ray(origin: .Point(x: 0, y: 0, z: -4), direction: .Vector(x: 0, y: 0, z: 1))
+//        let shape = GlassSphere()
+//        let shape.transform = Matrix4x4.translate(x: 0, y: 0, z: 1)
+//        let i = Intersection(t: 5, object: shape)
+//        
         XCTFail()
     }
     

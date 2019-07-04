@@ -141,8 +141,13 @@ class MaterialsTests: XCTestCase {
 //    And in_shadow ← true
 //    When result ← lighting(m, light, position, eyev, normalv, in_shadow)
 //    Then result = color(0.1, 0.1, 0.1)
-        
-        XCTFail()
+
+        let eyev = Tuple.Vector(x: 0, y: 0, z: -1)
+        let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
+        let light = PointLight(position: .Point(x: 0, y: 0, z: -10), intensity: Color(r: 1, g: 1, b: 1))
+        let inShadow = true
+        let result = light.lighting(material: m, position: position, eyeVector: eyev, normalVector: normalv, inShadow: inShadow)
+        XCTAssertEqual(result, Color(r: 0.1, g: 0.1, b: 0.1))
     }
     
     func testLightingWithPatternApplied() {

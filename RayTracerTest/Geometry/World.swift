@@ -48,10 +48,13 @@ class World {
             return Color.black
         }
         
+        let shadowed = world.isShadowed(point: computation.overPoint)
+        
         return world.light!.lighting(material: computation.object!.material,
                                      position: computation.point,
                                      eyeVector: computation.eyeVector,
-                                     normalVector: computation.normalVector)
+                                     normalVector: computation.normalVector,
+                                     inShadow: shadowed)
     }
     
     func shadeHit(computation: Computation) -> Color {
@@ -72,6 +75,27 @@ class World {
     
     func colorAt(ray: Ray) -> Color {
         return World.colorAt(world: self, ray: ray)
+    }
+    
+    static func isShadowed(world: World, point: Tuple) -> Bool {
+        assert(world.light != nil)
+        let v = world.light!.position - point
+        let distance = v.magnitude
+        let direction = v.normalize()
+        
+        let ray = Ray(origin: point, direction: direction)
+        let xs = world.intersects(ray: ray)
+        let hit = Intersection.hit(xs)
+        
+        if hit != nil && hit!.t < distance {
+            return true
+        }
+        
+        return false
+    }
+    
+    func isShadowed(point: Tuple) -> Bool {
+        return World.isShadowed(world: self, point: point)
     }
     
     var objects: [Shape] = []

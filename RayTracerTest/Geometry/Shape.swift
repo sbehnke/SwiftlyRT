@@ -18,14 +18,30 @@ class Shape : Equatable {
     }
     
     func intersects(ray: Ray) -> [Intersection] {
+        let localRay = transform.invert() * ray
+        savedRay = localRay
+        return localIntersects(ray: localRay)
+    }
+    
+    func localIntersects(ray: Ray) -> [Intersection] {
         return []
     }
     
     func normalAt(p : Tuple) -> Tuple {
-        return Tuple.zero
+        let localPoint = transform.invert() * p
+        let localNormal = localNormalAt(p: localPoint)
+        var worldNormal = transform.invert().transpose() * localNormal
+        worldNormal.w = 0.0
+        return worldNormal.normalize()
     }
     
+    func localNormalAt(p: Tuple) -> Tuple {
+        return .Vector(x: p.x, y: p.y, z: p.z)
+    }
+    
+    var name = ""
+    var parent: Shape? = nil
     var transform = Matrix4x4.identity
     var material = Material()
-    var name = ""
+    var savedRay = Ray(origin: .pointZero, direction: .zero)
 }

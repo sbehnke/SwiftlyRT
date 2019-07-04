@@ -12,6 +12,7 @@ struct Computation: Equatable {
     var t = 0.0
     var object: Shape? = nil
     var point = Tuple.pointZero
+    var overPoint = Tuple.pointZero
     var eyeVector = Tuple.zero
     var normalVector = Tuple.zero
     var inside = false

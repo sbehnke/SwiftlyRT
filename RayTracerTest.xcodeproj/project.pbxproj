@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6435B4F622CE58E800270210 /* TestShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4F522CE58E800270210 /* TestShape.swift */; };
 		646C32BE22CB9EE300A6B321 /* LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32BD22CB9EE300A6B321 /* LightsTests.swift */; };
 		646C32C422CB9FEA00A6B321 /* MaterialsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32C322CB9FEA00A6B321 /* MaterialsTests.swift */; };
 		646C32C622CBA2B600A6B321 /* CameraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32C522CBA2B600A6B321 /* CameraTests.swift */; };
@@ -71,6 +72,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6435B4F522CE58E800270210 /* TestShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShape.swift; sourceTree = "<group>"; };
 		646C32A722CB9EAA00A6B321 /* patterns.feature */ = {isa = PBXFileReference; lastKnownFileType = text; name = patterns.feature; path = "Book Data/features/patterns.feature"; sourceTree = "<group>"; };
 		646C32A822CB9EAA00A6B321 /* matrices.feature */ = {isa = PBXFileReference; lastKnownFileType = text; name = matrices.feature; path = "Book Data/features/matrices.feature"; sourceTree = "<group>"; };
 		646C32A922CB9EAA00A6B321 /* obj_file.feature */ = {isa = PBXFileReference; lastKnownFileType = text; name = obj_file.feature; path = "Book Data/features/obj_file.feature"; sourceTree = "<group>"; };
@@ -210,10 +212,11 @@
 		64D1FB2E22CADCC400AA05AE /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
-				64D1FB4222CD72F200AA05AE /* World.swift */,
-				64D1FB2F22CADCD700AA05AE /* Sphere.swift */,
-				64D1FB3522CAE4CF00AA05AE /* Shape.swift */,
 				64D1FB4622CD975700AA05AE /* Camera.swift */,
+				64D1FB3522CAE4CF00AA05AE /* Shape.swift */,
+				64D1FB2F22CADCD700AA05AE /* Sphere.swift */,
+				6435B4F522CE58E800270210 /* TestShape.swift */,
+				64D1FB4222CD72F200AA05AE /* World.swift */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -453,6 +456,7 @@
 				64D1FB2022C8731700AA05AE /* Matrix4x4.swift in Sources */,
 				64D1FB4522CD78FE00AA05AE /* Computation.swift in Sources */,
 				64D1FB4322CD72F200AA05AE /* World.swift in Sources */,
+				6435B4F622CE58E800270210 /* TestShape.swift in Sources */,
 				64EE91B622C813AF00FB2699 /* Environment.swift in Sources */,
 				64D1FB3022CADCD700AA05AE /* Sphere.swift in Sources */,
 				64EE917B22C7D18700FB2699 /* ViewController.swift in Sources */,
