@@ -47,7 +47,8 @@ class ViewController: NSViewController {
         let material = Material(color: Color(r: 1, g: 0.9, b: 0.9), ambient: 0.05, diffuse: 0.6, specular: 0, shininess: 200)
         floor.transform = .translate(x: 0, y: 0, z: -1)
         floor.material = material
-        
+        floor.material.pattern = CheckerPattern(a: Color.white, b: Color.black)
+
         let leftWall = Plane()
         leftWall.transform = .translate(x: 0, y: 0, z: 10) *
             .rotateX(.pi / 2)
@@ -65,12 +66,15 @@ class ViewController: NSViewController {
         right.material.color = Color(r: 0.5, g: 1, b: 0.1)
         right.material.diffuse = 0.7
         right.material.specular = 0.3
+        right.material.pattern = GradientPattern(a: right.material.color, b: Color.white)
         
         let middle = Sphere()
         middle.transform = .translate(x: -0.5, y: 1, z: 0.5)
         middle.material.color = Color(r: 0.1, g: 1, b: 0.5)
         middle.material.diffuse = 0.7
         middle.material.specular = 0.3
+        middle.material.pattern = StripePattern(a: Color.white, b: middle.material.color)
+        middle.material.pattern?.transform = .scale(x: 0.25, y: 0.25, z: 0.25)
         
         let left = Sphere()
         left.transform = .translate(x: -1.5, y: 0.33, z: -0.75) * .scale(x: 0.33, y: 0.33, z: 0.33)
@@ -189,7 +193,7 @@ class ViewController: NSViewController {
                     let point = ray.position(time: hit!.t)
                     let normal = hit!.object?.normalAt(p: point)
                     let eyeVector = -ray.direction
-                    let coloredLight = light.lighting(material: hit!.object!.material, position: position, eyeVector: eyeVector, normalVector: normal!)
+                    let coloredLight = light.lighting(object: hit?.object, material: hit!.object!.material, position: position, eyeVector: eyeVector, normalVector: normal!)
                     canvas.setPixel(x: x, y: y, color: coloredLight)
                 }
             }

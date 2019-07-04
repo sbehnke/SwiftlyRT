@@ -86,8 +86,8 @@ struct Color: Equatable, AdditiveArithmetic {
     static func == (lhs: Color, rhs: Color) -> Bool {
         return almostEqual(lhs: lhs.r, rhs: rhs.r) &&
             almostEqual(lhs: lhs.g, rhs: rhs.g) &&
-            almostEqual(lhs: lhs.b, rhs: rhs.b) &&
-            almostEqual(lhs: lhs.a, rhs: rhs.a)
+            almostEqual(lhs: lhs.b, rhs: rhs.b) /* &&
+            almostEqual(lhs: lhs.a, rhs: rhs.a) */
     }
     
     static func almostEqual(lhs: Float, rhs: Float) -> Bool {
@@ -99,7 +99,7 @@ struct Color: Equatable, AdditiveArithmetic {
         self.r = r
         self.g = g
         self.b = b
-        self.a = 1.0
+//        self.a = 1.0
     }
     
     static func normalize(rhs: Color) -> Color {
@@ -196,14 +196,14 @@ struct Color: Equatable, AdditiveArithmetic {
         }
     }
 
-    var a: Float {
-        get {
-            return backing[3]
-        }
-        set {
-            backing[3] = newValue
-        }
-    }
+//    var a: Float {
+//        get {
+//            return backing[3]
+//        }
+//        set {
+//            backing[3] = newValue
+//        }
+//    }
     
     var description : String {
         get {
@@ -212,6 +212,6 @@ struct Color: Equatable, AdditiveArithmetic {
     }
 
     
-    private var backing = Array<Float>(repeating: 0.0, count: 4)
+    private var backing = Array<Float>(repeating: 0.0, count: 3)
 
 }

@@ -26,4 +26,5 @@ struct Material : Equatable {
     var diffuse: Float = 0.9
     var specular: Float = 0.9
     var shininess: Float = 200.0
+    var pattern: Pattern? = nil
 }

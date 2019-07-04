@@ -12,6 +12,14 @@
 		6435B4FA22CE750100270210 /* Cylinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4F922CE750100270210 /* Cylinder.swift */; };
 		6435B4FC22CE751400270210 /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4FB22CE751400270210 /* Cube.swift */; };
 		6435B4FE22CE753300270210 /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4FD22CE753300270210 /* Triangle.swift */; };
+		6435B50022CE7B9700270210 /* Pattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4FF22CE7B9700270210 /* Pattern.swift */; };
+		6435B50222CE7BB600270210 /* StripePattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50122CE7BB600270210 /* StripePattern.swift */; };
+		6435B50422CE813700270210 /* TestPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50322CE813700270210 /* TestPattern.swift */; };
+		6435B50622CE8B5600270210 /* GradientPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50522CE8B5600270210 /* GradientPattern.swift */; };
+		6435B50822CE905C00270210 /* RingPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50722CE905C00270210 /* RingPattern.swift */; };
+		6435B50A22CE92CF00270210 /* CheckerPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50922CE92CF00270210 /* CheckerPattern.swift */; };
+		6435B50C22CE9A9300270210 /* SolidColorPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50B22CE9A9300270210 /* SolidColorPattern.swift */; };
+		6435B50E22CE9B0100270210 /* BlendedPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50D22CE9B0100270210 /* BlendedPattern.swift */; };
 		646C32BE22CB9EE300A6B321 /* LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32BD22CB9EE300A6B321 /* LightsTests.swift */; };
 		646C32C422CB9FEA00A6B321 /* MaterialsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32C322CB9FEA00A6B321 /* MaterialsTests.swift */; };
 		646C32C622CBA2B600A6B321 /* CameraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32C522CBA2B600A6B321 /* CameraTests.swift */; };
@@ -81,6 +89,14 @@
 		6435B4F922CE750100270210 /* Cylinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cylinder.swift; sourceTree = "<group>"; };
 		6435B4FB22CE751400270210 /* Cube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cube.swift; sourceTree = "<group>"; };
 		6435B4FD22CE753300270210 /* Triangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangle.swift; sourceTree = "<group>"; };
+		6435B4FF22CE7B9700270210 /* Pattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pattern.swift; sourceTree = "<group>"; };
+		6435B50122CE7BB600270210 /* StripePattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StripePattern.swift; sourceTree = "<group>"; };
+		6435B50322CE813700270210 /* TestPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPattern.swift; sourceTree = "<group>"; };
+		6435B50522CE8B5600270210 /* GradientPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientPattern.swift; sourceTree = "<group>"; };
+		6435B50722CE905C00270210 /* RingPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingPattern.swift; sourceTree = "<group>"; };
+		6435B50922CE92CF00270210 /* CheckerPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckerPattern.swift; sourceTree = "<group>"; };
+		6435B50B22CE9A9300270210 /* SolidColorPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidColorPattern.swift; sourceTree = "<group>"; };
+		6435B50D22CE9B0100270210 /* BlendedPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendedPattern.swift; sourceTree = "<group>"; };
 		646C32A722CB9EAA00A6B321 /* patterns.feature */ = {isa = PBXFileReference; lastKnownFileType = text; name = patterns.feature; path = "Book Data/features/patterns.feature"; sourceTree = "<group>"; };
 		646C32A822CB9EAA00A6B321 /* matrices.feature */ = {isa = PBXFileReference; lastKnownFileType = text; name = matrices.feature; path = "Book Data/features/matrices.feature"; sourceTree = "<group>"; };
 		646C32A922CB9EAA00A6B321 /* obj_file.feature */ = {isa = PBXFileReference; lastKnownFileType = text; name = obj_file.feature; path = "Book Data/features/obj_file.feature"; sourceTree = "<group>"; };
@@ -220,12 +236,20 @@
 		64D1FB2E22CADCC400AA05AE /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				6435B50D22CE9B0100270210 /* BlendedPattern.swift */,
 				64D1FB4622CD975700AA05AE /* Camera.swift */,
+				6435B50922CE92CF00270210 /* CheckerPattern.swift */,
 				6435B4FB22CE751400270210 /* Cube.swift */,
 				6435B4F922CE750100270210 /* Cylinder.swift */,
+				6435B50522CE8B5600270210 /* GradientPattern.swift */,
+				6435B4FF22CE7B9700270210 /* Pattern.swift */,
 				6435B4F722CE74C900270210 /* Plane.swift */,
+				6435B50722CE905C00270210 /* RingPattern.swift */,
 				64D1FB3522CAE4CF00AA05AE /* Shape.swift */,
+				6435B50B22CE9A9300270210 /* SolidColorPattern.swift */,
 				64D1FB2F22CADCD700AA05AE /* Sphere.swift */,
+				6435B50122CE7BB600270210 /* StripePattern.swift */,
+				6435B50322CE813700270210 /* TestPattern.swift */,
 				6435B4F522CE58E800270210 /* TestShape.swift */,
 				6435B4FD22CE753300270210 /* Triangle.swift */,
 				64D1FB4222CD72F200AA05AE /* World.swift */,
@@ -467,17 +491,23 @@
 			files = (
 				64D1FB2022C8731700AA05AE /* Matrix4x4.swift in Sources */,
 				64D1FB4522CD78FE00AA05AE /* Computation.swift in Sources */,
+				6435B50822CE905C00270210 /* RingPattern.swift in Sources */,
 				64D1FB4322CD72F200AA05AE /* World.swift in Sources */,
+				6435B50A22CE92CF00270210 /* CheckerPattern.swift in Sources */,
 				6435B4F622CE58E800270210 /* TestShape.swift in Sources */,
+				6435B50622CE8B5600270210 /* GradientPattern.swift in Sources */,
 				6435B4FC22CE751400270210 /* Cube.swift in Sources */,
 				64EE91B622C813AF00FB2699 /* Environment.swift in Sources */,
+				6435B50022CE7B9700270210 /* Pattern.swift in Sources */,
 				64D1FB3022CADCD700AA05AE /* Sphere.swift in Sources */,
 				64EE917B22C7D18700FB2699 /* ViewController.swift in Sources */,
 				64EE91A522C7D1B000FB2699 /* Tuple.swift in Sources */,
 				64EE91AB22C7F04300FB2699 /* Color.swift in Sources */,
+				6435B50422CE813700270210 /* TestPattern.swift in Sources */,
 				64D1FB3622CAE4CF00AA05AE /* Shape.swift in Sources */,
 				64EE917922C7D18700FB2699 /* AppDelegate.swift in Sources */,
 				64D1FB3F22CC2C3500AA05AE /* Material.swift in Sources */,
+				6435B50C22CE9A9300270210 /* SolidColorPattern.swift in Sources */,
 				64D1FB2422C9035100AA05AE /* Matrix2x2.swift in Sources */,
 				6435B4F822CE74C900270210 /* Plane.swift in Sources */,
 				6435B4FE22CE753300270210 /* Triangle.swift in Sources */,
@@ -486,9 +516,11 @@
 				64EE91B422C8139C00FB2699 /* Projecile.swift in Sources */,
 				64D1FB3D22CC2B8200AA05AE /* PointLight.swift in Sources */,
 				64D1FB2D22CADCB500AA05AE /* Ray.swift in Sources */,
+				6435B50E22CE9B0100270210 /* BlendedPattern.swift in Sources */,
 				6435B4FA22CE750100270210 /* Cylinder.swift in Sources */,
 				64D1FB3A22CAF0B600AA05AE /* Intersection.swift in Sources */,
 				64EE91AF22C7F2F000FB2699 /* Canvas.swift in Sources */,
+				6435B50222CE7BB600270210 /* StripePattern.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

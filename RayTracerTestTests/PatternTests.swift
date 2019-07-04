@@ -29,8 +29,10 @@ class PatternTests: XCTestCase {
 //    Given pattern ← stripe_pattern(white, black)
 //    Then pattern.a = white
 //    And pattern.b = black
-        
-        XCTFail()
+
+        let pattern = StripePattern(a: Color.white, b: Color.black)
+        XCTAssertEqual(pattern.a, Color.white)
+        XCTAssertEqual(pattern.b, Color.black)
     }
     
     func testStripePatternConstantY() {
@@ -40,7 +42,10 @@ class PatternTests: XCTestCase {
 //    And stripe_at(pattern, point(0, 1, 0)) = white
 //    And stripe_at(pattern, point(0, 2, 0)) = white
     
-        XCTFail()
+        let p = StripePattern(a: Color.white, b: Color.black)
+        XCTAssertEqual(p.patternAt(point: .Point(x: 0, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(p.patternAt(point: .Point(x: 0, y: 1, z: 0)), Color.white)
+        XCTAssertEqual(p.patternAt(point: .Point(x: 0, y: 2, z: 0)), Color.white)
     }
     
     func testStripePatternConstantX() {
@@ -50,7 +55,10 @@ class PatternTests: XCTestCase {
 //    And stripe_at(pattern, point(0, 0, 1)) = white
 //    And stripe_at(pattern, point(0, 0, 2)) = white
     
-        XCTFail()
+        let p = StripePattern(a: Color.white, b: Color.black)
+        XCTAssertEqual(p.patternAt(point: .Point(x: 0, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(p.patternAt(point: .Point(x: 0, y: 0, z: 1)), Color.white)
+        XCTAssertEqual(p.patternAt(point: .Point(x: 0, y: 0, z: 2)), Color.white)
     }
     
     func testStripePatternAlternates() {
@@ -63,7 +71,21 @@ class PatternTests: XCTestCase {
 //    And stripe_at(pattern, point(-1, 0, 0)) = black
 //    And stripe_at(pattern, point(-1.1, 0, 0)) = white
     
-        XCTFail()
+        let p = StripePattern(a: Color.white, b: Color.black)
+        XCTAssertEqual(p.patternAt(point: .Point(x: 0, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(p.patternAt(point: .Point(x: 0.9, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(p.patternAt(point: .Point(x: 1, y: 0, z: 0)), Color.black)
+        XCTAssertEqual(p.patternAt(point: .Point(x: -0.1, y: 0, z: 0)), Color.black)
+        XCTAssertEqual(p.patternAt(point: .Point(x: -1, y: 0, z: 0)), Color.black)
+        XCTAssertEqual(p.patternAt(point: .Point(x: -1.1, y: 0, z: 0)), Color.white)
+        
+        let object = TestShape()
+        XCTAssertEqual(p.patternAtShape(object: object, point: .Point(x: 0, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(p.patternAtShape(object: object, point: .Point(x: 0.9, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(p.patternAtShape(object: object, point: .Point(x: 1, y: 0, z: 0)), Color.black)
+        XCTAssertEqual(p.patternAtShape(object: object, point: .Point(x: -0.1, y: 0, z: 0)), Color.black)
+        XCTAssertEqual(p.patternAtShape(object: object, point: .Point(x: -1, y: 0, z: 0)), Color.black)
+        XCTAssertEqual(p.patternAtShape(object: object, point: .Point(x: -1.1, y: 0, z: 0)), Color.white)
     }
     
     func testStripesWithObjectTransformation() {
@@ -73,8 +95,14 @@ class PatternTests: XCTestCase {
 //    And pattern ← stripe_pattern(white, black)
 //    When c ← stripe_at_object(pattern, object, point(1.5, 0, 0))
 //    Then c = white
-    
-        XCTFail()
+
+        let object = Sphere()
+        object.transform = Matrix4x4.scale(x: 2, y: 2, z: 2)
+        let pattern = StripePattern(a: Color.white, b: Color.black)
+        let c = pattern.patternAtShape(object: object, point: Tuple.Point(x: 1.5, y: 0, z: 0))
+        let c2 = pattern.patternAtShape(object: object, point: Tuple.Point(x: 1.5, y: 0, z: 0))
+        XCTAssertEqual(c, Color.white)
+        XCTAssertEqual(c2, Color.white)
     }
     
     func testStripesWithPatternTransformation() {
@@ -85,7 +113,11 @@ class PatternTests: XCTestCase {
 //    When c ← stripe_at_object(pattern, object, point(1.5, 0, 0))
 //    Then c = white
         
-        XCTFail()
+        let object = Sphere()
+        let pattern = StripePattern(a: Color.white, b: Color.black)
+        pattern.transform = Matrix4x4.scale(x: 2, y: 2, z: 2)
+        let c = pattern.patternAtShape(object: object, point: Tuple.Point(x: 1.5, y: 0, z: 0))
+        XCTAssertEqual(c, Color.white)
     }
     
     func testStripesWithBothObjectAndPatternTransform() {
@@ -96,8 +128,13 @@ class PatternTests: XCTestCase {
 //    And set_pattern_transform(pattern, translation(0.5, 0, 0))
 //    When c ← stripe_at_object(pattern, object, point(2.5, 0, 0))
 //    Then c = white
-     
-        XCTFail()
+
+        let object = Sphere()
+        object.transform = Matrix4x4.scale(x: 2, y: 2, z: 2)
+        let pattern = StripePattern(a: Color.white, b: Color.black)
+        pattern.transform = Matrix4x4.translate(x: 0.5, y: 0, z: 0)
+        let c = pattern.patternAtShape(object: object, point: Tuple.Point(x: 1.5, y: 0, z: 0))
+        XCTAssertEqual(c, Color.white)
     }
     
     func testDefaultPatternTransformation() {
@@ -105,7 +142,8 @@ class PatternTests: XCTestCase {
 //    Given pattern ← test_pattern()
 //    Then pattern.transform = identity_matrix
         
-        XCTFail()
+        let p = TestPattern()
+        XCTAssertEqual(p.transform, Matrix4x4.identity)
     }
     
     func testAssigningTransformation() {
@@ -114,7 +152,9 @@ class PatternTests: XCTestCase {
 //    When set_pattern_transform(pattern, translation(1, 2, 3))
 //    Then pattern.transform = translation(1, 2, 3)
     
-        XCTFail()
+        let p = TestPattern()
+        p.transform = Matrix4x4.translate(x: 1, y: 2, z: 3)
+        XCTAssertEqual(p.transform, Matrix4x4.translate(x: 1, y: 2, z: 3))
     }
     
     func testPatternWithObjectTransformation() {
@@ -124,8 +164,12 @@ class PatternTests: XCTestCase {
 //    And pattern ← test_pattern()
 //    When c ← pattern_at_shape(pattern, shape, point(2, 3, 4))
 //    Then c = color(1, 1.5, 2)
-    
-        XCTFail()
+
+        let shape = Sphere()
+        shape.transform = .scale(x: 2, y: 2, z: 2)
+        let pattern = TestPattern()
+        let c = pattern.patternAtShape(object: shape, point: Tuple.Point(x: 2, y: 3, z: 4))
+        XCTAssertEqual(c, Color(r: 1, g: 1.5, b: 2))
     }
     
     func testPatternWithTransformation() {
@@ -135,7 +179,12 @@ class PatternTests: XCTestCase {
 //    And set_pattern_transform(pattern, scaling(2, 2, 2))
 //    When c ← pattern_at_shape(pattern, shape, point(2, 3, 4))
 //    Then c = color(1, 1.5, 2)
-        XCTFail()
+
+        let shape = Sphere()
+        let pattern = TestPattern()
+        pattern.transform = .scale(x: 2, y: 2, z: 2)
+        let c = pattern.patternAtShape(object: shape, point: Tuple.Point(x: 2, y: 3, z: 4))
+        XCTAssertEqual(c, Color(r: 1, g: 1.5, b: 2))
     }
     
     func testObjectAndPatternTransformation() {
@@ -147,7 +196,12 @@ class PatternTests: XCTestCase {
 //    When c ← pattern_at_shape(pattern, shape, point(2.5, 3, 3.5))
 //    Then c = color(0.75, 0.5, 0.25)
         
-        XCTFail()
+        let shape = Sphere()
+        shape.transform = .scale(x: 2, y: 2, z: 2)
+        let pattern = TestPattern()
+        pattern.transform = Matrix4x4.translate(x: 0.5, y: 1, z: 1.5)
+        let c = pattern.patternAtShape(object: shape, point: Tuple.Point(x: 2.5, y: 3, z: 3.5))
+        XCTAssertEqual(c, Color(r: 0.75, g: 0.5, b: 0.25))
     }
     
     func testGradiantLinearInteroplation() {
@@ -157,8 +211,12 @@ class PatternTests: XCTestCase {
 //    And pattern_at(pattern, point(0.25, 0, 0)) = color(0.75, 0.75, 0.75)
 //    And pattern_at(pattern, point(0.5, 0, 0)) = color(0.5, 0.5, 0.5)
 //    And pattern_at(pattern, point(0.75, 0, 0)) = color(0.25, 0.25, 0.25)
-    
-        XCTFail()
+
+        let pattern = GradientPattern(a: Color.white, b: Color.black)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0.25, y: 0, z: 0)), Color(r: 0.75, g: 0.75, b: 0.75))
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0.5, y: 0, z: 0)), Color(r: 0.5, g: 0.5, b: 0.5))
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0.75, y: 0, z: 0)), Color(r: 0.25, g: 0.25, b: 0.25))
     }
     
     func testRingExtendingBothXandY() {
@@ -170,17 +228,24 @@ class PatternTests: XCTestCase {
 //    # 0.708 = just slightly more than √2/2
 //    And pattern_at(pattern, point(0.708, 0, 0.708)) = black
     
-        XCTFail()
+        let pattern = RingPattern(a: Color.white, b: Color.black)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 1, y: 0, z: 0)), Color.black)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0, y: 0, z: 1)), Color.black)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0.708, y: 0, z: 0.708)), Color.black)
     }
     
-    func testChckersRepeatingX() {
+    func testCheckersRepeatingX() {
 //    Scenario: Checkers should repeat in x
 //    Given pattern ← checkers_pattern(white, black)
 //    Then pattern_at(pattern, point(0, 0, 0)) = white
 //    And pattern_at(pattern, point(0.99, 0, 0)) = white
 //    And pattern_at(pattern, point(1.01, 0, 0)) = black
-    
-        XCTFail()
+        
+        let pattern = CheckerPattern(a: Color.white, b: Color.black)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0.99, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 1.01, y: 0, z: 0)), Color.black)
     }
     
     func testCheckersRepeatingY() {
@@ -190,8 +255,10 @@ class PatternTests: XCTestCase {
 //    And pattern_at(pattern, point(0, 0.99, 0)) = white
 //    And pattern_at(pattern, point(0, 1.01, 0)) = black
         
-        XCTFail()
-    }
+        let pattern = CheckerPattern(a: Color.white, b: Color.black)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0, y: 0.99, z: 0)), Color.white)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0, y: 1.01, z: 0)), Color.black)    }
     
     func testCheckersRepeatingZ() {
 //    Scenario: Checkers should repeat in z
@@ -199,6 +266,9 @@ class PatternTests: XCTestCase {
 //    Then pattern_at(pattern, point(0, 0, 0)) = white
 //    And pattern_at(pattern, point(0, 0, 0.99)) = white
 //    And pattern_at(pattern, point(0, 0, 1.01)) = black
-        XCTFail()
-    }
+        
+        let pattern = CheckerPattern(a: Color.white, b: Color.black)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0, y: 0, z: 0)), Color.white)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0, y: 0, z: 0.99)), Color.white)
+        XCTAssertEqual(pattern.patternAt(point: .Point(x: 0, y: 0, z: 1.01)), Color.black)    }
 }

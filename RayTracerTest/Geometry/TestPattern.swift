@@ -1,5 +1,5 @@
 //
-//  TestShape.swift
+//  TestPattern.swift
 //  RayTracerTest
 //
 //  Created by Steven Behnke on 7/4/19.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-class TestShape : Shape {
+class TestPattern: Pattern {
 
 }

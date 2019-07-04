@@ -50,7 +50,8 @@ class World {
         
         let shadowed = world.isShadowed(point: computation.overPoint)
         
-        return world.light!.lighting(material: computation.object!.material,
+        return world.light!.lighting(object: computation.object,
+                                     material: computation.object!.material,
                                      position: computation.point,
                                      eyeVector: computation.eyeVector,
                                      normalVector: computation.normalVector,

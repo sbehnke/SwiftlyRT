@@ -19,11 +19,13 @@ struct PointLight: Equatable {
         self.intensity = intensity
     }
     
-    static func lighting(material: Material, light: PointLight, position: Tuple, eyeVector: Tuple, normalVector: Tuple, inShadow: Bool = false) -> Color {
+    static func lighting(object: Shape?, material: Material, light: PointLight, position: Tuple, eyeVector: Tuple, normalVector: Tuple, inShadow: Bool = false) -> Color {
         var specular: Color
         var diffuse: Color
         
-        let effectiveColor = material.color * light.intensity
+        let color = material.pattern?.patternAtShape(object: object, point: position) ?? material.color
+//        let effectiveColor = material.color * light.intensity
+        let effectiveColor = color * light.intensity
         let lightv = (light.position - position).normalize()
         let ambient = effectiveColor * material.ambient
         let lightDotNormal = Tuple.dot(lhs: lightv, rhs: normalVector)
@@ -51,8 +53,8 @@ struct PointLight: Equatable {
         return ambient + diffuse + specular
     }
     
-    func lighting(material: Material, position: Tuple, eyeVector: Tuple, normalVector: Tuple, inShadow: Bool = false) -> Color {
-        return PointLight.lighting(material: material, light: self, position: position, eyeVector: eyeVector, normalVector: normalVector, inShadow: inShadow)
+    func lighting(object: Shape?, material: Material, position: Tuple, eyeVector: Tuple, normalVector: Tuple, inShadow: Bool = false) -> Color {
+        return PointLight.lighting(object: object, material: material, light: self, position: position, eyeVector: eyeVector, normalVector: normalVector, inShadow: inShadow)
     }
     
     var position = Tuple.pointZero

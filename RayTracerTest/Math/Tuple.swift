@@ -158,6 +158,10 @@ struct Tuple: Equatable, AdditiveArithmetic {
         return Tuple.reflect(lhs: self, normal: normal)
     }
     
+    func toColor() -> Color {
+        return Color(r: Float(x), g: Float(y), b: Float(z))
+    }
+    
     var magnitude : Double {
         get {
             return sqrt((x * x) + (y * y) + (z * z) + (w * w))
