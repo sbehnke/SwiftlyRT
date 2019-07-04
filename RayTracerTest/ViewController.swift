@@ -12,6 +12,7 @@ class ViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.progressLabel.stringValue = ""
 
         // Do any additional setup after loading the view.
     }
@@ -22,11 +23,15 @@ class ViewController: NSViewController {
         }
     }
 
+    @IBOutlet weak var progressLabel: NSTextFieldCell!
+    
     @IBAction func buttonRenderScene(_ sender: Any) {
         renderScene()
     }
     
     @IBAction func renderFullScene(_ sender: Any) {
+        let start = Date()
+        
         let floor = Sphere()
         floor.transform = .scale(x: 10, y: 0.01, z: 10)
         floor.material.color = Color(r: 1, g: 0.9, b: 0.9)
@@ -75,14 +80,27 @@ class ViewController: NSViewController {
                                           to: .Point(x: 0, y: 1, z: 0),
                                           up: .Vector(x: 0, y: 1, z: 0))
         
-        let canvas = camera.render(world: world)
-        let data = canvas.getPPM()
-        let filename = getDocumentsDirectory().appendingPathComponent("rayTracingScene.ppm")
-        do {
-            try data.write(to: filename)
-            NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: getDocumentsDirectory().absoluteString)
-        } catch {
-            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+        DispatchQueue.global(qos: .background).async {
+            let canvas = camera.render(world: world, progress: { (x: Int, y: Int) -> Void in
+                DispatchQueue.main.async {
+                    self.progressLabel.stringValue = "(\(x),\(y))"
+                }
+            })
+            
+            let data = canvas.getPPM()
+            
+            let filename = self.getDocumentsDirectory().appendingPathComponent("rayTracingScene.ppm")
+            do {
+                try data.write(to: filename)
+                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: self.getDocumentsDirectory().absoluteString)
+            } catch {
+                // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+            }
+            
+            DispatchQueue.main.async {
+                let timeDiff = Date.timeIntervalSince(start)
+                self.progressLabel.stringValue = "Finished in: \(String(describing: timeDiff))"
+            }
         }
     }
     

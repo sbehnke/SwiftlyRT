@@ -51,7 +51,8 @@ struct Camera {
         return Camera.rayForPixel(camera: self, x: x, y: y)
     }
     
-    static func render(c: Camera, world: World) -> Canvas {
+    public typealias RenderProgress = (Int, Int) -> Void
+    static func render(c: Camera, world: World, progress: RenderProgress? = nil) -> Canvas {
         let image = Canvas(width: c.width, height: c.height)
         
         for y in 0..<c.height {
@@ -59,14 +60,15 @@ struct Camera {
                 let ray = c.rayForPixel(x: x, y: y)
                 let color = world.colorAt(ray: ray)
                 image.setPixel(x: x, y: y, color: color)
+                progress?(x, y)
             }
         }
         
         return image
     }
     
-    func render(world: World) -> Canvas {
-        return Camera.render(c: self, world: world)
+    func render(world: World, progress: RenderProgress? = nil) -> Canvas {
+        return Camera.render(c: self, world: world, progress: progress)
     }
     
     private(set) var pixelSize = 0.0
