@@ -41,26 +41,24 @@ class ViewController: NSViewController {
     @IBAction func renderFullScene(_ sender: Any) {
         let startTime = CACurrentMediaTime()
 
-        let floor = Sphere()
-        floor.transform = .scale(x: 10, y: 0.01, z: 10)
-        floor.material.color = Color(r: 1, g: 0.9, b: 0.9)
-        floor.material.specular = 0
+        //let floor = Sphere()
+        let floor = Plane()
         
-        let leftWall = Sphere()
-        leftWall.transform = .translate(x: 0, y: 0, z: 5) *
-            .rotateY(-.pi / 4) *
-            .rotateX(.pi / 2) *
-            .scale(x: 10, y: 0.01, z: 10)
+        let material = Material(color: Color(r: 1, g: 0.9, b: 0.9), ambient: 0.05, diffuse: 0.6, specular: 0, shininess: 200)
+        floor.transform = .translate(x: 0, y: 0, z: -1)
+        floor.material = material
         
-        leftWall.material = floor.material
+        let leftWall = Plane()
+        leftWall.transform = .translate(x: 0, y: 0, z: 10) *
+            .rotateX(.pi / 2)
+        leftWall.material = Material(color: Color(r: 0, g: 0, b: 1), ambient: 0.05, diffuse: 0.6, specular: 0.5, shininess: 200)
         
-        let rightWall = Sphere()
+        let rightWall = Plane()
         rightWall.transform = .translate(x: 0, y: 0, z: 5) *
             .rotateY(.pi / 4) *
             .rotateX(.pi / 2) *
             .scale(x: 10, y: 0.01, z: 10)
-        
-        rightWall.material = floor.material
+        rightWall.material = material
         
         let right = Sphere()
         right.transform = .translate(x: 1.5, y: 0.5, z: -0.5) * .scale(x: 0.5, y: 0.5, z: 0.5)
