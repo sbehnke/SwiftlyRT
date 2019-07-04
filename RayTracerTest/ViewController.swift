@@ -59,7 +59,8 @@ class ViewController: NSViewController {
             .rotateY(.pi / 4) *
             .rotateX(.pi / 2) *
             .scale(x: 10, y: 0.01, z: 10)
-        rightWall.material = material
+        rightWall.material.color = Color(r: 0.2, g: 0, b: 0.8)
+        rightWall.material.pattern = GradientPattern(a: rightWall.material.color, b: Color.white)
         
         let right = Sphere()
         right.transform = .translate(x: 1.5, y: 0.5, z: -0.5) * .scale(x: 0.5, y: 0.5, z: 0.5)

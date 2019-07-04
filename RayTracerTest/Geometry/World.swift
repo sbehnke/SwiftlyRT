@@ -52,7 +52,7 @@ class World {
         
         return world.light!.lighting(object: computation.object,
                                      material: computation.object!.material,
-                                     position: computation.point,
+                                     position: computation.overPoint,
                                      eyeVector: computation.eyeVector,
                                      normalVector: computation.normalVector,
                                      inShadow: shadowed)
