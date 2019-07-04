@@ -45,8 +45,9 @@ class MaterialsTests: XCTestCase {
 //    Scenario: Reflectivity for the default material
 //    Given m ← material()
 //    Then m.reflective = 0.0
-        
-        XCTFail()
+
+        let m = Material()
+        XCTAssertEqual(m.reflective, 0.0)
     }
     
     func testTransparencyAndRefractiveIndexForDefaultMaterial() {
@@ -54,8 +55,10 @@ class MaterialsTests: XCTestCase {
 //    Given m ← material()
 //    Then m.transparency = 0.0
 //    And m.refractive_index = 1.0
-        
-        XCTFail()
+
+        let m = Material()
+        XCTAssertEqual(m.transparency, 0.0)
+        XCTAssertEqual(m.refractiveIndex, 1.0)
     }
     
     func testLightingWithEyeBetweenLightAndSurface() {

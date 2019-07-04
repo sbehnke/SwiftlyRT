@@ -9,6 +9,7 @@
 import Foundation
 
 class World {
+    static var MaxiumRecurrsionDepth = 4
     
     static func defaultWorld() -> World {
         let light = PointLight(position: Tuple.Point(x: -10, y: 10, z: -10), intensity: Color.white)
@@ -43,26 +44,28 @@ class World {
         return World.intersects(world: self, ray: ray)
     }
     
-    static func shadeHit(world: World, computation: Computation) -> Color {
+    static func shadeHit(world: World, computation: Computation, remaining: Int = MaxiumRecurrsionDepth) -> Color {
         if (world.light == nil || computation.object == nil) {
             return Color.black
         }
         
         let shadowed = world.isShadowed(point: computation.overPoint)
         
-        return world.light!.lighting(object: computation.object,
+        let surface = world.light!.lighting(object: computation.object,
                                      material: computation.object!.material,
                                      position: computation.overPoint,
                                      eyeVector: computation.eyeVector,
                                      normalVector: computation.normalVector,
                                      inShadow: shadowed)
+        let reflected = world.reflectedColor(computation: computation, remaining: remaining)
+        return surface + reflected
     }
     
-    func shadeHit(computation: Computation) -> Color {
-        return World.shadeHit(world: self, computation: computation)
+    func shadeHit(computation: Computation, remaining: Int = MaxiumRecurrsionDepth) -> Color {
+        return World.shadeHit(world: self, computation: computation, remaining: remaining)
     }
     
-    static func colorAt(world: World, ray: Ray) -> Color {
+    static func colorAt(world: World, ray: Ray, remaining: Int = MaxiumRecurrsionDepth) -> Color {
         let xs = world.intersects(ray: ray)
         let hit = Intersection.hit(xs)
 
@@ -70,12 +73,32 @@ class World {
             return Color.black
         } else {
             let comps = hit!.prepareCopmutation(ray: ray)
-            return world.shadeHit(computation: comps)
+            return world.shadeHit(computation: comps, remaining: remaining)
         }
     }
     
-    func colorAt(ray: Ray) -> Color {
-        return World.colorAt(world: self, ray: ray)
+    func colorAt(ray: Ray, remaining: Int = MaxiumRecurrsionDepth) -> Color {
+        return World.colorAt(world: self, ray: ray, remaining: remaining)
+    }
+    
+    static func reflectedColor(world: World, computation: Computation, remaining: Int = MaxiumRecurrsionDepth) -> Color {
+        let material = computation.object?.material ?? Material()
+        
+        if remaining < 1 {
+            return Color.black
+        }
+        
+        if material.reflective.isZero {
+            return Color.black
+        }
+        
+        let reflectRay = Ray(origin: computation.overPoint, direction: computation.reflectVector)
+        let color = colorAt(world: world, ray: reflectRay, remaining: remaining - 1)
+        return color * material.reflective
+    }
+    
+    func reflectedColor(computation: Computation, remaining: Int = MaxiumRecurrsionDepth) -> Color {
+        return World.reflectedColor(world: self, computation: computation, remaining: remaining)
     }
     
     static func isShadowed(world: World, point: Tuple) -> Bool {

@@ -262,7 +262,14 @@ class WorldTests: XCTestCase {
 //    And color ← reflected_color(w, comps)
 //    Then color = color(0, 0, 0)
         
-        XCTFail()
+        let w = World.defaultWorld()
+        let r = Ray(origin: .Point(x: 0, y: 0, z: 0), direction: .Vector(x: 0, y: 0, z: 1))
+        let shape = w.objects[1]
+        shape.material.ambient = 1
+        let i = Intersection(t: 1, object: shape)
+        let comps = i.prepareCopmutation(ray: r)
+        let color = w.reflectedColor(computation: comps)
+        XCTAssertEqual(color, Color.black)
     }
     
     
@@ -277,9 +284,18 @@ class WorldTests: XCTestCase {
 //    And i ← intersection(√2, shape)
 //    When comps ← prepare_computations(i, r)
 //    And color ← reflected_color(w, comps)
-//    Then color = color(0.19032, 0.2379, 0.14274)
+//    Then color = color(0.1903322, 0.23791523, 0.14274916)
 
-        XCTFail()
+        let w = World.defaultWorld()
+        let shape = Plane()
+        shape.material.reflective = 0.5
+        shape.transform = .translate(x: 0, y: -1, z: 0)
+        w.objects.append(shape)
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -3), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
+        let i = Intersection(t: sqrt(2.0), object: shape)
+        let comps = i.prepareCopmutation(ray: r)
+        let color = w.reflectedColor(computation: comps)
+        XCTAssertEqual(color, Color(r: 0.1903322, g: 0.23791523, b: 0.14274916))
     }
     
     func testShadeHitWithReflectiveMaterial() {
@@ -293,9 +309,18 @@ class WorldTests: XCTestCase {
 //    And i ← intersection(√2, shape)
 //    When comps ← prepare_computations(i, r)
 //    And color ← shade_hit(w, comps)
-//    Then color = color(0.87677, 0.92436, 0.82918)
+//    Then color = color(0.87675726, 0.9243403, 0.8291743)
         
-        XCTFail()
+        let w = World.defaultWorld()
+        let shape = Plane()
+        shape.material.reflective = 0.5
+        shape.transform = .translate(x: 0, y: -1, z: 0)
+        w.objects.append(shape)
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -3), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
+        let i = Intersection(t: sqrt(2.0), object: shape)
+        let comps = i.prepareCopmutation(ray: r)
+        let color = w.shadeHit(computation: comps)
+        XCTAssertEqual(color, Color(r: 0.87675726, g: 0.9243403, b: 0.8291743))
     }
     
     func testColorAtWithMutuallyReflectiveSurfaces() {
@@ -312,8 +337,21 @@ class WorldTests: XCTestCase {
 //    And upper is added to w
 //    And r ← ray(point(0, 0, 0), vector(0, 1, 0))
 //    Then color_at(w, r) should terminate successfully
+
+        let w = World()
+        w.light = PointLight(position: .Point(x: 0, y: 0, z: 0), intensity: Color.white)
+        let lower = Plane()
+        lower.material.reflective = 1.0
+        lower.transform = Matrix4x4.translate(x: 0, y: -1, z: 0)
+        w.objects.append(lower)
         
-        XCTFail()
+        let upper = Plane()
+        upper.material.reflective = 1.0
+        upper.transform = .translate(x: 0, y: 1, z: 0)
+        w.objects.append(upper)
+        let r = Ray(origin: .Point(x: 0, y: 0, z: 0), direction: .Vector(x: 0, y: 1, z: 0))
+        _ = w.colorAt(ray: r)
+        XCTAssertTrue(true)
     }
     
     func testReflectedColorAtMaximumRecusrionDepth() {
@@ -328,8 +366,19 @@ class WorldTests: XCTestCase {
 //    When comps ← prepare_computations(i, r)
 //    And color ← reflected_color(w, comps, 0)
 //    Then color = color(0, 0, 0)
+
+        let w = World.defaultWorld()
+        w.light = PointLight(position: .Point(x: 0, y: 0, z: 0), intensity: Color.white)
+        let shape = Plane()
+        shape.material.reflective = 0.5
+        shape.transform = Matrix4x4.translate(x: 0, y: -1, z: 0)
+        w.objects.append(shape)
         
-        XCTFail()
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -3), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
+        let i = Intersection(t: sqrt(2), object: shape)
+        let comps = i.prepareCopmutation(ray: r)
+        let color = w.reflectedColor(computation: comps, remaining: 0)
+        XCTAssertEqual(color, Color.black)
     }
     
     func testRefractedColorWithOpaqueSurface() {

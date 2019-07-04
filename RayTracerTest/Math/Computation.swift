@@ -15,5 +15,6 @@ struct Computation: Equatable {
     var overPoint = Tuple.pointZero
     var eyeVector = Tuple.zero
     var normalVector = Tuple.zero
+    var reflectVector = Tuple.zero
     var inside = false
 }

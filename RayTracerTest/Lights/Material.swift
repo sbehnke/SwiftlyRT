@@ -21,10 +21,13 @@ struct Material : Equatable {
         self.shininess = shininess
     }
     
+    var pattern: Pattern? = nil
     var color = Color(r: 1, g: 1, b: 1)
     var ambient: Float = 0.1
     var diffuse: Float = 0.9
     var specular: Float = 0.9
     var shininess: Float = 200.0
-    var pattern: Pattern? = nil
+    var reflective: Float = 0.0
+    var transparency: Float = 0.0
+    var refractiveIndex: Float = 1.0
 }
