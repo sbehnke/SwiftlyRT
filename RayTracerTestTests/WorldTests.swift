@@ -465,7 +465,7 @@ class WorldTests: XCTestCase {
 //    And xs ← intersections(-0.9899:A, -0.4899:B, 0.4899:B, 0.9899:A)
 //    When comps ← prepare_computations(xs[2], r, xs)
 //    And c ← refracted_color(w, comps, 5)
-//    Then c = color(0, 0.99888, 0.04725)
+//    Then c = color(0, 0.99887455, 0.047218982)
         
         let w = World.defaultWorld()
         let A = w.objects[0]
@@ -484,7 +484,7 @@ class WorldTests: XCTestCase {
         
         let comps = xs[2].prepareCopmutation(ray: r, xs: xs)
         let c = w.refractedColor(computation: comps, remaining: 5)
-        XCTAssertEqual(c, Color(r: 0, g: 0.99888, b: 0.04725))
+        XCTAssertEqual(c, Color(r: 0, g: 0.99887455, b: 0.047218982))
     }
     
     func testShadeHitWithTransparentMaterial() {

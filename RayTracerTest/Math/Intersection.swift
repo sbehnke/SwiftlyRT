@@ -68,9 +68,6 @@ struct Intersection : Equatable, Comparable {
         comps.point = ray.position(time: i.t)
         comps.eyeVector = -ray.direction
         comps.normalVector = i.object!.normalAt(p: comps.point)
-        comps.overPoint = comps.point + comps.normalVector * Tuple.epsilon
-        comps.underPoint = comps.point - comps.normalVector * Tuple.epsilon
-        comps.reflectVector = Tuple.reflect(lhs: ray.direction, normal: comps.normalVector)
         
         if (comps.normalVector.dot(rhs: comps.eyeVector) < 0) {
             comps.inside = true
@@ -78,6 +75,10 @@ struct Intersection : Equatable, Comparable {
         } else {
             comps.inside = false
         }
+        
+        comps.overPoint = comps.point + comps.normalVector * Tuple.epsilon
+        comps.underPoint = comps.point - comps.normalVector * Tuple.epsilon
+        comps.reflectVector = Tuple.reflect(lhs: ray.direction, normal: comps.normalVector)
         
         return comps
     }
