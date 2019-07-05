@@ -46,7 +46,7 @@ struct Intersection : Equatable, Comparable {
             }
             
             if container.contains(intersection.object!) {
-                container.remove(at: container.firstIndex(of: intersection.object!)!)
+                container = container.filter() { $0 != i.object! }
             } else {
                 container.append(intersection.object!)
             }

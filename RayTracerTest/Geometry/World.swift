@@ -80,7 +80,7 @@ class World {
         if (hit == nil) {
             return Color.black
         } else {
-            let comps = hit!.prepareCopmutation(ray: ray)
+            let comps = hit!.prepareCopmutation(ray: ray, xs: xs)
             return world.shadeHit(computation: comps, remaining: remaining)
         }
     }
