@@ -9,6 +9,13 @@
 import Foundation
 
 struct Material : Equatable {
+    enum RefractiveIndex: Float {
+        case Vacuum = 1.0
+        case Air = 1.00029
+        case Water = 1.33333
+        case Glass = 1.52
+        case Diamond = 2.417
+    }
     
     init() {
     }
@@ -29,5 +36,5 @@ struct Material : Equatable {
     var shininess: Float = 200.0
     var reflective: Float = 0.0
     var transparency: Float = 0.0
-    var refractiveIndex: Float = 1.0
+    var refractiveIndex: Float = RefractiveIndex.Vacuum.rawValue
 }

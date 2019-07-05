@@ -47,6 +47,20 @@ class Sphere : Shape {
 //        return Sphere.normalAt(sphere: self, p: p)
 //    }
     
+    static func GlassSphere() -> Sphere {
+        //    Scenario: A helper for producing a sphere with a glassy material
+        //    Given s ← glass_sphere()
+        //    Then s.transform = identity_matrix
+        //    And s.material.transparency = 1.0
+        //    And s.material.refractive_index = 1.5
+        
+        let s = Sphere()
+        s.transform = Matrix4x4.identity
+        s.material.transparency = 1.0
+        s.material.refractiveIndex = 1.5
+        return s
+    }
+    
     override func localIntersects(ray: Ray) -> [Intersection] {
         // Vector from sphere's center to the ray origin
         // the sphere is centered at the world origin

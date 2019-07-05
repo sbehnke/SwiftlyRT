@@ -62,8 +62,12 @@ class IntersectionsTest: XCTestCase {
 //    And i ← intersection(√2, shape)
 //    When comps ← prepare_computations(i, r)
 //    Then comps.reflectv = vector(0, √2/2, √2/2)
-        
-        XCTFail()
+
+        let shape = Plane()
+        let r = Ray(origin: .Point(x: 0, y: 1, z: -1), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
+        let i = Intersection(t: sqrt(2), object: shape)
+        let comps = i.prepareCopmutation(ray: r)
+        XCTAssertEqual(comps.reflectVector, Tuple.Vector(x: 0, y: sqrt(2)/2, z: sqrt(2)/2))
     }
     
     func testHitWhenIntersectionOccursOnOutside() {
@@ -134,13 +138,15 @@ class IntersectionsTest: XCTestCase {
 //    When comps ← prepare_computations(i, r, xs)
 //    Then comps.under_point.z > EPSILON/2
 //    And comps.point.z < comps.under_point.z
-//
-//        let r = Ray(origin: .Point(x: 0, y: 0, z: -4), direction: .Vector(x: 0, y: 0, z: 1))
-//        let shape = GlassSphere()
-//        let shape.transform = Matrix4x4.translate(x: 0, y: 0, z: 1)
-//        let i = Intersection(t: 5, object: shape)
-//        
-        XCTFail()
+
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let shape = Sphere.GlassSphere()
+        shape.transform = .translate(x: 0, y: 0, z: 1)
+        let i = Intersection(t: 5, object: shape)
+        let xs = [i]
+        let comps = i.prepareCopmutation(ray: r, xs: xs)
+        XCTAssertTrue(comps.underPoint.z > Tuple.epsilon / 2.0)
+        XCTAssertTrue(comps.point.z < comps.underPoint.z)
     }
     
     func testAggragatingIntersections() {
@@ -152,8 +158,14 @@ class IntersectionsTest: XCTestCase {
 //    Then xs.count = 2
 //    And xs[0].t = 1
 //    And xs[1].t = 2
+        let s = Sphere()
+        let i1 = Intersection(t: 1, object: s)
+        let i2 = Intersection(t: 2, object: s)
+        let xs = [i1, i2]
+        XCTAssertEqual(2, xs.count)
+        XCTAssertEqual(xs[0].t, 1.0)
+        XCTAssertEqual(xs[1].t, 2.0)
         
-        XCTFail()
     }
     
     func testHitWhenAllIntersectionsHavePositiveT() {
@@ -254,8 +266,35 @@ class IntersectionsTest: XCTestCase {
 //    | 3     | 2.5 | 2.5 |
 //    | 4     | 2.5 | 1.5 |
 //    | 5     | 1.5 | 1.0 |
+
+        let A = Sphere.GlassSphere()
+        A.transform = .scale(x: 2, y: 2, z: 2)
+        A.material.refractiveIndex = 1.5
         
-        XCTFail()
+        let B = Sphere.GlassSphere()
+        B.transform = .translate(x: 0, y: 0, z: -0.25)
+        B.material.refractiveIndex = 2.0
+        
+        let C = Sphere.GlassSphere()
+        C.transform = .translate(x: 0, y: 0, z: 0.25)
+        C.material.refractiveIndex = 2.5
+        
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -4), direction: .Vector(x: 0, y: 0, z: 1))
+        let xs = [Intersection(t: 2, object: A),
+                  Intersection(t: 2.75, object: B),
+                  Intersection(t: 3.25, object: C),
+                  Intersection(t: 4.75, object: B),
+                  Intersection(t: 5.25, object: C),
+                  Intersection(t: 5.25, object: A)]
+        
+        let n1 = [1.0, 1.5, 2.0, 2.5, 2.5, 1.5]
+        let n2 = [1.5, 2.0, 2.5, 2.5, 1.5, 1.0]
+        
+        for index in 0..<xs.count {
+            let comps = xs[index].prepareCopmutation(ray: r, xs: xs)
+            XCTAssertEqual(comps.n1, n1[index])
+            XCTAssertEqual(comps.n2, n2[index])
+        }
     }
     
     func testSchlickApproximation() {
@@ -267,7 +306,12 @@ class IntersectionsTest: XCTestCase {
 //    And reflectance ← schlick(comps)
 //    Then reflectance = 1.0
         
-        XCTFail()
+        let shape = Sphere.GlassSphere()
+        let r = Ray(origin: .Point(x: 0, y: 0, z: sqrt(2)/2) , direction: .Vector(x: 0, y: 1, z: 0))
+        let xs = [Intersection(t: -sqrt(2)/2, object: shape), Intersection(t: sqrt(2)/2, object: shape)]
+        let comps = xs.last!.prepareCopmutation(ray: r, xs: xs)
+        let reflectance = comps.schlick()
+        XCTAssertEqual(reflectance, 1.0, accuracy: Tuple.epsilon)
     }
     
     func testSchlickApproximationWithPerpendicularViewingAngle() {
@@ -278,8 +322,13 @@ class IntersectionsTest: XCTestCase {
 //    When comps ← prepare_computations(xs[1], r, xs)
 //    And reflectance ← schlick(comps)
 //    Then reflectance = 0.04
-        
-        XCTFail()
+
+        let shape = Sphere.GlassSphere()
+        let r = Ray(origin: .Point(x: 0, y: 0, z: 0), direction: .Vector(x: 0, y: 1, z: 0))
+        let xs = [Intersection(t: -1, object: shape), Intersection(t: 1, object: shape)]
+        let comps = xs[1].prepareCopmutation(ray: r, xs: xs)
+        let reflectance = comps.schlick()
+        XCTAssertEqual(0.04, reflectance, accuracy: Tuple.epsilon)
     }
     
     func testSchlickApproximationWithSmallAngle() {
@@ -291,7 +340,12 @@ class IntersectionsTest: XCTestCase {
 //    And reflectance ← schlick(comps)
 //    Then reflectance = 0.48873
         
-        XCTFail()
+        let shape = Sphere.GlassSphere()
+        let r = Ray(origin: .Point(x: 0, y: 0.99, z: -2), direction: .Vector(x: 0, y: 0, z: 1))
+        let xs = [Intersection(t: 1.8589, object: shape)]
+        let comps = xs[0].prepareCopmutation(ray: r, xs: xs)
+        let reflectance = comps.schlick()
+        XCTAssertEqual(0.48873, reflectance, accuracy: Tuple.epsilon)
     }
     
     func testIntersectionCanEncapsulateUandV() {

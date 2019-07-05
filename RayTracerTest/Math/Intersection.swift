@@ -31,10 +31,37 @@ struct Intersection : Equatable, Comparable {
         return nil
     }
     
-    static func prepareComputation(i: Intersection, ray: Ray) -> Computation {
+    static func prepareComputation(i: Intersection, ray: Ray, xs: [Intersection] = []) -> Computation {
         assert(i.object != nil)
-        
         var comps = Computation()
+
+        var container: [Shape] = []
+        for intersection in xs {
+            if intersection == i {
+                if container.isEmpty {
+                    comps.n1 = 1.0
+                } else {
+                    comps.n1 = Double(container.last!.material.refractiveIndex)
+                }
+            }
+            
+            if container.contains(intersection.object!) {
+                container.remove(at: container.firstIndex(of: intersection.object!)!)
+            } else {
+                container.append(intersection.object!)
+            }
+            
+            if intersection == i {
+                if container.isEmpty {
+                    comps.n2 = 1.0
+                } else {
+                    comps.n2 = Double(container.last!.material.refractiveIndex)
+                }
+                
+                break
+            }
+        }
+        
         comps.t = i.t
         comps.object = i.object
         
@@ -42,6 +69,7 @@ struct Intersection : Equatable, Comparable {
         comps.eyeVector = -ray.direction
         comps.normalVector = i.object!.normalAt(p: comps.point)
         comps.overPoint = comps.point + comps.normalVector * Tuple.epsilon
+        comps.underPoint = comps.point - comps.normalVector * Tuple.epsilon
         comps.reflectVector = Tuple.reflect(lhs: ray.direction, normal: comps.normalVector)
         
         if (comps.normalVector.dot(rhs: comps.eyeVector) < 0) {
@@ -54,8 +82,8 @@ struct Intersection : Equatable, Comparable {
         return comps
     }
     
-    func prepareCopmutation(ray: Ray) -> Computation {
-        return Intersection.prepareComputation(i: self, ray: ray)
+    func prepareCopmutation(ray: Ray, xs: [Intersection] = []) -> Computation {
+        return Intersection.prepareComputation(i: self, ray: ray, xs: xs)
     }
     
     init() {

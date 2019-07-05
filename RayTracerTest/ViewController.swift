@@ -48,6 +48,7 @@ class ViewController: NSViewController {
         floor.transform = .translate(x: 0, y: 0, z: -1)
         floor.material = material
         floor.material.pattern = CheckerPattern(a: Color.white, b: Color.black)
+        floor.material.reflective = 0.5
 
         let leftWall = Plane()
         leftWall.transform = .translate(x: 0, y: 0, z: 10) *
@@ -87,7 +88,7 @@ class ViewController: NSViewController {
         world.light = PointLight(position: .Point(x: -10, y: 10, z: -10), intensity: .white)
         world.objects.append(contentsOf: [floor, leftWall, rightWall, right, middle, left])
         
-        var camera = Camera(w: 100, h: 50, fieldOfView: .pi / 3)
+        var camera = Camera(w: 300, h: 150, fieldOfView: .pi / 3)
         camera.transform = .viewTransform(from: .Point(x: 0, y: 1.5, z: -5),
                                           to: .Point(x: 0, y: 1, z: 0),
                                           up: .Vector(x: 0, y: 1, z: 0))

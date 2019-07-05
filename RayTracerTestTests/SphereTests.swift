@@ -279,12 +279,17 @@ class SphereTests: XCTestCase {
         XCTAssertEqual(s.material, m)
     }
     
-    func testSphereHelperWithGlassyMaterial() {
+    static func GlassSphere() -> Sphere {
 //    Scenario: A helper for producing a sphere with a glassy material
 //    Given s ← glass_sphere()
 //    Then s.transform = identity_matrix
 //    And s.material.transparency = 1.0
 //    And s.material.refractive_index = 1.5
-        XCTFail()
+
+        let s = Sphere()
+        s.transform = Matrix4x4.identity
+        s.material.transparency = 1.0
+        s.material.refractiveIndex = 1.5
+        return s
     }
 }

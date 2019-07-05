@@ -9,7 +9,7 @@
 import Foundation
 
 class World {
-    static var MaxiumRecurrsionDepth = 4
+    static var MaximumRecursionDepth = 5
     
     static func defaultWorld() -> World {
         let light = PointLight(position: Tuple.Point(x: -10, y: 10, z: -10), intensity: Color.white)
@@ -44,7 +44,7 @@ class World {
         return World.intersects(world: self, ray: ray)
     }
     
-    static func shadeHit(world: World, computation: Computation, remaining: Int = MaxiumRecurrsionDepth) -> Color {
+    static func shadeHit(world: World, computation: Computation, remaining: Int = MaximumRecursionDepth) -> Color {
         if (world.light == nil || computation.object == nil) {
             return Color.black
         }
@@ -57,15 +57,23 @@ class World {
                                      eyeVector: computation.eyeVector,
                                      normalVector: computation.normalVector,
                                      inShadow: shadowed)
-        let reflected = world.reflectedColor(computation: computation, remaining: remaining)
-        return surface + reflected
+        var reflected = world.reflectedColor(computation: computation, remaining: remaining)
+        var refracted = world.refractedColor(computation: computation, remaining: remaining)
+        
+        if computation.object!.material.reflective > 0 && computation.object!.material.transparency > 0 {
+            let reflectance = computation.schlick()
+            reflected *= Float(reflectance)
+            refracted *= Float(1 - reflectance)
+        }
+        
+        return surface + reflected + refracted
     }
     
-    func shadeHit(computation: Computation, remaining: Int = MaxiumRecurrsionDepth) -> Color {
+    func shadeHit(computation: Computation, remaining: Int = MaximumRecursionDepth) -> Color {
         return World.shadeHit(world: self, computation: computation, remaining: remaining)
     }
     
-    static func colorAt(world: World, ray: Ray, remaining: Int = MaxiumRecurrsionDepth) -> Color {
+    static func colorAt(world: World, ray: Ray, remaining: Int = MaximumRecursionDepth) -> Color {
         let xs = world.intersects(ray: ray)
         let hit = Intersection.hit(xs)
 
@@ -77,17 +85,16 @@ class World {
         }
     }
     
-    func colorAt(ray: Ray, remaining: Int = MaxiumRecurrsionDepth) -> Color {
+    func colorAt(ray: Ray, remaining: Int = MaximumRecursionDepth) -> Color {
         return World.colorAt(world: self, ray: ray, remaining: remaining)
     }
     
-    static func reflectedColor(world: World, computation: Computation, remaining: Int = MaxiumRecurrsionDepth) -> Color {
-        let material = computation.object?.material ?? Material()
-        
+    static func reflectedColor(world: World, computation: Computation, remaining: Int = MaximumRecursionDepth) -> Color {
         if remaining < 1 {
             return Color.black
         }
         
+        let material = computation.object?.material ?? Material()
         if material.reflective.isZero {
             return Color.black
         }
@@ -97,8 +104,71 @@ class World {
         return color * material.reflective
     }
     
-    func reflectedColor(computation: Computation, remaining: Int = MaxiumRecurrsionDepth) -> Color {
+    func reflectedColor(computation: Computation, remaining: Int = MaximumRecursionDepth) -> Color {
         return World.reflectedColor(world: self, computation: computation, remaining: remaining)
+    }
+    
+    let b = """
+    const Colour World::refractedColour(const Hit &hit, int remaining) const noexcept {
+        if (remaining < 1)
+            return predefined_colours::black;
+
+        const auto transparency = hit.getObject()->getMaterial()->getTransparency();
+        if (transparency == 0)
+            return predefined_colours::black;
+
+        // Apply Snell's Law to find the angle of refraction.
+        const auto n_ratio = hit.getN1() / hit.getN2();
+        const auto cos_i = hit.getEyeVector().dot_product(hit.getNormalVector());
+        const auto sin2_t = n_ratio * n_ratio * (1 - cos_i * cos_i);
+
+        // If sin2_t > 1, we have total internal reflection.
+        if (sin2_t > 1)
+            return predefined_colours::black;
+
+        // Create the refracted ray.
+        const auto cos_t = const_sqrtd(1 - sin2_t);
+        const auto direction = hit.getNormalVector() * (n_ratio * cos_i - cos_t) - hit.getEyeVector() * n_ratio;
+        const Ray refract_ray{hit.getUnderPoint(), direction};
+
+        // Find its colour.
+        const auto colour = colourAt(refract_ray, remaining - 1) * transparency;
+        return colour;
+    }
+"""
+    
+    static func refractedColor(world: World, computation: Computation, remaining: Int = MaximumRecursionDepth) -> Color {
+        // Maximum recursion met, return black
+        if remaining < 1 {
+            return Color.black
+        }
+        
+        let transparency = computation.object!.material.transparency
+        if transparency.isZero {
+            return Color.black
+        }
+        
+        // Check for total internal reflection with snells' law, return black
+        let nRatio = Double(computation.n1 / computation.n2)
+        let cosI = computation.eyeVector.dot(rhs: computation.normalVector)
+        let sin2T = nRatio * nRatio * (1 - cosI * cosI)
+        
+        // We have total internal reflection
+        if sin2T > 1 {
+            return Color.black
+        }
+
+        // Create the refracted ray
+        let cosT = sqrt(1 - sin2T)
+        let direction = computation.normalVector * (nRatio * cosI - cosT) - computation.eyeVector * nRatio
+        let refractedRay = Ray(origin: computation.underPoint, direction: direction)
+        
+        let color = colorAt(world: world, ray: refractedRay, remaining: remaining - 1) * transparency
+        return color
+    }
+    
+    func refractedColor(computation: Computation, remaining: Int = MaximumRecursionDepth) -> Color {
+        return World.refractedColor(world: self, computation: computation, remaining: remaining)
     }
     
     static func isShadowed(world: World, point: Tuple) -> Bool {

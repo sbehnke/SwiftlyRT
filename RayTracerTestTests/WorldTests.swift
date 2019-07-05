@@ -391,7 +391,13 @@ class WorldTests: XCTestCase {
 //    And c ← refracted_color(w, comps, 5)
 //    Then c = color(0, 0, 0)
         
-        XCTFail()
+        let w = World.defaultWorld()
+        let shape = w.objects.first!
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let xs = [Intersection(t: 4, object: shape), Intersection(t: 6, object: shape)]
+        let comps = Intersection.prepareComputation(i: xs.first!, ray: r, xs: xs)
+        let c = w.refractedColor(computation: comps, remaining: 5)
+        XCTAssertEqual(c, Color.black)
     }
     
     func testRefractedColorAtMaximumRecursionDepth() {
@@ -406,8 +412,16 @@ class WorldTests: XCTestCase {
 //    When comps ← prepare_computations(xs[0], r, xs)
 //    And c ← refracted_color(w, comps, 0)
 //    Then c = color(0, 0, 0)
-        
-        XCTFail()
+
+        let w = World.defaultWorld()
+        let shape = w.objects.first!
+        shape.material.transparency = 1.0
+        shape.material.refractiveIndex = 1.5
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let xs = [Intersection(t: 4, object: shape), Intersection(t: 6, object: shape)]
+        let comps = Intersection.prepareComputation(i: xs.first!, ray: r, xs: xs)
+        let c = w.refractedColor(computation: comps, remaining: 0)
+        XCTAssertEqual(c, Color.black)
     }
     
     func testRefractedColorUnderTotalInternalReflection() {
@@ -425,9 +439,16 @@ class WorldTests: XCTestCase {
 //    And c ← refracted_color(w, comps, 5)
 //    Then c = color(0, 0, 0)
         
-        XCTFail()
+        let w = World.defaultWorld()
+        let shape = w.objects.first!
+        shape.material.transparency = 1.0
+        shape.material.refractiveIndex = 1.5
+        let r = Ray(origin: .Point(x: 0, y: 0, z: sqrt(2)/2), direction: .Vector(x: 0, y: 1, z: 0))
+        let xs = [Intersection(t: -sqrt(2)/2, object: shape), Intersection(t: sqrt(2)/2, object: shape)]
+        let comps = Intersection.prepareComputation(i: xs.last!, ray: r, xs: xs)
+        let c = w.refractedColor(computation: comps, remaining: 5)
+        XCTAssertEqual(c, Color.black)
     }
-    
     
     func testRefractedColorWithRefractedRay() {
 //    Scenario: The refracted color with a refracted ray
@@ -446,7 +467,24 @@ class WorldTests: XCTestCase {
 //    And c ← refracted_color(w, comps, 5)
 //    Then c = color(0, 0.99888, 0.04725)
         
-        XCTFail()
+        let w = World.defaultWorld()
+        let A = w.objects[0]
+        A.material.ambient = 1.0
+        A.material.pattern = TestPattern()
+        
+        let B = w.objects[1]
+        B.material.transparency = 1.0
+        B.material.refractiveIndex = 1.5
+        
+        let r = Ray(origin: .Point(x: 0, y: 0, z: 0.1), direction: .Vector(x: 0, y: 1, z: 0))
+        let xs = [Intersection(t: -0.9899, object: A),
+                  Intersection(t: -0.4899, object: B),
+                  Intersection(t: 0.4899, object: B),
+                  Intersection(t: 0.9899, object: A)]
+        
+        let comps = xs[2].prepareCopmutation(ray: r, xs: xs)
+        let c = w.refractedColor(computation: comps, remaining: 5)
+        XCTAssertEqual(c, Color(r: 0, g: 0.99888, b: 0.04725))
     }
     
     func testShadeHitWithTransparentMaterial() {
@@ -467,8 +505,26 @@ class WorldTests: XCTestCase {
 //    When comps ← prepare_computations(xs[0], r, xs)
 //    And color ← shade_hit(w, comps, 5)
 //    Then color = color(0.93642, 0.68642, 0.68642)
+
+        let w = World.defaultWorld()
+        let floor = Plane()
+        floor.transform = .translate(x: 0, y: -1, z: 0)
+        floor.material.transparency = 0.5
+        floor.material.refractiveIndex = 1.5
+        w.objects.append(floor)
         
-        XCTFail()
+        let ball = Sphere()
+        ball.material.color = Color(r: 1, g: 0, b: 0)
+        ball.material.ambient = 0.5
+        ball.transform = .translate(x: 0, y: -3.5, z: -0.5)
+        w.objects.append(ball)
+        
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -3), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
+        let xs = [Intersection(t: sqrt(2), object: floor)]
+        let comps = xs[0].prepareCopmutation(ray: r, xs: xs)
+        let color = w.shadeHit(computation: comps, remaining: 5)
+        
+        XCTAssertEqual(color, Color(r: 0.93642, g: 0.68642, b: 0.68642))
     }
     
     func testShadeHitWithReflectiveTransparentMaterial() {
@@ -491,6 +547,24 @@ class WorldTests: XCTestCase {
 //    And color ← shade_hit(w, comps, 5)
 //    Then color = color(0.93391, 0.69643, 0.69243)
      
-        XCTFail()
+        let w = World.defaultWorld()
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -3), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
+        let floor = Plane()
+        floor.transform = .translate(x: 0, y: -1, z: 0)
+        floor.material.reflective = 0.5
+        floor.material.transparency = 0.5
+        floor.material.refractiveIndex = 1.5
+        w.objects.append(floor)
+        
+        let ball = Sphere()
+        ball.material.color = Color(r: 1, g: 0, b: 0)
+        ball.material.ambient = 0.5
+        ball.transform = .translate(x: 0, y: -3.5, z: -0.5)
+        w.objects.append(ball)
+        
+        let xs = [Intersection(t: sqrt(2), object: floor)]
+        let comps = xs[0].prepareCopmutation(ray: r, xs: xs)
+        let color = w.shadeHit(computation: comps, remaining: 5)
+        XCTAssertEqual(color, Color(r: 0.93391, g: 0.69643, b: 0.69243))
     }
 }
