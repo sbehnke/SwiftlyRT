@@ -151,7 +151,7 @@ class World {
         // Check for total internal reflection with snells' law, return black
         let nRatio = Double(computation.n1 / computation.n2)
         let cosI = computation.eyeVector.dot(rhs: computation.normalVector)
-        let sin2T = nRatio * nRatio * (1 - cosI * cosI)
+        let sin2T = pow(nRatio, 2) * (1 - pow(cosI, 2))
         
         // We have total internal reflection
         if sin2T > 1 {
