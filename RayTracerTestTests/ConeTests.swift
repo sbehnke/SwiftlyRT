@@ -36,8 +36,27 @@ class ConeTests: XCTestCase {
 //    | point(0, 0, -5) | vector(0, 0, 1)     | 5       |  5       |
 //    | point(0, 0, -5) | vector(1, 1, 1)     | 8.66025 |  8.66025 |
 //    | point(1, 1, -5) | vector(-0.5, -1, 1) | 4.55006 | 49.44994 |
-    
-        XCTFail()
+
+        let shape = Cone()
+        
+        let points: [Tuple] = [.Point(x: 0, y: 0, z: -5),
+                               .Point(x: 0, y: 0, z: -5),
+                               .Point(x: 1, y: 1, z: -5),]
+
+        let directions: [Tuple] = [.Vector(x: 0,    y:  0, z: 1),
+                                   .Vector(x: 1,    y:  1, z: 1),
+                                   .Vector(x: -0.5, y: -1, z: 1),]
+
+        let t0: [Double] = [5, 8.66025, 4.55006]
+        let t1: [Double] = [5, 8.66025, 49.44994]
+        
+        for index in 0..<points.count {
+            let r = Ray(origin: points[index], direction: directions[index].normalied())
+            let xs = shape.localIntersects(ray: r)
+            XCTAssertEqual(xs.count, 2)
+            XCTAssertEqual(xs[0].t, t0[index], accuracy: Tuple.epsilon)
+            XCTAssertEqual(xs[1].t, t1[index], accuracy: Tuple.epsilon)
+        }
     }
     
     func testIntersectingConeWithRayParallel() {
@@ -49,7 +68,12 @@ class ConeTests: XCTestCase {
 //    Then xs.count = 1
 //    And xs[0].t = 0.35355
     
-        XCTFail()
+        let shape = Cone()
+        let direction = Tuple.Vector(x: 0, y: 1, z: 1).normalied()
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -1), direction: direction)
+        let xs = shape.localIntersects(ray: r)
+        XCTAssertEqual(xs.count, 1)
+        XCTAssertEqual(xs[0].t, 0.35355, accuracy: Tuple.epsilon)
     }
     
     func testingConeIntersectingEndCaps() {
@@ -69,7 +93,26 @@ class ConeTests: XCTestCase {
 //    | point(0, 0, -0.25) | vector(0, 1, 1) | 2     |
 //    | point(0, 0, -0.25) | vector(0, 1, 0) | 4     |
     
-        XCTFail()
+        let shape = Cone()
+        shape.minimum = -0.5
+        shape.maximum = 0.5
+        shape.closed = true
+        
+        let points: [Tuple] = [.Point(x: 0, y: 0, z: -5),
+                               .Point(x: 0, y: 0, z: -0.25),
+                               .Point(x: 0, y: 0, z: -0.25),]
+        
+        let directions: [Tuple] = [.Vector(x:0, y: 1, z: 0),
+                                   .Vector(x:0, y: 1, z: 1),
+                                   .Vector(x:0, y: 1, z: 0),]
+        
+        let counts = [0, 2, 4]
+        
+        for index in 0..<points.count {
+            let r = Ray(origin: points[index], direction: directions[index].normalied())
+            let xs = shape.localIntersects(ray: r)
+            XCTAssertEqual(counts[index], xs.count)
+        }
     }
     
     func testComputingNormal() {
@@ -83,7 +126,20 @@ class ConeTests: XCTestCase {
 //    | point(0, 0, 0)    | vector(0, 0, 0)        |
 //    | point(1, 1, 1)    | vector(1, -√2, 1)      |
 //    | point(-1, -1, 0)  | vector(-1, 1, 0)       |
+
+        let points: [Tuple] = [.Point(x: 0,  y:  0, z: 0),
+                               .Point(x: 1,  y:  1, z: 1),
+                               .Point(x: -1, y: -1, z: 0),]
         
-        XCTFail()
+        let normals: [Tuple] = [.Vector(x: 0,  y: 0,   z:0),
+                                .Vector(x: 1,  y: -sqrt(2), z:1),
+                                .Vector(x: -1, y:  1,  z:0),]
+        
+        let shape = Cone()
+        
+        for index in 0..<points.count {
+            let n = shape.localNormalAt(p: points[index])
+            XCTAssertEqual(n, normals[index])
+        }
     }
 }

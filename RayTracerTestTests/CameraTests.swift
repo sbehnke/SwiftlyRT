@@ -47,7 +47,7 @@ class CameraTests: XCTestCase {
 //    Then c.pixel_size = 0.01
         
         let c = Camera(w: 200, h: 125, fieldOfView: .pi/2.0)
-        XCTAssertEqual(c.pixelSize, 0.01, accuracy: 0.00001)
+        XCTAssertEqual(c.pixelSize, 0.01, accuracy: Tuple.epsilon)
     }
     
     func testVerticalPixelSize() {
@@ -56,7 +56,7 @@ class CameraTests: XCTestCase {
 //    Then c.pixel_size = 0.01
 
         let c = Camera(w: 125, h: 200, fieldOfView: .pi/2.0)
-        XCTAssertEqual(c.pixelSize, 0.01, accuracy: 0.00001)
+        XCTAssertEqual(c.pixelSize, 0.01, accuracy: Tuple.epsilon)
     }
     
     func testRayThroughCenterOfCamera() {

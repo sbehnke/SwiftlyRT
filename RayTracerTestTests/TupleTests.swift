@@ -157,7 +157,7 @@ class TupleTests: XCTestCase {
         XCTAssertEqual(1.0, a.magnitude);
         
         a = Tuple.Vector(x: 1, y: 2, z: 3);
-        XCTAssertEqual(a.magnitude, sqrt(14), accuracy: 0.00001)
+        XCTAssertEqual(a.magnitude, sqrt(14), accuracy: Tuple.epsilon)
     }
     
     func testNormalization() {
@@ -165,9 +165,9 @@ class TupleTests: XCTestCase {
         XCTAssertEqual(v, Tuple.Vector(x: 1, y: 0, z: 0))
         
         v = Tuple.Vector(x: 1, y: 2, z: 3).normalied()
-        XCTAssertEqual(v.x, 0.26726, accuracy: 0.00001)
-        XCTAssertEqual(v.y, 0.53452, accuracy: 0.00001)
-        XCTAssertEqual(v.z, 0.80178, accuracy: 0.00001)
+        XCTAssertEqual(v.x, 0.26726, accuracy: Tuple.epsilon)
+        XCTAssertEqual(v.y, 0.53452, accuracy: Tuple.epsilon)
+        XCTAssertEqual(v.z, 0.80178, accuracy: Tuple.epsilon)
         XCTAssertEqual(v.w, 0.0)
         XCTAssertEqual(v.magnitude, 1.0)
     }
@@ -313,7 +313,7 @@ class TupleTests: XCTestCase {
         //    Given v ← vector(1, 2, 3)
         //    Then magnitude(v) = √14
         let v = Tuple.Vector(x: 1, y: 2, z: 3)
-        XCTAssertEqual(sqrt(14), v.magnitude, accuracy: 0.00001)
+        XCTAssertEqual(sqrt(14), v.magnitude, accuracy: Tuple.epsilon)
     }
     
     func testVectorMagnitudeNegativeXYZ() {
@@ -322,7 +322,7 @@ class TupleTests: XCTestCase {
         //    Then magnitude(v) = √14
         
         let v = Tuple.Vector(x: -1, y: -2, z: -3)
-        XCTAssertEqual(sqrt(14), v.magnitude, accuracy: 0.00001)
+        XCTAssertEqual(sqrt(14), v.magnitude, accuracy: Tuple.epsilon)
     }
     
     func testNormalizingVector() {

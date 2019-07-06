@@ -35,7 +35,22 @@ class CylinderTests: XCTestCase {
 //    | point(0, 0, 0)  | vector(0, 1, 0) |
 //    | point(0, 0, -5) | vector(1, 1, 1) |
     
-        XCTFail()
+        let points: [Tuple] = [.Point(x: 1, y: 0, z: 0),
+                               .Point(x: 0, y: 0, z: 0),
+                               .Point(x: 0, y: 0, z: -5)]
+        
+        let directions: [Tuple] = [.Vector(x: 0, y: 1, z: 0),
+                                   .Vector(x: 0, y: 1, z: 0),
+                                   .Vector(x: 1, y: 1, z: 1)]
+
+        let cyl = Cylinder()
+        
+        for index in 0..<points.count {
+            let direction = directions[index].normalied()
+            let ray = Ray(origin: points[index], direction: direction)
+            let xs = cyl.localIntersects(ray: ray)
+            XCTAssertEqual(xs.count, 0)
+        }
     }
     
     func testRayStrikesCylinder() {
@@ -54,7 +69,27 @@ class CylinderTests: XCTestCase {
 //    | point(0, 0, -5)   | vector(0, 0, 1)   | 4       | 6       |
 //    | point(0.5, 0, -5) | vector(0.1, 1, 1) | 6.80798 | 7.08872 |
     
-        XCTFail()
+        let points: [Tuple] = [.Point(x: 1,   y: 0, z: -5),
+                               .Point(x: 0,   y: 0, z: -5),
+                               .Point(x: 0.5, y: 0, z: -5)]
+        
+        let directions: [Tuple] = [.Vector(x: 0,   y: 0, z: 1),
+                                   .Vector(x: 0,   y: 0, z: 1),
+                                   .Vector(x: 0.1, y: 1, z: 1)]
+        
+        let t0: [Double] = [5, 4, 6.80798]
+        let t1: [Double] = [5, 6, 7.08872]
+        
+        let cyl = Cylinder()
+        
+        for index in 0..<points.count {
+            let direction = directions[index].normalied()
+            let ray = Ray(origin: points[index], direction: direction)
+            let xs = cyl.localIntersects(ray: ray)
+            XCTAssertEqual(xs.count, 2)
+            XCTAssertEqual(xs[0].t, t0[index], accuracy: Tuple.epsilon)
+            XCTAssertEqual(xs[1].t, t1[index], accuracy: Tuple.epsilon)
+        }
     }
         
     func testNormalVectorOnCylinder() {
@@ -70,7 +105,22 @@ class CylinderTests: XCTestCase {
 //    | point(0, -2, 1) | vector(0, 0, 1)  |
 //    | point(-1, 1, 0) | vector(-1, 0, 0) |
     
-        XCTFail()
+        let cyl = Cylinder()
+        
+        let points: [Tuple] = [.Point(x: 1,  y: 0,  z:  0),
+                               .Point(x: 0,  y: 5,  z: -1),
+                               .Point(x: 0,  y: -2, z:  1),
+                               .Point(x: -1, y:  1, z:  0),]
+
+        let normals: [Tuple] = [.Vector(x: 1,  y: 0,  z: 0) ,
+                                .Vector(x: 0,  y: 0,  z: -1),
+                                .Vector(x: 0,  y: 0,  z: 1) ,
+                                .Vector(x: -1, y:  0, z:  0),]
+
+        for index in 0..<points.count {
+            let n = cyl.localNormalAt(p: points[index])
+            XCTAssertEqual(n, normals[index])
+        }
     }
         
     func testMinimumAndMaximumForCylinder() {
@@ -78,8 +128,10 @@ class CylinderTests: XCTestCase {
 //    Given cyl ← cylinder()
 //    Then cyl.minimum = -infinity
 //    And cyl.maximum = infinity
-    
-        XCTFail()
+        
+        let cyl = Cylinder()
+        XCTAssertEqual(cyl.minimum, -Double.infinity)
+        XCTAssertEqual(cyl.maximum, Double.infinity)
     }
     
     func testIntersectingConstrainedCylinder() {
@@ -100,15 +152,40 @@ class CylinderTests: XCTestCase {
 //    | 4 | point(0, 2, -5)   | vector(0, 0, 1)   | 0     |
 //    | 5 | point(0, 1, -5)   | vector(0, 0, 1)   | 0     |
 //    | 6 | point(0, 1.5, -2) | vector(0, 0, 1)   | 2     |
-    
-        XCTFail()
+        
+        let cyl = Cylinder()
+        cyl.minimum = 1
+        cyl.maximum = 2
+        
+        let points: [Tuple] = [.Point(x: 0, y: 1.5, z:  0),
+                               .Point(x: 0, y: 3,   z: -5),
+                               .Point(x: 0, y: 0,   z: -5),
+                               .Point(x: 0, y: 2,   z: -5),
+                               .Point(x: 0, y: 1,   z: -5),
+                               .Point(x: 0, y: 1.5, z: -2),]
+        
+        let directions: [Tuple] = [.Vector(x: 0.1, y: 1, z: 0),
+                                   .Vector(x: 0,   y: 0, z: 1),
+                                   .Vector(x: 0,   y: 0, z: 1),
+                                   .Vector(x: 0,   y: 0, z: 1),
+                                   .Vector(x: 0,   y: 0, z: 1),
+                                   .Vector(x: 0,   y: 0, z: 1),]
+        
+        let counts = [0, 0, 0, 0, 0, 2]
+        
+        for index in 0..<points.count {
+            let r = Ray(origin: points[index], direction: directions[index].normalied())
+            let xs = cyl.localIntersects(ray: r)
+            XCTAssertEqual(counts[index], xs.count)
+        }
     }
     
     func testDefaultClosedValueForCylinder() {
 //    Scenario: The default closed value for a cylinder
 //    Given cyl ← cylinder()
 //    Then cyl.closed = false
-        XCTFail()
+        let cyl = Cylinder()
+        XCTAssertFalse(cyl.closed)
     }
 
     func testIntersectingCapsOfClosedCylinder() {
@@ -130,7 +207,30 @@ class CylinderTests: XCTestCase {
 //    | 4 | point(0, 0, -2)  | vector(0, 1, 2)  | 2     |
 //    | 5 | point(0, -1, -2) | vector(0, 1, 1)  | 2     | # corner case
     
-        XCTFail()
+        let cyl = Cylinder()
+        cyl.minimum = 1
+        cyl.maximum = 2
+        cyl.closed = true
+        
+        let points: [Tuple] = [.Point(x: 0, y:  3, z:  0),
+                               .Point(x: 0, y:  3, z: -2),
+                               .Point(x: 0, y:  4, z: -2),
+                               .Point(x: 0, y:  0, z: -2),
+                               .Point(x: 0, y: -1, z: -2),]
+        
+        let directions: [Tuple] = [.Vector(x: 0, y: -1, z: 0),
+                                   .Vector(x: 0, y: -1, z: 2),
+                                   .Vector(x: 0, y: -1, z: 1),
+                                   .Vector(x: 0, y:  1, z: 2),
+                                   .Vector(x: 0, y:  1, z: 1),]
+
+        let counts = [2, 2, 2, 2, 2]
+        
+        for index in 0..<points.count {
+            let r = Ray(origin: points[index], direction: directions[index].normalied())
+            let xs = cyl.localIntersects(ray: r)
+            XCTAssertEqual(counts[index], xs.count)
+        }
     }
         
     func testNormalOnCylinderCaps() {
@@ -151,6 +251,28 @@ class CylinderTests: XCTestCase {
 //    | point(0.5, 2, 0) | vector(0, 1, 0)  |
 //    | point(0, 2, 0.5) | vector(0, 1, 0)  |
     
-        XCTFail()
+        let cyl = Cylinder()
+        cyl.minimum = 1
+        cyl.maximum = 2
+        cyl.closed = true
+        
+        let points: [Tuple] = [.Point(x: 0,   y: 1, z: 0),
+                               .Point(x: 0.5, y: 1, z: 0),
+                               .Point(x: 0,   y: 1, z: 0.5),
+                               .Point(x: 0,   y: 2, z: 0),
+                               .Point(x: 0.5, y: 2, z: 0),
+                               .Point(x: 0,   y: 2, z: 0.5),]
+        
+        let normals: [Tuple] = [.Vector(x: 0, y: -1, z: 0),
+                                .Vector(x: 0, y: -1, z: 0),
+                                .Vector(x: 0, y: -1, z: 0),
+                                .Vector(x: 0, y:  1, z: 0),
+                                .Vector(x: 0, y:  1, z: 0),
+                                .Vector(x: 0, y:  1, z: 0),]
+        
+        for index in 0..<points.count {
+            let n = cyl.localNormalAt(p: points[index])
+            XCTAssertEqual(n, normals[index])
+        }
     }
 }
