@@ -24,13 +24,13 @@ struct Ray {
     
     func translate(vector: Tuple) -> Ray {
         assert(vector.isVector())
-        let transform = Matrix4x4.translate(x: vector.x, y: vector.y, z: vector.z)
+        let transform = Matrix4x4.translated(x: vector.x, y: vector.y, z: vector.z)
         return transform * self
     }
     
     func scale(vector: Tuple) -> Ray {
         assert(vector.isVector())
-        let transform = Matrix4x4.scale(x: vector.x, y: vector.y, z: vector.z)
+        let transform = Matrix4x4.scaled(x: vector.x, y: vector.y, z: vector.z)
         return transform * self
     }
     

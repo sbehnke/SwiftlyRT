@@ -9,5 +9,15 @@
 import Foundation
 
 class TestShape : Shape {
-
+    
+    override func localIntersects(ray: Ray) -> [Intersection] {
+        savedRay = ray
+        return []
+    }
+    
+    override func localNormalAt(p: Tuple) -> Tuple {
+        return p - Tuple.pointZero
+    }
+    
+    var savedRay = Ray(origin: .pointZero, direction: .zero)
 }

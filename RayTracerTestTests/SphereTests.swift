@@ -133,7 +133,7 @@ class SphereTests: XCTestCase {
 //    Then s.transform = t
         
         let s = Sphere()
-        let t = Matrix4x4.translate(x: 2, y: 3, z: 4)
+        let t = Matrix4x4.translated(x: 2, y: 3, z: 4)
         s.transform = t
         XCTAssertEqual(s.transform, t)
     }
@@ -150,7 +150,7 @@ class SphereTests: XCTestCase {
         
         let r = Ray(origin: Tuple.Point(x: 0, y: 0, z: -5), direction: Tuple.Vector(x: 0, y: 0, z: 1))
         let s = Sphere()
-        s.transform = Matrix4x4.scale(x: 2, y: 2, z: 2)
+        s.transform = Matrix4x4.scaled(x: 2, y: 2, z: 2)
         let xs = s.intersects(ray: r)
         XCTAssertEqual(2, xs.count)
         XCTAssertEqual(xs[0].t, 3)
@@ -167,7 +167,7 @@ class SphereTests: XCTestCase {
         
         let r = Ray(origin: Tuple.Point(x: 0, y: 0, z: -5), direction: Tuple.Vector(x: 0, y: 0, z: 1))
         let s = Sphere()
-        s.transform = Matrix4x4.translate(x: 5, y: 0, z: 0)
+        s.transform = Matrix4x4.translated(x: 5, y: 0, z: 0)
         let xs = s.intersects(ray: r)
         XCTAssertEqual(0, xs.count)
     }
@@ -234,7 +234,7 @@ class SphereTests: XCTestCase {
 //    When n ← normal_at(s, point(0, 1.70711, -0.70711))
 //    Then n = vector(0, 0.70711, -0.70711)
         let s = Sphere()
-        s.transform = Matrix4x4.translate(x: 0, y: 1, z: 0)
+        s.transform = Matrix4x4.translated(x: 0, y: 1, z: 0)
         let n = s.normalAt(p: Tuple.Point(x: 0, y: 1.70711, z: -0.70711))
         XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0.70711, z: -0.70711))
     }
@@ -248,7 +248,7 @@ class SphereTests: XCTestCase {
 //    Then n = vector(0, 0.97014, -0.24254)
 
         let s = Sphere()
-        let m = Matrix4x4.rotateZ(Double.pi/5.0).scale(x: 1, y: 0.5, z: 1)
+        let m = Matrix4x4.rotatedZ(Double.pi/5.0).scaled(x: 1, y: 0.5, z: 1)
         s.transform = m
         let n = s.normalAt(p: Tuple.Point(x: 0, y: sqrt(2.0)/2.0, z: -sqrt(2.0)/2.0))
         XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0.97014, z: -0.24254))

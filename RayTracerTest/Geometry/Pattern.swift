@@ -18,14 +18,19 @@ class Pattern: Equatable {
     }
     
     func patternAtShape(object: Shape?, point: Tuple) -> Color {
-        var t = self.transform.invert()
+        var t = self.inverseTransform
         if let o = object {
-            t *= o.transform.invert()
+            t *= o.inverseTransform
         }
         
         let transformedPoint = t * point
         return patternAt(point: transformedPoint)
     }
     
-    var transform = Matrix4x4.identity
+    var transform = Matrix4x4.identity {
+        didSet {
+            inverseTransform = transform.inversed()
+        }
+    }
+    private(set) var inverseTransform = Matrix4x4.identity
 }

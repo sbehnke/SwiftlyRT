@@ -160,7 +160,7 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return row >= 0 && row < Matrix4x4.rows && column >= 0 && column < Matrix4x4.columns
     }
     
-    func transpose() -> Matrix4x4 {
+    func transposed() -> Matrix4x4 {
         var output = Matrix4x4()
         
         for row in 0..<Matrix4x4.rows {
@@ -216,7 +216,7 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return determinate() != 0
     }
     
-    func invert() -> Matrix4x4 {
+    func inversed() -> Matrix4x4 {
         assert(canInvert())
         var result = Matrix4x4()
         let d = determinate()
@@ -254,7 +254,7 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         }
     }
     
-    static func translate(x: Double, y: Double, z: Double) -> Matrix4x4 {
+    static func translated(x: Double, y: Double, z: Double) -> Matrix4x4 {
         var m = Matrix4x4.identity
         m[0, 3] = x
         m[1, 3] = y
@@ -262,11 +262,11 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return m
     }
     
-    func translate(x: Double, y: Double, z: Double) -> Matrix4x4 {
-        return Matrix4x4.translate(x: x, y: y, z: z) * self
+    func translated(x: Double, y: Double, z: Double) -> Matrix4x4 {
+        return Matrix4x4.translated(x: x, y: y, z: z) * self
     }
     
-    static func scale(x: Double, y: Double, z: Double) -> Matrix4x4 {
+    static func scaled(x: Double, y: Double, z: Double) -> Matrix4x4 {
         var m = Matrix4x4.identity
         m[0,0] = x
         m[1,1] = y
@@ -274,11 +274,11 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return m
     }
     
-    func scale(x: Double, y: Double, z: Double) -> Matrix4x4 {
-        return Matrix4x4.scale(x: x, y: y, z: z) * self
+    func scaled(x: Double, y: Double, z: Double) -> Matrix4x4 {
+        return Matrix4x4.scaled(x: x, y: y, z: z) * self
     }
     
-    static func rotateX(_ radians: Double) -> Matrix4x4 {
+    static func rotatedX(_ radians: Double) -> Matrix4x4 {
         var matrix = Matrix4x4.identity
         matrix[1, 1] = cos(radians)
         matrix[1, 2] = -sin(radians)
@@ -287,11 +287,11 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return matrix
     }
     
-    func rotateX(_ radians: Double) -> Matrix4x4 {
-        return Matrix4x4.rotateX(radians) * self
+    func rotatedX(_ radians: Double) -> Matrix4x4 {
+        return Matrix4x4.rotatedX(radians) * self
     }
 
-    static func rotateY(_ radians: Double) -> Matrix4x4 {
+    static func rotatedY(_ radians: Double) -> Matrix4x4 {
         var matrix = Matrix4x4.identity
         matrix[0, 0] = cos(radians)
         matrix[0, 2] = sin(radians)
@@ -300,11 +300,11 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return matrix
     }
     
-    func rotateY(_ radians: Double) -> Matrix4x4 {
-        return Matrix4x4.rotateY(radians) * self
+    func rotatedY(_ radians: Double) -> Matrix4x4 {
+        return Matrix4x4.rotatedY(radians) * self
     }
     
-    static func rotateZ(_ radians: Double) -> Matrix4x4 {
+    static func rotatedZ(_ radians: Double) -> Matrix4x4 {
         var matrix = Matrix4x4.identity
         matrix[0, 0] = cos(radians)
         matrix[0, 1] = -sin(radians)
@@ -313,11 +313,11 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return matrix
     }
     
-    func rotateZ(_ radians: Double) -> Matrix4x4 {
-        return Matrix4x4.rotateZ(radians) * self
+    func rotatedZ(_ radians: Double) -> Matrix4x4 {
+        return Matrix4x4.rotatedZ(radians) * self
     }
     
-    static func shear(xy: Double, xz: Double, yx: Double, yz: Double, zx: Double, zy: Double) -> Matrix4x4 {
+    static func sheared(xy: Double, xz: Double, yx: Double, yz: Double, zx: Double, zy: Double) -> Matrix4x4 {
         var matrix = Matrix4x4.identity
 
         matrix[0, 1] = xy
@@ -330,11 +330,11 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return matrix
     }
     
-    func shear(xy: Double, xz: Double, yx: Double, yz: Double, zx: Double, zy: Double) -> Matrix4x4 {
-        return Matrix4x4.shear(xy: xy, xz: xz, yx: yx, yz: yz, zx: zx, zy: zy) * self
+    func sheared(xy: Double, xz: Double, yx: Double, yz: Double, zx: Double, zy: Double) -> Matrix4x4 {
+        return Matrix4x4.sheared(xy: xy, xz: xz, yx: yx, yz: yz, zx: zx, zy: zy) * self
     }
     
-    func viewTransformSIMD(from: vector_float3, to: vector_float3, up: vector_float3) -> matrix_float4x4 {
+    func viewTransformedSIMD(from: vector_float3, to: vector_float3, up: vector_float3) -> matrix_float4x4 {
         let forward = simd_normalize(to - from)
         let upn = simd_normalize(up)
         let left = simd_cross(forward, upn)
@@ -352,7 +352,7 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         return orientation * translation
     }
     
-    static func viewTransform(from: Tuple, to: Tuple, up: Tuple) -> Matrix4x4 {
+    static func viewTransformed(from: Tuple, to: Tuple, up: Tuple) -> Matrix4x4 {
         assert(from.isPoint())
         assert(to.isPoint())
         assert(up.isVector())
@@ -367,7 +367,7 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
                                      -forward.x, -forward.y, -forward.z, 0,
                                      0,          0,          0,          1])
         
-        return orientation * Matrix4x4.translate(x: -from.x, y: -from.y, z: -from.z)
+        return orientation * Matrix4x4.translated(x: -from.x, y: -from.y, z: -from.z)
     }
     
     var description: String {

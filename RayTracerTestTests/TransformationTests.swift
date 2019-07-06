@@ -25,7 +25,7 @@ class TransformationTests: XCTestCase {
         //        Then transform * p = point(2, 1, 7)
         
         let point = Tuple.Point(x: -3, y: 4, z: 5)
-        let transformed = Matrix4x4.translate(x: 5, y: -3, z: 2) * point
+        let transformed = Matrix4x4.translated(x: 5, y: -3, z: 2) * point
         let result = Tuple.Point(x: 2, y: 1, z: 7)
         XCTAssertEqual(transformed, result)
     }
@@ -37,8 +37,8 @@ class TransformationTests: XCTestCase {
         //        And p ← point(-3, 4, 5)
         //        Then inv * p = point(-8, 7, 3)
         let point = Tuple.Point(x: -3, y: 4, z: 5)
-        let translate = Matrix4x4.translate(x: 5, y: -3, z: 2)
-        let inverse = translate.invert()
+        let translate = Matrix4x4.translated(x: 5, y: -3, z: 2)
+        let inverse = translate.inversed()
         let translated = inverse * point
         let result = Tuple.Point(x: -8, y: 7, z: 3)
         XCTAssertEqual(result, translated)
@@ -51,7 +51,7 @@ class TransformationTests: XCTestCase {
         //        Then transform * v = v
         
         let vector = Tuple.Vector(x: -3, y: 4, z: 5)
-        let transform = Matrix4x4.translate(x: 5, y: -3, z: 2)
+        let transform = Matrix4x4.translated(x: 5, y: -3, z: 2)
         XCTAssertEqual(transform * vector, vector)
     }
     
@@ -62,7 +62,7 @@ class TransformationTests: XCTestCase {
         //        Then transform * p = point(-8, 18, 32)
         //
         
-        let transform = Matrix4x4.scale(x: 2, y: 3, z: 4)
+        let transform = Matrix4x4.scaled(x: 2, y: 3, z: 4)
         let point = Tuple.Point(x: -4, y: 6, z: 8)
         let transformed = transform * point
         let result = Tuple.Point(x: -8, y: 18, z: 32)
@@ -76,7 +76,7 @@ class TransformationTests: XCTestCase {
         //        And v ← vector(-4, 6, 8)
         //        Then transform * v = vector(-8, 18, 32)
         //
-        let transform = Matrix4x4.scale(x: 2, y: 3, z: 4)
+        let transform = Matrix4x4.scaled(x: 2, y: 3, z: 4)
         let v = Tuple.Vector(x: -4, y: 6, z: 8)
         let transformed = transform * v
         let result = Tuple.Vector(x: -8, y: 18, z: 32)
@@ -90,8 +90,8 @@ class TransformationTests: XCTestCase {
         //        And v ← vector(-4, 6, 8)
         //        Then inv * v = vector(-2, 2, 2)
         //
-        let transform = Matrix4x4.scale(x: 2, y: 3, z: 4)
-        let inverse = transform.invert()
+        let transform = Matrix4x4.scaled(x: 2, y: 3, z: 4)
+        let inverse = transform.inversed()
         let v = Tuple.Vector(x: -4, y: 6, z: 8)
         let transformed = inverse * v
         let result = Tuple.Vector(x: -2, y: 2, z: 2)
@@ -103,7 +103,7 @@ class TransformationTests: XCTestCase {
         //        Given transform ← scaling(-1, 1, 1)
         //        And p ← point(2, 3, 4)
         //        Then transform * p = point(-2, 3, 4)
-        let transform = Matrix4x4.scale(x: -1, y: 1, z: 1)
+        let transform = Matrix4x4.scaled(x: -1, y: 1, z: 1)
         let point = Tuple.Point(x: 2, y: 3, z: 4)
         let transformed = transform * point
         let result = Tuple.Point(x: -2, y: 3, z: 4)
@@ -119,8 +119,8 @@ class TransformationTests: XCTestCase {
         //        And full_quarter * p = point(0, 0, 1)
         
         let p = Tuple.Point(x: 0, y: 1, z: 0)
-        let halfQuarter = Matrix4x4.rotateX(Double.pi / 4)
-        let fullQuarter = Matrix4x4.rotateX(Double.pi / 2)
+        let halfQuarter = Matrix4x4.rotatedX(Double.pi / 4)
+        let fullQuarter = Matrix4x4.rotatedX(Double.pi / 2)
         
         let sqrt2Over2 = sqrt(2) / 2.0
         let rotatedHalf = Tuple.Point(x: 0, y: sqrt2Over2, z: sqrt2Over2)
@@ -141,7 +141,7 @@ class TransformationTests: XCTestCase {
         //        Then inv * p = point(0, √2/2, -√2/2)
         
         let p = Tuple.Point(x: 0, y: 1, z: 0)
-        let halfQuarter = Matrix4x4.rotateX(Double.pi / 4).invert()
+        let halfQuarter = Matrix4x4.rotatedX(Double.pi / 4).inversed()
         
         let sqrt2Over2 = sqrt(2) / 2.0
         let rotatedHalf = Tuple.Point(x: 0, y: sqrt2Over2, z: -sqrt2Over2)
@@ -160,8 +160,8 @@ class TransformationTests: XCTestCase {
         //        And full_quarter * p = point(1, 0, 0)
         
         let p = Tuple.Point(x: 0, y: 0, z: 1)
-        let halfQuarter = Matrix4x4.rotateY(Double.pi / 4)
-        let fullQuarter = Matrix4x4.rotateY(Double.pi / 2)
+        let halfQuarter = Matrix4x4.rotatedY(Double.pi / 4)
+        let fullQuarter = Matrix4x4.rotatedY(Double.pi / 2)
         
         let sqrt2Over2 = sqrt(2) / 2.0
         let rotatedHalf = Tuple.Point(x: sqrt2Over2, y: 0, z: sqrt2Over2)
@@ -183,8 +183,8 @@ class TransformationTests: XCTestCase {
         //        And full_quarter * p = point(-1, 0, 0)
         
         let p = Tuple.Point(x: 0, y: 1, z: 0, w: 1)
-        let halfQuarter = Matrix4x4.rotateZ(Double.pi / 4)
-        let fullQuarter = Matrix4x4.rotateZ(Double.pi / 2)
+        let halfQuarter = Matrix4x4.rotatedZ(Double.pi / 4)
+        let fullQuarter = Matrix4x4.rotatedZ(Double.pi / 2)
         
         let sqrt2Over2 = sqrt(2) / 2.0
         let rotatedHalf = Tuple.Point(x: -sqrt2Over2, y: sqrt2Over2, z: 0)
@@ -203,7 +203,7 @@ class TransformationTests: XCTestCase {
         //        And p ← point(2, 3, 4)
         //        Then transform * p = point(5, 3, 4)
         
-        let transform = Matrix4x4.shear(xy: 1, xz: 0, yx: 0, yz: 0, zx: 0, zy: 0)
+        let transform = Matrix4x4.sheared(xy: 1, xz: 0, yx: 0, yz: 0, zx: 0, zy: 0)
         let point = Tuple.Point(x: 2, y: 3, z: 4)
         let transformed = Tuple.Point(x: 5, y: 3, z: 4)
         let result = transform * point
@@ -216,7 +216,7 @@ class TransformationTests: XCTestCase {
         //        And p ← point(2, 3, 4)
         //        Then transform * p = point(6, 3, 4)
         
-        let transform = Matrix4x4.shear(xy: 0, xz: 1, yx: 0, yz: 0, zx: 0, zy: 0)
+        let transform = Matrix4x4.sheared(xy: 0, xz: 1, yx: 0, yz: 0, zx: 0, zy: 0)
         let point = Tuple.Point(x: 2, y: 3, z: 4)
         let transformed = Tuple.Point(x: 6, y: 3, z: 4)
         let result = transform * point
@@ -229,7 +229,7 @@ class TransformationTests: XCTestCase {
         //        And p ← point(2, 3, 4)
         //        Then transform * p = point(2, 5, 4)
         
-        let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 1, yz: 0, zx: 0, zy: 0)
+        let transform = Matrix4x4.sheared(xy: 0, xz: 0, yx: 1, yz: 0, zx: 0, zy: 0)
         let point = Tuple.Point(x: 2, y: 3, z: 4)
         let transformed = Tuple.Point(x: 2, y: 5, z: 4)
         let result = transform * point
@@ -242,7 +242,7 @@ class TransformationTests: XCTestCase {
         //        And p ← point(2, 3, 4)
         //        Then transform * p = point(2, 7, 4)
         
-        let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 0, yz: 1, zx: 0, zy: 0)
+        let transform = Matrix4x4.sheared(xy: 0, xz: 0, yx: 0, yz: 1, zx: 0, zy: 0)
         let point = Tuple.Point(x: 2, y: 3, z: 4)
         let transformed = Tuple.Point(x: 2, y: 7, z: 4)
         let result = transform * point
@@ -255,7 +255,7 @@ class TransformationTests: XCTestCase {
         //        And p ← point(2, 3, 4)
         //        Then transform * p = point(2, 3, 6)
         
-        let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 0, yz: 0, zx: 1, zy: 0)
+        let transform = Matrix4x4.sheared(xy: 0, xz: 0, yx: 0, yz: 0, zx: 1, zy: 0)
         let point = Tuple.Point(x: 2, y: 3, z: 4)
         let transformed = Tuple.Point(x: 2, y: 3, z: 6)
         let result = transform * point
@@ -268,7 +268,7 @@ class TransformationTests: XCTestCase {
         //        And p ← point(2, 3, 4)
         //        Then transform * p = point(2, 3, 7)
         
-        let transform = Matrix4x4.shear(xy: 0, xz: 0, yx: 0, yz: 0, zx: 0, zy: 1)
+        let transform = Matrix4x4.sheared(xy: 0, xz: 0, yx: 0, yz: 0, zx: 0, zy: 1)
         let point = Tuple.Point(x: 2, y: 3, z: 4)
         let transformed = Tuple.Point(x: 2, y: 3, z: 7)
         let result = transform * point
@@ -280,11 +280,11 @@ class TransformationTests: XCTestCase {
         //        Given p ← point(1, 0, 1)
         let p = Tuple.Point(x: 1, y: 0, z: 1)
         //        And A ← rotation_x(π / 2)
-        let A = Matrix4x4.rotateX(Double.pi / 2)
+        let A = Matrix4x4.rotatedX(Double.pi / 2)
         //        And B ← scaling(5, 5, 5)
-        let B = Matrix4x4.scale(x: 5, y: 5, z: 5)
+        let B = Matrix4x4.scaled(x: 5, y: 5, z: 5)
         //        And C ← translation(10, 5, 7)
-        let C = Matrix4x4.translate(x: 10, y: 5, z: 7)
+        let C = Matrix4x4.translated(x: 10, y: 5, z: 7)
         //        # apply rotation first
         //        When p2 ← A * p
         let p2 = A * p
@@ -307,11 +307,11 @@ class TransformationTests: XCTestCase {
         //        Given p ← point(1, 0, 1)
         let p = Tuple.Point(x: 1, y: 0, z: 1)
         //        And A ← rotation_x(π / 2)
-        let A = Matrix4x4.rotateX(Double.pi / 2)
+        let A = Matrix4x4.rotatedX(Double.pi / 2)
         //        And B ← scaling(5, 5, 5)
-        let B = Matrix4x4.scale(x: 5, y: 5, z: 5)
+        let B = Matrix4x4.scaled(x: 5, y: 5, z: 5)
         //        And C ← translation(10, 5, 7)
-        let C = Matrix4x4.translate(x: 10, y: 5, z: 7)
+        let C = Matrix4x4.translated(x: 10, y: 5, z: 7)
         //        When T ← C * B * A
         let T = C * B * A
         //        Then T * p = point(15, 0, 7)
@@ -319,14 +319,14 @@ class TransformationTests: XCTestCase {
         
         XCTAssertEqual(p2, Tuple.Point(x: 15, y: 0, z: 7))
         
-        XCTAssertEqual(Matrix4x4.identity.rotateX(Double.pi / 2), A)
-        XCTAssertEqual(Matrix4x4.identity.scale(x: 5, y: 5, z: 5), B)
-        XCTAssertEqual(Matrix4x4.identity.translate(x: 10, y: 5, z: 7), C)
+        XCTAssertEqual(Matrix4x4.identity.rotatedX(Double.pi / 2), A)
+        XCTAssertEqual(Matrix4x4.identity.scaled(x: 5, y: 5, z: 5), B)
+        XCTAssertEqual(Matrix4x4.identity.translated(x: 10, y: 5, z: 7), C)
         
-        let T2 = Matrix4x4.identity.rotateX(Double.pi / 2).scale(x: 5, y: 5, z: 5)
+        let T2 = Matrix4x4.identity.rotatedX(Double.pi / 2).scaled(x: 5, y: 5, z: 5)
         XCTAssertEqual(T2, B * A)
         
-        let transform = Matrix4x4.identity.rotateX(Double.pi / 2).scale(x: 5, y: 5, z: 5).translate(x: 10, y: 5, z: 7)
+        let transform = Matrix4x4.identity.rotatedX(Double.pi / 2).scaled(x: 5, y: 5, z: 5).translated(x: 10, y: 5, z: 7)
         XCTAssertEqual(T, transform)
     }
     
@@ -341,7 +341,7 @@ class TransformationTests: XCTestCase {
         let from = Tuple.Point(x: 0, y: 0, z: 0)
         let to = Tuple.Point(x: 0, y: 0, z: -1)
         let up = Tuple.Vector(x: 0, y: 1, z: 0)
-        let t = Matrix4x4.viewTransform(from: from, to: to, up: up)
+        let t = Matrix4x4.viewTransformed(from: from, to: to, up: up)
         XCTAssertEqual(t, Matrix4x4.identity)
     }
     
@@ -356,8 +356,8 @@ class TransformationTests: XCTestCase {
         let from = Tuple.Point(x: 0, y: 0, z: 0)
         let to = Tuple.Point(x: 0, y: 0, z: 1)
         let up = Tuple.Vector(x: 0, y: 1, z: 0)
-        let t = Matrix4x4.viewTransform(from: from, to: to, up: up)
-        XCTAssertEqual(t, Matrix4x4.scale(x: -1, y: 1, z: -1))
+        let t = Matrix4x4.viewTransformed(from: from, to: to, up: up)
+        XCTAssertEqual(t, Matrix4x4.scaled(x: -1, y: 1, z: -1))
     }
     
     func testViewTransformMovesWorld() {
@@ -371,8 +371,8 @@ class TransformationTests: XCTestCase {
         let from = Tuple.Point(x: 0, y: 0, z: 8)
         let to = Tuple.Point(x: 0, y: 0, z: 0)
         let up = Tuple.Vector(x: 0, y: 1, z: 0)
-        let t = Matrix4x4.viewTransform(from: from, to: to, up: up)
-        XCTAssertEqual(t, Matrix4x4.translate(x: 0, y: 0, z: -8))
+        let t = Matrix4x4.viewTransformed(from: from, to: to, up: up)
+        XCTAssertEqual(t, Matrix4x4.translated(x: 0, y: 0, z: -8))
     }
     
     func testArbitraryViewTransform() {
@@ -390,7 +390,7 @@ class TransformationTests: XCTestCase {
         let from = Tuple.Point(x: 1, y: 3, z: 2)
         let to = Tuple.Point(x: 4, y: -2, z: 8)
         let up = Tuple.Vector(x: 1, y: 1, z: 0)
-        let t = Matrix4x4.viewTransform(from: from, to: to, up: up)
+        let t = Matrix4x4.viewTransformed(from: from, to: to, up: up)
         
         let result = Matrix4x4([-0.50709, 0.50709,  0.67612, -2.36643,
                                 0.76772, 0.60609,  0.12122, -2.82843,

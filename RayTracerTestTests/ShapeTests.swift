@@ -36,8 +36,8 @@ class ShapeTests: XCTestCase {
 //    Then s.transform = translation(2, 3, 4)
     
         let s = TestShape()
-        s.transform = .translate(x: 2, y: 3, z: 4)
-        XCTAssertEqual(s.transform, Matrix4x4.translate(x: 2, y: 3, z: 4))
+        s.transform = .translated(x: 2, y: 3, z: 4)
+        XCTAssertEqual(s.transform, Matrix4x4.translated(x: 2, y: 3, z: 4))
     }
     
     
@@ -78,7 +78,7 @@ class ShapeTests: XCTestCase {
         
         let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
         let s = TestShape()
-        s.transform = .scale(x: 2, y: 2, z: 2)
+        s.transform = .scaled(x: 2, y: 2, z: 2)
         let _ = s.intersects(ray: r)
         XCTAssertEqual(s.savedRay.origin, Tuple.Point(x: 0, y: 0, z: -2.5))
         XCTAssertEqual(s.savedRay.direction, Tuple.Vector(x: 0, y: 0, z: 0.5))
@@ -95,7 +95,7 @@ class ShapeTests: XCTestCase {
 
         let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
         let s = TestShape()
-        s.transform = .translate(x: 5, y: 0, z: 0)
+        s.transform = .translated(x: 5, y: 0, z: 0)
         let _ = s.intersects(ray: r)
         XCTAssertEqual(s.savedRay.origin, Tuple.Point(x: -5, y: 0, z: -5))
         XCTAssertEqual(s.savedRay.direction, Tuple.Vector(x: 0, y: 0, z: 1))
@@ -110,7 +110,7 @@ class ShapeTests: XCTestCase {
 //    Then n = vector(0, 0.70711, -0.70711)
         
         let s = TestShape()
-        s.transform = .translate(x: 0, y: 1, z: 0)
+        s.transform = .translated(x: 0, y: 1, z: 0)
         let n = s.normalAt(p: .Point(x: 0, y: 1.70711, z: -0.70711))
         XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0.70711, z: -0.70711))
     }
@@ -125,7 +125,8 @@ class ShapeTests: XCTestCase {
 //    Then n = vector(0, 0.97014, -0.24254)
 
         let s = TestShape()
-        s.transform = Matrix4x4.scale(x: 1, y: 0.5, z: 1) * Matrix4x4.rotateZ(.pi / 5)
+        let m = Matrix4x4.scaled(x: 1, y: 0.5, z: 1) * Matrix4x4.rotatedZ(.pi / 5)
+        s.transform = m
         let n = s.normalAt(p: .Point(x: 0, y: sqrt(2)/2, z: -sqrt(2)/2))
         XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0.97014, z: -0.24254))
     }
@@ -151,8 +152,17 @@ class ShapeTests: XCTestCase {
 //    And add_child(g2, s)
 //    When p ← world_to_object(s, point(-2, 0, -10))
 //    Then p = point(0, 0, -1)
-    
-        XCTFail()
+
+        let g1 = Group()
+        g1.transform = .rotatedY(.pi / 2)
+        let g2 = Group()
+        g2.transform = .scaled(x: 2, y: 2, z: 2)
+        g1.addChild(g2)
+        let s = Sphere()
+        s.transform = .translated(x: 5, y: 0, z: 0)
+        g2.addChild(s)
+        let p = s.worldToObject(point: .Point(x: -2, y: 0, z: -10))
+        XCTAssertEqual(p, Tuple.Point(x: 0, y: 0, z: -1))
     }
     
     func testConvertingNormalFromObjectToWorldSpace() {
@@ -168,7 +178,16 @@ class ShapeTests: XCTestCase {
 //    When n ← normal_to_world(s, vector(√3/3, √3/3, √3/3))
 //    Then n = vector(0.2857, 0.4286, -0.8571)
         
-        XCTFail()
+        let g1 = Group()
+        g1.transform = .rotatedY(.pi / 2)
+        let g2 = Group()
+        g2.transform = .scaled(x: 1, y: 2, z: 3)
+        g1.addChild(g2)
+        let s = Sphere()
+        s.transform = .translated(x: 5, y: 0, z: 0  )
+        g2.addChild(s)
+        let n = s.normalToWorld(normal: .Vector(x: sqrt(3)/3, y: sqrt(3)/3, z: sqrt(3)/3))
+        XCTAssertEqual(n, Tuple.Vector(x: 0.28571428571428575, y: 0.42857142857142855, z: -0.8571428571428571))
     }
     
     func testFindingNormalOnChildObject() {
@@ -183,7 +202,16 @@ class ShapeTests: XCTestCase {
 //    And add_child(g2, s)
 //    When n ← normal_at(s, point(1.7321, 1.1547, -5.5774))
 //    Then n = vector(0.2857, 0.4286, -0.8571)
-        
-        XCTFail()
+
+        let g1 = Group()
+        g1.transform = .rotatedY(.pi / 2)
+        let g2 = Group()
+        g2.transform = .scaled(x: 1, y: 2, z: 3)
+        g1.addChild(g2)
+        let s = Sphere()
+        s.transform = .translated(x: 5, y: 0, z: 0  )
+        g2.addChild(s)
+        let n = s.normalAt(p: .Point(x: 1.7321, y: 1.1547, z: -5.5774))
+        XCTAssertEqual(n, Tuple.Vector(x: 0.28570368184140726, y: 0.42854315178114105, z: -0.8571605294481017))
     }
 }

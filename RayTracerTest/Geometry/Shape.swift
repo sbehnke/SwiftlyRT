@@ -20,13 +20,7 @@ class Shape : Equatable {
     }
     
     func intersects(ray: Ray) -> [Intersection] {
-        let localRay = transform.invert() * ray
-        let _ = self.semaphore.wait(timeout: DispatchTime.distantFuture)
-        defer {
-            self.semaphore.signal()
-        }
-        
-        savedRay = localRay
+        let localRay = inverseTransform * ray        
         return localIntersects(ray: localRay)
     }
     
@@ -35,21 +29,33 @@ class Shape : Equatable {
     }
     
     func normalAt(p : Tuple) -> Tuple {
-        let localPoint = transform.invert() * p
+        let localPoint = worldToObject(point: p)
         let localNormal = localNormalAt(p: localPoint)
-        var worldNormal = transform.invert().transpose() * localNormal
-        worldNormal.w = 0.0
-        return worldNormal.normalied()
+        return normalToWorld(normal: localNormal)
     }
     
     func localNormalAt(p: Tuple) -> Tuple {
         return .Vector(x: p.x, y: p.y, z: p.z)
     }
     
+    func worldToObject(point: Tuple) -> Tuple {
+        return inverseTransform * (parent == nil ? point : parent!.worldToObject(point: point))
+    }
+    
+    func normalToWorld(normal: Tuple) -> Tuple {
+        let n1 = inverseTransform.transposed() * normal
+        let n2 = Tuple.Vector(x: n1.x, y: n1.y, z: n1.z).normalied()
+        return (parent == nil) ? n2 : parent!.normalToWorld(normal: n2)
+    }
+    
     var name = ""
     var parent: Shape? = nil
     var children: [Shape] = []
-    var transform = Matrix4x4.identity
+    var transform = Matrix4x4.identity {
+        didSet {
+            inverseTransform = transform.inversed()
+        }
+    }
+    private(set) var inverseTransform = Matrix4x4.identity
     var material = Material()
-    var savedRay = Ray(origin: .pointZero, direction: .zero)
 }

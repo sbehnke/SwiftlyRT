@@ -20,7 +20,7 @@ class World {
         s1.name = "s1"
         
         let s2 = Sphere()
-        s2.transform = Matrix4x4.scale(x: 0.5, y: 0.5, z: 0.5)
+        s2.transform = Matrix4x4.scaled(x: 0.5, y: 0.5, z: 0.5)
         s2.name = "s2"
         
         let world = World()

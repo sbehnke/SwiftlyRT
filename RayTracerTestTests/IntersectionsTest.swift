@@ -121,7 +121,7 @@ class IntersectionsTest: XCTestCase {
         
         let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
         let shape = Sphere()
-        shape.transform = Matrix4x4.translate(x: 0, y: 0, z: 1)
+        shape.transform = Matrix4x4.translated(x: 0, y: 0, z: 1)
         let i = Intersection(t: 5, object: shape)
         let comps = i.prepareComputation(ray: r)
         XCTAssertTrue(comps.overPoint.z < -Tuple.epsilon / 2)
@@ -141,7 +141,7 @@ class IntersectionsTest: XCTestCase {
 
         let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
         let shape = Sphere.GlassSphere()
-        shape.transform = .translate(x: 0, y: 0, z: 1)
+        shape.transform = .translated(x: 0, y: 0, z: 1)
         let i = Intersection(t: 5, object: shape)
         let xs = [i]
         let comps = i.prepareComputation(ray: r, xs: xs)
@@ -268,15 +268,15 @@ class IntersectionsTest: XCTestCase {
 //    | 5     | 1.5 | 1.0 |
 
         let A = Sphere.GlassSphere()
-        A.transform = .scale(x: 2, y: 2, z: 2)
+        A.transform = .scaled(x: 2, y: 2, z: 2)
         A.material.refractiveIndex = 1.5
         
         let B = Sphere.GlassSphere()
-        B.transform = .translate(x: 0, y: 0, z: -0.25)
+        B.transform = .translated(x: 0, y: 0, z: -0.25)
         B.material.refractiveIndex = 2.0
         
         let C = Sphere.GlassSphere()
-        C.transform = .translate(x: 0, y: 0, z: 0.25)
+        C.transform = .translated(x: 0, y: 0, z: 0.25)
         C.material.refractiveIndex = 2.5
         
         let r = Ray(origin: .Point(x: 0, y: 0, z: -4), direction: .Vector(x: 0, y: 0, z: 1))

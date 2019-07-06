@@ -59,7 +59,7 @@ class ViewController: NSViewController {
 //        up: [0, 1, 0]
         
         var camera = Camera(w: 400, h: 200, fieldOfView: 1.152)
-        camera.transform = Matrix4x4.viewTransform(from: .Point(x: -2.6, y: 1.5, z: -3.9),
+        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: -2.6, y: 1.5, z: -3.9),
                                                    to: .Point(x: -0.6, y: 1, z: -0.8),
                                                    up: .Vector(x: 0, y: 1, z: 0))
 
@@ -97,8 +97,8 @@ class ViewController: NSViewController {
         let stripeColors = [Color(r: 0.45, g: 0.45, b: 0.45),
                             Color(r: 0.55, g: 0.55, b: 0.55)]
         wallMaterial.pattern = StripePattern(a: stripeColors[0], b: stripeColors[1])
-        wallMaterial.pattern!.transform = Matrix4x4.rotateY(1.5708) *
-                                          Matrix4x4.scale(x: 0.25, y: 0.25, z: 0.25)
+        wallMaterial.pattern!.transform = Matrix4x4.rotatedY(1.5708) *
+                                          Matrix4x4.scaled(x: 0.25, y: 0.25, z: 0.25)
         wallMaterial.ambient = 0
         wallMaterial.diffuse = 0.4
         wallMaterial.specular = 0
@@ -122,7 +122,7 @@ class ViewController: NSViewController {
 //        reflective: 0.4
         
         let floor = Plane()
-        floor.transform = .rotateY(0.31415)
+        floor.transform = .rotatedY(0.31415)
         floor.material.pattern = CheckerPattern(a: Color(r: 0.35, g: 0.35, b: 0.35),
                                                 b: Color(r: 0.65, g: 0.65, b: 0.65))
         floor.material.specular = 0
@@ -138,7 +138,7 @@ class ViewController: NSViewController {
 //        specular: 0
         
         let ceiling = Plane()
-        ceiling.transform = .translate(x: 0, y: 5, z: 0)
+        ceiling.transform = .translated(x: 0, y: 5, z: 0)
         ceiling.material.color = Color(r: 0.8, g: 0.8, b: 0.8)
         ceiling.material.ambient = 0.3
         ceiling.material.specular = 0
@@ -152,9 +152,9 @@ class ViewController: NSViewController {
 //        material: wall-material
         
         let westWall = Plane()
-        westWall.transform = Matrix4x4.translate(x: -5, y: 0, z: 0) *
-                             Matrix4x4.rotateZ(1.5708) *
-                             Matrix4x4.rotateY(1.5708)
+        westWall.transform = Matrix4x4.translated(x: -5, y: 0, z: 0) *
+                             Matrix4x4.rotatedZ(1.5708) *
+                             Matrix4x4.rotatedY(1.5708)
         westWall.material = wallMaterial
 
 //        # east wall
@@ -166,9 +166,9 @@ class ViewController: NSViewController {
 //        material: wall-material
         
         let eastWall = Plane()
-        eastWall.transform = Matrix4x4.translate(x: 5, y: 0, z: 0) *
-                             Matrix4x4.rotateZ(1.5708) *
-                             Matrix4x4.rotateY(1.5708)
+        eastWall.transform = Matrix4x4.translated(x: 5, y: 0, z: 0) *
+                             Matrix4x4.rotatedZ(1.5708) *
+                             Matrix4x4.rotatedY(1.5708)
         eastWall.material = wallMaterial
 
 //        # north wall
@@ -179,8 +179,8 @@ class ViewController: NSViewController {
 //        material: wall-material
         
         let northWall = Plane()
-        northWall.transform = Matrix4x4.translate(x: 0, y: 0, z: 5) *
-                              Matrix4x4.rotateX(1.5708)
+        northWall.transform = Matrix4x4.translated(x: 0, y: 0, z: 5) *
+                              Matrix4x4.rotatedX(1.5708)
         northWall.material = wallMaterial
 
 //        # south wall
@@ -191,8 +191,8 @@ class ViewController: NSViewController {
 //        material: wall-material
         
         let southWall = Plane()
-        southWall.transform = Matrix4x4.translate(x: 0, y: 0, z: -5) *
-                              Matrix4x4.rotateX(1.5708)
+        southWall.transform = Matrix4x4.translated(x: 0, y: 0, z: -5) *
+                              Matrix4x4.rotatedX(1.5708)
         southWall.material = wallMaterial
 
 //        # ----------------------
@@ -208,8 +208,8 @@ class ViewController: NSViewController {
 //        shininess: 50
 
         let bsphere1 = Sphere()
-        bsphere1.transform = Matrix4x4.translate(x: 4.6, y: 0.4, z: 1) *
-                             Matrix4x4.scale(x: 0.4, y: 0.4, z: 0.4)
+        bsphere1.transform = Matrix4x4.translated(x: 4.6, y: 0.4, z: 1) *
+                             Matrix4x4.scaled(x: 0.4, y: 0.4, z: 0.4)
         bsphere1.material.color = Color(r: 0.8, g: 0.5, b: 0.3)
         bsphere1.material.shininess = 50
         
@@ -222,8 +222,8 @@ class ViewController: NSViewController {
 //        shininess: 50
         
         let bsphere2 = Sphere()
-        bsphere2.transform = Matrix4x4.translate(x: 4.7, y: 0.3, z: 0.4) *
-                             Matrix4x4.scale(x: 0.3, y: 0.3, z: 0.3)
+        bsphere2.transform = Matrix4x4.translated(x: 4.7, y: 0.3, z: 0.4) *
+                             Matrix4x4.scaled(x: 0.3, y: 0.3, z: 0.3)
         bsphere2.material.color = Color(r: 0.9, g: 0.4, b: 0.5)
         bsphere2.material.shininess = 50
 
@@ -236,8 +236,8 @@ class ViewController: NSViewController {
 //        shininess: 50
         
         let bsphere3 = Sphere()
-        bsphere3.transform = Matrix4x4.translate(x: -1, y: 0.5, z: 4.5) *
-                             Matrix4x4.scale(x: 0.5, y: 0.5, z: 0.5)
+        bsphere3.transform = Matrix4x4.translated(x: -1, y: 0.5, z: 4.5) *
+                             Matrix4x4.scaled(x: 0.5, y: 0.5, z: 0.5)
         bsphere3.material.color = Color(r: 0.4, g: 0.9, b: 0.6)
         bsphere3.material.shininess = 50
         
@@ -250,8 +250,8 @@ class ViewController: NSViewController {
 //        shininess: 50
         
         let bsphere4 = Sphere()
-        bsphere4.transform = Matrix4x4.translate(x: -1.7, y: 0.3, z: 4.7) *
-                             Matrix4x4.scale(x: 0.3, y: 0.3, z: 0.3)
+        bsphere4.transform = Matrix4x4.translated(x: -1.7, y: 0.3, z: 4.7) *
+                             Matrix4x4.scaled(x: 0.3, y: 0.3, z: 0.3)
         bsphere4.material.color = Color(r: 0.4, g: 0.6, b: 0.9)
         bsphere4.material.shininess = 50
     
@@ -269,7 +269,7 @@ class ViewController: NSViewController {
 //        shininess: 5
         
         let redsphere = Sphere()
-        redsphere.transform = Matrix4x4.translate(x: -0.6, y: 1, z: 0.6)
+        redsphere.transform = Matrix4x4.translated(x: -0.6, y: 1, z: 0.6)
         redsphere.material.color = Color(r: 1, g: 0.3, b: 0.2)
         redsphere.material.specular = 0.4
         redsphere.material.shininess = 5
@@ -290,8 +290,8 @@ class ViewController: NSViewController {
 //        refractive-index: 1.5
         
         let bluesphere = Sphere()
-        bluesphere.transform = Matrix4x4.translate(x: 0.6, y: 0.7, z: -0.6) *
-                               Matrix4x4.scale(x: 0.7, y: 0.7, z: 0.7)
+        bluesphere.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6) *
+                               Matrix4x4.scaled(x: 0.7, y: 0.7, z: 0.7)
         bluesphere.material.color = Color(r: 0, g: 0, b: 0.2)
         bluesphere.material.ambient = 0
         bluesphere.material.diffuse = 0.4
@@ -317,8 +317,8 @@ class ViewController: NSViewController {
 //        refractive-index: 1.5
         
         let greensphere = Sphere()
-        greensphere.transform = Matrix4x4.translate(x: -0.7, y: 0.5, z: -0.8) *
-                                Matrix4x4.scale(x: 0.5, y: 0.5, z: 0.5)
+        greensphere.transform = Matrix4x4.translated(x: -0.7, y: 0.5, z: -0.8) *
+                                Matrix4x4.scaled(x: 0.5, y: 0.5, z: 0.5)
         greensphere.material.color = Color(r: 0, g: 0.2, b: 0.0)
         greensphere.material.ambient = 0
         greensphere.material.diffuse = 0.4
@@ -366,41 +366,41 @@ class ViewController: NSViewController {
         let floor = Plane()
         
         let material = Material(color: Color(r: 1, g: 0.9, b: 0.9), ambient: 0.05, diffuse: 0.6, specular: 0, shininess: 200)
-        floor.transform = .translate(x: 0, y: 0, z: -1)
+        floor.transform = .translated(x: 0, y: 0, z: -1)
         floor.material = material
         floor.material.pattern = CheckerPattern(a: Color.white, b: Color.black)
         floor.material.reflective = 0.5
 
         let leftWall = Plane()
-        leftWall.transform = .translate(x: 0, y: 0, z: 10) *
-            .rotateX(.pi / 2)
+        leftWall.transform = .translated(x: 0, y: 0, z: 10) *
+            .rotatedX(.pi / 2)
         leftWall.material = Material(color: Color(r: 0, g: 0, b: 1), ambient: 0.05, diffuse: 0.6, specular: 0.5, shininess: 200)
         
         let rightWall = Plane()
-        rightWall.transform = .translate(x: 0, y: 0, z: 5) *
-            .rotateY(.pi / 4) *
-            .rotateX(.pi / 2) *
-            .scale(x: 10, y: 0.01, z: 10)
+        rightWall.transform = .translated(x: 0, y: 0, z: 5) *
+            .rotatedY(.pi / 4) *
+            .rotatedX(.pi / 2) *
+            .scaled(x: 10, y: 0.01, z: 10)
         rightWall.material.color = Color(r: 0.2, g: 0, b: 0.8)
         rightWall.material.pattern = GradientPattern(a: rightWall.material.color, b: Color.white)
         
         let right = Sphere()
-        right.transform = .translate(x: 1.5, y: 0.5, z: -0.5) * .scale(x: 0.5, y: 0.5, z: 0.5)
+        right.transform = .translated(x: 1.5, y: 0.5, z: -0.5) * .scaled(x: 0.5, y: 0.5, z: 0.5)
         right.material.color = Color(r: 0.5, g: 1, b: 0.1)
         right.material.diffuse = 0.7
         right.material.specular = 0.3
         right.material.pattern = GradientPattern(a: right.material.color, b: Color.white)
         
         let middle = Sphere()
-        middle.transform = .translate(x: -0.5, y: 1, z: 0.5)
+        middle.transform = .translated(x: -0.5, y: 1, z: 0.5)
         middle.material.color = Color(r: 0.1, g: 1, b: 0.5)
         middle.material.diffuse = 0.7
         middle.material.specular = 0.3
         middle.material.pattern = StripePattern(a: Color.white, b: middle.material.color)
-        middle.material.pattern?.transform = .scale(x: 0.25, y: 0.25, z: 0.25)
+        middle.material.pattern?.transform = .scaled(x: 0.25, y: 0.25, z: 0.25)
         
         let left = Sphere()
-        left.transform = .translate(x: -1.5, y: 0.33, z: -0.75) * .scale(x: 0.33, y: 0.33, z: 0.33)
+        left.transform = .translated(x: -1.5, y: 0.33, z: -0.75) * .scaled(x: 0.33, y: 0.33, z: 0.33)
         left.material.color = Color(r: 1, g: 0.8, b: 0.1)
         left.material.diffuse = 0.7
         left.material.specular = 0.3
@@ -410,7 +410,7 @@ class ViewController: NSViewController {
         world.objects.append(contentsOf: [floor, leftWall, rightWall, right, middle, left])
         
         var camera = Camera(w: 300, h: 150, fieldOfView: .pi / 3)
-        camera.transform = .viewTransform(from: .Point(x: 0, y: 1.5, z: -5),
+        camera.transform = .viewTransformed(from: .Point(x: 0, y: 1.5, z: -5),
                                           to: .Point(x: 0, y: 1, z: 0),
                                           up: .Vector(x: 0, y: 1, z: 0))
         
@@ -448,19 +448,19 @@ class ViewController: NSViewController {
     }
     
     @IBAction func renderShrinkY(_ sender: Any) {
-        renderScene(transform: Matrix4x4.scale(x: 1.0, y: 0.5, z: 1))
+        renderScene(transform: Matrix4x4.scaled(x: 1.0, y: 0.5, z: 1))
     }
     
     @IBAction func renderShrinkX(_ sender: Any) {
-        renderScene(transform: Matrix4x4.scale(x: 0.5, y: 1.0, z: 1))
+        renderScene(transform: Matrix4x4.scaled(x: 0.5, y: 1.0, z: 1))
     }
     
     @IBAction func renderShrinkXAndRotate(_ sender: Any) {
-        renderScene(transform: Matrix4x4.scale(x: 0.5, y: 1.0, z: 1).rotateZ(Double.pi / 4))
+        renderScene(transform: Matrix4x4.scaled(x: 0.5, y: 1.0, z: 1).rotatedZ(Double.pi / 4))
     }
     
     @IBAction func renderShrinkXAndShear(_ sender: Any) {
-        renderScene(transform: Matrix4x4.scale(x: 0.5, y: 1.0, z: 1).shear(xy: 1, xz: 0, yx: 0, yz: 0, zx: 0, zy: 0))
+        renderScene(transform: Matrix4x4.scaled(x: 0.5, y: 1.0, z: 1).sheared(xy: 1, xz: 0, yx: 0, yz: 0, zx: 0, zy: 0))
     }
     
     func getDocumentsDirectory() -> URL {

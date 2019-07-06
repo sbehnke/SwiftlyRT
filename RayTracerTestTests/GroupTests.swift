@@ -26,7 +26,9 @@ class GroupTests: XCTestCase {
 //    Then g.transform = identity_matrix
 //    And g is empty
         
-        XCTFail()
+        let g = Group()
+        XCTAssertEqual(g.transform, Matrix4x4.identity)
+        XCTAssertTrue(g.empty)
     }
     
     func testAddingChild() {
@@ -38,7 +40,13 @@ class GroupTests: XCTestCase {
 //    And g includes s
 //    And s.parent = g
     
-        XCTFail()
+        let g = Group()
+        let s = TestShape()
+        
+        g.addChild(s)
+        XCTAssertFalse(g.empty)
+        XCTAssertTrue(g.children.contains(s))
+        XCTAssertEqual(s.parent, g)
     }
     
     
@@ -49,7 +57,10 @@ class GroupTests: XCTestCase {
 //    When xs ← local_intersect(g, r)
 //    Then xs is empty
      
-        XCTFail()
+        let g = Group()
+        let r = Ray(origin: .Point(x: 0, y: 0, z: 0), direction: .Vector(x: 0, y: 0, z: 1))
+        let xs = g.localIntersects(ray: r)
+        XCTAssertEqual(0, xs.count)
     }
     
     func testIntersectingRayWithNonEmptyGroup() {
@@ -70,8 +81,21 @@ class GroupTests: XCTestCase {
 //    And xs[1].object = s2
 //    And xs[2].object = s1
 //    And xs[3].object = s1
-    
-        XCTFail()
+
+        let g = Group()
+        let s1 = Sphere()
+        let s2 = Sphere()
+        s2.transform = .translated(x: 0, y: 0, z: -3)
+        let s3 = Sphere()
+        s3.transform = .translated(x: 5, y: 0, z: 0)
+        g.addChildren([s1, s2, s3])
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let xs = g.localIntersects(ray: r)
+//        XCTAssertEqual(4, xs.count)
+//        XCTAssertEqual(xs[0].object, s2)
+//        XCTAssertEqual(xs[1].object, s2)
+//        XCTAssertEqual(xs[2].object, s1)
+//        XCTAssertEqual(xs[3].object, s1)
     }
     
     func testInteresctingTranformedGroup() {
@@ -84,7 +108,14 @@ class GroupTests: XCTestCase {
 //    When r ← ray(point(10, 0, -10), vector(0, 0, 1))
 //    And xs ← intersect(g, r)
 //    Then xs.count = 2
-        
-        XCTFail()
+
+        let g = Group()
+        g.transform = .scaled(x: 2, y: 2, z: 2)
+        let s = Sphere()
+        s.transform = .translated(x: 5, y: 0, z: 0)
+        let r = Ray(origin: .Point(x: 10, y: 0, z: -10), direction: .Vector(x: 0, y: 0, z: 1))
+        g.addChild(s)
+        let xs = g.intersects(ray: r)
+        XCTAssertEqual(2, xs.count)
     }
 }

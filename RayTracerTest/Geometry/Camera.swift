@@ -48,8 +48,8 @@ struct Camera {
         let worldX = camera.halfWidth - xoffset
         let worldY = camera.halfHeight - yoffset
         
-        let pixel = camera.transform.invert() * Tuple.Point(x: worldX, y: worldY, z: -1)
-        let origin = camera.transform.invert() * Tuple.pointZero
+        let pixel = camera.inverseTransform * Tuple.Point(x: worldX, y: worldY, z: -1)
+        let origin = camera.inverseTransform * Tuple.pointZero
         let direction = (pixel - origin).normalied()
         
         return Ray(origin: origin, direction: direction)
@@ -133,5 +133,10 @@ struct Camera {
     private var halfHeight = 0.0
     private var halfView = 0.0
     
-    var transform = Matrix4x4.identity
+    var transform = Matrix4x4.identity {
+        didSet {
+            inverseTransform = transform.inversed()
+        }
+    }
+    private(set) var inverseTransform = Matrix4x4.identity
 }

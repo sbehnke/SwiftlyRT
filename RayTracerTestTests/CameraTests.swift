@@ -94,7 +94,7 @@ class CameraTests: XCTestCase {
 //    And r.direction = vector(√2/2, 0, -√2/2)
 
         var c = Camera(w: 201, h: 101, fieldOfView: .pi / 20)
-        c.transform = Matrix4x4.rotateY(.pi / 4.0) * Matrix4x4.translate(x: 0, y: -2, z: 5)
+        c.transform = Matrix4x4.rotatedY(.pi / 4.0) * Matrix4x4.translated(x: 0, y: -2, z: 5)
         let r = c.rayForPixel(x: 100, y: 50)
         XCTAssertEqual(r.origin, Tuple.Point(x: 0, y: 2, z: -5))
         XCTAssertEqual(r.direction, Tuple.Vector(x: sqrt(2)/2, y: 0, z: -sqrt(2)/2))
@@ -116,7 +116,7 @@ class CameraTests: XCTestCase {
         let from = Tuple.Point(x: 0, y: 0, z: -5)
         let to = Tuple.Point(x: 0, y: 0, z: 0)
         let up = Tuple.Vector(x: 0, y: 1, z: 0)
-        c.transform = Matrix4x4.viewTransform(from: from, to: to, up: up)
+        c.transform = Matrix4x4.viewTransformed(from: from, to: to, up: up)
         let image = c.render(world: w)
         XCTAssertEqual(image.getPixel(x: 5, y: 5), Color(r: 0.38066, g: 0.47583, b: 0.2855))
     }

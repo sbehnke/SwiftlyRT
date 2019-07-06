@@ -247,9 +247,9 @@ class MatrixTests: XCTestCase {
                            c0: 3, c1: 0, c2: 5, c3: 5,
                            d0: 0, d1: 8, d2: 3, d3: 8)
         
-        let m3 = m1.transpose()
-        XCTAssertEqual(m3.transpose(), m1)
-        XCTAssertEqual(Matrix4x4.identity.transpose(), Matrix4x4.identity)
+        let m3 = m1.transposed()
+        XCTAssertEqual(m3.transposed(), m1)
+        XCTAssertEqual(Matrix4x4.identity.transposed(), Matrix4x4.identity)
         XCTAssertEqual(m3, m2)
     }
     
@@ -258,7 +258,7 @@ class MatrixTests: XCTestCase {
         //        Given A ← transpose(identity_matrix)
         //        Then A = identity_matrix
         
-        let A = Matrix4x4.identity.transpose()
+        let A = Matrix4x4.identity.transposed()
         XCTAssertEqual(A, Matrix4x4.identity)
     }
     
@@ -494,7 +494,7 @@ class MatrixTests: XCTestCase {
         XCTAssertEqual(105, m1.cofactor(row: 3, column: 2))
         XCTAssertEqual(163, m1.cofactor(row: 3, column: 3))
         
-        let m2 = m1.invert()
+        let m2 = m1.inversed()
         
         let values = Matrix4x4([0.21805, 0.45113,  0.24060, -0.04511,
                                 -0.80827, -1.45677, -0.44361, 0.52068,
@@ -528,7 +528,7 @@ class MatrixTests: XCTestCase {
                                  0.35897,  0.35897,  0.43590,  0.92308,
                                  -0.69231, -0.69231, -0.76923, -1.92308])
         
-        let m2 = m1.invert()
+        let m2 = m1.inversed()
         XCTAssertEqual(m2, inverse)
     }
     
@@ -550,7 +550,7 @@ class MatrixTests: XCTestCase {
                             -4,  9,  6,  4,
                             -7,  6,  6,  2])
         
-        let m2 = m1.invert()
+        let m2 = m1.inversed()
         let inverse = Matrix4x4([-0.04074, -0.07778,  0.14444, -0.22222,
                                  -0.07778,  0.03333,  0.36667, -0.33333,
                                  -0.02901, -0.14630, -0.10926,  0.12963,
@@ -587,7 +587,7 @@ class MatrixTests: XCTestCase {
                            7,  0, 5, 4,
                            6, -2, 0, 5])
         
-        let bInverse = b.invert()
+        let bInverse = b.inversed()
         let m2 = a * b * bInverse
         
         XCTAssertEqual(m2, a)
