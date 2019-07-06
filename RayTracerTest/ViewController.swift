@@ -38,218 +38,307 @@ class ViewController: NSViewController {
         return formatter.string(from: duration)!
     }
     
+    @IBAction func multiThreadedTest(_ sender: Any) {
+        let camera = Camera(w: 400, h: 200, fieldOfView: .pi / 3)
+        let _ = camera.multiThreadedRender(world: World.defaultWorld(), numberOfJobs: 4)
+    }
+    
     @IBAction func renderRefactionTest(_ sender: Any) {
         let startTime = CACurrentMediaTime()
         
-        var camera = Camera(w: 800, h: 400, fieldOfView: .pi / 3)
-        camera.transform = Matrix4x4.viewTransform(from: .Point(x: -2.6, y: 1.5, z: -3.9), to: .Point(x: -0.6, y: 1, z: -0.8), up: .Vector(x: 0, y: 1, z: 0))
-        let light = PointLight(position: .Point(x: -4.9, y: 4.9, z: -1), intensity: Color.white)
+//        # ======================================================
+//        # the camera
+//        # ======================================================
+//
+//        - add: camera
+//        width: 400
+//        height: 200
+//        field-of-view: 1.152
+//        from: [-2.6, 1.5, -3.9]
+//        to: [-0.6, 1, -0.8]
+//        up: [0, 1, 0]
         
-//        Camera camera{800, 400, math_constants::pi_by_three<>,
-//            view_transform(make_point(-2.6, 1.5, -3.9), make_point(-0.6, 1, -0.8), predefined_tuples::y1)};
-//        PointLight light{make_point(-4.9, 4.9, -1), predefined_colours::white};
+        var camera = Camera(w: 400, h: 200, fieldOfView: 1.152)
+        camera.transform = Matrix4x4.viewTransform(from: .Point(x: -2.6, y: 1.5, z: -3.9),
+                                                   to: .Point(x: -0.6, y: 1, z: -0.8),
+                                                   up: .Vector(x: 0, y: 1, z: 0))
+
+//        # ======================================================
+//        # light sources
+//        # ======================================================
+//
+//        - add: light
+//        at: [-4.9, 4.9, -1]
+//        intensity: [1, 1, 1]
+
+        let light = PointLight(position: .Point(x: -4.9, y: 4.9, z: -1),
+                               intensity: Color.white)
+        
+//        # ======================================================
+//        # define constants to avoid duplication
+//        # ======================================================
+//
+//        - define: wall-material
+//        value:
+//        pattern:
+//        type: stripes
+//        colors:
+//        - [0.45, 0.45, 0.45]
+//        - [0.55, 0.55, 0.55]
+//        transform:
+//        - [ scale, 0.25, 0.25, 0.25 ]
+//        - [ rotate-y, 1.5708 ]
+//        ambient: 0
+//        diffuse: 0.4
+//        specular: 0
+//        reflective: 0.3
         
         var wallMaterial = Material()
-        let stripeColors = [Color(r: 0.45, g: 0.45, b: 0.45), Color(r: 0.55, g: 0.55, b: 0.55)]
-        let wallPattern = StripePattern(a: stripeColors[0], b: stripeColors[1])
-        wallMaterial.pattern = wallPattern
-        wallMaterial.pattern!.transform = Matrix4x4.rotateY(.pi / 2) * Matrix4x4.scale(x: 0.25, y: 0.25, z: 0.25)
+        let stripeColors = [Color(r: 0.45, g: 0.45, b: 0.45),
+                            Color(r: 0.55, g: 0.55, b: 0.55)]
+        wallMaterial.pattern = StripePattern(a: stripeColors[0], b: stripeColors[1])
+        wallMaterial.pattern!.transform = Matrix4x4.rotateY(1.5708) *
+                                          Matrix4x4.scale(x: 0.25, y: 0.25, z: 0.25)
         wallMaterial.ambient = 0
         wallMaterial.diffuse = 0.4
         wallMaterial.specular = 0
         wallMaterial.reflective = 0.3
         
-        // WALL MATERIAL
-//        auto wall_material = std::make_shared<Material>();
-//        std::vector<Colour> stripe_colours{make_colour(0.45, 0.45, 0.45), make_colour(0.55, 0.55, 0.55)};
-//        auto wall_pattern = std::make_shared<StripePattern>(stripe_colours);
-//        wall_pattern->setTransformation(rotation_y(math_constants::pi_by_two<>) * scale(0.25, 0.25, 0.25));
-//        wall_material->setPattern(wall_pattern);
-//        wall_material->setAmbient(0);
-//        wall_material->setDiffuse(0.4);
-//        wall_material->setSpecular(0);
-//        wall_material->setReflectivity(0.3);
+//        # ======================================================
+//        # describe the elements of the scene
+//        # ======================================================
+//
+//        # the checkered floor
+//        - add: plane
+//        transform:
+//        - [ rotate-y, 0.31415 ]
+//        material:
+//        pattern:
+//        type: checkers
+//        colors:
+//        - [0.35, 0.35, 0.35]
+//        - [0.65, 0.65, 0.65]
+//        specular: 0
+//        reflective: 0.4
         
         let floor = Plane()
-        floor.material.pattern = CheckerPattern(a: Color(r: 0.35, g: 0.35, b: 0.35), b: Color(r: 0.65, g: 0.65, b: 0.65))
+        floor.transform = .rotateY(0.31415)
+        floor.material.pattern = CheckerPattern(a: Color(r: 0.35, g: 0.35, b: 0.35),
+                                                b: Color(r: 0.65, g: 0.65, b: 0.65))
         floor.material.specular = 0
         floor.material.reflective = 0.4
-        floor.transform = .rotateY(.pi / 10)
         
-        // CHECKERED FLOOR
-//        auto floor = Plane::createPlane();
-//        auto floor_material = std::make_shared<Material>();
-//        auto floor_material_pattern = std::make_shared<CheckerPattern>(make_colour(0.35, 0.35, 0.35), make_colour(0.65, 0.65, 0.65));
-//        floor_material->setPattern(floor_material_pattern);
-//        floor_material->setSpecular(0);
-//        floor_material->setReflectivity(0.4);
-//        floor->setMaterial(floor_material);
-//        floor->setTransformation(rotation_y(math_constants::pi<> / 10));
+//        # the ceiling
+//        - add: plane
+//        transform:
+//        - [ translate, 0, 5, 0 ]
+//        material:
+//        color: [0.8, 0.8, 0.8]
+//        ambient: 0.3
+//        specular: 0
         
         let ceiling = Plane()
-        ceiling.material.pattern = SolidColorPattern(Color(r: 0.8, g: 0.8, b: 0.8))
+        ceiling.transform = .translate(x: 0, y: 5, z: 0)
+        ceiling.material.color = Color(r: 0.8, g: 0.8, b: 0.8)
         ceiling.material.ambient = 0.3
         ceiling.material.specular = 0
-        ceiling.transform = .translate(x: 0, y: 5, z: 0)
         
-        // CEILING
-//        auto ceiling = Plane::createPlane();
-//        auto ceiling_material = std::make_shared<Material>();
-//        ceiling_material->setPattern(std::make_shared<SolidPattern>(make_colour(0.8, 0.8, 0.8)));
-//        ceiling_material->setAmbient(0.3);
-//        ceiling_material->setSpecular(0);
-//        ceiling->setMaterial(ceiling_material);
-//        ceiling->setTransformation(translation(0, 5, 0));
+//        # west wall
+//        - add: plane
+//        transform:
+//        - [ rotate-y, 1.5708 ] # orient texture
+//        - [ rotate-z, 1.5708 ] # rotate to vertical
+//        - [ translate, -5, 0, 0 ]
+//        material: wall-material
         
         let westWall = Plane()
+        westWall.transform = Matrix4x4.translate(x: -5, y: 0, z: 0) *
+                             Matrix4x4.rotateZ(1.5708) *
+                             Matrix4x4.rotateY(1.5708)
         westWall.material = wallMaterial
-        westWall.transform = Matrix4x4.translate(x: -5, y: 0, z: 0) * Matrix4x4.rotateZ(.pi / 2.0) * Matrix4x4.rotateY(.pi / 2.0)
-        // WEST WALL
-//        auto west_wall = Plane::createPlane();
-//        west_wall->setMaterial(wall_material);
-//        west_wall->setTransformation(translation(-5, 0, 0) * rotation_z(math_constants::pi_by_two<>) *
-//        rotation_y(math_constants::pi_by_two<>));
+
+//        # east wall
+//        - add: plane
+//        transform:
+//        - [ rotate-y, 1.5708 ] # orient texture
+//        - [ rotate-z, 1.5708 ] # rotate to vertical
+//        - [ translate, 5, 0, 0 ]
+//        material: wall-material
         
         let eastWall = Plane()
+        eastWall.transform = Matrix4x4.translate(x: 5, y: 0, z: 0) *
+                             Matrix4x4.rotateZ(1.5708) *
+                             Matrix4x4.rotateY(1.5708)
         eastWall.material = wallMaterial
-        eastWall.transform = Matrix4x4.translate(x: 5, y: 0, z: 0) * Matrix4x4.rotateZ(.pi / 2.0) * Matrix4x4.rotateY(.pi / 2.0)
-        
-        // EAST WALL
-//        auto east_wall = Plane::createPlane();
-//        east_wall->setMaterial(wall_material);
-//        east_wall->setTransformation(translation(5, 0, 0) * rotation_z(math_constants::pi_by_two<>) *
-//        rotation_y(math_constants::pi_by_two<>));
+
+//        # north wall
+//        - add: plane
+//        transform:
+//        - [ rotate-x, 1.5708 ] # rotate to vertical
+//        - [ translate, 0, 0, 5 ]
+//        material: wall-material
         
         let northWall = Plane()
+        northWall.transform = Matrix4x4.translate(x: 0, y: 0, z: 5) *
+                              Matrix4x4.rotateX(1.5708)
         northWall.material = wallMaterial
-        northWall.transform = Matrix4x4.translate(x: 0, y: 0, z: 5) * Matrix4x4.rotateX(.pi / 2.0)
-        
-        // NORTH WALL
-//        auto north_wall = Plane::createPlane();
-//        north_wall->setMaterial(wall_material);
-//        north_wall->setTransformation(translation(0, 0, 5) * rotation_x(math_constants::pi_by_two<>));
+
+//        # south wall
+//        - add: plane
+//        transform:
+//        - [ rotate-x, 1.5708 ] # rotate to vertical
+//        - [ translate, 0, 0, -5 ]
+//        material: wall-material
         
         let southWall = Plane()
+        southWall.transform = Matrix4x4.translate(x: 0, y: 0, z: -5) *
+                              Matrix4x4.rotateX(1.5708)
         southWall.material = wallMaterial
-        southWall.transform = Matrix4x4.translate(x: 0, y: 0, z: 5) * Matrix4x4.rotateX(.pi / 2.0)
-        // SOUTH WALL
-//        auto south_wall = Plane::createPlane();
-//        south_wall->setMaterial(wall_material);
-//        south_wall->setTransformation(translation(0, 0, 5) * rotation_x(math_constants::pi_by_two<>));
-        
+
+//        # ----------------------
+//        # background balls
+//        # ----------------------
+//
+//        - add: sphere
+//        transform:
+//        - [ scale, 0.4, 0.4, 0.4 ]
+//        - [ translate, 4.6, 0.4, 1 ]
+//        material:
+//        color: [0.8, 0.5, 0.3]
+//        shininess: 50
+
         let bsphere1 = Sphere()
-        bsphere1.material.pattern = SolidColorPattern(Color(r: 0.8, g: 0.5, b: 0.3))
+        bsphere1.transform = Matrix4x4.translate(x: 4.6, y: 0.4, z: 1) *
+                             Matrix4x4.scale(x: 0.4, y: 0.4, z: 0.4)
+        bsphere1.material.color = Color(r: 0.8, g: 0.5, b: 0.3)
         bsphere1.material.shininess = 50
-        bsphere1.transform = Matrix4x4.translate(x: 4.6, y: 0.4, z: 1) * Matrix4x4.scale(x: 0.4, y: 0.4, z: 0.4)
-        // BACKGROUND BALLS
-//        auto bsphere1 = Sphere::createSphere();
-//        auto bsphere1_material = std::make_shared<Material>();
-//        bsphere1_material->setPattern(std::make_shared<SolidPattern>(make_colour(0.8, 0.5, 0.3)));
-//        bsphere1_material->setShininess(50);
-//        bsphere1->setMaterial(bsphere1_material);
-//        bsphere1->setTransformation(translation(4.6, 0.4, 1) * scale(0.4, 0.4, 0.4));
+        
+//        - add: sphere
+//        transform:
+//        - [ scale, 0.3, 0.3, 0.3 ]
+//        - [ translate, 4.7, 0.3, 0.4 ]
+//        material:
+//        color: [0.9, 0.4, 0.5]
+//        shininess: 50
         
         let bsphere2 = Sphere()
-        bsphere2.material.pattern = SolidColorPattern(Color(r: 0.9, g: 0.4, b: 0.5))
+        bsphere2.transform = Matrix4x4.translate(x: 4.7, y: 0.3, z: 0.4) *
+                             Matrix4x4.scale(x: 0.3, y: 0.3, z: 0.3)
+        bsphere2.material.color = Color(r: 0.9, g: 0.4, b: 0.5)
         bsphere2.material.shininess = 50
-        bsphere2.transform = Matrix4x4.translate(x: 4.7, y: 0.3, z: 0.4) * Matrix4x4.scale(x: 0.3, y: 0.3, z: 0.3)
-//        auto bsphere2 = Sphere::createSphere();
-//        auto bsphere2_material = std::make_shared<Material>();
-//        bsphere2_material->setPattern(std::make_shared<SolidPattern>(make_colour(0.9, 0.4, 0.5)));
-//        bsphere2_material->setShininess(50);
-//        bsphere2->setMaterial(bsphere2_material);
-//        bsphere2->setTransformation(translation(4.7, 0.3, 0.4) * scale(0.3, 0.3, 0.3));
+
+//        - add: sphere
+//        transform:
+//        - [ scale, 0.5, 0.5, 0.5 ]
+//        - [ translate, -1, 0.5, 4.5 ]
+//        material:
+//        color: [0.4, 0.9, 0.6]
+//        shininess: 50
         
         let bsphere3 = Sphere()
-        bsphere3.material.pattern = SolidColorPattern(Color(r: 0.4, g: 0.9, b: 0.6))
+        bsphere3.transform = Matrix4x4.translate(x: -1, y: 0.5, z: 4.5) *
+                             Matrix4x4.scale(x: 0.5, y: 0.5, z: 0.5)
+        bsphere3.material.color = Color(r: 0.4, g: 0.9, b: 0.6)
         bsphere3.material.shininess = 50
-        bsphere3.transform = Matrix4x4.translate(x: -1, y: 0.5, z: 4.5) * Matrix4x4.scale(x: 0.5, y: 0.5, z: 0.5)
-//        auto bsphere3 = Sphere::createSphere();
-//        auto bsphere3_material = std::make_shared<Material>();
-//        bsphere3_material->setPattern(std::make_shared<SolidPattern>(make_colour(0.4, 0.9, 0.6)));
-//        bsphere3_material->setShininess(50);
-//        bsphere3->setMaterial(bsphere3_material);
-//        bsphere3->setTransformation(translation(-1, 0.5, 4.5) * scale(0.5, 0.5, 0.5));
+        
+//        - add: sphere
+//        transform:
+//        - [ scale, 0.3, 0.3, 0.3 ]
+//        - [ translate, -1.7, 0.3, 4.7 ]
+//        material:
+//        color: [0.4, 0.6, 0.9]
+//        shininess: 50
         
         let bsphere4 = Sphere()
-        bsphere4.material.pattern = SolidColorPattern(Color(r: 0.3, g: 0.3, b: 0.3))
+        bsphere4.transform = Matrix4x4.translate(x: -1.7, y: 0.3, z: 4.7) *
+                             Matrix4x4.scale(x: 0.3, y: 0.3, z: 0.3)
+        bsphere4.material.color = Color(r: 0.4, g: 0.6, b: 0.9)
         bsphere4.material.shininess = 50
-        bsphere4.transform = Matrix4x4.translate(x: -1.7, y: 0.3, z: 4.7) * Matrix4x4.scale(x: 0.3, y: 0.3, z: 0.3)
-//        auto bsphere4 = Sphere::createSphere();
-//        auto bsphere4_material = std::make_shared<Material>();
-//        bsphere4_material->setPattern(std::make_shared<SolidPattern>(make_colour(0.4, 0.6, 0.9)));
-//        bsphere4_material->setShininess(50);
-//        bsphere4->setMaterial(bsphere4_material);
-//        bsphere4->setTransformation(translation(-1.7, 0.3, 4.7) * scale(0.3, 0.3, 0.3));
+    
+//        # ----------------------
+//        # foreground balls
+//        # ----------------------
+//
+//        # red sphere
+//        - add: sphere
+//        transform:
+//        - [ translate, -0.6, 1, 0.6 ]
+//        material:
+//        color: [1, 0.3, 0.2]
+//        specular: 0.4
+//        shininess: 5
         
         let redsphere = Sphere()
-        redsphere.material.pattern = SolidColorPattern(Color(r: 1, g: 0.3, b: 0.2))
-        redsphere.material.shininess = 5
-        redsphere.material.specular = 0.4
         redsphere.transform = Matrix4x4.translate(x: -0.6, y: 1, z: 0.6)
-        // FOREGROUND BALLS
-//        auto red_sphere = Sphere::createSphere();
-//        auto red_sphere_material = std::make_shared<Material>();
-//        red_sphere_material->setPattern(std::make_shared<SolidPattern>(make_colour(1, 0.3, 0.2)));
-//        red_sphere_material->setSpecular(0.4);
-//        red_sphere_material->setShininess(5);
-//        red_sphere->setMaterial(red_sphere_material);
-//        red_sphere->setTransformation(translation(-0.6, 1, 0.6));
+        redsphere.material.color = Color(r: 1, g: 0.3, b: 0.2)
+        redsphere.material.specular = 0.4
+        redsphere.material.shininess = 5
+
+//        # blue glass sphere
+//        - add: sphere
+//        transform:
+//        - [ scale, 0.7, 0.7, 0.7 ]
+//        - [ translate, 0.6, 0.7, -0.6 ]
+//        material:
+//        color: [0, 0, 0.2]
+//        ambient: 0
+//        diffuse: 0.4
+//        specular: 0.9
+//        shininess: 300
+//        reflective: 0.9
+//        transparency: 0.9
+//        refractive-index: 1.5
         
         let bluesphere = Sphere()
-        bluesphere.material.pattern = SolidColorPattern(Color(r: 1, g: 0.3, b: 0.2))
+        bluesphere.transform = Matrix4x4.translate(x: 0.6, y: 0.7, z: -0.6) *
+                               Matrix4x4.scale(x: 0.7, y: 0.7, z: 0.7)
+        bluesphere.material.color = Color(r: 0, g: 0, b: 0.2)
         bluesphere.material.ambient = 0
         bluesphere.material.diffuse = 0.4
+        bluesphere.material.specular = 0.9
+        bluesphere.material.shininess = 300
         bluesphere.material.reflective = 0.9
         bluesphere.material.transparency = 0.9
-        bluesphere.material.refractiveIndex = 1.52
-        bluesphere.material.shininess = 300
-        bluesphere.material.specular = 0.4
-        bluesphere.transform = Matrix4x4.translate(x: 0.6, y: 0.7, z: -0.6) * Matrix4x4.scale(x: 0.7, y: 0.7, z: 0.7)
-//        auto blue_sphere = Sphere::createSphere();
-//        auto blue_sphere_material = std::make_shared<Material>();
-//        blue_sphere_material->setPattern(std::make_shared<SolidPattern>(make_colour(0, 0, 0.2)));
-//        blue_sphere_material->setAmbient(0);
-//        blue_sphere_material->setDiffuse(0.4);
-//        blue_sphere_material->setSpecular(0.9);
-//        blue_sphere_material->setShininess(300);
-//        blue_sphere_material->setReflectivity(0.9);
-//        blue_sphere_material->setTransparency(0.9);
-//        blue_sphere_material->setRefractiveIndex(1.5);
-//        blue_sphere->setMaterial(blue_sphere_material);
-//        blue_sphere->setTransformation(translation(0.6, 0.7, -0.6) * scale(0.7, 0.7, 0.7));
+        bluesphere.material.refractiveIndex = 1.5
+        
+//        # green glass sphere
+//        - add: sphere
+//        transform:
+//        - [ scale, 0.5, 0.5, 0.5 ]
+//        - [ translate, -0.7, 0.5, -0.8 ]
+//        material:
+//        color: [0, 0.2, 0]
+//        ambient: 0
+//        diffuse: 0.4
+//        specular: 0.9
+//        shininess: 300
+//        reflective: 0.9
+//        transparency: 0.9
+//        refractive-index: 1.5
         
         let greensphere = Sphere()
-        greensphere.material.pattern = SolidColorPattern(Color(r: 0, g: 0.2, b: 0.2))
+        greensphere.transform = Matrix4x4.translate(x: -0.7, y: 0.5, z: -0.8) *
+                                Matrix4x4.scale(x: 0.5, y: 0.5, z: 0.5)
+        greensphere.material.color = Color(r: 0, g: 0.2, b: 0.0)
         greensphere.material.ambient = 0
         greensphere.material.diffuse = 0.4
+        greensphere.material.specular = 0.9
+        greensphere.material.shininess = 300
         greensphere.material.reflective = 0.9
         greensphere.material.transparency = 0.9
-        greensphere.material.refractiveIndex = 1.52
-        greensphere.material.shininess = 300
-        greensphere.material.specular = 0.9
-        greensphere.transform = Matrix4x4.translate(x: -0.7, y: 0.5, z: -0.8) * Matrix4x4.scale(x: 0.5, y: 0.5, z: 0.5)
-        //        auto green_sphere = Sphere::createSphere();
-        //        auto green_sphere_material = std::make_shared<Material>();
-        //        green_sphere_material->setPattern(std::make_shared<SolidPattern>(make_colour(0, 0.2, 0)));
-        //        green_sphere_material->setAmbient(0);
-        //        green_sphere_material->setDiffuse(0.4);
-        //        green_sphere_material->setSpecular(0.9);
-        //        green_sphere_material->setShininess(300);
-        //        green_sphere_material->setReflectivity(0.9);
-        //        green_sphere_material->setTransparency(0.9);
-        //        green_sphere_material->setRefractiveIndex(1.5);
-        //        green_sphere->setMaterial(green_sphere_material);
-        //        green_sphere->setTransformation(translation(-0.7, 0.5, -0.8) * scale(0.5, 0.5, 0.5));
+        greensphere.material.refractiveIndex = 1.5
         
         let world = World()
         world.light = light
         world.objects = [floor, ceiling, southWall, westWall, eastWall, northWall, bsphere1, bsphere2, bsphere3, bsphere4, redsphere, bluesphere, greensphere]
         
         DispatchQueue.global(qos: .background).async {
-            let canvas = camera.render(world: world, progress: { (x: Int, y: Int) -> Void in
+            let numberOfJobs = ProcessInfo.processInfo.activeProcessorCount
+            let canvas = camera.multiThreadedRender(world: world, numberOfJobs: numberOfJobs, progress: { (jobNumber: Int, y: Int, numberOfRows: Int) -> Void in
                 DispatchQueue.main.async {
-                    self.progressLabel.stringValue = "(\(x),\(y))"
+                    let percent = 100.0 * (Float(y) / Float(numberOfRows))
+                    // self.progressLabel.stringValue = "Job: \(jobNumber) - \(percent)%)"
+                    print("Job: \(jobNumber) - " + String(format: "%.2f", percent) + "%")
                 }
             })
             
@@ -326,11 +415,20 @@ class ViewController: NSViewController {
                                           up: .Vector(x: 0, y: 1, z: 0))
         
         DispatchQueue.global(qos: .background).async {
-            let canvas = camera.render(world: world, progress: { (x: Int, y: Int) -> Void in
+            let numberOfJobs = ProcessInfo.processInfo.activeProcessorCount
+            let canvas = camera.multiThreadedRender(world: world, numberOfJobs: numberOfJobs, progress: { (jobNumber: Int, y: Int, numberOfRows: Int) -> Void in
                 DispatchQueue.main.async {
-                    self.progressLabel.stringValue = "(\(x),\(y))"
+                    let percent = 100.0 * (Float(y) / Float(numberOfRows))
+                    // self.progressLabel.stringValue = "Job: \(jobNumber) - \(percent)%)"
+                    print("Job: \(jobNumber) - " + String(format: "%.2f", percent) + "%")
                 }
             })
+            
+//            let canvas = camera.render(world: world, progress: { (x: Int, y: Int) -> Void in
+//                DispatchQueue.main.async {
+//                    self.progressLabel.stringValue = "(\(x),\(y))"
+//                }
+//            })
             
             let data = canvas.getPPM()
             

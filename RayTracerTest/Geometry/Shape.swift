@@ -9,6 +9,8 @@
 import Foundation
 
 class Shape : Equatable {
+    let semaphore = DispatchSemaphore(value: 1)
+
     static func == (lhs: Shape, rhs: Shape) -> Bool {
         return lhs === rhs
     }
@@ -19,6 +21,11 @@ class Shape : Equatable {
     
     func intersects(ray: Ray) -> [Intersection] {
         let localRay = transform.invert() * ray
+        let _ = self.semaphore.wait(timeout: DispatchTime.distantFuture)
+        defer {
+            self.semaphore.signal()
+        }
+        
         savedRay = localRay
         return localIntersects(ray: localRay)
     }

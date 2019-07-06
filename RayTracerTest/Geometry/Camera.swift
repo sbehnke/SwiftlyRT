@@ -8,6 +8,14 @@
 
 import Foundation
 
+extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        return stride(from: 0, to: count, by: size).map {
+            Array(self[$0 ..< Swift.min($0 + size, count)])
+        }
+    }
+}
+
 struct Camera {
     
     private mutating func computePixelSize() {
@@ -64,6 +72,51 @@ struct Camera {
             }
         }
         
+        return image
+    }
+    
+    func partialRender(dispatchGroup: DispatchGroup, jobNumber: Int, startingY: Int, endingY: Int, image: Canvas, world: World, progress: MultiThreadedProgress? = nil) {
+
+        let numberOfRows = endingY - startingY
+        
+        for y in startingY...endingY {
+            progress?(jobNumber, y - startingY, numberOfRows)
+
+            for x in 0..<width {
+                let ray = rayForPixel(x: x, y: y)
+                let color = world.colorAt(ray: ray)
+                image.setPixel(x: x, y: y, color: color)
+            }
+        }
+        
+        dispatchGroup.leave()
+    }
+    
+    public typealias MultiThreadedProgress = (Int, Int, Int) -> Void
+    func multiThreadedRender(world: World, numberOfJobs: Int = 1, progress: MultiThreadedProgress? = nil) -> Canvas {
+        let image = Canvas(width: width, height: height)
+
+        let rows = Array(0..<height)
+        let rowsPerJob = height / numberOfJobs
+        let chunks = rows.chunked(into: rowsPerJob)
+        var jobNumber = 0
+        
+        let dispatchGroup = DispatchGroup()
+        
+        for chunk in chunks {
+            let startingRow = chunk.min()!
+            let endingRow = chunk.max()!
+
+            let j = jobNumber
+            DispatchQueue.global(qos: .background).async {
+                dispatchGroup.enter()
+                self.partialRender(dispatchGroup: dispatchGroup, jobNumber: j, startingY: startingRow, endingY: endingRow, image: image, world: world, progress: progress)
+            }
+            
+            jobNumber += 1
+        }
+        
+        dispatchGroup.wait()
         return image
     }
     

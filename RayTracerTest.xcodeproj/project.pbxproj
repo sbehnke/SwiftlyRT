@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6416F6C622D0281C005E4797 /* Scenes in Resources */ = {isa = PBXBuildFile; fileRef = 6416F6C522D0281B005E4797 /* Scenes */; };
 		6435B4F622CE58E800270210 /* TestShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4F522CE58E800270210 /* TestShape.swift */; };
 		6435B4F822CE74C900270210 /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4F722CE74C900270210 /* Plane.swift */; };
 		6435B4FA22CE750100270210 /* Cylinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4F922CE750100270210 /* Cylinder.swift */; };
@@ -84,6 +85,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6416F6C522D0281B005E4797 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Scenes; sourceTree = "<group>"; };
 		6435B4F522CE58E800270210 /* TestShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShape.swift; sourceTree = "<group>"; };
 		6435B4F722CE74C900270210 /* Plane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
 		6435B4F922CE750100270210 /* Cylinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cylinder.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				64EE917E22C7D18900FB2699 /* Main.storyboard */,
 				64EE91B222C8125200FB2699 /* Math */,
 				64EE91B322C8139C00FB2699 /* Projecile.swift */,
+				6416F6C522D0281B005E4797 /* Scenes */,
 				64EE917A22C7D18700FB2699 /* ViewController.swift */,
 			);
 			path = RayTracerTest;
@@ -463,6 +466,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6416F6C622D0281C005E4797 /* Scenes in Resources */,
 				64EE917D22C7D18900FB2699 /* Assets.xcassets in Resources */,
 				64EE918022C7D18900FB2699 /* Main.storyboard in Resources */,
 			);
