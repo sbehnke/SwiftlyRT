@@ -38,8 +38,52 @@ class CubeTests: XCTestCase {
 //    | +z     | point(0.5, 0, 5)  | vector(0, 0, -1) |  4 |  6 |
 //    | -z     | point(0.5, 0, -5) | vector(0, 0, 1)  |  4 |  6 |
 //    | inside | point(0, 0.5, 0)  | vector(0, 0, 1)  | -1 |  1 |
-    
-        XCTFail()
+
+        let points: [Tuple] = [
+            .Point(x:5,   y: 0.5, z:0),
+            .Point(x:-5,  y: 0.5, z:0),
+            .Point(x:0.5, y: 5,   z:0),
+            .Point(x:0.5, y: -5,  z:0),
+            .Point(x:0.5, y: 0,   z:5),
+            .Point(x:0.5, y: 0,   z:-5),
+            .Point(x:0,   y: 0.5, z:0)]
+        
+        let directions: [Tuple] = [
+            .Vector(x: -1,y:  0,z:  0),
+            .Vector(x: 1, y: 0, z: 0),
+            .Vector(x: 0, y: -1,z:  0),
+            .Vector(x: 0, y: 1, z: 0),
+            .Vector(x: 0, y: 0, z: -1),
+            .Vector(x: 0, y: 0, z: 1),
+            .Vector(x: 0, y: 0, z: 1)]
+        
+        let t1: [Double] = [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            -1]
+        
+        let t2: [Double] = [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            1]
+        
+        let c = Cube()
+
+        for index in 0..<points.count {
+            let r = Ray(origin: points[index], direction: directions[index])
+            let xs = c.localIntersects(ray: r)
+            XCTAssertEqual(xs.count, 2)
+            XCTAssertEqual(xs[0].t, t1[index])
+            XCTAssertEqual(xs[1].t, t2[index])
+        }
     }
     
     func testRayMissesCube() {
@@ -57,8 +101,28 @@ class CubeTests: XCTestCase {
 //    | point(2, 0, 2)   | vector(0, 0, -1)               |
 //    | point(0, 2, 2)   | vector(0, -1, 0)               |
 //    | point(2, 2, 0)   | vector(-1, 0, 0)               |
-    
-        XCTFail()
+
+        let points: [Tuple] = [.Point(x: -2, y:  0, z: 0),
+                               .Point(x: 0,  y: -2, z: 0),
+                               .Point(x: 0,  y: 0,  z:-2),
+                               .Point(x: 2,  y: 0,  z: 2),
+                               .Point(x: 0,  y: 2,  z: 2),
+                               .Point(x: 2,  y: 2,  z: 0)]
+        
+        let directions: [Tuple] = [.Vector(x: 0.2673, y: 0.5345, z: 0.8018),
+                                   .Vector(x: 0.8018, y: 0.2673, z: 0.5345),
+                                   .Vector(x: 0.5345, y: 0.8018, z: 0.2673),
+                                   .Vector(x: 0,  y: 0,  z: -1),
+                                   .Vector(x: 0,  y: -1, z:  0),
+                                   .Vector(x: -1, y:  0, z:  0)]
+        
+        let c = Cube()
+        
+        for index in 0..<points.count {
+            let r = Ray(origin: points[index], direction: directions[index])
+            let xs = c.localIntersects(ray: r)
+            XCTAssertEqual(xs.count, 0)
+        }
     }
     
     func testNormalOnSurfaceOfCube() {
@@ -79,6 +143,29 @@ class CubeTests: XCTestCase {
 //    | point(1, 1, 1)       | vector(1, 0, 0)  |
 //    | point(-1, -1, -1)    | vector(-1, 0, 0) |
 
-        XCTFail()
+        let c = Cube()
+        
+        let points: [Tuple] = [.Point(x: 1,    y: 0.5,  z: -0.8),
+                               .Point(x: -1,   y: -0.2, z:  0.9),
+                               .Point(x: -0.4, y: 1,    z: -0.1),
+                               .Point(x: 0.3,  y: -1,   z: -0.7),
+                               .Point(x: -0.6, y: 0.3,  z:  1),
+                               .Point(x: 0.4,  y: 0.4,  z: -1),
+                               .Point(x: 1,    y: 1,    z:  1),
+                               .Point(x: -1,   y: -1,   z: -1)]
+        
+        let normals: [Tuple] = [.Vector(x: 1,  y: 0,  z: 0),
+                                .Vector(x: -1, y: 0,  z: 0),
+                                .Vector(x: 0,  y: 1,  z: 0),
+                                .Vector(x: 0,  y: -1, z: 0),
+                                .Vector(x: 0,  y: 0,  z: 1),
+                                .Vector(x: 0,  y: 0,  z: -1),
+                                .Vector(x: 1,  y: 0,  z: 0),
+                                .Vector(x: -1, y: 0,  z: 0)]
+        
+        for index in 0..<points.count {
+            let normal = c.localNormalAt(p: points[index])
+            XCTAssertEqual(normal, normals[index])
+        }
     }
 }
