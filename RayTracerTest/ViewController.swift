@@ -514,18 +514,17 @@ class ViewController: NSViewController {
                 //        position ← point(world_x, world_y, wall_z)
                 let position = Tuple.Point(x: worldX, y: worldY, z: wallZ)
                 //        r ← ray(ray_origin, normalize(position - ray_origin))
-                let ray = Ray(origin: rayOrigin, direction: (position - rayOrigin).normalize())
+                let ray = Ray(origin: rayOrigin, direction: (position - rayOrigin).normalied())
                 //        xs ← intersect(shape, r)
                 let xs = shape.intersects(ray: ray)
                 //        if hit(xs) is defined
                 
-                let hit = Intersection.hit(xs)
-                if (hit != nil) {
+                if let hit = Intersection.hit(xs) {
                     //        write_pixel(canvas, x, y, color)
-                    let point = ray.position(time: hit!.t)
-                    let normal = hit!.object?.normalAt(p: point)
+                    let point = ray.position(time: hit.t)
+                    let normal = hit.object?.normalAt(p: point)
                     let eyeVector = -ray.direction
-                    let coloredLight = light.lighting(object: hit?.object, material: hit!.object!.material, position: position, eyeVector: eyeVector, normalVector: normal!)
+                    let coloredLight = hit.object!.material.lighting(object: hit.object, light: light, position: position, eyeVector: eyeVector, normalVector: normal!)
                     canvas.setPixel(x: x, y: y, color: coloredLight)
                 }
             }

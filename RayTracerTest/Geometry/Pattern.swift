@@ -19,9 +19,10 @@ class Pattern: Equatable {
     
     func patternAtShape(object: Shape?, point: Tuple) -> Color {
         var t = self.transform.invert()
-        if object != nil {
-            t *= object!.transform.invert()
-        }        
+        if let o = object {
+            t *= o.transform.invert()
+        }
+        
         let transformedPoint = t * point
         return patternAt(point: transformedPoint)
     }

@@ -31,13 +31,13 @@ struct Intersection : Equatable, Comparable {
         return nil
     }
     
-    static func prepareComputation(i: Intersection, ray: Ray, xs: [Intersection] = []) -> Computation {
-        assert(i.object != nil)
+    func prepareComputation(ray: Ray, xs: [Intersection] = []) -> Computation {
+        assert(object != nil)
         var comps = Computation()
-
+        
         var container: [Shape] = []
         for intersection in xs {
-            if intersection == i {
+            if intersection == self {
                 if container.isEmpty {
                     comps.n1 = 1.0
                 } else {
@@ -46,12 +46,12 @@ struct Intersection : Equatable, Comparable {
             }
             
             if container.contains(intersection.object!) {
-                container = container.filter() { $0 != i.object! }
+                container = container.filter() { $0 != intersection.object! }
             } else {
                 container.append(intersection.object!)
             }
             
-            if intersection == i {
+            if intersection == self {
                 if container.isEmpty {
                     comps.n2 = 1.0
                 } else {
@@ -62,14 +62,14 @@ struct Intersection : Equatable, Comparable {
             }
         }
         
-        comps.t = i.t
-        comps.object = i.object
+        comps.t = self.t
+        comps.object = self.object
         
-        comps.point = ray.position(time: i.t)
+        comps.point = ray.position(time: self.t)
         comps.eyeVector = -ray.direction
-        comps.normalVector = i.object!.normalAt(p: comps.point)
+        comps.normalVector = self.object!.normalAt(p: comps.point)
         
-        if (comps.normalVector.dot(rhs: comps.eyeVector) < 0) {
+        if (comps.normalVector.dot(comps.eyeVector) < 0) {
             comps.inside = true
             comps.normalVector = -comps.normalVector
         } else {
@@ -78,13 +78,9 @@ struct Intersection : Equatable, Comparable {
         
         comps.overPoint = comps.point + comps.normalVector * Tuple.epsilon
         comps.underPoint = comps.point - comps.normalVector * Tuple.epsilon
-        comps.reflectVector = Tuple.reflect(lhs: ray.direction, normal: comps.normalVector)
+        comps.reflectVector = ray.direction.reflected(normal: comps.normalVector)
         
         return comps
-    }
-    
-    func prepareCopmutation(ray: Ray, xs: [Intersection] = []) -> Computation {
-        return Intersection.prepareComputation(i: self, ray: ray, xs: xs)
     }
     
     init() {

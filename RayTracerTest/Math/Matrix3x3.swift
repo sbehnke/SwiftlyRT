@@ -82,20 +82,6 @@ struct Matrix3x3 : Equatable, AdditiveArithmetic {
         return lhs
     }
     
-//    static func * (lhs: Matrix3x3, rhs: Vector3) -> Vector3 {
-//        var value = Vector4()
-//
-//        for row in 0..<rows {
-//            var sum = 0.0
-//            for col in 0..<columns {
-//                sum += lhs[row, col] * rhs[col]
-//            }
-//            value[row] = sum
-//        }
-//
-//        return value
-//    }
-    
     static func *= (lhs: inout Matrix3x3, rhs: Matrix3x3) {
         let a = lhs
         for i in 0..<rows {

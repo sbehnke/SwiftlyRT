@@ -18,7 +18,7 @@ class BlendedPattern: Pattern {
     override func patternAt(point: Tuple) -> Color {
         let colorA = a.patternAt(point: point)
         let colorB = b.patternAt(point: point)
-        return colorA + colorB
+        return (colorA + colorB) / 2.0
     }
     
     var a = Pattern()

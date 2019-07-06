@@ -39,7 +39,7 @@ class Shape : Equatable {
         let localNormal = localNormalAt(p: localPoint)
         var worldNormal = transform.invert().transpose() * localNormal
         worldNormal.w = 0.0
-        return worldNormal.normalize()
+        return worldNormal.normalied()
     }
     
     func localNormalAt(p: Tuple) -> Tuple {

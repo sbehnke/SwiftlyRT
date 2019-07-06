@@ -99,7 +99,7 @@ class WorldTests: XCTestCase {
         let r = Ray(origin: Tuple.Point(x: 0, y: 0, z: -5), direction: Tuple.Vector(x: 0, y: 0, z: 1))
         let shape = w.objects[0]
         let i = Intersection(t: 4, object: shape)
-        let comps = i.prepareCopmutation(ray: r)
+        let comps = i.prepareComputation(ray: r)
         let c = w.shadeHit(computation: comps)
         XCTAssertEqual(Color.init(r: 0.38066, g: 0.47583, b: 0.2855), c)
     }
@@ -120,7 +120,7 @@ class WorldTests: XCTestCase {
         let r = Ray(origin: Tuple.Point(x: 0, y: 0, z: 0), direction: Tuple.Vector(x: 0, y: 0, z: 1))
         let shape = w.objects[1]
         let i = Intersection(t: 0.5, object: shape)
-        let comps = i.prepareCopmutation(ray: r)
+        let comps = i.prepareComputation(ray: r)
         let c = w.shadeHit(computation: comps)
         if w.isShadowed(point: comps.point) {
             XCTAssertEqual(Color.init(r: 0.1, g: 0.1, b: 0.1), c)
@@ -246,7 +246,7 @@ class WorldTests: XCTestCase {
         
         let r = Ray(origin: .Point(x: 0, y: 0, z: 0), direction: .Vector(x: 0, y: 0, z: 1))
         let i = Intersection(t: 4, object: s2)
-        let comps = i.prepareCopmutation(ray: r)
+        let comps = i.prepareComputation(ray: r)
         let c = w.shadeHit(computation: comps)
         XCTAssertEqual(c, Color(r: 0.1, g: 0.1, b: 0.1))
     }
@@ -267,7 +267,7 @@ class WorldTests: XCTestCase {
         let shape = w.objects[1]
         shape.material.ambient = 1
         let i = Intersection(t: 1, object: shape)
-        let comps = i.prepareCopmutation(ray: r)
+        let comps = i.prepareComputation(ray: r)
         let color = w.reflectedColor(computation: comps)
         XCTAssertEqual(color, Color.black)
     }
@@ -293,7 +293,7 @@ class WorldTests: XCTestCase {
         w.objects.append(shape)
         let r = Ray(origin: .Point(x: 0, y: 0, z: -3), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
         let i = Intersection(t: sqrt(2.0), object: shape)
-        let comps = i.prepareCopmutation(ray: r)
+        let comps = i.prepareComputation(ray: r)
         let color = w.reflectedColor(computation: comps)
         XCTAssertEqual(color, Color(r: 0.1903322, g: 0.23791523, b: 0.14274916))
     }
@@ -318,7 +318,7 @@ class WorldTests: XCTestCase {
         w.objects.append(shape)
         let r = Ray(origin: .Point(x: 0, y: 0, z: -3), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
         let i = Intersection(t: sqrt(2.0), object: shape)
-        let comps = i.prepareCopmutation(ray: r)
+        let comps = i.prepareComputation(ray: r)
         let color = w.shadeHit(computation: comps)
         XCTAssertEqual(color, Color(r: 0.87675726, g: 0.9243403, b: 0.8291743))
     }
@@ -376,7 +376,7 @@ class WorldTests: XCTestCase {
         
         let r = Ray(origin: .Point(x: 0, y: 0, z: -3), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
         let i = Intersection(t: sqrt(2), object: shape)
-        let comps = i.prepareCopmutation(ray: r)
+        let comps = i.prepareComputation(ray: r)
         let color = w.reflectedColor(computation: comps, remaining: 0)
         XCTAssertEqual(color, Color.black)
     }
@@ -395,7 +395,7 @@ class WorldTests: XCTestCase {
         let shape = w.objects.first!
         let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
         let xs = [Intersection(t: 4, object: shape), Intersection(t: 6, object: shape)]
-        let comps = Intersection.prepareComputation(i: xs.first!, ray: r, xs: xs)
+        let comps = xs.first!.prepareComputation(ray: r, xs: xs)
         let c = w.refractedColor(computation: comps, remaining: 5)
         XCTAssertEqual(c, Color.black)
     }
@@ -419,7 +419,7 @@ class WorldTests: XCTestCase {
         shape.material.refractiveIndex = 1.5
         let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
         let xs = [Intersection(t: 4, object: shape), Intersection(t: 6, object: shape)]
-        let comps = Intersection.prepareComputation(i: xs.first!, ray: r, xs: xs)
+        let comps = xs.first!.prepareComputation(ray: r, xs: xs)
         let c = w.refractedColor(computation: comps, remaining: 0)
         XCTAssertEqual(c, Color.black)
     }
@@ -445,7 +445,7 @@ class WorldTests: XCTestCase {
         shape.material.refractiveIndex = 1.5
         let r = Ray(origin: .Point(x: 0, y: 0, z: sqrt(2)/2), direction: .Vector(x: 0, y: 1, z: 0))
         let xs = [Intersection(t: -sqrt(2)/2, object: shape), Intersection(t: sqrt(2)/2, object: shape)]
-        let comps = Intersection.prepareComputation(i: xs.last!, ray: r, xs: xs)
+        let comps = xs.last!.prepareComputation(ray: r, xs: xs)
         let c = w.refractedColor(computation: comps, remaining: 5)
         XCTAssertEqual(c, Color.black)
     }
@@ -482,7 +482,7 @@ class WorldTests: XCTestCase {
                   Intersection(t: 0.4899, object: B),
                   Intersection(t: 0.9899, object: A)]
         
-        let comps = xs[2].prepareCopmutation(ray: r, xs: xs)
+        let comps = xs[2].prepareComputation(ray: r, xs: xs)
         let c = w.refractedColor(computation: comps, remaining: 5)
         XCTAssertEqual(c, Color(r: 0, g: 0.99887455, b: 0.047218982))
     }
@@ -521,7 +521,7 @@ class WorldTests: XCTestCase {
         
         let r = Ray(origin: .Point(x: 0, y: 0, z: -3), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
         let xs = [Intersection(t: sqrt(2), object: floor)]
-        let comps = xs[0].prepareCopmutation(ray: r, xs: xs)
+        let comps = xs[0].prepareComputation(ray: r, xs: xs)
         let color = w.shadeHit(computation: comps, remaining: 5)
         
         XCTAssertEqual(color, Color(r: 0.93642, g: 0.68642, b: 0.68642))
@@ -563,7 +563,7 @@ class WorldTests: XCTestCase {
         w.objects.append(ball)
         
         let xs = [Intersection(t: sqrt(2), object: floor)]
-        let comps = xs[0].prepareCopmutation(ray: r, xs: xs)
+        let comps = xs[0].prepareComputation(ray: r, xs: xs)
         let color = w.shadeHit(computation: comps, remaining: 5)
         XCTAssertEqual(color, Color(r: 0.93391, g: 0.69643, b: 0.69243))
     }

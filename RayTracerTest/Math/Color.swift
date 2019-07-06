@@ -17,7 +17,6 @@ struct Color: Equatable, AdditiveArithmetic {
         lhs.r *= rhs;
         lhs.g *= rhs;
         lhs.b *= rhs;
-//        lhs.a *= rhs;
     }
     
     static func *= (lhs: inout Color, rhs: Color) {
@@ -30,21 +29,18 @@ struct Color: Equatable, AdditiveArithmetic {
         lhs.r /= rhs;
         lhs.g /= rhs;
         lhs.b /= rhs;
-//        lhs.a /= rhs;
     }
     
     static func += (lhs: inout Color, rhs: Color) {
         lhs.r += rhs.r
         lhs.g += rhs.g
         lhs.b += rhs.b
-//        lhs.a += rhs.a
     }
     
     static func -= (lhs: inout Color, rhs: Color) {
         lhs.r -= rhs.r
         lhs.g -= rhs.g
         lhs.b -= rhs.b
-//        lhs.a -= rhs.a
     }
     
     static func + (lhs: Color, rhs: Color) -> Color {
@@ -86,8 +82,7 @@ struct Color: Equatable, AdditiveArithmetic {
     static func == (lhs: Color, rhs: Color) -> Bool {
         return almostEqual(lhs: lhs.r, rhs: rhs.r) &&
             almostEqual(lhs: lhs.g, rhs: rhs.g) &&
-            almostEqual(lhs: lhs.b, rhs: rhs.b) /* &&
-            almostEqual(lhs: lhs.a, rhs: rhs.a) */
+            almostEqual(lhs: lhs.b, rhs: rhs.b)
     }
     
     static func almostEqual(lhs: Float, rhs: Float) -> Bool {
@@ -99,12 +94,11 @@ struct Color: Equatable, AdditiveArithmetic {
         self.r = r
         self.g = g
         self.b = b
-//        self.a = 1.0
     }
     
     static func normalize(rhs: Color) -> Color {
         let mag = rhs.magnitude;
-        return Color(r: rhs.r / mag, g: rhs.g / mag, b: rhs.b / mag/*, a: rhs.a / mag */)
+        return Color(r: rhs.r / mag, g: rhs.g / mag, b: rhs.b / mag)
     }
     
     mutating func normalize() {
@@ -112,18 +106,18 @@ struct Color: Equatable, AdditiveArithmetic {
         r /= mag
         g /= mag
         b /= mag
-//        a /= mag
     }
     
     static func dot(lhs: Color, rhs: Color) -> Float {
         return lhs.r * rhs.r +
             lhs.g * rhs.g +
-            lhs.b * rhs.b /* +
-            lhs.a * rhs.a */
+            lhs.b * rhs.b
     }
     
-    func dot(rhs: Color) -> Float {
-        return Color.dot(lhs: self, rhs: rhs)
+    func dot(_ rhs: Color) -> Float {
+        return self.r * rhs.r +
+               self.g * rhs.g +
+               self.b * rhs.b
     }
     
     static func cross(lhs: Color, rhs: Color) -> Color {
@@ -132,33 +126,17 @@ struct Color: Equatable, AdditiveArithmetic {
                      b: lhs.r * rhs.g - lhs.g * rhs.r)
     }
     
-    func cross(rhs: Color) -> Color {
-        return Color.cross(lhs: self, rhs: rhs)
+    func cross(_ rhs: Color) -> Color {
+        return Color(r: self.g * rhs.b - self.b * rhs.g,
+                     g: self.b * rhs.r - self.r * rhs.b,
+                     b: self.r * rhs.g - self.g * rhs.r)
     }
     
-    var magnitude : Float {
-        get {
-            return sqrt((r * r) + (g * g) + (b * b)/* + (a * a) */)
-        }
-    }
+    var magnitude : Float { return sqrt((r * r) + (g * g) + (b * b)) }
     
-    var rByte : UInt8 {
-        get {
-            return UInt8(round(255.0 * clamp(value: r)))
-        }
-    }
-    
-    var bByte : UInt8 {
-        get {
-            return UInt8(round(255.0 * clamp(value: b)))
-        }
-    }
-    
-    var gByte : UInt8 {
-        get {
-            return UInt8(round(255.0 * clamp(value: g)))
-        }
-    }
+    var rByte : UInt8 { return UInt8(round(255.0 * clamp(value: r))) }
+    var bByte : UInt8 { return UInt8(round(255.0 * clamp(value: b))) }
+    var gByte : UInt8 { return UInt8(round(255.0 * clamp(value: g))) }
     
     private func clamp(value : Float, min: Float = 0.0, max: Float = 1.0) -> Float {
         if (value > max) {
@@ -195,23 +173,10 @@ struct Color: Equatable, AdditiveArithmetic {
             backing[2] = newValue
         }
     }
-
-//    var a: Float {
-//        get {
-//            return backing[3]
-//        }
-//        set {
-//            backing[3] = newValue
-//        }
-//    }
     
     var description : String {
-        get {
-            return "(\(rByte), \(gByte), \(bByte))"
-        }
+        return "(\(rByte), \(gByte), \(bByte))"
     }
 
-    
     private var backing = Array<Float>(repeating: 0.0, count: 3)
-
 }

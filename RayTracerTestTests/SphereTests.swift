@@ -224,7 +224,7 @@ class SphereTests: XCTestCase {
         let value = sqrt(3.0) / 3.0
         let s = Sphere()
         let n = s.normalAt(p: Tuple.Point(x: value, y: value, z: value))
-        XCTAssertEqual(n, n.normalize())
+        XCTAssertEqual(n, n.normalied())
     }
     
     func testComputingTheNormalOnTranslatedSphere() {

@@ -28,6 +28,39 @@ struct Material : Equatable {
         self.shininess = shininess
     }
     
+    func lighting(object: Shape?, light: PointLight, position: Tuple, eyeVector: Tuple, normalVector: Tuple, inShadow: Bool = false) -> Color {
+        var specular: Color
+        var diffuse: Color
+        
+        let color = pattern?.patternAtShape(object: object, point: position) ?? self.color
+        let effectiveColor = color * light.intensity
+        let lightv = (light.position - position).normalied()
+        let ambient = effectiveColor * self.ambient
+        let lightDotNormal = lightv.dot(normalVector)
+        
+        if inShadow {
+            return ambient
+        }
+        
+        if lightDotNormal < 0 {
+            diffuse = Color.black
+            specular = Color.black
+        } else {
+            diffuse = effectiveColor * self.diffuse * lightDotNormal
+            
+            let reflectv = -lightv.reflected(normal: normalVector)
+            let reflectDotEye = reflectv.dot(eyeVector)
+            
+            if reflectDotEye <= 0 {
+                specular = Color.black
+            } else {
+                let factor = pow(reflectDotEye, Double(shininess))
+                specular = light.intensity * self.specular * factor
+            }
+        }
+        return ambient + diffuse + specular
+    }
+    
     var pattern: Pattern? = nil
     var color = Color(r: 1, g: 1, b: 1)
     var ambient: Float = 0.1

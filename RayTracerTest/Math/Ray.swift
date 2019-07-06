@@ -18,32 +18,20 @@ struct Ray {
         self.direction = direction
     }
     
-    static func position(ray: Ray, time: Double) -> Tuple {
-        return ray.origin + ray.direction * time
-    }
-    
     func position(time: Double) -> Tuple {
-        return Ray.position(ray: self, time: time)
-    }
-    
-    static func translate(ray: Ray, vector: Tuple) -> Ray {
-        assert(vector.isVector())
-        let transform = Matrix4x4.translate(x: vector.x, y: vector.y, z: vector.z)
-        return transform * ray
+        return origin + direction * time
     }
     
     func translate(vector: Tuple) -> Ray {
-        return Ray.translate(ray: self, vector: vector)
-    }
-    
-    static func scale(ray: Ray, vector: Tuple) -> Ray {
         assert(vector.isVector())
-        let transform = Matrix4x4.scale(x: vector.x, y: vector.y, z: vector.z)
-        return transform * ray
+        let transform = Matrix4x4.translate(x: vector.x, y: vector.y, z: vector.z)
+        return transform * self
     }
     
     func scale(vector: Tuple) -> Ray {
-        return Ray.scale(ray: self, vector: vector)
+        assert(vector.isVector())
+        let transform = Matrix4x4.scale(x: vector.x, y: vector.y, z: vector.z)
+        return transform * self
     }
     
     var origin = Tuple.Point()

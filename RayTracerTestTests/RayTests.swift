@@ -43,10 +43,10 @@ class RayTests: XCTestCase {
 //    And position(r, 2.5) = point(4.5, 3, 4)
         
         let r = Ray(origin: Tuple.Point(x: 2, y: 3, z: 4), direction: Tuple.Vector(x: 1, y: 0, z: 0))
-        XCTAssertEqual(Ray.position(ray: r, time: 0), Tuple.Point(x: 2, y: 3, z: 4))
-        XCTAssertEqual(Ray.position(ray: r, time: 1), Tuple.Point(x: 3, y: 3, z: 4))
-        XCTAssertEqual(Ray.position(ray: r, time: -1), Tuple.Point(x: 1, y: 3, z: 4))
-        XCTAssertEqual(Ray.position(ray: r, time: 2.5), Tuple.Point(x: 4.5, y: 3, z: 4))
+        XCTAssertEqual(r.position(time: 0), Tuple.Point(x: 2, y: 3, z: 4))
+        XCTAssertEqual(r.position(time: 1), Tuple.Point(x: 3, y: 3, z: 4))
+        XCTAssertEqual(r.position(time: -1), Tuple.Point(x: 1, y: 3, z: 4))
+        XCTAssertEqual(r.position(time: 2.5), Tuple.Point(x: 4.5, y: 3, z: 4))
     }
     
     func testTranslatingRay() {
@@ -59,7 +59,7 @@ class RayTests: XCTestCase {
         
         let r = Ray(origin: Tuple.Point(x: 1, y: 2, z: 3), direction: Tuple.Vector(x: 0, y: 1, z: 0))
         let m = Tuple.Vector(x: 3, y: 4, z: 5)
-        let r2 = Ray.translate(ray: r, vector: m)
+        let r2 = r.translate(vector: m)
         XCTAssertEqual(r2.origin, Tuple.Point(x: 4, y: 6, z: 8))
         XCTAssertEqual(r2.direction, Tuple.Vector(x: 0, y: 1, z: 0))
     }
@@ -74,7 +74,7 @@ class RayTests: XCTestCase {
         
         let r = Ray(origin: Tuple.Point(x: 1, y: 2, z: 3), direction: Tuple.Vector(x: 0, y: 1, z: 0))
         let m = Tuple.Vector(x: 2, y: 3, z: 4)
-        let r2 = Ray.scale(ray: r, vector: m)
+        let r2 = r.scale(vector: m)
         XCTAssertEqual(r2.origin, Tuple.Point(x: 2, y: 6, z: 12))
         XCTAssertEqual(r2.direction, Tuple.Vector(x: 0, y: 3, z: 0))
     }

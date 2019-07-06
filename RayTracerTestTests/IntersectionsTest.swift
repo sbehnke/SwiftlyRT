@@ -47,7 +47,7 @@ class IntersectionsTest: XCTestCase {
         let r = Ray(origin: Tuple.Point(x: 0, y: 0, z: -5), direction: Tuple.Vector(x: 0, y: 0, z: 1))
         let shape = Sphere()
         let i = shape.intersects(ray: r)
-        let comps = i[0].prepareCopmutation(ray: r)
+        let comps = i[0].prepareComputation(ray: r)
         XCTAssertEqual(comps.t, i[0].t)
         XCTAssertEqual(comps.object, i[0].object)
         XCTAssertEqual(comps.point, Tuple.Point(x: 0, y: 0, z: -1))
@@ -66,7 +66,7 @@ class IntersectionsTest: XCTestCase {
         let shape = Plane()
         let r = Ray(origin: .Point(x: 0, y: 1, z: -1), direction: .Vector(x: 0, y: -sqrt(2)/2, z: sqrt(2)/2))
         let i = Intersection(t: sqrt(2), object: shape)
-        let comps = i.prepareCopmutation(ray: r)
+        let comps = i.prepareComputation(ray: r)
         XCTAssertEqual(comps.reflectVector, Tuple.Vector(x: 0, y: sqrt(2)/2, z: sqrt(2)/2))
     }
     
@@ -82,7 +82,7 @@ class IntersectionsTest: XCTestCase {
         let shape = Sphere()
         let i = shape.intersects(ray: r)
         let hit = Intersection.hit(i)
-        let comps = hit!.prepareCopmutation(ray: r)
+        let comps = hit!.prepareComputation(ray: r)
         XCTAssertFalse(comps.inside)
     }
     
@@ -102,7 +102,7 @@ class IntersectionsTest: XCTestCase {
         let shape = Sphere()
         let i = shape.intersects(ray: r)
         let hit = Intersection.hit(i)
-        let comps = hit!.prepareCopmutation(ray: r)
+        let comps = hit!.prepareComputation(ray: r)
         XCTAssertEqual(comps.point, Tuple.Point(x: 0, y: 0, z: 1))
         XCTAssertEqual(comps.eyeVector, Tuple.Vector(x: 0, y: 0, z: -1))
         XCTAssertTrue(comps.inside)
@@ -123,7 +123,7 @@ class IntersectionsTest: XCTestCase {
         let shape = Sphere()
         shape.transform = Matrix4x4.translate(x: 0, y: 0, z: 1)
         let i = Intersection(t: 5, object: shape)
-        let comps = i.prepareCopmutation(ray: r)
+        let comps = i.prepareComputation(ray: r)
         XCTAssertTrue(comps.overPoint.z < -Tuple.epsilon / 2)
         XCTAssertTrue(comps.point.z > comps.overPoint.z)
     }
@@ -144,7 +144,7 @@ class IntersectionsTest: XCTestCase {
         shape.transform = .translate(x: 0, y: 0, z: 1)
         let i = Intersection(t: 5, object: shape)
         let xs = [i]
-        let comps = i.prepareCopmutation(ray: r, xs: xs)
+        let comps = i.prepareComputation(ray: r, xs: xs)
         XCTAssertTrue(comps.underPoint.z > Tuple.epsilon / 2.0)
         XCTAssertTrue(comps.point.z < comps.underPoint.z)
     }
@@ -291,7 +291,7 @@ class IntersectionsTest: XCTestCase {
         let n2 = [1.5, 2.0, 2.5, 2.5, 1.5, 1.0]
         
         for index in 0..<xs.count {
-            let comps = xs[index].prepareCopmutation(ray: r, xs: xs)
+            let comps = xs[index].prepareComputation(ray: r, xs: xs)
             XCTAssertEqual(comps.n1, n1[index])
             XCTAssertEqual(comps.n2, n2[index])
         }
@@ -309,7 +309,7 @@ class IntersectionsTest: XCTestCase {
         let shape = Sphere.GlassSphere()
         let r = Ray(origin: .Point(x: 0, y: 0, z: sqrt(2)/2) , direction: .Vector(x: 0, y: 1, z: 0))
         let xs = [Intersection(t: -sqrt(2)/2, object: shape), Intersection(t: sqrt(2)/2, object: shape)]
-        let comps = xs.last!.prepareCopmutation(ray: r, xs: xs)
+        let comps = xs.last!.prepareComputation(ray: r, xs: xs)
         let reflectance = comps.schlick()
         XCTAssertEqual(reflectance, 1.0, accuracy: Tuple.epsilon)
     }
@@ -326,7 +326,7 @@ class IntersectionsTest: XCTestCase {
         let shape = Sphere.GlassSphere()
         let r = Ray(origin: .Point(x: 0, y: 0, z: 0), direction: .Vector(x: 0, y: 1, z: 0))
         let xs = [Intersection(t: -1, object: shape), Intersection(t: 1, object: shape)]
-        let comps = xs[1].prepareCopmutation(ray: r, xs: xs)
+        let comps = xs[1].prepareComputation(ray: r, xs: xs)
         let reflectance = comps.schlick()
         XCTAssertEqual(0.04, reflectance, accuracy: Tuple.epsilon)
     }
@@ -343,7 +343,7 @@ class IntersectionsTest: XCTestCase {
         let shape = Sphere.GlassSphere()
         let r = Ray(origin: .Point(x: 0, y: 0.99, z: -2), direction: .Vector(x: 0, y: 0, z: 1))
         let xs = [Intersection(t: 1.8589, object: shape)]
-        let comps = xs[0].prepareCopmutation(ray: r, xs: xs)
+        let comps = xs[0].prepareComputation(ray: r, xs: xs)
         let reflectance = comps.schlick()
         XCTAssertEqual(0.48873, reflectance, accuracy: Tuple.epsilon)
     }

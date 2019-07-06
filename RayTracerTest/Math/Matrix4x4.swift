@@ -357,10 +357,10 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         assert(to.isPoint())
         assert(up.isVector())
         
-        let forward = (to - from).normalize()
-        let upn = up.normalize()
-        let left = forward.cross(rhs: upn)
-        let trueUp = left.cross(rhs: forward)
+        let forward = (to - from).normalied()
+        let upn = up.normalied()
+        let left = forward.cross(upn)
+        let trueUp = left.cross(forward)
         
         let orientation = Matrix4x4([left.x,     left.y,     left.z,     0,
                                      trueUp.x,   trueUp.y,   trueUp.z,   0,

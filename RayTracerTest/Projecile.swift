@@ -8,14 +8,9 @@
 
 import Foundation
 
-class Projectile {
+struct Projectile {
     
-    init(position: Tuple, velocity: Tuple) {
-        self.position = position
-        self.velocity = velocity
-    }
-    
-    func tick(environment: Environment) {
+    mutating func tick(environment: Environment) {
         position += velocity
         velocity = velocity + environment.gravity + environment.wind
     }

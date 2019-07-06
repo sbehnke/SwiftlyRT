@@ -161,10 +161,10 @@ class TupleTests: XCTestCase {
     }
     
     func testNormalization() {
-        var v = Tuple.Vector(x: 4, y: 0, z: 0).normalize()
+        var v = Tuple.Vector(x: 4, y: 0, z: 0).normalied()
         XCTAssertEqual(v, Tuple.Vector(x: 1, y: 0, z: 0))
         
-        v = Tuple.Vector(x: 1, y: 2, z: 3).normalize()
+        v = Tuple.Vector(x: 1, y: 2, z: 3).normalied()
         XCTAssertEqual(v.x, 0.26726, accuracy: 0.00001)
         XCTAssertEqual(v.y, 0.53452, accuracy: 0.00001)
         XCTAssertEqual(v.z, 0.80178, accuracy: 0.00001)
@@ -175,7 +175,7 @@ class TupleTests: XCTestCase {
     func testDotProduct() {
         let a = Tuple.Vector(x: 1, y: 2, z: 3)
         let b = Tuple.Vector(x: 2, y: 3, z: 4)
-        let dotProduct = a.dot(rhs: b)
+        let dotProduct = a.dot(b)
         XCTAssertEqual(20.0, dotProduct)
     }
     
@@ -188,8 +188,8 @@ class TupleTests: XCTestCase {
 
         let a = Tuple.Vector(x: 1, y: 2, z: 3)
         let b = Tuple.Vector(x: 2, y: 3, z: 4)
-        XCTAssertEqual(a.cross(rhs: b), Tuple.Vector(x: -1, y: 2, z: -1))
-        XCTAssertEqual(b.cross(rhs: a), Tuple.Vector(x: 1, y: -2, z: 1))
+        XCTAssertEqual(a.cross(b), Tuple.Vector(x: -1, y: 2, z: -1))
+        XCTAssertEqual(b.cross(a), Tuple.Vector(x: 1, y: -2, z: 1))
     }
     
     func testAddTuples() {
@@ -331,7 +331,7 @@ class TupleTests: XCTestCase {
         //    Then normalize(v) = vector(1, 0, 0)
         
         let v = Tuple.Vector(x: 4.0, y: 0, z: 0)
-        XCTAssertEqual(v.normalize(), Tuple.Vector(x: 1, y: 0, z: 0))
+        XCTAssertEqual(v.normalied(), Tuple.Vector(x: 1, y: 0, z: 0))
     }
     
     func testNormalizingVector2() {
@@ -342,7 +342,7 @@ class TupleTests: XCTestCase {
         
         let v = Tuple.Vector(x: 1.0, y: 2.0, z: 3.0)
         let mag = sqrt(14.0)
-        XCTAssertEqual(v.normalize(), Tuple.Vector(x: 1.0/mag, y: 2.0/mag, z: 3.0/mag))
+        XCTAssertEqual(v.normalied(), Tuple.Vector(x: 1.0/mag, y: 2.0/mag, z: 3.0/mag))
     }
     
     func testMagnitudeOfNormalizedVector() {
@@ -350,7 +350,7 @@ class TupleTests: XCTestCase {
         //    Given v ← vector(1, 2, 3)
         //    When norm ← normalize(v)
         //    Then magnitude(norm) = 1
-        let v = Tuple.Vector(x: 1.0, y: 2.0, z: 3.0).normalize()
+        let v = Tuple.Vector(x: 1.0, y: 2.0, z: 3.0).normalied()
         XCTAssertEqual(1.0, v.magnitude)
     }
     
@@ -362,7 +362,7 @@ class TupleTests: XCTestCase {
         
         let a = Tuple.Vector(x: 1, y: 2, z: 3)
         let b = Tuple.Vector(x: 2, y: 3, z: 4)
-        XCTAssertEqual(Tuple.dot(lhs: a, rhs: b), 20.0)
+        XCTAssertEqual(a.dot(b), 20.0)
     }
     
     func testCrossProductOfVectors() {
@@ -374,8 +374,8 @@ class TupleTests: XCTestCase {
         
         let a = Tuple.Vector(x: 1, y: 2, z: 3)
         let b = Tuple.Vector(x: 2, y: 3, z: 4)
-        XCTAssertEqual(Tuple.cross(lhs: a, rhs: b), Tuple.Vector(x: -1, y: 2, z: -1))
-        XCTAssertEqual(Tuple.cross(lhs: b, rhs: a), Tuple.Vector(x: 1, y: -2, z: 1))
+        XCTAssertEqual(a.cross(b), Tuple.Vector(x: -1, y: 2, z: -1))
+        XCTAssertEqual(b.cross(a), Tuple.Vector(x: 1, y: -2, z: 1))
     }
     
     func testColorComponents() {
@@ -441,7 +441,7 @@ class TupleTests: XCTestCase {
 
         let v = Tuple.Vector(x: 1, y: -1, z: 0)
         let n = Tuple.Vector(x: 0, y: 1, z: 0)
-        let r = v.reflect(normal: n)
+        let r = v.reflected(normal: n)
         XCTAssertEqual(r, Tuple.Vector(x: 1, y: 1, z: 0))
     }
     
@@ -454,7 +454,7 @@ class TupleTests: XCTestCase {
 
         let v = Tuple.Vector(x: 0, y: -1, z: 0)
         let n = Tuple.Vector(x: sqrt(2.0)/2.0, y: sqrt(2.0)/2.0, z: 0)
-        let r = v.reflect(normal: n)
+        let r = v.reflected(normal: n)
         XCTAssertEqual(r, Tuple.Vector(x: 1, y: 0, z: 0))
 
     }

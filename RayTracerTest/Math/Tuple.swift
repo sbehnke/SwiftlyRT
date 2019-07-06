@@ -119,12 +119,11 @@ struct Tuple: Equatable, AdditiveArithmetic {
         return abs(lhs - rhs) < epsilon
     }
     
-    static func normalize(rhs: Tuple) -> Tuple {
-        let mag = rhs.magnitude;
-        return Tuple(x: rhs.x / mag, y: rhs.y / mag, z: rhs.z / mag, w: rhs.w / mag)
+    mutating func normalize() {
+        self /= magnitude
     }
     
-    func normalize() -> Tuple {
+    func normalied() -> Tuple {
         let mag = magnitude;
         return Tuple(x: x/mag, y: y/mag, z: z/mag, w: w/mag)
     }
@@ -136,8 +135,11 @@ struct Tuple: Equatable, AdditiveArithmetic {
                lhs.w * rhs.w
     }
     
-    func dot(rhs: Tuple) -> Double {
-        return Tuple.dot(lhs: self, rhs: rhs)
+    func dot(_ rhs: Tuple) -> Double {
+        return self.x * rhs.x +
+               self.y * rhs.y +
+               self.z * rhs.z +
+               self.w * rhs.w
     }
     
     static func cross(lhs: Tuple, rhs: Tuple) -> Tuple {
@@ -146,16 +148,14 @@ struct Tuple: Equatable, AdditiveArithmetic {
                      z: lhs.x * rhs.y - lhs.y * rhs.x)
     }
     
-    func cross(rhs: Tuple) -> Tuple {
-        return Tuple.cross(lhs: self, rhs: rhs)
-    }
-    
-    static func reflect(lhs: Tuple, normal: Tuple) -> Tuple {
-        return lhs - normal * 2 * Tuple.dot(lhs: lhs, rhs: normal)
+    func cross(_ rhs: Tuple) -> Tuple {
+        return Tuple(x: self.y * rhs.z - self.z * rhs.y,
+                     y: self.z * rhs.x - self.x * rhs.z,
+                     z: self.x * rhs.y - self.y * rhs.x)
     }
 
-    func reflect(normal: Tuple) -> Tuple {
-        return Tuple.reflect(lhs: self, normal: normal)
+    func reflected(normal: Tuple) -> Tuple {
+        return self - normal * 2 * self.dot(normal)
     }
     
     func toColor() -> Color {
@@ -163,9 +163,7 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
     
     var magnitude : Double {
-        get {
-            return sqrt((x * x) + (y * y) + (z * z) + (w * w))
-        }
+        return sqrt((x * x) + (y * y) + (z * z) + (w * w))
     }
 
     subscript(index:Int) -> Double {
@@ -180,9 +178,7 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
     
     var description : String {
-        get {
-            return "[ \(x), \(y), \(z), \(w) ]"
-        }
+        return "[ \(x), \(y), \(z), \(w) ]"
     }
     
     var x: Double {
