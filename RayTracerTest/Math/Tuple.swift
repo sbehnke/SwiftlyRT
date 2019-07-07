@@ -128,7 +128,7 @@ struct Tuple: Equatable, AdditiveArithmetic {
         self /= magnitude
     }
     
-    func normalied() -> Tuple {
+    func normalized() -> Tuple {
         let mag = magnitude;
         return Tuple(x: x/mag, y: y/mag, z: z/mag, w: w/mag)
     }

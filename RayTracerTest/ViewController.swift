@@ -35,6 +35,8 @@ class ViewController: NSViewController {
         return corner
     }
     
+    @IBOutlet weak var TextField: NSTextField!
+    
     func hexagonEdge() -> Shape {
         let edge = Cylinder()
         edge.minimum = 0
@@ -54,15 +56,59 @@ class ViewController: NSViewController {
         return side
     }
     
+    func getColor(index: Int) -> Color {
+        if index == 0 {
+            return Color(r: 1, g: 1, b: 1)
+        }
+        
+        if index == 1 {
+            return Color(r: 1, g: 0, b: 0)
+        }
+        
+        if index == 2 {
+            return Color(r: 0.5, g: 0, b: 0)
+        }
+        
+        if index == 3 {
+            return Color(r: 0, g: 1, b: 0)
+        }
+        
+        if index == 4 {
+            return Color(r: 0, g: 0.5, b: 0)
+        }
+        
+        if index == 5 {
+            return Color(r: 0, g: 0, b: 1)
+        }
+        
+        if index == 0 {
+            return Color(r: 0, g: 0, b: 0.5)
+        }
+        
+        return Color(r: 0.25, g: 0.25, b: 0.25)
+    }
+    
     func hexagon() -> Group {
         let hex = Group()
         
-        for index in 1...6 {
+        
+        for index in 0...6 {
             let side = hexagonSide()
+            side.material.color = getColor(index: index)
             side.transform = Matrix4x4.rotatedY(Double(index) * Double(index) / 3.0)
             hex.addChild(side)
         }
         
+        return hex
+    }
+    
+    
+    func hexagon(_ whichSide: Int) -> Group {
+        let hex = Group()
+        let side = hexagonSide()
+        let rotation = Double(whichSide * whichSide) / 3.0
+        side.transform = Matrix4x4.rotatedY(rotation)
+        hex.addChild(side)
         return hex
     }
     
@@ -494,7 +540,10 @@ class ViewController: NSViewController {
 //            Matrix4x4.rotatedX(1.5708)
 //        southWall.material = wallMaterial
         
-        let hex = hexagon()
+        var hex = hexagon()
+        if (!TextField.stringValue.isEmpty) {
+            hex = hexagon(Int(TextField.stringValue) ?? 0)
+        }
         hex.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6) * Matrix4x4.rotatedZ(.pi / 3)
 //
 //        let s = Sphere()
@@ -611,7 +660,7 @@ class ViewController: NSViewController {
                 //        position ← point(world_x, world_y, wall_z)
                 let position = Tuple.Point(x: worldX, y: worldY, z: wallZ)
                 //        r ← ray(ray_origin, normalize(position - ray_origin))
-                let ray = Ray(origin: rayOrigin, direction: (position - rayOrigin).normalied())
+                let ray = Ray(origin: rayOrigin, direction: (position - rayOrigin).normalized())
                 //        xs ← intersect(shape, r)
                 let xs = shape.intersects(ray: ray)
                 //        if hit(xs) is defined

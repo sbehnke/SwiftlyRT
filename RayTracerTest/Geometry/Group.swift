@@ -29,7 +29,10 @@ class Group: Shape {
     override func localIntersects(ray: Ray) -> [Intersection] {
         var intersections: [Intersection] = []
         
-        if boundingBox().intersects(ray: ray) {
+        let box = boundingBox()
+        let intersects = box.intersects(ray: ray)
+        
+        if intersects {
             for child in children {
                 let xs = child.intersects(ray: ray)
                 intersections.append(contentsOf: xs)
@@ -62,6 +65,14 @@ class Group: Shape {
 //            end function
         
         children.removeAll()
+    }
+    
+    override var material: Material {
+        didSet {
+            for child in children {
+                child.material = material
+            }
+        }
     }
     
     var children: [Shape] = []

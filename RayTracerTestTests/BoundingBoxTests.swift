@@ -25,7 +25,9 @@ class BoundingBoxTests: XCTestCase {
 //        Then box.min = point(infinity, infinity, infinity)
 //        And box.max = point(-infinity, -infinity, -infinity)
 
-//        let box = BoundingBox()
+        let box = BoundingBox()
+        XCTAssertEqual(box.minimum, Tuple.Point(x: .infinity, y: .infinity, z: .infinity))
+        XCTAssertEqual(box.maximum, Tuple.Point(x: -.infinity, y: -.infinity, z: -.infinity))
     }
     
   
@@ -34,8 +36,11 @@ class BoundingBoxTests: XCTestCase {
 //        Given box ← bounding_box(min=point(-1, -2, -3) max=point(3, 2, 1))
 //        Then box.min = point(-1, -2, -3)
 //        And box.max = point(3, 2, 1)
+        
+        let box = BoundingBox(minimum: .Point(x: -1, y: -2, z: -3), maximum: .Point(x: 3, y: 2, z: 1))
 
-
+        XCTAssertEqual(box.minimum, Tuple.Point(x: -1, y: -2, z: -3))
+        XCTAssertEqual(box.maximum, Tuple.Point(x: 3, y: 2, z: 1))
     }
 
     func testAddingPointsToAnEmptyBoundingBox() {
@@ -48,7 +53,13 @@ class BoundingBoxTests: XCTestCase {
 //        Then box.min = point(-5, 0, -3)
 //        And box.max = point(7, 2, 0)
 
-        
+        var box = BoundingBox()
+        let p1 = Tuple.Point(x: -5, y: 2, z: 0)
+        let p2 = Tuple.Point(x: 7, y: 0, z: -3)
+        box.addPoint(point: p1)
+        box.addPoint(point: p2)
+        XCTAssertEqual(box.minimum, Tuple.Point(x: -5, y: 0, z: -3))
+        XCTAssertEqual(box.maximum, Tuple.Point(x: 7, y: 2, z: 0))
     }
     
     func testAddingOneBoxToAnother() {
@@ -59,6 +70,12 @@ class BoundingBoxTests: XCTestCase {
 //        Then box1.min = point(-5, -7, -2)
 //        And box1.max = point(14, 4, 8)
         
+        var box1 = BoundingBox(minimum: .Point(x: -5, y: -2, z: 0), maximum: .Point(x: 7, y: 4, z: 4))
+        let box2 = BoundingBox(minimum: .Point(x: 8, y: -7, z: -2), maximum: .Point(x: 14, y: 2, z: 8))
+        box1.addBox(box: box2)
+        
+        XCTAssertEqual(box1.minimum, Tuple.Point(x: -5, y: -7, z: -2))
+        XCTAssertEqual(box1.maximum, Tuple.Point(x: 14, y: 4, z: 8))
     }
     
     func testIfBoxContainsPoint() {
@@ -78,6 +95,24 @@ class BoundingBoxTests: XCTestCase {
 //        | point(13, 1, 3) | false  |
 //        | point(8, 5, 3)  | false  |
 //        | point(8, 1, 8)  | false  |
+        
+        let box = BoundingBox(minimum: .Point(x: 5, y: -2, z: 0), maximum: .Point(x: 11, y: 4, z: 7))
+        
+        let points: [Tuple] = [.Point(x: 5,  y: -2, z: 0),
+                               .Point(x: 11, y:  4, z: 7),
+                               .Point(x: 8,  y: 1,  z: 3),
+                               .Point(x: 3,  y: 0,  z: 3),
+                               .Point(x: 8,  y: -4, z: 3),
+                               .Point(x: 8,  y: 1,  z: -1),
+                               .Point(x: 13, y:  1, z: 3),
+                               .Point(x: 8,  y: 5,  z: 3),
+                               .Point(x: 8,  y: 1,  z: 8),]
+
+        let results: [Bool] = [true, true, true, false, false, false, false, false, false]
+        
+        for index in 0..<results.count {
+            XCTAssertEqual(box.containsPoint(point: points[index]), results[index])
+        }
     }
     
     func testBoxContainsBox() {
@@ -93,6 +128,24 @@ class BoundingBoxTests: XCTestCase {
 //        | point(4, -3, -1) | point(10, 3, 6) | false  |
 //        | point(6, -1, 1)  | point(12, 5, 8) | false  |
         
+        let box = BoundingBox(minimum: .Point(x: 5, y: -2, z: 0), maximum: .Point(x: 11, y: 4, z: 7))
+
+        let mins: [Tuple] = [.Point(x: 5, y: -2, z: 0),
+                             .Point(x: 6, y: -1, z: 1),
+                             .Point(x: 4, y: -3, z: -1),
+                             .Point(x: 6, y: -1, z: 1),]
+        
+        let maxs: [Tuple] = [.Point(x: 11, y: 4, z: 7),
+                             .Point(x: 10, y: 3, z: 6),
+                             .Point(x: 10, y: 3, z: 6),
+                             .Point(x: 12, y: 5, z: 8),]
+        
+        let results: [Bool] = [true, true, false, false]
+        
+        for index in 0..<results.count {
+            let box2 = BoundingBox(minimum: mins[index], maximum: maxs[index])
+            XCTAssertEqual(box.containsBox(box: box2), results[index])
+        }
     }
     
     func testTransformations() {
@@ -103,7 +156,12 @@ class BoundingBoxTests: XCTestCase {
 //        Then box2.min = point(-1.4142, -1.7071, -1.7071)
 //        And box2.max = point(1.4142, 1.7071, 1.7071)
         
-        
+        let box = BoundingBox(minimum: .Point(x: -1, y: -1, z: -1), maximum: .Point(x: 1, y: 1, z: 1))
+        let matrix = Matrix4x4.rotatedX(.pi / 4) * Matrix4x4.rotatedY(.pi / 4)
+        let box2 = box.transform(transform: matrix)
+
+        XCTAssertEqual(box2.minimum, Tuple.Point(x: -1.414213562373095, y: -1.7071067811865475, z: -1.7071067811865475))
+        XCTAssertEqual(box2.maximum, Tuple.Point(x: 1.414213562373095, y: 1.7071067811865475, z: 1.7071067811865475))
     }
     
     func testSplittingPerfectCube() {
@@ -115,6 +173,12 @@ class BoundingBoxTests: XCTestCase {
 //        And right.min = point(4, -4, -5)
 //        And right.max = point(9, 6, 5)
         
+        let box = BoundingBox(minimum: .Point(x: -1, y: -4, z: -5), maximum: .Point(x: 9, y: 6, z: 5))
+        let (left, right) = box.splitBoundingBox()
+        XCTAssertEqual(left.minimum, Tuple.Point(x: -1, y: -4, z: -5))
+        XCTAssertEqual(left.maximum, Tuple.Point(x: 4, y: 6, z: 5))
+        XCTAssertEqual(right.minimum, Tuple.Point(x: 4, y: -4, z: -5))
+        XCTAssertEqual(right.maximum, Tuple.Point(x: 9, y: 6, z: 5))
     }
     
     func testSplittingXWideBox() {
@@ -125,6 +189,13 @@ class BoundingBoxTests: XCTestCase {
 //    And left.max = point(4, 5.5, 3)
 //    And right.min = point(4, -2, -3)
 //    And right.max = point(9, 5.5, 3)
+        
+        let box = BoundingBox(minimum: .Point(x: -1, y: -2, z: -3), maximum: .Point(x: 9, y: 5.5, z: 3))
+        let (left, right) = box.splitBoundingBox()
+        XCTAssertEqual(left.minimum, Tuple.Point(x: -1, y: -2, z: -3))
+        XCTAssertEqual(left.maximum, Tuple.Point(x: 4, y: 5.5, z: 3))
+        XCTAssertEqual(right.minimum, Tuple.Point(x: 4, y: -2, z: -3))
+        XCTAssertEqual(right.maximum, Tuple.Point(x: 9, y: 5.5, z: 3))
     }
     
     func testSplittingYWideBox() {
@@ -135,6 +206,13 @@ class BoundingBoxTests: XCTestCase {
 //    And left.max = point(5, 3, 3)
 //    And right.min = point(-1, 3, -3)
 //    And right.max = point(5, 8, 3)
+        
+        let box = BoundingBox(minimum: .Point(x: -1, y: -2, z: -3), maximum: .Point(x: 5, y: 8, z: 3))
+        let (left, right) = box.splitBoundingBox()
+        XCTAssertEqual(left.minimum, Tuple.Point(x: -1, y: -2, z: -3))
+        XCTAssertEqual(left.maximum, Tuple.Point(x: 5, y: 3, z: 3))
+        XCTAssertEqual(right.minimum, Tuple.Point(x: -1, y: 3, z: -3))
+        XCTAssertEqual(right.maximum, Tuple.Point(x: 5, y: 8, z: 3))
     }
     
     func testSplittingZWideBox() {
@@ -145,5 +223,12 @@ class BoundingBoxTests: XCTestCase {
 //    And left.max = point(5, 3, 2)
 //    And right.min = point(-1, -2, 2)
 //    And right.max = point(5, 3, 7)
+        
+        let box = BoundingBox(minimum: .Point(x: -1, y: -2, z: -3), maximum: .Point(x: 5, y: 3, z: 7))
+        let (left, right) = box.splitBoundingBox()
+        XCTAssertEqual(left.minimum, Tuple.Point(x: -1, y: -2, z: -3))
+        XCTAssertEqual(left.maximum, Tuple.Point(x: 5, y: 3, z: 2))
+        XCTAssertEqual(right.minimum, Tuple.Point(x: -1, y: -2, z: 2))
+        XCTAssertEqual(right.maximum, Tuple.Point(x: 5, y: 3, z: 7))
     }
 }

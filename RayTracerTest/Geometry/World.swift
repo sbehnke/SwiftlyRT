@@ -131,7 +131,7 @@ class World {
         if let l = light {
             let v = l.position - point
             let distance = v.magnitude
-            let direction = v.normalied()
+            let direction = v.normalized()
             
             let ray = Ray(origin: point, direction: direction)
             let xs = intersects(ray: ray)

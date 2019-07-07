@@ -161,10 +161,10 @@ class TupleTests: XCTestCase {
     }
     
     func testNormalization() {
-        var v = Tuple.Vector(x: 4, y: 0, z: 0).normalied()
+        var v = Tuple.Vector(x: 4, y: 0, z: 0).normalized()
         XCTAssertEqual(v, Tuple.Vector(x: 1, y: 0, z: 0))
         
-        v = Tuple.Vector(x: 1, y: 2, z: 3).normalied()
+        v = Tuple.Vector(x: 1, y: 2, z: 3).normalized()
         XCTAssertEqual(v.x, 0.26726, accuracy: Tuple.epsilon)
         XCTAssertEqual(v.y, 0.53452, accuracy: Tuple.epsilon)
         XCTAssertEqual(v.z, 0.80178, accuracy: Tuple.epsilon)
@@ -331,7 +331,7 @@ class TupleTests: XCTestCase {
         //    Then normalize(v) = vector(1, 0, 0)
         
         let v = Tuple.Vector(x: 4.0, y: 0, z: 0)
-        XCTAssertEqual(v.normalied(), Tuple.Vector(x: 1, y: 0, z: 0))
+        XCTAssertEqual(v.normalized(), Tuple.Vector(x: 1, y: 0, z: 0))
     }
     
     func testNormalizingVector2() {
@@ -342,7 +342,7 @@ class TupleTests: XCTestCase {
         
         let v = Tuple.Vector(x: 1.0, y: 2.0, z: 3.0)
         let mag = sqrt(14.0)
-        XCTAssertEqual(v.normalied(), Tuple.Vector(x: 1.0/mag, y: 2.0/mag, z: 3.0/mag))
+        XCTAssertEqual(v.normalized(), Tuple.Vector(x: 1.0/mag, y: 2.0/mag, z: 3.0/mag))
     }
     
     func testMagnitudeOfNormalizedVector() {
@@ -350,7 +350,7 @@ class TupleTests: XCTestCase {
         //    Given v ← vector(1, 2, 3)
         //    When norm ← normalize(v)
         //    Then magnitude(norm) = 1
-        let v = Tuple.Vector(x: 1.0, y: 2.0, z: 3.0).normalied()
+        let v = Tuple.Vector(x: 1.0, y: 2.0, z: 3.0).normalized()
         XCTAssertEqual(1.0, v.magnitude)
     }
     

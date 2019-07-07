@@ -51,7 +51,7 @@ class ConeTests: XCTestCase {
         let t1: [Double] = [5, 8.66025, 49.44994]
         
         for index in 0..<points.count {
-            let r = Ray(origin: points[index], direction: directions[index].normalied())
+            let r = Ray(origin: points[index], direction: directions[index].normalized())
             let xs = shape.localIntersects(ray: r)
             XCTAssertEqual(xs.count, 2)
             XCTAssertEqual(xs[0].t, t0[index], accuracy: Tuple.epsilon)
@@ -69,7 +69,7 @@ class ConeTests: XCTestCase {
 //    And xs[0].t = 0.35355
     
         let shape = Cone()
-        let direction = Tuple.Vector(x: 0, y: 1, z: 1).normalied()
+        let direction = Tuple.Vector(x: 0, y: 1, z: 1).normalized()
         let r = Ray(origin: .Point(x: 0, y: 0, z: -1), direction: direction)
         let xs = shape.localIntersects(ray: r)
         XCTAssertEqual(xs.count, 1)
@@ -109,7 +109,7 @@ class ConeTests: XCTestCase {
         let counts = [0, 2, 4]
         
         for index in 0..<points.count {
-            let r = Ray(origin: points[index], direction: directions[index].normalied())
+            let r = Ray(origin: points[index], direction: directions[index].normalized())
             let xs = shape.localIntersects(ray: r)
             XCTAssertEqual(counts[index], xs.count)
         }

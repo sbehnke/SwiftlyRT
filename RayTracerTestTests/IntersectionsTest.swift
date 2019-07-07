@@ -380,8 +380,44 @@ class IntersectionsTest: XCTestCase {
 //        | point(2, 0, 2)    | vector(0, 0, -1) | false  |
 //        | point(0, 2, 2)    | vector(0, -1, 0) | false  |
 //        | point(2, 2, 0)    | vector(-1, 0, 0) | false  |
+
+        let box = BoundingBox(minimum: .Point(x: -1, y: -1, z: -1), maximum: .Point(x: 1, y: 1, z: 1))
         
-        XCTFail()
+        let points: [Tuple] = [.Point(x: 5,   y: 0.5, z: 0),
+                               .Point(x: -5,  y: 0.5, z: 0),
+                               .Point(x: 0.5, y: 5,   z: 0),
+                               .Point(x: 0.5, y: -5,  z: 0),
+                               .Point(x: 0.5, y: 0,   z: 5),
+                               .Point(x: 0.5, y: 0,   z:-5),
+                               .Point(x: 0,   y: 0.5, z: 0),
+                               .Point(x: -2,  y: 0,   z: 0),
+                               .Point(x: 0,   y: -2,  z: 0),
+                               .Point(x: 0,   y: 0,   z:-2),
+                               .Point(x: 2,   y: 0,   z: 2),
+                               .Point(x: 0,   y: 2,   z: 2),
+                               .Point(x: 2,   y: 2,   z: 0),]
+
+        
+        let directions: [Tuple] = [.Vector(x: -1, y:  0, z:  0),
+                                   .Vector(x: 1,  y: 0,  z: 0),
+                                   .Vector(x: 0,  y: -1, z:  0),
+                                   .Vector(x: 0,  y: 1,  z: 0),
+                                   .Vector(x: 0,  y: 0,  z: -1),
+                                   .Vector(x: 0,  y: 0,  z: 1),
+                                   .Vector(x: 0,  y: 0,  z: 1),
+                                   .Vector(x: 2,  y: 4,  z: 6),
+                                   .Vector(x: 6,  y: 2,  z: 4),
+                                   .Vector(x: 4,  y: 6,  z: 2),
+                                   .Vector(x: 0,  y: 0,  z: -1),
+                                   .Vector(x: 0,  y: -1, z:  0),
+                                   .Vector(x: -1, y:  0, z:  0),]
+        
+        let results: [Bool] = [true, true, true, true, true, true, true, false, false, false, false, false, false,]
+
+        for index in 0..<points.count {
+            let r = Ray(origin: points[index], direction: directions[index].normalized())
+            XCTAssertEqual(results[index], box.intersects(ray: r), "Index \(index) does not match.")
+        }
     }
     
     func testIntersectingRayWithNonCubicBoundingBox() {
@@ -407,6 +443,41 @@ class IntersectionsTest: XCTestCase {
 //        | point(8, 6, -1)  | vector(0, -1, 0) | false  |
 //        | point(12, 5, 4)  | vector(-1, 0, 0) | false  |
         
-        XCTFail()
+        let box = BoundingBox(minimum: .Point(x: 5, y: -2, z: 0), maximum: .Point(x: 11, y: 4, z: 7))
+        
+        let points: [Tuple] = [.Point(x: 15, y:  1, z: 2),
+                               .Point(x: -5, y: -1, z: 4),
+                               .Point(x: 7,  y: 6,  z: 5),
+                               .Point(x: 9,  y: -5, z: 6),
+                               .Point(x: 8,  y: 2,  z: 12),
+                               .Point(x: 6,  y: 0,  z: -5),
+                               .Point(x: 8,  y: 1,  z: 3.5),
+                               .Point(x: 9,  y: -1, z: -8),
+                               .Point(x: 8,  y: 3,  z: -4),
+                               .Point(x: 9,  y: -1, z: -2),
+                               .Point(x: 4,  y: 0,  z:  9),
+                               .Point(x: 8,  y: 6,  z: -1),
+                               .Point(x: 12, y:  5, z:  4),]
+        
+        let directions: [Tuple] = [.Vector(x: -1, y:  0, z:  0),
+                                   .Vector(x: 1,  y: 0,  z: 0),
+                                   .Vector(x: 0,  y: -1, z:  0),
+                                   .Vector(x: 0,  y: 1,  z: 0),
+                                   .Vector(x: 0,  y: 0,  z: -1),
+                                   .Vector(x: 0,  y: 0,  z: 1),
+                                   .Vector(x: 0,  y: 0,  z: 1),
+                                   .Vector(x: 2,  y: 4,  z: 6),
+                                   .Vector(x: 6,  y: 2,  z: 4),
+                                   .Vector(x: 4,  y: 6,  z: 2),
+                                   .Vector(x: 0,  y: 0,  z: -1),
+                                   .Vector(x: 0,  y: -1, z:  0),
+                                   .Vector(x: -1, y:  0, z:  0),]
+        
+        let results: [Bool] = [true, true, true, true, true, true, true, false, false, false, false, false, false,]
+        
+        for index in 0..<points.count {
+            let r = Ray(origin: points[index], direction: directions[index].normalized())
+            XCTAssertEqual(results[index], box.intersects(ray: r), "Index \(index) does not match.")
+        }
     }
 }

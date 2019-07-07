@@ -46,7 +46,7 @@ class CylinderTests: XCTestCase {
         let cyl = Cylinder()
         
         for index in 0..<points.count {
-            let direction = directions[index].normalied()
+            let direction = directions[index].normalized()
             let ray = Ray(origin: points[index], direction: direction)
             let xs = cyl.localIntersects(ray: ray)
             XCTAssertEqual(xs.count, 0)
@@ -83,7 +83,7 @@ class CylinderTests: XCTestCase {
         let cyl = Cylinder()
         
         for index in 0..<points.count {
-            let direction = directions[index].normalied()
+            let direction = directions[index].normalized()
             let ray = Ray(origin: points[index], direction: direction)
             let xs = cyl.localIntersects(ray: ray)
             XCTAssertEqual(xs.count, 2)
@@ -174,7 +174,7 @@ class CylinderTests: XCTestCase {
         let counts = [0, 0, 0, 0, 0, 2]
         
         for index in 0..<points.count {
-            let r = Ray(origin: points[index], direction: directions[index].normalied())
+            let r = Ray(origin: points[index], direction: directions[index].normalized())
             let xs = cyl.localIntersects(ray: r)
             XCTAssertEqual(counts[index], xs.count)
         }
@@ -227,7 +227,7 @@ class CylinderTests: XCTestCase {
         let counts = [2, 2, 2, 2, 2]
         
         for index in 0..<points.count {
-            let r = Ray(origin: points[index], direction: directions[index].normalied())
+            let r = Ray(origin: points[index], direction: directions[index].normalized())
             let xs = cyl.localIntersects(ray: r)
             XCTAssertEqual(counts[index], xs.count)
         }

@@ -357,8 +357,8 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
         assert(to.isPoint())
         assert(up.isVector())
         
-        let forward = (to - from).normalied()
-        let upn = up.normalied()
+        let forward = (to - from).normalized()
+        let upn = up.normalized()
         let left = forward.cross(upn)
         let trueUp = left.cross(forward)
         

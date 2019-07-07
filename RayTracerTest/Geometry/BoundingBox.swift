@@ -38,12 +38,12 @@ struct BoundingBox : Equatable {
     func transform(transform: Matrix4x4) -> BoundingBox {
         var points: [Tuple] = []
         points.append(minimum)
-        points.append(.Point(x: minimum.x, y: minimum.y, z: maximum.z))
-        points.append(.Point(x: minimum.x, y: maximum.y, z: minimum.z))
-        points.append(.Point(x: minimum.x, y: maximum.y, z: maximum.z))
-        points.append(.Point(x: maximum.x, y: minimum.y, z: minimum.z))
-        points.append(.Point(x: maximum.x, y: minimum.y, z: maximum.z))
-        points.append(.Point(x: maximum.x, y: maximum.y, z: minimum.z))
+        points.append(transform * .Point(x: minimum.x, y: minimum.y, z: maximum.z))
+        points.append(transform * .Point(x: minimum.x, y: maximum.y, z: minimum.z))
+        points.append(transform * .Point(x: minimum.x, y: maximum.y, z: maximum.z))
+        points.append(transform * .Point(x: maximum.x, y: minimum.y, z: minimum.z))
+        points.append(transform * .Point(x: maximum.x, y: minimum.y, z: maximum.z))
+        points.append(transform * .Point(x: maximum.x, y: maximum.y, z: minimum.z))
         points.append(maximum)
         var box = BoundingBox()
         
@@ -59,30 +59,25 @@ struct BoundingBox : Equatable {
     }
     
     func intersects(ray: Ray) -> Bool {
-        var minList: [Double] = []
-        var maxList: [Double] = []
-
-        for index in 0..<3 {
-            let (min, max) = checkAxis(origin: ray.origin[index], direction: ray.direction[index], minExtent: minimum[index], maxExtent: maximum[index])
-            
-            minList.append(min)
-            maxList.append(max)
+        let (xtmin, xtmax) = checkAxis(origin: ray.origin.x, direction: ray.origin.x, minExtent: minimum.x, maxExtent: maximum.x)
+        let (ytmin, ytmax) = checkAxis(origin: ray.origin.y, direction: ray.origin.y, minExtent: minimum.y, maxExtent: maximum.y)
+        let (ztmin, ztmax) = checkAxis(origin: ray.origin.z, direction: ray.origin.z, minExtent: minimum.z, maxExtent: maximum.z)
+        
+        let tmin = max(xtmin, ytmin, ztmin)
+        let tmax = min(xtmax, ytmax, ztmax)
+        
+        if tmin > tmax {
+            return false
         }
         
-        if minList.count > 0 && maxList.count > 0 {
-            let tmin = minList.min()!
-            let tmax = maxList.max()!
-            
-            return tmin <= tmax
-        }
-        
-        return false
+        return true
     }
     
-    func checkAxis(origin: Double, direction: Double, minExtent: Double, maxExtent: Double) -> (Double, Double) {
-        let tmin = (minExtent - origin) / direction
+    private func checkAxis(origin: Double, direction: Double, minExtent: Double, maxExtent: Double) -> (Double, Double) {
+        let tmin =  (minExtent - origin) / direction
         let tmax = (maxExtent - origin) / direction
-        if tmin > tmax {
+        
+        if (tmin > tmax) {
             return (tmax, tmin)
         }
         
@@ -90,42 +85,32 @@ struct BoundingBox : Equatable {
     }
     
     func splitBoundingBox() -> (BoundingBox, BoundingBox) {
-//        function split_bounds(box)
-//        # figure out the box's largest dimension
-//        dx ← size of box in x
-//        dy ← size of box in y
-//        dz ← size of box in z
-//        
-//        greatest ← maximum of dx, dy, dz
-//        
-//        # variables to help construct the points on
-//        # the dividing plane
-//        (x0, y0, z0) ← (x, y, z) from box.min
-//        (x1, y1, z1) ← (x, y, z) from box.max
-//        
-//        # adjust the points so that they lie on the
-//        # dividing plane
-//        if greatest = dx then
-//        x0 ← x1 ← x0 + dx / 2.0
-//        else if greatest = dy then
-//        y0 ← y1 ← y0 + dy / 2.0
-//        else
-//        z0 ← z1 ← z0 + dz / 2.0
-//        end if
-//            
-//            mid_min ← point(x0, y0, z0)
-//        mid_max ← point(x1, y1, z1)
-//        
-//        # construct and return the two halves of
-//        # the bounding box
-//        left ← bounding_box(min=box.min max=mid_max)
-//        right ← bounding_box(min=mid_min max=box.max)
-//        
-//        return (left, right)
-//        end function
+        let dx = maximum.x - minimum.x
+        let dy = maximum.y - minimum.y
+        let dz = maximum.z - minimum.z
         
+        let greatest = max(dx, dy, dz)
+        var (x0, y0, z0) = (minimum.x, minimum.y, minimum.z)
+        var (x1, y1, z1) = (maximum.x, maximum.y, maximum.z)
         
-        return (BoundingBox(), BoundingBox())
+        if greatest == dx {
+            x1 = x0 + dx / 2.0
+            x0 = x1
+        } else if greatest == dy {
+            y1 = y0 + dy / 2.0
+            y0 = y1
+        } else {
+            z1 = z0 + dz / 2.0
+            z0 = z1
+        }
+        
+        let midMin = Tuple.Point(x: x0, y: y0, z: z0)
+        let midMax = Tuple.Point(x: x1, y: y1, z: z1)
+        
+        let left = BoundingBox(minimum: minimum, maximum: midMax)
+        let right = BoundingBox(minimum: midMin, maximum: maximum)
+        
+        return (left, right)
     }
     
     var minimum = Tuple.Point(x: .infinity, y: .infinity, z: .infinity)

@@ -23,5 +23,5 @@ class TestShape : Shape {
         return BoundingBox(minimum: .Point(x: -1, y: -1, z: -1), maximum: .Point(x: 1, y: 1, z: 1))
     }
     
-    var savedRay = Ray(origin: .pointZero, direction: .zero)
+    var savedRay: Ray? = nil
 }

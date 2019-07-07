@@ -159,7 +159,12 @@ class GroupTests: XCTestCase {
 //        When xs ← intersect(shape, r)
 //        Then child.saved_ray is unset
         
-        XCTFail()
+        let child = TestShape()
+        let shape = Group()
+        shape.addChild(child)
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 1, z: 0))
+        let _ = shape.intersects(ray: r)
+        XCTAssertNil(child.savedRay)
     }
     
     func testInterestingRayGroupChildrenHit() {        
@@ -170,8 +175,13 @@ class GroupTests: XCTestCase {
 //        And r ← ray(point(0, 0, -5), vector(0, 0, 1))
 //        When xs ← intersect(shape, r)
 //        Then child.saved_ray is set
-        
-        XCTFail()
+
+        let child = TestShape()
+        let shape = Group()
+        shape.addChild(child)
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let _ = shape.intersects(ray: r)
+        XCTAssertNotNil(child.savedRay)
     }
     
     func testPartitioningGroupsChildren() {

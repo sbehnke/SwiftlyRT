@@ -80,8 +80,8 @@ class ShapeTests: XCTestCase {
         let s = TestShape()
         s.transform = .scaled(x: 2, y: 2, z: 2)
         let _ = s.intersects(ray: r)
-        XCTAssertEqual(s.savedRay.origin, Tuple.Point(x: 0, y: 0, z: -2.5))
-        XCTAssertEqual(s.savedRay.direction, Tuple.Vector(x: 0, y: 0, z: 0.5))
+        XCTAssertEqual(s.savedRay?.origin, Tuple.Point(x: 0, y: 0, z: -2.5))
+        XCTAssertEqual(s.savedRay?.direction, Tuple.Vector(x: 0, y: 0, z: 0.5))
     }
     
     func testTranslatedShapeWithRay() {
@@ -97,8 +97,8 @@ class ShapeTests: XCTestCase {
         let s = TestShape()
         s.transform = .translated(x: 5, y: 0, z: 0)
         let _ = s.intersects(ray: r)
-        XCTAssertEqual(s.savedRay.origin, Tuple.Point(x: -5, y: 0, z: -5))
-        XCTAssertEqual(s.savedRay.direction, Tuple.Vector(x: 0, y: 0, z: 1))
+        XCTAssertEqual(s.savedRay?.origin, Tuple.Point(x: -5, y: 0, z: -5))
+        XCTAssertEqual(s.savedRay?.direction, Tuple.Vector(x: 0, y: 0, z: 1))
 
     }
     

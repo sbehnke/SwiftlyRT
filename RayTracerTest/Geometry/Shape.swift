@@ -44,7 +44,7 @@ class Shape : Equatable {
     
     func normalToWorld(normal: Tuple) -> Tuple {
         let n1 = inverseTransform.transposed() * normal
-        let n2 = Tuple.Vector(x: n1.x, y: n1.y, z: n1.z).normalied()
+        let n2 = Tuple.Vector(x: n1.x, y: n1.y, z: n1.z).normalized()
         return (parent == nil) ? n2 : parent!.normalToWorld(normal: n2)
     }
     

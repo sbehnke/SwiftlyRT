@@ -34,7 +34,7 @@ struct Material : Equatable {
         
         let color = pattern?.patternAtShape(object: object, point: position) ?? self.color
         let effectiveColor = color * light.intensity
-        let lightv = (light.position - position).normalied()
+        let lightv = (light.position - position).normalized()
         let ambient = effectiveColor * self.ambient
         let lightDotNormal = lightv.dot(normalVector)
         

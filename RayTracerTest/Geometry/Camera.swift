@@ -50,7 +50,7 @@ struct Camera {
         
         let pixel = camera.inverseTransform * Tuple.Point(x: worldX, y: worldY, z: -1)
         let origin = camera.inverseTransform * Tuple.pointZero
-        let direction = (pixel - origin).normalied()
+        let direction = (pixel - origin).normalized()
         
         return Ray(origin: origin, direction: direction)
     }
