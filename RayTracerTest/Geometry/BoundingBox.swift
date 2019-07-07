@@ -59,9 +59,9 @@ struct BoundingBox : Equatable {
     }
     
     func intersects(ray: Ray) -> Bool {
-        let (xtmin, xtmax) = checkAxis(origin: ray.origin.x, direction: ray.origin.x, minExtent: minimum.x, maxExtent: maximum.x)
-        let (ytmin, ytmax) = checkAxis(origin: ray.origin.y, direction: ray.origin.y, minExtent: minimum.y, maxExtent: maximum.y)
-        let (ztmin, ztmax) = checkAxis(origin: ray.origin.z, direction: ray.origin.z, minExtent: minimum.z, maxExtent: maximum.z)
+        let (xtmin, xtmax) = checkAxis(origin: ray.origin.x, direction: ray.direction.x, minExtent: minimum.x, maxExtent: maximum.x)
+        let (ytmin, ytmax) = checkAxis(origin: ray.origin.y, direction: ray.direction.y, minExtent: minimum.y, maxExtent: maximum.y)
+        let (ztmin, ztmax) = checkAxis(origin: ray.origin.z, direction: ray.direction.z, minExtent: minimum.z, maxExtent: maximum.z)
         
         let tmin = max(xtmin, ytmin, ztmin)
         let tmax = min(xtmax, ytmax, ztmax)
