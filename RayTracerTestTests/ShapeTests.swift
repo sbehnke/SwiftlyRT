@@ -249,6 +249,7 @@ class ShapeTests: XCTestCase {
 //        When divide(shape, 1)
 //        Then shape is a sphere
 
-        XCTFail()
+        let s = Sphere()
+        s.divide(threshold: 1)
     }
 }

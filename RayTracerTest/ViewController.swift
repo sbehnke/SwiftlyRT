@@ -540,26 +540,82 @@ class ViewController: NSViewController {
 //            Matrix4x4.rotatedX(1.5708)
 //        southWall.material = wallMaterial
         
-        var hex = hexagon()
-        if (!TextField.stringValue.isEmpty) {
-            hex = hexagon(Int(TextField.stringValue) ?? 0)
-        }
-        hex.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6) * Matrix4x4.rotatedZ(.pi / 3)
+//        var hex = hexagon()
+//        if (!TextField.stringValue.isEmpty) {
+//            hex = hexagon(Int(TextField.stringValue) ?? 0)
+//        }
+//        hex.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6) * Matrix4x4.rotatedZ(.pi / 3)
 //
 //        let s = Sphere()
 //        s.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6)
         
+        
+        var camera = Camera(w: 400, h: 300, fieldOfView: 1.047)
+        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: 1, y: 2, z: -5), to: .Point(x: 0, y: 1, z: 0), up: .Vector(x: 0, y: 1, z: 0))
+        
         let world = World()
-        let light = PointLight(position: .Point(x: -4.9, y: 4.9, z: -1),
-                               intensity: Color.white)
-        world.light = light
-        world.objects.append(contentsOf: [hex])
+        world.light = PointLight(position: .Point(x: -9, y: 9, z: -9), intensity: Color.white)
         
-        var camera = Camera(w: 400, h: 200, fieldOfView: 1.152)
-        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: -2.6, y: 1.5, z: -3.9),
-                                                     to: .Point(x: -0.6, y: 1, z: -0.8),
-                                                     up: .Vector(x: 0, y: 1, z: 0))
+        let floor = Plane()
+        floor.material.pattern = CheckerPattern(a: Color(r: 0.7, g: 0.7, b: 0.7), b: Color(r: 0.3, g: 0.3, b: 0.3))
+        floor.material.pattern?.transform = Matrix4x4.scaled(x: 0.6, y: 0.6, z: 0.6)
+        floor.material.ambient = 0.02
+        floor.material.diffuse = 0.7
+        floor.material.specular = 0
+        floor.material.reflective = 0.05
         
+        let room = Cube()
+        room.material.color = Color(r: 0.7, g: 0.7, b: 0.7)
+        room.material.diffuse = 0.8
+        room.material.ambient = 0.1
+        room.material.specular = 0
+        room.transform = Matrix4x4.translated(x: 0, y: 0.99, z: 0) * Matrix4x4.scaled(x: 10, y: 10, z: 10)
+        
+        let sphere1 = Sphere()
+        sphere1.transform = .translated(x: 0, y: 1, z: 0)
+        sphere1.material.color = Color(r: 0.9, g: 0.9, b: 0.9)
+        sphere1.material.ambient = 0.1
+        sphere1.material.diffuse = 0.6
+        sphere1.material.specular = 0.4
+        sphere1.material.shininess = 5
+        sphere1.material.reflective = 0.1
+        
+        let sphere2 = Sphere()
+        sphere2.transform = Matrix4x4.translated(x: 1.5, y: 0.6, z: -0.3) * Matrix4x4.scaled(x: 0.6, y: 0.6, z: 0.6)
+        sphere2.material.color = Color(r: 0.9, g: 1, b: 0.9)
+        sphere2.material.ambient = 0.1
+        sphere2.material.diffuse = 0.6
+        sphere2.material.specular = 0.4
+        sphere2.material.shininess = 5
+        sphere2.material.reflective = 0.1
+        
+        let sphere3 = Sphere()
+        sphere3.transform = Matrix4x4.translated(x: -1.1, y: 0.5, z: -0.9) * Matrix4x4.scaled(x: 0.5, y: 0.5, z: 0.5)
+        sphere3.material.color = Color(r: 1, g: 0.9, b: 0.9)
+        sphere3.material.ambient = 0.1
+        sphere3.material.diffuse = 0.6
+        sphere3.material.specular = 0.4
+        sphere3.material.shininess = 5
+        sphere3.material.reflective = 0.1
+        
+        let group = Group()
+        group.addChildren([sphere1, sphere2, sphere3])
+        
+        group.transform = .translated(x: 0, y: 0.75, z: 0) * Matrix4x4.rotatedY(.pi / 6) * Matrix4x4.rotatedZ(.pi / 6)
+        
+        world.objects = [floor, room, group]
+        
+//        let light = PointLight(position: .Point(x: -4.9, y: 4.9, z: -1),
+//                               intensity: Color.white)
+//        world.light = light
+//        world.objects.append(contentsOf: [hex])
+
+        
+//        var camera = Camera(w: 400, h: 200, fieldOfView: 1.152)
+//        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: -2.6, y: 1.5, z: -3.9),
+//                                                     to: .Point(x: -0.6, y: 1, z: -0.8),
+//                                                     up: .Vector(x: 0, y: 1, z: 0))
+//
         DispatchQueue.global(qos: .background).async {
 //            let numberOfJobs = ProcessInfo.processInfo.activeProcessorCount
 //            let canvas = camera.multiThreadedRender(world: world, numberOfJobs: numberOfJobs, progress: { (jobNumber: Int, y: Int, numberOfRows: Int) -> Void in

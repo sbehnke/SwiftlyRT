@@ -16,8 +16,24 @@ class Group: Shape {
         }
     }
     
+    func removeAllChildren() {
+        for child in children {
+            removeChild(child)
+        }
+    }
+    
+    func removeChild(_ child: Shape) {
+        assert(child.parent == self)
+        assert(children.contains(child))
+        child.parent = nil
+        children.remove(at: children.firstIndex(of: child)!)
+    }
+    
     func addChild(_ child: Shape) {
-        assert(child.parent == nil)
+        if child.parent != nil {
+            child.removeFromParent()
+        }
+        
         child.parent = self
         children.append(child)
     }
@@ -51,20 +67,47 @@ class Group: Shape {
         return bounds
     }
     
-    func subdivide(threshold: Int) {
-//        function divide(group, threshold)
-//        if threshold <= group.count then
-//        (left, right) ← partition_children(group)
-//        if left is not empty then make_subgroup(group, left)
-//        if right is not empty then make_subgroup(group, right)
-//        end if
-//
-//        for each child in group
-//        divide(child, threshold)
-//        end for
-//            end function
+    override func divide(threshold: Int) {
+        if threshold <= children.count {
+            let (left, right) = partitionChildren()
+            
+            if !left.isEmpty {
+                makeSubgroup(children: left)
+            }
+            
+            if !right.isEmpty {
+                makeSubgroup(children: right)
+            }
+        }
         
-        children.removeAll()
+        for child in children {
+            child.divide(threshold: threshold)
+        }
+    }
+    
+    func partitionChildren() -> ([Shape], [Shape]) {
+        var left: [Shape] = []
+        var right: [Shape] = []
+        
+        let (boundsLeft, boundsRight) = boundingBox().splitBoundingBox()
+        
+        for child in children {
+            if boundsLeft.containsBox(box: child.parentSpaceBounds()) {
+                child.removeFromParent()
+                left.append(child)
+            } else if (boundsRight.containsBox(box: child.parentSpaceBounds())) {
+                child.removeFromParent()
+                right.append(child)
+            }
+        }
+        
+        return (left, right)
+    }
+    
+    func makeSubgroup(children: [Shape]) {
+        let g = Group()
+        g.addChildren(children)
+        addChild(g)
     }
     
     override var material: Material {
@@ -73,7 +116,5 @@ class Group: Shape {
                 child.material = material
             }
         }
-    }
-    
-    var children: [Shape] = []
+    }    
 }

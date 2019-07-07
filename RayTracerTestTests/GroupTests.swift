@@ -196,8 +196,25 @@ class GroupTests: XCTestCase {
 //        Then g is a group of [s3]
 //        And left = [s1]
 //        And right = [s2]
+
+        let s1 = Sphere()
+        s1.transform = .translated(x: -2, y: 0, z: 0)
         
-        XCTFail()
+        let s2 = Sphere()
+        s2.transform = .translated(x: 2, y: 0, z: 0)
+        
+        let s3 = Sphere()
+        
+        let g = Group()
+        g.addChildren([s1, s2, s3])
+        
+        let (left, right) = g.partitionChildren()
+        XCTAssertEqual(g.children.count, 1)
+        XCTAssertEqual(g.children.first!, s3)
+        XCTAssertEqual(left.count, 1)
+        XCTAssertEqual(left.first!, s1)
+        XCTAssertEqual(right.count, 1)
+        XCTAssertEqual(right.first!, s2)
     }
     
     func testCreatingSubGroupFromListOfChildren() {
@@ -209,7 +226,18 @@ class GroupTests: XCTestCase {
 //        Then g.count = 1
 //        And g[0] is a group of [s1, s2]
 
-        XCTFail()
+        let s1 = Sphere()
+        let s2 = Sphere()
+        let g = Group()
+        g.makeSubgroup(children: [s1, s2])
+        XCTAssertEqual(g.children.count, 1)
+        
+        if g.children[0] is Group {
+            let g2 = g.children[0] as! Group
+            XCTAssertEqual(g2.children.count, 2)
+            XCTAssertEqual(g2.children[0], s1)
+            XCTAssertEqual(g2.children[1], s2)
+        }
     }
     
     func testSubdividingGroupPartitionsItsChildren() {
@@ -229,7 +257,37 @@ class GroupTests: XCTestCase {
 //        And subgroup[0] is a group of [s1]
 //        And subgroup[1] is a group of [s2]
 
-        XCTFail()
+        let s1 = Sphere()
+        s1.name = "s1"
+        s1.transform = .translated(x: -2, y: -2, z: 0)
+        let s2 = Sphere()
+        s2.name = "s2"
+        s2.transform = .translated(x: -2, y: 2, z: 0)
+        let s3 = Sphere()
+        s3.name = "s3"
+        s3.transform = .scaled(x: 4, y: 4, z: 4)
+        
+        let g = Group()
+        g.addChildren([s1, s2, s3])
+        g.divide(threshold: 1)
+        XCTAssertEqual(g.children.first!, s3)
+        
+        if g.children[1] is Group {
+            let g2 = g.children[1] as! Group
+            XCTAssertEqual(g2.children.count, 2)
+            
+            if g2.children[0] is Group {
+                let g3 = g2.children[0] as! Group
+                XCTAssertEqual(g3.children.count, 1)
+                XCTAssertEqual(g3.children.first!, s1)
+            }
+            
+            if (g2.children[1] is Group) {
+                let g4 = g2.children[1] as! Group
+                XCTAssertEqual(g4.children.count, 1)
+                XCTAssertEqual(g4.children.first!, s2)
+            }
+        }
     }
     
     func testSubdividingGroupWithTooFewChildren() {
@@ -250,6 +308,44 @@ class GroupTests: XCTestCase {
 //        And subgroup[0] is a group of [s1]
 //        And subgroup[1] is a group of [s2, s3]
         
-        XCTFail()
+        let s1 = Sphere()
+        s1.name = "s1"
+        s1.transform = .translated(x: -2, y: 0, z: 0)
+        
+        let s2 = Sphere()
+        s2.name = "s2"
+        s2.transform = .translated(x: 2, y: 1, z: 0)
+        
+        let s3 = Sphere()
+        s3.name = "s3"
+        s3.transform = .translated(x: 2, y: -1, z: 0)
+        
+        let subgroup = Group()
+        subgroup.name = "subgroup"
+        subgroup.addChildren([s1, s2, s3])
+        
+        let s4 = Sphere()
+        s4.name = "s4"
+        
+        let g = Group()
+        g.name = "g"
+        g.addChildren([subgroup, s4])
+        
+        g.divide(threshold: 3)
+        XCTAssertEqual(g.children[1], s4)
+        XCTAssertEqual(subgroup.children.count, 2)
+
+        if subgroup.children[0] is Group {
+            let sub1 = subgroup.children[0] as! Group
+            XCTAssertEqual(sub1.children.count, 1)
+            XCTAssertEqual(sub1.children[0], s1)
+        }
+        
+        if subgroup.children[1] is Group {
+            let sub2 = subgroup.children[1] as! Group
+            XCTAssertEqual(sub2.children.count, 2)
+            XCTAssertEqual(sub2.children[0], s2)
+            XCTAssertEqual(sub2.children[1], s3)
+        }
     }
 }

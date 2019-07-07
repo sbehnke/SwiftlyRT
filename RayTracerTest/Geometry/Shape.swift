@@ -56,8 +56,18 @@ class Shape : Equatable {
         return BoundingBox()
     }
     
+    func removeFromParent() {
+        if let p = parent {
+            p.removeChild(self)
+        }
+    }
+    
+    func divide(threshold: Int) {
+    }
+    
     var name = ""
     var parent: Group? = nil
+    var children: [Shape] = []
     var transform = Matrix4x4.identity {
         didSet {
             inverseTransform = transform.inversed()
