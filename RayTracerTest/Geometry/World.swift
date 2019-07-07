@@ -65,16 +65,18 @@ class World {
         return surface + reflected + refracted
     }
     
+    
     func colorAt(ray: Ray, remaining: Int = MaximumRecursionDepth) -> Color {
         let xs = intersects(ray: ray)
         let hit = Intersection.hit(xs)
+        var color = Color.black
         
         if let h = hit {
             let comps = h.prepareComputation(ray: ray, xs: xs)
-            return shadeHit(computation: comps, remaining: remaining)
+            color = shadeHit(computation: comps, remaining: remaining)
         }
         
-        return Color.black
+        return color
     }
     
     func reflectedColor(computation: Computation, remaining: Int = MaximumRecursionDepth) -> Color {
@@ -135,10 +137,8 @@ class World {
             let xs = intersects(ray: ray)
             let hit = Intersection.hit(xs)
             
-            if let h = hit {
-                if h.t < distance {
-                    return true
-                }
+            if hit != nil && hit!.t < distance {
+                return true
             }
         }
         

@@ -29,6 +29,43 @@ class ViewController: NSViewController {
         renderScene()
     }
     
+    func hexagonCorner() -> Shape {
+        let corner = Sphere()
+        corner.transform = .translated(x: 0, y: 0, z: -1) * Matrix4x4.scaled(x: 0.25, y: 0.25, z: 0.25)
+        return corner
+    }
+    
+    func hexagonEdge() -> Shape {
+        let edge = Cylinder()
+        edge.minimum = 0
+        edge.maximum = 1
+        edge.transform = Matrix4x4.translated(x: 0, y: 0, z: -1) *
+                         Matrix4x4.rotatedY(-.pi / 6) *
+                         Matrix4x4.rotatedZ(-.pi / 2) *
+                         Matrix4x4.scaled(x: 0.25, y: 1, z: 0.25)
+        return edge
+    }
+    
+    func hexagonSide() -> Group {
+        let side = Group()
+        side.addChild(hexagonCorner())
+        side.addChild(hexagonEdge())
+        
+        return side
+    }
+    
+    func hexagon() -> Group {
+        let hex = Group()
+        
+        for index in 0...5 {
+            let side = hexagonSide()
+            side.transform = Matrix4x4.rotatedY(Double(index) * Double(index) / 3.0)
+            hex.addChild(side)
+        }
+        
+        return hex
+    }
+    
     func format(duration: TimeInterval) -> String {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.day, .hour, .minute, .second]
@@ -39,8 +76,8 @@ class ViewController: NSViewController {
     }
     
     @IBAction func multiThreadedTest(_ sender: Any) {
-        let camera = Camera(w: 400, h: 200, fieldOfView: .pi / 3)
-        let _ = camera.multiThreadedRender(world: World.defaultWorld(), numberOfJobs: 4)
+//        let camera = Camera(w: 400, h: 200, fieldOfView: .pi / 3)
+//        let _ = camera.multiThreadedRender(world: World.defaultWorld(), numberOfJobs: 4)
     }
     
     @IBAction func renderRefactionTest(_ sender: Any) {
@@ -333,12 +370,18 @@ class ViewController: NSViewController {
         world.objects = [floor, ceiling, southWall, westWall, eastWall, northWall, bsphere1, bsphere2, bsphere3, bsphere4, redsphere, bluesphere, greensphere]
         
         DispatchQueue.global(qos: .background).async {
-            let numberOfJobs = ProcessInfo.processInfo.activeProcessorCount
-            let canvas = camera.multiThreadedRender(world: world, numberOfJobs: numberOfJobs, progress: { (jobNumber: Int, y: Int, numberOfRows: Int) -> Void in
+//            let numberOfJobs = ProcessInfo.processInfo.activeProcessorCount
+//            let canvas = camera.render(world: world, progress: { (jobNumber: Int, y: Int, numberOfRows: Int) -> Void in
+//                DispatchQueue.main.async {
+//                    let percent = 100.0 * (Float(y) / Float(numberOfRows))
+//                    // self.progressLabel.stringValue = "Job: \(jobNumber) - \(percent)%)"
+//                    print("Job: \(jobNumber) - " + String(format: "%.2f", percent) + "%")
+//                }
+//            })
+            
+            let canvas = camera.render(world: world, progress: { (x: Int, y: Int) -> Void in
                 DispatchQueue.main.async {
-                    let percent = 100.0 * (Float(y) / Float(numberOfRows))
-                    // self.progressLabel.stringValue = "Job: \(jobNumber) - \(percent)%)"
-                    print("Job: \(jobNumber) - " + String(format: "%.2f", percent) + "%")
+                    self.progressLabel.stringValue = "(\(x),\(y))"
                 }
             })
             
@@ -363,72 +406,126 @@ class ViewController: NSViewController {
         let startTime = CACurrentMediaTime()
 
         //let floor = Sphere()
-        let floor = Plane()
+//        let floor = Plane()
+//
+//        let material = Material(color: Color(r: 1, g: 0.9, b: 0.9), ambient: 0.05, diffuse: 0.6, specular: 0, shininess: 200)
+//        floor.transform = .translated(x: 0, y: 0, z: -1)
+//        floor.material = material
+//        floor.material.pattern = CheckerPattern(a: Color.white, b: Color.black)
+//        floor.material.reflective = 0.5
+//
+//        let leftWall = Plane()
+//        leftWall.transform = .translated(x: 0, y: 0, z: 10) *
+//            .rotatedX(.pi / 2)
+//        leftWall.material = Material(color: Color(r: 0, g: 0, b: 1), ambient: 0.05, diffuse: 0.6, specular: 0.5, shininess: 200)
+//
+//        let rightWall = Plane()
+//        rightWall.transform = .translated(x: 0, y: 0, z: 5) *
+//            .rotatedY(.pi / 4) *
+//            .rotatedX(.pi / 2) *
+//            .scaled(x: 10, y: 0.01, z: 10)
+//        rightWall.material.color = Color(r: 0.2, g: 0, b: 0.8)
+//        rightWall.material.pattern = GradientPattern(a: rightWall.material.color, b: Color.white)
+//
+//        let right = Sphere()
+//        right.transform = .translated(x: 1.5, y: 0.5, z: -0.5) * .scaled(x: 0.5, y: 0.5, z: 0.5)
+//        right.material.color = Color(r: 0.5, g: 1, b: 0.1)
+//        right.material.diffuse = 0.7
+//        right.material.specular = 0.3
+//        right.material.pattern = GradientPattern(a: right.material.color, b: Color.white)
+//
+//        let middle = Sphere()
+//        middle.transform = .translated(x: -0.5, y: 1, z: 0.5)
+//        middle.material.color = Color(r: 0.1, g: 1, b: 0.5)
+//        middle.material.diffuse = 0.7
+//        middle.material.specular = 0.3
+//        middle.material.pattern = StripePattern(a: Color.white, b: middle.material.color)
+//        middle.material.pattern?.transform = .scaled(x: 0.25, y: 0.25, z: 0.25)
+//
+//        let left = Sphere()
+//        left.transform = .translated(x: -1.5, y: 0.33, z: -0.75) * .scaled(x: 0.33, y: 0.33, z: 0.33)
+//        left.material.color = Color(r: 1, g: 0.8, b: 0.1)
+//        left.material.diffuse = 0.7
+//        left.material.specular = 0.3
         
-        let material = Material(color: Color(r: 1, g: 0.9, b: 0.9), ambient: 0.05, diffuse: 0.6, specular: 0, shininess: 200)
-        floor.transform = .translated(x: 0, y: 0, z: -1)
-        floor.material = material
-        floor.material.pattern = CheckerPattern(a: Color.white, b: Color.black)
-        floor.material.reflective = 0.5
-
-        let leftWall = Plane()
-        leftWall.transform = .translated(x: 0, y: 0, z: 10) *
-            .rotatedX(.pi / 2)
-        leftWall.material = Material(color: Color(r: 0, g: 0, b: 1), ambient: 0.05, diffuse: 0.6, specular: 0.5, shininess: 200)
+//        var wallMaterial = Material()
+//        let stripeColors = [Color(r: 0.45, g: 0.45, b: 0.45),
+//                            Color(r: 0.55, g: 0.55, b: 0.55)]
+//        wallMaterial.pattern = StripePattern(a: stripeColors[0], b: stripeColors[1])
+//        wallMaterial.pattern!.transform = Matrix4x4.rotatedY(1.5708) *
+//            Matrix4x4.scaled(x: 0.25, y: 0.25, z: 0.25)
+//        wallMaterial.ambient = 0
+//        wallMaterial.diffuse = 0.4
+//        wallMaterial.specular = 0
+//        wallMaterial.reflective = 0.3
+//
+//        let floor = Plane()
+//        floor.transform = .rotatedY(0.31415)
+//        floor.material.pattern = CheckerPattern(a: Color(r: 0.35, g: 0.35, b: 0.35),
+//                                                b: Color(r: 0.65, g: 0.65, b: 0.65))
+//        floor.material.specular = 0
+//        floor.material.reflective = 0.4
+//
+//        let ceiling = Plane()
+//        ceiling.transform = .translated(x: 0, y: 5, z: 0)
+//        ceiling.material.color = Color(r: 0.8, g: 0.8, b: 0.8)
+//        ceiling.material.ambient = 0.3
+//        ceiling.material.specular = 0
+//
+//        let westWall = Plane()
+//        westWall.transform = Matrix4x4.translated(x: -5, y: 0, z: 0) *
+//            Matrix4x4.rotatedZ(1.5708) *
+//            Matrix4x4.rotatedY(1.5708)
+//        westWall.material = wallMaterial
+//
+//        let eastWall = Plane()
+//        eastWall.transform = Matrix4x4.translated(x: 5, y: 0, z: 0) *
+//            Matrix4x4.rotatedZ(1.5708) *
+//            Matrix4x4.rotatedY(1.5708)
+//        eastWall.material = wallMaterial
+//
+//        let northWall = Plane()
+//        northWall.transform = Matrix4x4.translated(x: 0, y: 0, z: 5) *
+//            Matrix4x4.rotatedX(1.5708)
+//        northWall.material = wallMaterial
+//
+//        let southWall = Plane()
+//        southWall.transform = Matrix4x4.translated(x: 0, y: 0, z: -5) *
+//            Matrix4x4.rotatedX(1.5708)
+//        southWall.material = wallMaterial
         
-        let rightWall = Plane()
-        rightWall.transform = .translated(x: 0, y: 0, z: 5) *
-            .rotatedY(.pi / 4) *
-            .rotatedX(.pi / 2) *
-            .scaled(x: 10, y: 0.01, z: 10)
-        rightWall.material.color = Color(r: 0.2, g: 0, b: 0.8)
-        rightWall.material.pattern = GradientPattern(a: rightWall.material.color, b: Color.white)
-        
-        let right = Sphere()
-        right.transform = .translated(x: 1.5, y: 0.5, z: -0.5) * .scaled(x: 0.5, y: 0.5, z: 0.5)
-        right.material.color = Color(r: 0.5, g: 1, b: 0.1)
-        right.material.diffuse = 0.7
-        right.material.specular = 0.3
-        right.material.pattern = GradientPattern(a: right.material.color, b: Color.white)
-        
-        let middle = Sphere()
-        middle.transform = .translated(x: -0.5, y: 1, z: 0.5)
-        middle.material.color = Color(r: 0.1, g: 1, b: 0.5)
-        middle.material.diffuse = 0.7
-        middle.material.specular = 0.3
-        middle.material.pattern = StripePattern(a: Color.white, b: middle.material.color)
-        middle.material.pattern?.transform = .scaled(x: 0.25, y: 0.25, z: 0.25)
-        
-        let left = Sphere()
-        left.transform = .translated(x: -1.5, y: 0.33, z: -0.75) * .scaled(x: 0.33, y: 0.33, z: 0.33)
-        left.material.color = Color(r: 1, g: 0.8, b: 0.1)
-        left.material.diffuse = 0.7
-        left.material.specular = 0.3
+//        let hex = hexagon()
+//        hex.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6)
+  
+        let s = Sphere()
+        s.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6)
         
         let world = World()
-        world.light = PointLight(position: .Point(x: -10, y: 10, z: -10), intensity: .white)
-        world.objects.append(contentsOf: [floor, leftWall, rightWall, right, middle, left])
+        let light = PointLight(position: .Point(x: -4.9, y: 4.9, z: -1),
+                               intensity: Color.white)
+        world.light = light
+        world.objects.append(contentsOf: [s])
         
-        var camera = Camera(w: 300, h: 150, fieldOfView: .pi / 3)
-        camera.transform = .viewTransformed(from: .Point(x: 0, y: 1.5, z: -5),
-                                          to: .Point(x: 0, y: 1, z: 0),
-                                          up: .Vector(x: 0, y: 1, z: 0))
+        var camera = Camera(w: 400, h: 200, fieldOfView: 1.152)
+        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: -2.6, y: 1.5, z: -3.9),
+                                                     to: .Point(x: -0.6, y: 1, z: -0.8),
+                                                     up: .Vector(x: 0, y: 1, z: 0))
         
         DispatchQueue.global(qos: .background).async {
-            let numberOfJobs = ProcessInfo.processInfo.activeProcessorCount
-            let canvas = camera.multiThreadedRender(world: world, numberOfJobs: numberOfJobs, progress: { (jobNumber: Int, y: Int, numberOfRows: Int) -> Void in
-                DispatchQueue.main.async {
-                    let percent = 100.0 * (Float(y) / Float(numberOfRows))
-                    // self.progressLabel.stringValue = "Job: \(jobNumber) - \(percent)%)"
-                    print("Job: \(jobNumber) - " + String(format: "%.2f", percent) + "%")
-                }
-            })
-            
-//            let canvas = camera.render(world: world, progress: { (x: Int, y: Int) -> Void in
+//            let numberOfJobs = ProcessInfo.processInfo.activeProcessorCount
+//            let canvas = camera.multiThreadedRender(world: world, numberOfJobs: numberOfJobs, progress: { (jobNumber: Int, y: Int, numberOfRows: Int) -> Void in
 //                DispatchQueue.main.async {
-//                    self.progressLabel.stringValue = "(\(x),\(y))"
+//                    let percent = 100.0 * (Float(y) / Float(numberOfRows))
+//                    // self.progressLabel.stringValue = "Job: \(jobNumber) - \(percent)%)"
+//                    print("Job: \(jobNumber) - " + String(format: "%.2f", percent) + "%")
 //                }
 //            })
+            
+            let canvas = camera.render(world: world, progress: { (x: Int, y: Int) -> Void in
+                DispatchQueue.main.async {
+                    self.progressLabel.stringValue = "(\(x),\(y))"
+                }
+            })
             
             let data = canvas.getPPM()
             

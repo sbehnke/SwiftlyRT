@@ -75,6 +75,7 @@ struct Camera {
         return image
     }
     
+    public typealias MultiThreadedProgress = (Int, Int, Int) -> Void
     func partialRender(dispatchGroup: DispatchGroup, jobNumber: Int, startingY: Int, endingY: Int, image: Canvas, world: World, progress: MultiThreadedProgress? = nil) {
 
         let numberOfRows = endingY - startingY
@@ -92,33 +93,32 @@ struct Camera {
         dispatchGroup.leave()
     }
     
-    public typealias MultiThreadedProgress = (Int, Int, Int) -> Void
-    func multiThreadedRender(world: World, numberOfJobs: Int = 1, progress: MultiThreadedProgress? = nil) -> Canvas {
-        let image = Canvas(width: width, height: height)
-
-        let rows = Array(0..<height)
-        let rowsPerJob = height / numberOfJobs
-        let chunks = rows.chunked(into: rowsPerJob)
-        var jobNumber = 0
-        
-        let dispatchGroup = DispatchGroup()
-        
-        for chunk in chunks {
-            let startingRow = chunk.min()!
-            let endingRow = chunk.max()!
-
-            let j = jobNumber
-            DispatchQueue.global(qos: .background).async {
-                dispatchGroup.enter()
-                self.partialRender(dispatchGroup: dispatchGroup, jobNumber: j, startingY: startingRow, endingY: endingRow, image: image, world: world, progress: progress)
-            }
-            
-            jobNumber += 1
-        }
-        
-        dispatchGroup.wait()
-        return image
-    }
+//    func multiThreadedRender(world: World, numberOfJobs: Int = 1, progress: MultiThreadedProgress? = nil) -> Canvas {
+//        let image = Canvas(width: width, height: height)
+//
+//        let rows = Array(0..<height)
+//        let rowsPerJob = height / numberOfJobs
+//        let chunks = rows.chunked(into: rowsPerJob)
+//        var jobNumber = 0
+//        
+//        let dispatchGroup = DispatchGroup()
+//        
+//        for chunk in chunks {
+//            let startingRow = chunk.min()!
+//            let endingRow = chunk.max()!
+//
+//            let j = jobNumber
+//            DispatchQueue.global(qos: .background).async {
+//                dispatchGroup.enter()
+//                self.partialRender(dispatchGroup: dispatchGroup, jobNumber: j, startingY: startingRow, endingY: endingRow, image: image, world: world, progress: progress)
+//            }
+//            
+//            jobNumber += 1
+//        }
+//        
+//        dispatchGroup.wait()
+//        return image
+//    }
     
     func render(world: World, progress: RenderProgress? = nil) -> Canvas {
         return Camera.render(c: self, world: world, progress: progress)

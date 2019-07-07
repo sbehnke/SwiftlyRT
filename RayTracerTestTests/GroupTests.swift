@@ -91,11 +91,11 @@ class GroupTests: XCTestCase {
         g.addChildren([s1, s2, s3])
         let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
         let xs = g.localIntersects(ray: r)
-//        XCTAssertEqual(4, xs.count)
-//        XCTAssertEqual(xs[0].object, s2)
-//        XCTAssertEqual(xs[1].object, s2)
-//        XCTAssertEqual(xs[2].object, s1)
-//        XCTAssertEqual(xs[3].object, s1)
+        XCTAssertEqual(4, xs.count)
+        XCTAssertEqual(xs[0].object, s2)
+        XCTAssertEqual(xs[1].object, s2)
+        XCTAssertEqual(xs[2].object, s1)
+        XCTAssertEqual(xs[3].object, s1)
     }
     
     func testInteresctingTranformedGroup() {
