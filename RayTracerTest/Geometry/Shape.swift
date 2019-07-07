@@ -48,9 +48,16 @@ class Shape : Equatable {
         return (parent == nil) ? n2 : parent!.normalToWorld(normal: n2)
     }
     
+    func parentSpaceBounds() -> Bounds {
+        return bounds().transformed(transform: transform)
+    }
+    
+    func bounds() -> Bounds {
+        return Bounds()
+    }
+    
     var name = ""
-    var parent: Shape? = nil
-    var children: [Shape] = []
+    var parent: Group? = nil
     var transform = Matrix4x4.identity {
         didSet {
             inverseTransform = transform.inversed()

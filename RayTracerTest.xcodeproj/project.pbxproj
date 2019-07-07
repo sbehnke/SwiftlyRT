@@ -10,6 +10,7 @@
 		6416F6C622D0281C005E4797 /* Scenes in Resources */ = {isa = PBXBuildFile; fileRef = 6416F6C522D0281B005E4797 /* Scenes */; };
 		6416F6C822D120AF005E4797 /* Cone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6416F6C722D120AF005E4797 /* Cone.swift */; };
 		6416F6CA22D131FC005E4797 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6416F6C922D131FC005E4797 /* Group.swift */; };
+		6416F6CC22D15B81005E4797 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6416F6CB22D15B81005E4797 /* Bounds.swift */; };
 		6435B4F622CE58E800270210 /* TestShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4F522CE58E800270210 /* TestShape.swift */; };
 		6435B4F822CE74C900270210 /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4F722CE74C900270210 /* Plane.swift */; };
 		6435B4FA22CE750100270210 /* Cylinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B4F922CE750100270210 /* Cylinder.swift */; };
@@ -90,6 +91,7 @@
 		6416F6C522D0281B005E4797 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Scenes; sourceTree = "<group>"; };
 		6416F6C722D120AF005E4797 /* Cone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cone.swift; sourceTree = "<group>"; };
 		6416F6C922D131FC005E4797 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		6416F6CB22D15B81005E4797 /* Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bounds.swift; sourceTree = "<group>"; };
 		6435B4F522CE58E800270210 /* TestShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShape.swift; sourceTree = "<group>"; };
 		6435B4F722CE74C900270210 /* Plane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
 		6435B4F922CE750100270210 /* Cylinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cylinder.swift; sourceTree = "<group>"; };
@@ -202,6 +204,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6416F6CD22D15D03005E4797 /* Patterns */ = {
+			isa = PBXGroup;
+			children = (
+				6435B50D22CE9B0100270210 /* BlendedPattern.swift */,
+				6435B50922CE92CF00270210 /* CheckerPattern.swift */,
+				6435B50522CE8B5600270210 /* GradientPattern.swift */,
+				6435B4FF22CE7B9700270210 /* Pattern.swift */,
+				6435B50722CE905C00270210 /* RingPattern.swift */,
+				6435B50B22CE9A9300270210 /* SolidColorPattern.swift */,
+				6435B50122CE7BB600270210 /* StripePattern.swift */,
+				6435B50322CE813700270210 /* TestPattern.swift */,
+			);
+			path = Patterns;
+			sourceTree = "<group>";
+		};
 		646C32A222CB9E3200A6B321 /* Features */ = {
 			isa = PBXGroup;
 			children = (
@@ -242,25 +259,19 @@
 		64D1FB2E22CADCC400AA05AE /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
-				6435B50D22CE9B0100270210 /* BlendedPattern.swift */,
+				6416F6CB22D15B81005E4797 /* Bounds.swift */,
 				64D1FB4622CD975700AA05AE /* Camera.swift */,
-				6435B50922CE92CF00270210 /* CheckerPattern.swift */,
 				6416F6C722D120AF005E4797 /* Cone.swift */,
 				6435B4FB22CE751400270210 /* Cube.swift */,
 				6435B4F922CE750100270210 /* Cylinder.swift */,
-				6435B50522CE8B5600270210 /* GradientPattern.swift */,
-				6435B4FF22CE7B9700270210 /* Pattern.swift */,
+				6416F6C922D131FC005E4797 /* Group.swift */,
 				6435B4F722CE74C900270210 /* Plane.swift */,
-				6435B50722CE905C00270210 /* RingPattern.swift */,
+				64EE91B322C8139C00FB2699 /* Projecile.swift */,
 				64D1FB3522CAE4CF00AA05AE /* Shape.swift */,
-				6435B50B22CE9A9300270210 /* SolidColorPattern.swift */,
 				64D1FB2F22CADCD700AA05AE /* Sphere.swift */,
-				6435B50122CE7BB600270210 /* StripePattern.swift */,
-				6435B50322CE813700270210 /* TestPattern.swift */,
 				6435B4F522CE58E800270210 /* TestShape.swift */,
 				6435B4FD22CE753300270210 /* Triangle.swift */,
 				64D1FB4222CD72F200AA05AE /* World.swift */,
-				6416F6C922D131FC005E4797 /* Group.swift */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -268,6 +279,7 @@
 		64D1FB3B22CC2B6D00AA05AE /* Lights */ = {
 			isa = PBXGroup;
 			children = (
+				64EE91AA22C7F04300FB2699 /* Color.swift */,
 				64D1FB3C22CC2B8200AA05AE /* PointLight.swift */,
 				64D1FB3E22CC2C3500AA05AE /* Material.swift */,
 			);
@@ -307,7 +319,7 @@
 				64D1FB3B22CC2B6D00AA05AE /* Lights */,
 				64EE917E22C7D18900FB2699 /* Main.storyboard */,
 				64EE91B222C8125200FB2699 /* Math */,
-				64EE91B322C8139C00FB2699 /* Projecile.swift */,
+				6416F6CD22D15D03005E4797 /* Patterns */,
 				6416F6C522D0281B005E4797 /* Scenes */,
 				64EE917A22C7D18700FB2699 /* ViewController.swift */,
 			);
@@ -356,7 +368,6 @@
 		64EE91B222C8125200FB2699 /* Math */ = {
 			isa = PBXGroup;
 			children = (
-				64EE91AA22C7F04300FB2699 /* Color.swift */,
 				64D1FB3922CAF0B600AA05AE /* Intersection.swift */,
 				64D1FB2322C9035100AA05AE /* Matrix2x2.swift */,
 				64D1FB2522C9035C00AA05AE /* Matrix3x3.swift */,
@@ -500,6 +511,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				64D1FB2022C8731700AA05AE /* Matrix4x4.swift in Sources */,
+				6416F6CC22D15B81005E4797 /* Bounds.swift in Sources */,
 				6416F6CA22D131FC005E4797 /* Group.swift in Sources */,
 				64D1FB4522CD78FE00AA05AE /* Computation.swift in Sources */,
 				6435B50822CE905C00270210 /* RingPattern.swift in Sources */,

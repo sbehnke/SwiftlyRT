@@ -214,4 +214,19 @@ class ShapeTests: XCTestCase {
         let n = s.normalAt(p: .Point(x: 1.7321, y: 1.1547, z: -5.5774))
         XCTAssertEqual(n, Tuple.Vector(x: 0.28570368184140726, y: 0.42854315178114105, z: -0.8571605294481017))
     }
+    
+    func testArbitraryBounds() {
+        let s = TestShape()
+        let box = s.bounds()
+        XCTAssertEqual(box.minimum, Tuple.Point(x: -1, y: -1, z: -1))
+        XCTAssertEqual(box.maximum, Tuple.Point(x: 1, y: 1, z: 1))
+    }
+    
+    func testBoundingBoxInParentSpace() {
+        let s = Sphere()
+        s.transform = .translated(x: 1, y: -3, z: 5) * Matrix4x4.scaled(x: 0.5, y: 2, z: 4)
+        let box = s.parentSpaceBounds()
+        XCTAssertEqual(box.minimum, Tuple.Point(x: 0.5, y: -5, z: 1))
+        XCTAssertEqual(box.maximum, Tuple.Point(x: 1.5, y: -1, z: 9))
+    }
 }

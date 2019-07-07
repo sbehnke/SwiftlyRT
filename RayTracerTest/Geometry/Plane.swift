@@ -22,4 +22,8 @@ class Plane: Shape {
     override func localNormalAt(p: Tuple) -> Tuple {
         return .Vector(x: 0, y: 1, z: 0)
     }
+    
+    override func bounds() -> Bounds {
+        return Bounds(minimum: Tuple.Point(x: -.infinity, y: 0, z: -.infinity), maximum: Tuple.Point(x: .infinity, y: 0, z: .infinity))
+    }
 }

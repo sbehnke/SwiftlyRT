@@ -81,6 +81,10 @@ class Cylinder: Shape {
         }
     }
     
+    override func bounds() -> Bounds {
+        return Bounds(minimum: Tuple.Point(x: -1, y: minimum, z: -1), maximum: Tuple.Point(x: 1, y: maximum, z: 1))
+    }
+    
     var minimum = -Double.infinity
     var maximum = Double.infinity
     var closed = false

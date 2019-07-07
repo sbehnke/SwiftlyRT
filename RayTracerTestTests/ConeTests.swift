@@ -142,4 +142,14 @@ class ConeTests: XCTestCase {
             XCTAssertEqual(n, normals[index])
         }
     }
+    
+    func testConeBounds() {
+        let c = Cone()
+        c.minimum = -5
+        c.maximum = 3
+        
+        let bounds = c.bounds()
+        XCTAssertEqual(bounds.minimum, Tuple.Point(x: -5, y: -5, z: -5))
+        XCTAssertEqual(bounds.maximum, Tuple.Point(x: 5, y: 3, z: 5))
+    }
 }

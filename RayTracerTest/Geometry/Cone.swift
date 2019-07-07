@@ -38,7 +38,7 @@ class Cone: Shape {
         let c = ray.origin.x * ray.origin.x + -ray.origin.y * ray.origin.y + ray.origin.z * ray.origin.z
 
         if Tuple.almostEqual(lhs: a, rhs: 0.0) && !Tuple.almostEqual(lhs: b, rhs: 0.0) {
-            let t = -c / 2 * b
+            let t = -c / (2 * b)
             xs.append(Intersection(t: t, object: self))
         }
         
@@ -87,6 +87,13 @@ class Cone: Shape {
         }
         
         return .Vector(x: p.x, y: y, z: p.z)
+    }
+    
+    override func bounds() -> Bounds {
+        let a = abs(minimum)
+        let b = abs(maximum)
+        let limit = max(a, b)
+        return Bounds(minimum: Tuple.Point(x: -limit, y: minimum, z: -limit), maximum: Tuple.Point(x: limit, y: maximum, z: limit))
     }
     
     var minimum = -Double.infinity

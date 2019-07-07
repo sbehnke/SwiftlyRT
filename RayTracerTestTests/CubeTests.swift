@@ -168,4 +168,11 @@ class CubeTests: XCTestCase {
             XCTAssertEqual(normal, normals[index])
         }
     }
+    
+    func testCubeBounds() {
+        let c = Cube()
+        let bounds = c.bounds()
+        XCTAssertEqual(bounds.minimum, Tuple.Point(x: -1, y: -1, z: -1))
+        XCTAssertEqual(bounds.maximum, Tuple.Point(x: 1, y: 1, z: 1))
+    }
 }

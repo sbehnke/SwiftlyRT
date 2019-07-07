@@ -100,4 +100,11 @@ class PlaneTests: XCTestCase {
         XCTAssertEqual(xs[0].object, p)
         
     }
+    
+    func testBounds() {
+        let p = Plane()
+        let bounds = p.bounds()
+        XCTAssertEqual(bounds.minimum, Tuple.Point(x: -.infinity, y: 0, z: -.infinity))
+        XCTAssertEqual(bounds.maximum, Tuple.Point(x: .infinity, y: 0, z: .infinity))
+    }
 }

@@ -292,4 +292,11 @@ class SphereTests: XCTestCase {
         s.material.refractiveIndex = 1.5
         return s
     }
+    
+    func testCubeBounds() {
+        let s = Sphere()
+        let bounds = s.bounds()
+        XCTAssertEqual(bounds.minimum, Tuple.Point(x: -1, y: -1, z: -1))
+        XCTAssertEqual(bounds.maximum, Tuple.Point(x: 1, y: 1, z: 1))
+    }
 }

@@ -275,4 +275,11 @@ class CylinderTests: XCTestCase {
             XCTAssertEqual(n, normals[index])
         }
     }
+    
+    func testCylinderBounds() {
+        let c = Cylinder()
+        let bounds = c.bounds()
+        XCTAssertEqual(bounds.minimum, Tuple.Point(x: -1, y: -.infinity, z: -1))
+        XCTAssertEqual(bounds.maximum, Tuple.Point(x: 1, y: .infinity, z: 1))
+    }
 }

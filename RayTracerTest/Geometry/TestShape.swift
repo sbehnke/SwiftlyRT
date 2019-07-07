@@ -19,5 +19,9 @@ class TestShape : Shape {
         return p - Tuple.pointZero
     }
     
+    override func bounds() -> Bounds {
+        return Bounds(minimum: .Point(x: -1, y: -1, z: -1), maximum: .Point(x: 1, y: 1, z: 1))
+    }
+    
     var savedRay = Ray(origin: .pointZero, direction: .zero)
 }

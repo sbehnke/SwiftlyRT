@@ -24,6 +24,10 @@ class Sphere : Shape {
         return s
     }
     
+    override func bounds() -> Bounds {
+        return Bounds(minimum: Tuple.Point(x: -1, y: -1, z: -1), maximum: Tuple.Point(x: 1, y: 1, z: 1))
+    }
+    
     override func localIntersects(ray: Ray) -> [Intersection] {
         // Vector from sphere's center to the ray origin
         // the sphere is centered at the world origin
@@ -48,5 +52,4 @@ class Sphere : Shape {
     override func localNormalAt(p: Tuple) -> Tuple {
         return p - Tuple.pointZero
     }
-
 }

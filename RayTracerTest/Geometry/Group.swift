@@ -29,11 +29,24 @@ class Group: Shape {
     override func localIntersects(ray: Ray) -> [Intersection] {
         var intersections: [Intersection] = []
         
-        for child in children {
-            let xs = child.intersects(ray: ray)
-            intersections.append(contentsOf: xs)
+        if bounds().intersects(ray: ray) {
+            for child in children {
+                let xs = child.intersects(ray: ray)
+                intersections.append(contentsOf: xs)
+            }
         }
-        
         return intersections.sorted()
     }
+    
+    override func bounds() -> Bounds {
+        var bounds = Bounds()
+        
+        for child in children {
+            bounds.addBox(box: child.parentSpaceBounds())
+        }
+        
+        return bounds
+    }
+    
+    var children: [Shape] = []
 }

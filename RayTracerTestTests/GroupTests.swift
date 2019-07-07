@@ -118,4 +118,21 @@ class GroupTests: XCTestCase {
         let xs = g.intersects(ray: r)
         XCTAssertEqual(2, xs.count)
     }
+    
+    func testGroupBoundsContainsItsChildren() {
+        let s = Sphere()
+        s.transform = .translated(x: 2, y: 5, z: -3) * Matrix4x4.scaled(x: 2, y: 2, z: 2)
+        
+        let c = Cylinder()
+        c.minimum = -2
+        c.maximum = 2
+        c.transform = .translated(x: -4, y: -1, z: 4) * Matrix4x4.scaled(x: 0.5, y: 1, z: 0.5)
+        
+        let g = Group()
+        g.addChildren([s, c])
+        
+        let bounds = g.bounds()
+        XCTAssertEqual(bounds.minimum, Tuple.Point(x: -4.5, y: -3, z: -5))
+        XCTAssertEqual(bounds.maximum, Tuple.Point(x: 4, y: 7, z: 4.5))
+    }
 }
