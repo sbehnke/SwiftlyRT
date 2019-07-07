@@ -19,7 +19,7 @@ class Plane: Shape {
         return [Intersection(t: -ray.origin.y / ray.direction.y, object: self)]
     }
     
-    override func localNormalAt(p: Tuple) -> Tuple {
+    override func localNormalAt(p: Tuple, hit: Intersection) -> Tuple {
         return .Vector(x: 0, y: 1, z: 0)
     }
     

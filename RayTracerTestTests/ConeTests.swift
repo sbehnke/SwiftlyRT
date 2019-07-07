@@ -138,7 +138,7 @@ class ConeTests: XCTestCase {
         let shape = Cone()
         
         for index in 0..<points.count {
-            let n = shape.localNormalAt(p: points[index])
+            let n = shape.localNormalAt(p: points[index], hit: Intersection())
             XCTAssertEqual(n, normals[index])
         }
     }

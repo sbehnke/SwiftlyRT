@@ -15,7 +15,7 @@ class TestShape : Shape {
         return []
     }
     
-    override func localNormalAt(p: Tuple) -> Tuple {
+    override func localNormalAt(p: Tuple, hit: Intersection) -> Tuple {
         return p - Tuple.pointZero
     }
     

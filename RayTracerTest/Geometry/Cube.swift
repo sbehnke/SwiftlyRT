@@ -36,7 +36,7 @@ class Cube: Shape {
         return [Intersection(t: tmin, object: self), Intersection(t: tmax, object: self)]
     }
     
-    override func localNormalAt(p: Tuple) -> Tuple {
+    override func localNormalAt(p: Tuple, hit: Intersection) -> Tuple {
         let maxc = max(abs(p.x), abs(p.y), abs(p.z))
         if maxc == abs(p.x) {
             return .Vector(x: p.x, y: 0, z: 0)

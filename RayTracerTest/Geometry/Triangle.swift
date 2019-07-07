@@ -31,7 +31,7 @@ class Triangle: Shape {
         computeNormal()
     }
     
-    private func computeNormal() {
+    internal func computeNormal() {
         if self.suspendComputation {
             return
         }
@@ -66,10 +66,10 @@ class Triangle: Shape {
         }
         
         let t = f * Tuple.dot(lhs: e2, rhs: originCrossE1)
-        return [Intersection(t: t, object: self)]
+        return [Intersection(t: t, object: self, u: u, v: v)]
     }
     
-    override func localNormalAt(p: Tuple) -> Tuple {
+    override func localNormalAt(p: Tuple, hit: Intersection) -> Tuple {
         return normal
     }
     
@@ -99,7 +99,7 @@ class Triangle: Shape {
         }
     }
     
-    private var suspendComputation = false
+    internal var suspendComputation = false
     
     private(set) var normal = Tuple.zero
     private(set) var e1 = Tuple.zero

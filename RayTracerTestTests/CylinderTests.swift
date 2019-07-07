@@ -118,7 +118,7 @@ class CylinderTests: XCTestCase {
                                 .Vector(x: -1, y:  0, z:  0),]
 
         for index in 0..<points.count {
-            let n = cyl.localNormalAt(p: points[index])
+            let n = cyl.localNormalAt(p: points[index], hit: Intersection())
             XCTAssertEqual(n, normals[index])
         }
     }
@@ -271,7 +271,7 @@ class CylinderTests: XCTestCase {
                                 .Vector(x: 0, y:  1, z: 0),]
         
         for index in 0..<points.count {
-            let n = cyl.localNormalAt(p: points[index])
+            let n = cyl.localNormalAt(p: points[index], hit: Intersection())
             XCTAssertEqual(n, normals[index])
         }
     }

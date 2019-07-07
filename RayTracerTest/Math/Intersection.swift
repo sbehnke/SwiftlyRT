@@ -67,7 +67,7 @@ struct Intersection : Equatable, Comparable {
         
         comps.point = ray.position(time: self.t)
         comps.eyeVector = -ray.direction
-        comps.normalVector = self.object!.normalAt(p: comps.point)
+        comps.normalVector = self.object!.normalAt(p: comps.point, hit: self)
         
         if (comps.normalVector.dot(comps.eyeVector) < 0) {
             comps.inside = true
@@ -93,6 +93,15 @@ struct Intersection : Equatable, Comparable {
         self.object = object
     }
     
-    var t : Double
-    var object : Shape?
+    init(t: Double, object: Shape?, u: Double, v: Double) {
+        self.t = t
+        self.object = object
+        self.u = u
+        self.v = v
+    }
+    
+    var u: Double = 0.0
+    var v: Double = 0.0
+    var t: Double = 0.0
+    var object: Shape? = nil
 }

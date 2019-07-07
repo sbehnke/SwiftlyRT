@@ -354,8 +354,11 @@ class IntersectionsTest: XCTestCase {
 //    When i ← intersection_with_uv(3.5, s, 0.2, 0.4)
 //    Then i.u = 0.2
 //    And i.v = 0.4
-        
-        XCTFail()
+
+        let s = Triangle(point1: .Point(x: 0, y: 1, z: 0), point2: .Point(x: -1, y: 0, z: 0), point3: .Point(x: 1, y: 0, z: 0))
+        let i = Intersection(t: 3.5, object: s, u: 0.2, v: 0.4)
+        XCTAssertEqual(i.u, 0.2)
+        XCTAssertEqual(i.v, 0.4)
     }
     
     func testBoundingBoxIntersections() {

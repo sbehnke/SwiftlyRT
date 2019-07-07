@@ -32,9 +32,9 @@ class PlaneTests: XCTestCase {
     
 
         let p = Plane()
-        let n1 = p.localNormalAt(p: .Point(x: 0, y: 0, z: 0))
-        let n2 = p.localNormalAt(p: .Point(x: 10, y: 0, z: -10))
-        let n3 = p.localNormalAt(p: .Point(x: -5, y: 0, z: 150))
+        let n1 = p.localNormalAt(p: .Point(x: 0, y: 0, z: 0), hit: Intersection())
+        let n2 = p.localNormalAt(p: .Point(x: 10, y: 0, z: -10), hit: Intersection())
+        let n3 = p.localNormalAt(p: .Point(x: -5, y: 0, z: 150), hit: Intersection())
         XCTAssertEqual(n1, Tuple.Vector(x: 0, y: 1, z: 0))
         XCTAssertEqual(n2, Tuple.Vector(x: 0, y: 1, z: 0))
         XCTAssertEqual(n3, Tuple.Vector(x: 0, y: 1, z: 0))

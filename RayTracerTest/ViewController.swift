@@ -724,7 +724,7 @@ class ViewController: NSViewController {
                 if let hit = Intersection.hit(xs) {
                     //        write_pixel(canvas, x, y, color)
                     let point = ray.position(time: hit.t)
-                    let normal = hit.object?.normalAt(p: point)
+                    let normal = hit.object?.normalAt(p: point, hit: hit)
                     let eyeVector = -ray.direction
                     let coloredLight = hit.object!.material.lighting(object: hit.object, light: light, position: position, eyeVector: eyeVector, normalVector: normal!)
                     canvas.setPixel(x: x, y: y, color: coloredLight)

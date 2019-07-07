@@ -164,7 +164,7 @@ class CubeTests: XCTestCase {
                                 .Vector(x: -1, y: 0,  z: 0)]
         
         for index in 0..<points.count {
-            let normal = c.localNormalAt(p: points[index])
+            let normal = c.localNormalAt(p: points[index], hit: Intersection())
             XCTAssertEqual(normal, normals[index])
         }
     }

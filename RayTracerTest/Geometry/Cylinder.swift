@@ -69,7 +69,7 @@ class Cylinder: Shape {
         return xs
     }
     
-    override func localNormalAt(p: Tuple) -> Tuple {
+    override func localNormalAt(p: Tuple, hit: Intersection) -> Tuple {
         let dist = p.x * p.x + p.z * p.z
         
         if dist < 1 && p.y >= maximum - Tuple.epsilon {

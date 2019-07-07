@@ -28,13 +28,13 @@ class Shape : Equatable {
         return []
     }
     
-    func normalAt(p : Tuple) -> Tuple {
+    func normalAt(p: Tuple, hit: Intersection) -> Tuple {
         let localPoint = worldToObject(point: p)
-        let localNormal = localNormalAt(p: localPoint)
+        let localNormal = localNormalAt(p: localPoint, hit: hit)
         return normalToWorld(normal: localNormal)
     }
     
-    func localNormalAt(p: Tuple) -> Tuple {
+    func localNormalAt(p: Tuple, hit: Intersection) -> Tuple {
         return .Vector(x: p.x, y: p.y, z: p.z)
     }
     

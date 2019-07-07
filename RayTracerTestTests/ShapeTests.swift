@@ -111,7 +111,7 @@ class ShapeTests: XCTestCase {
         
         let s = TestShape()
         s.transform = .translated(x: 0, y: 1, z: 0)
-        let n = s.normalAt(p: .Point(x: 0, y: 1.70711, z: -0.70711))
+        let n = s.normalAt(p: .Point(x: 0, y: 1.70711, z: -0.70711), hit: Intersection())
         XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0.70711, z: -0.70711))
     }
     
@@ -127,7 +127,7 @@ class ShapeTests: XCTestCase {
         let s = TestShape()
         let m = Matrix4x4.scaled(x: 1, y: 0.5, z: 1) * Matrix4x4.rotatedZ(.pi / 5)
         s.transform = m
-        let n = s.normalAt(p: .Point(x: 0, y: sqrt(2)/2, z: -sqrt(2)/2))
+        let n = s.normalAt(p: .Point(x: 0, y: sqrt(2)/2, z: -sqrt(2)/2), hit: Intersection())
         XCTAssertEqual(n, Tuple.Vector(x: 0, y: 0.97014, z: -0.24254))
     }
     
@@ -211,7 +211,7 @@ class ShapeTests: XCTestCase {
         let s = Sphere()
         s.transform = .translated(x: 5, y: 0, z: 0  )
         g2.addChild(s)
-        let n = s.normalAt(p: .Point(x: 1.7321, y: 1.1547, z: -5.5774))
+        let n = s.normalAt(p: .Point(x: 1.7321, y: 1.1547, z: -5.5774), hit: Intersection())
         XCTAssertEqual(n, Tuple.Vector(x: 0.28570368184140726, y: 0.42854315178114105, z: -0.8571605294481017))
     }
     

@@ -49,7 +49,7 @@ class Sphere : Shape {
                 Intersection(t: intersection2, object: self)]
     }
 
-    override func localNormalAt(p: Tuple) -> Tuple {
+    override func localNormalAt(p: Tuple, hit: Intersection) -> Tuple {
         return p - Tuple.pointZero
     }
 }

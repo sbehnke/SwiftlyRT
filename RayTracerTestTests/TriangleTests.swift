@@ -122,13 +122,13 @@ class TriangleTests: XCTestCase {
 //    And n3 = t.normal
         
         let t = Triangle(point1: .Point(x: 0, y: 1, z: 0), point2: .Point(x: -1, y: 0, z: 0), point3: .Point(x: 1, y: 0, z: 0))
-        let n1 = t.localNormalAt(p: .Point(x: 0, y: 0.5, z: 0))
+        let n1 = t.localNormalAt(p: .Point(x: 0, y: 0.5, z: 0), hit: Intersection())
         XCTAssertEqual(n1, t.normal)
         
-        let n2 = t.localNormalAt(p: .Point(x: -0.5, y: 0.75, z: 0))
+        let n2 = t.localNormalAt(p: .Point(x: -0.5, y: 0.75, z: 0), hit: Intersection())
         XCTAssertEqual(n2, t.normal)
         
-        let n3 = t.localNormalAt(p: .Point(x: 0.5, y: 0.25, z: 0))
+        let n3 = t.localNormalAt(p: .Point(x: 0.5, y: 0.25, z: 0), hit: Intersection())
         XCTAssertEqual(n3, t.normal)
     }
 
