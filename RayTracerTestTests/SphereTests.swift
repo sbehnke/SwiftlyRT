@@ -293,9 +293,15 @@ class SphereTests: XCTestCase {
         return s
     }
     
-    func testCubeBounds() {
+    func testSphereBoundingBox() {
+//        Scenario: A sphere has a bounding box
+//        Given shape ← sphere()
+//        When box ← bounds_of(shape)
+//        Then box.min = point(-1, -1, -1)
+//        And box.max = point(1, 1, 1)
+        
         let s = Sphere()
-        let bounds = s.bounds()
+        let bounds = s.boundingBox()
         XCTAssertEqual(bounds.minimum, Tuple.Point(x: -1, y: -1, z: -1))
         XCTAssertEqual(bounds.maximum, Tuple.Point(x: 1, y: 1, z: 1))
     }

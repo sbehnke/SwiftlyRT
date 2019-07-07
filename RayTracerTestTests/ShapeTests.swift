@@ -215,18 +215,40 @@ class ShapeTests: XCTestCase {
         XCTAssertEqual(n, Tuple.Vector(x: 0.28570368184140726, y: 0.42854315178114105, z: -0.8571605294481017))
     }
     
-    func testArbitraryBounds() {
+    func testArbitraryBoundingBox() {
+//        Scenario: Test shape has (arbitrary) bounds
+//        Given shape ← test_shape()
+//        When box ← bounds_of(shape)
+//        Then box.min = point(-1, -1, -1)
+//        And box.max = point(1, 1, 1)
+
         let s = TestShape()
-        let box = s.bounds()
+        let box = s.boundingBox()
         XCTAssertEqual(box.minimum, Tuple.Point(x: -1, y: -1, z: -1))
         XCTAssertEqual(box.maximum, Tuple.Point(x: 1, y: 1, z: 1))
     }
     
     func testBoundingBoxInParentSpace() {
+//        Scenario: Querying a shape's bounding box in its parent's space
+//        Given shape ← sphere()
+//        And set_transform(shape, translation(1, -3, 5) * scaling(0.5, 2, 4))
+//        When box ← parent_space_bounds_of(shape)
+//        Then box.min = point(0.5, -5, 1)
+//        And box.max = point(1.5, -1, 9)
+        
         let s = Sphere()
         s.transform = .translated(x: 1, y: -3, z: 5) * Matrix4x4.scaled(x: 0.5, y: 2, z: 4)
         let box = s.parentSpaceBounds()
         XCTAssertEqual(box.minimum, Tuple.Point(x: 0.5, y: -5, z: 1))
         XCTAssertEqual(box.maximum, Tuple.Point(x: 1.5, y: -1, z: 9))
+    }
+    
+    func testSubDivingPrimative() {
+//        Scenario: Subdividing a primitive does nothing
+//        Given shape ← sphere()
+//        When divide(shape, 1)
+//        Then shape is a sphere
+
+        XCTFail()
     }
 }

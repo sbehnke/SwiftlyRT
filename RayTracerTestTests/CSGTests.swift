@@ -117,4 +117,70 @@ class CSGTests: XCTestCase {
 
         XCTFail()
     }
+    
+    func testCSGBoundingBox() {
+//        Scenario: Querying a shape's bounding box in its parent's space
+//        Given shape ← sphere()
+//        And set_transform(shape, translation(1, -3, 5) * scaling(0.5, 2, 4))
+//        When box ← parent_space_bounds_of(shape)
+//        Then box.min = point(0.5, -5, 1)
+//        And box.max = point(1.5, -1, 9)
+    }
+    
+    func testCSGContainingChildrenBoundingBox() {
+//        Scenario: A CSG shape has a bounding box that contains its children
+//        Given left ← sphere()
+//        And right ← sphere() with:
+//        | transform | translation(2, 3, 4) |
+//        And shape ← csg("difference", left, right)
+//        When box ← bounds_of(shape)
+//        Then box.min = point(-1, -1, -1)
+//        And box.max = point(3, 4, 5)
+        
+    }
+
+    func testInterestMissingBoundingBox() {
+//    Scenario: Intersecting ray+csg doesn't test children if box is missed
+//    Given left ← test_shape()
+//    And right ← test_shape()
+//    And shape ← csg("difference", left, right)
+//    And r ← ray(point(0, 0, -5), vector(0, 1, 0))
+//    When xs ← intersect(shape, r)
+//    Then left.saved_ray is unset
+//    And right.saved_ray is unset
+        
+    }
+    
+    func testIntersectHittingBoundingBox() {
+//    Scenario: Intersecting ray+csg tests children if box is hit
+//    Given left ← test_shape()
+//    And right ← test_shape()
+//    And shape ← csg("difference", left, right)
+//    And r ← ray(point(0, 0, -5), vector(0, 0, 1))
+//    When xs ← intersect(shape, r)
+//    Then left.saved_ray is set
+//    And right.saved_ray is set
+        
+    }
+    
+    func testSubdividingCSGShape() {
+//        Scenario: Subdividing a CSG shape subdivides its children
+//        Given s1 ← sphere() with:
+//        | transform | translation(-1.5, 0, 0) |
+//        And s2 ← sphere() with:
+//        | transform | translation(1.5, 0, 0) |
+//        And left ← group() of [s1, s2]
+//        And s3 ← sphere() with:
+//        | transform | translation(0, 0, -1.5) |
+//        And s4 ← sphere() with:
+//        | transform | translation(0, 0, 1.5) |
+//        And right ← group() of [s3, s4]
+//        And shape ← csg("difference", left, right)
+//        When divide(shape, 1)
+//        Then left[0] is a group of [s1]
+//        And left[1] is a group of [s2]
+//        And right[0] is a group of [s3]
+//        And right[1] is a group of [s4]
+        
+    }
 }

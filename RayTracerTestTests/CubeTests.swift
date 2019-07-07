@@ -169,9 +169,15 @@ class CubeTests: XCTestCase {
         }
     }
     
-    func testCubeBounds() {
+    func testCubeBoundingBox() {
+//        Scenario: A cube has a bounding box
+//        Given shape ← cube()
+//        When box ← bounds_of(shape)
+//        Then box.min = point(-1, -1, -1)
+//        And box.max = point(1, 1, 1)
+        
         let c = Cube()
-        let bounds = c.bounds()
+        let bounds = c.boundingBox()
         XCTAssertEqual(bounds.minimum, Tuple.Point(x: -1, y: -1, z: -1))
         XCTAssertEqual(bounds.maximum, Tuple.Point(x: 1, y: 1, z: 1))
     }

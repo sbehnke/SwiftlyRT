@@ -89,11 +89,11 @@ class Cone: Shape {
         return .Vector(x: p.x, y: y, z: p.z)
     }
     
-    override func bounds() -> Bounds {
+    override func boundingBox() -> BoundingBox {
         let a = abs(minimum)
         let b = abs(maximum)
         let limit = max(a, b)
-        return Bounds(minimum: Tuple.Point(x: -limit, y: minimum, z: -limit), maximum: Tuple.Point(x: limit, y: maximum, z: limit))
+        return BoundingBox(minimum: Tuple.Point(x: -limit, y: minimum, z: -limit), maximum: Tuple.Point(x: limit, y: maximum, z: limit))
     }
     
     var minimum = -Double.infinity

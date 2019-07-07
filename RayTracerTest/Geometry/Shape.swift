@@ -48,12 +48,12 @@ class Shape : Equatable {
         return (parent == nil) ? n2 : parent!.normalToWorld(normal: n2)
     }
     
-    func parentSpaceBounds() -> Bounds {
-        return bounds().transformed(transform: transform)
+    func parentSpaceBounds() -> BoundingBox {
+        return boundingBox().transformed(transform: transform)
     }
     
-    func bounds() -> Bounds {
-        return Bounds()
+    func boundingBox() -> BoundingBox {
+        return BoundingBox()
     }
     
     var name = ""

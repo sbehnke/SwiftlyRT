@@ -143,12 +143,33 @@ class ConeTests: XCTestCase {
         }
     }
     
-    func testConeBounds() {
+    func testUnboundedCylinderBoundingBox() {
+//        Scenario: An unbounded cone has a bounding box
+//        Given shape ← cone()
+//        When box ← bounds_of(shape)
+//        Then box.min = point(-infinity, -infinity, -infinity)
+//        And box.max = point(infinity, infinity, infinity)
+
+        let c = Cone()
+        let bounds = c.boundingBox()
+        XCTAssertEqual(bounds.minimum, Tuple.Point(x: -.infinity, y: -.infinity, z: -.infinity))
+        XCTAssertEqual(bounds.maximum, Tuple.Point(x: .infinity, y: .infinity, z: .infinity))
+    }
+    
+    func testBoundedConeBoundingBox() {
+//        Scenario: A bounded cone has a bounding box
+//        Given shape ← cone()
+//        And shape.minimum ← -5
+//        And shape.maximum ← 3
+//        When box ← bounds_of(shape)
+//        Then box.min = point(-5, -5, -5)
+//        And box.max = point(5, 3, 5)
+        
         let c = Cone()
         c.minimum = -5
         c.maximum = 3
         
-        let bounds = c.bounds()
+        let bounds = c.boundingBox()
         XCTAssertEqual(bounds.minimum, Tuple.Point(x: -5, y: -5, z: -5))
         XCTAssertEqual(bounds.maximum, Tuple.Point(x: 5, y: 3, z: 5))
     }

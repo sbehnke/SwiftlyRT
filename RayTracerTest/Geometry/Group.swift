@@ -29,7 +29,7 @@ class Group: Shape {
     override func localIntersects(ray: Ray) -> [Intersection] {
         var intersections: [Intersection] = []
         
-        if bounds().intersects(ray: ray) {
+        if boundingBox().intersects(ray: ray) {
             for child in children {
                 let xs = child.intersects(ray: ray)
                 intersections.append(contentsOf: xs)
@@ -38,14 +38,30 @@ class Group: Shape {
         return intersections.sorted()
     }
     
-    override func bounds() -> Bounds {
-        var bounds = Bounds()
+    override func boundingBox() -> BoundingBox {
+        var bounds = BoundingBox()
         
         for child in children {
             bounds.addBox(box: child.parentSpaceBounds())
         }
         
         return bounds
+    }
+    
+    func subdivide(threshold: Int) {
+//        function divide(group, threshold)
+//        if threshold <= group.count then
+//        (left, right) ← partition_children(group)
+//        if left is not empty then make_subgroup(group, left)
+//        if right is not empty then make_subgroup(group, right)
+//        end if
+//
+//        for each child in group
+//        divide(child, threshold)
+//        end for
+//            end function
+        
+        children.removeAll()
     }
     
     var children: [Shape] = []

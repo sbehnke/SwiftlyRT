@@ -16,4 +16,14 @@ class Triangle: Shape {
     override func localNormalAt(p: Tuple) -> Tuple {
         return p - Tuple.pointZero
     }
+    
+//    function bounds_of(triangle)
+//    let box ← bounding_box(empty)
+//    
+//    add triangle.p1 to box
+//    add triangle.p2 to box
+//    add triangle.p3 to box
+//    
+//    return box
+//    end function
 }

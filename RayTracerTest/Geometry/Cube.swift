@@ -47,7 +47,7 @@ class Cube: Shape {
         }
     }
     
-    override func bounds() -> Bounds {
-        return Bounds(minimum: Tuple.Point(x: -1, y: -1, z: -1), maximum: Tuple.Point(x: 1, y: 1, z: 1))
+    override func boundingBox() -> BoundingBox {
+        return BoundingBox(minimum: Tuple.Point(x: -1, y: -1, z: -1), maximum: Tuple.Point(x: 1, y: 1, z: 1))
     }
 }

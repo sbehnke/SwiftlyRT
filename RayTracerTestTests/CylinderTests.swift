@@ -276,10 +276,33 @@ class CylinderTests: XCTestCase {
         }
     }
     
-    func testCylinderBounds() {
+    func testUnboundedCylinderbBoundingBox() {
+//        Scenario: An unbounded cylinder has a bounding box
+//        Given shape ← cylinder()
+//        When box ← bounds_of(shape)
+//        Then box.min = point(-1, -infinity, -1)
+//        And box.max = point(1, infinity, 1)
+        
         let c = Cylinder()
-        let bounds = c.bounds()
+        let bounds = c.boundingBox()
         XCTAssertEqual(bounds.minimum, Tuple.Point(x: -1, y: -.infinity, z: -1))
         XCTAssertEqual(bounds.maximum, Tuple.Point(x: 1, y: .infinity, z: 1))
+    }
+    
+    func testBoundedCylinderBoundingBox() {
+//        Scenario: A bounded cylinder has a bounding box
+//        Given shape ← cylinder()
+//        And shape.minimum ← -5
+//        And shape.maximum ← 3
+//        When box ← bounds_of(shape)
+//        Then box.min = point(-1, -5, -1)
+//        And box.max = point(1, 3, 1)
+
+        let c = Cylinder()
+        c.minimum = -5
+        c.maximum = 3
+        let bounds = c.boundingBox()
+        XCTAssertEqual(bounds.minimum, Tuple.Point(x: -1, y: -5, z: -1))
+        XCTAssertEqual(bounds.maximum, Tuple.Point(x: 1, y: 3, z: 1))
     }
 }

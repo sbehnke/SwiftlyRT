@@ -49,7 +49,7 @@ class ViewController: NSViewController {
     func hexagonSide() -> Group {
         let side = Group()
         side.addChild(hexagonCorner())
-        side.addChild(hexagonEdge())
+//        side.addChild(hexagonEdge())
         
         return side
     }
@@ -57,7 +57,7 @@ class ViewController: NSViewController {
     func hexagon() -> Group {
         let hex = Group()
         
-        for index in 0...5 {
+        for index in 1...6 {
             let side = hexagonSide()
             side.transform = Matrix4x4.rotatedY(Double(index) * Double(index) / 3.0)
             hex.addChild(side)
@@ -494,17 +494,17 @@ class ViewController: NSViewController {
 //            Matrix4x4.rotatedX(1.5708)
 //        southWall.material = wallMaterial
         
-//        let hex = hexagon()
-//        hex.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6)
-  
-        let s = Sphere()
-        s.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6)
+        let hex = hexagon()
+        hex.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6) * Matrix4x4.rotatedZ(.pi / 3)
+//
+//        let s = Sphere()
+//        s.transform = Matrix4x4.translated(x: 0.6, y: 0.7, z: -0.6)
         
         let world = World()
         let light = PointLight(position: .Point(x: -4.9, y: 4.9, z: -1),
                                intensity: Color.white)
         world.light = light
-        world.objects.append(contentsOf: [s])
+        world.objects.append(contentsOf: [hex])
         
         var camera = Camera(w: 400, h: 200, fieldOfView: 1.152)
         camera.transform = Matrix4x4.viewTransformed(from: .Point(x: -2.6, y: 1.5, z: -3.9),

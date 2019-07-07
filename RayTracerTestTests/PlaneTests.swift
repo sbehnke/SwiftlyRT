@@ -101,9 +101,15 @@ class PlaneTests: XCTestCase {
         
     }
     
-    func testBounds() {
+    func testPlaneBoundingBox() {        
+//        Scenario: A plane has a bounding box
+//        Given shape ← plane()
+//        When box ← bounds_of(shape)
+//        Then box.min = point(-infinity, 0, -infinity)
+//        And box.max = point(infinity, 0, infinity)
+        
         let p = Plane()
-        let bounds = p.bounds()
+        let bounds = p.boundingBox()
         XCTAssertEqual(bounds.minimum, Tuple.Point(x: -.infinity, y: 0, z: -.infinity))
         XCTAssertEqual(bounds.maximum, Tuple.Point(x: .infinity, y: 0, z: .infinity))
     }
