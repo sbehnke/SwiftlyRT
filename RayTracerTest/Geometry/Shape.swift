@@ -65,6 +65,10 @@ class Shape : Equatable {
     func divide(threshold: Int) {
     }
     
+    func includes(_ shape: Shape) -> Bool {
+        return self == shape
+    }
+    
     var name = ""
     var parent: Group? = nil
     var children: [Shape] = []

@@ -30,8 +30,15 @@ class CSGTests: XCTestCase {
 //    And c.right = s2
 //    And s1.parent = c
 //    And s2.parent = c
-    
-        XCTFail()
+
+        let s1 = Sphere()
+        let s2 = Cube()
+        let c = CSG.union(left: s1, right: s2)
+        XCTAssertEqual(c.oper, GeometryOperation.union)
+        XCTAssertEqual(c.left, s1)
+        XCTAssertEqual(c.right, s2)
+        XCTAssertEqual(s1.parent, c)
+        XCTAssertEqual(s2.parent, c)
     }
     
     func testEvaluatingRuleForCSGOperation() {
@@ -67,8 +74,34 @@ class CSGTests: XCTestCase {
 //    | difference   | false | true  | false | true   |
 //    | difference   | false | false | true  | false  |
 //    | difference   | false | false | false | false  |
-    
-        XCTFail()
+        
+        
+        var ops: [GeometryOperation] = []
+        var lhit: [Bool] = []
+        var inl: [Bool] = []
+        var inr: [Bool] = []
+        var result: [Bool] = []
+        
+        // union examples
+        ops = [ .union, .union, .union, .union, .union, .union, .union, .union, .intersection, .intersection, .intersection, .intersection, .intersection, .intersection, .intersection, .intersection, .difference, .difference, .difference, .difference, .difference, .difference, .difference, .difference, ]
+
+        lhit = [ true, true, true, true, false, false, false, false, true, true, true, true, false, false, false, false, true, true, true, true, false, false, false, false ]
+        
+        inl = [ true, true, false, false, true, true, false, false, true, true, false, false, true, true, false, false, true, true, false, false, true, true, false, false, ]
+        
+        inr = [ true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, ]
+
+        result = [ false, true, false, true, false, false, true, true, true, false, true, false, true, true, false, false, false, true, false, true, true, true, false, false, ]
+        
+        XCTAssertEqual(ops.count, lhit.count)
+        XCTAssertEqual(ops.count, inl.count)
+        XCTAssertEqual(ops.count, inr.count)
+        XCTAssertEqual(ops.count, result.count)
+        
+        for index in 0..<ops.count {
+            XCTAssertEqual(CSG.intersectionAllowed(op: ops[index], lhit: lhit[index], inl: inl[index], inr: inr[index]), result[index],
+                            "Index \(index) does not match the expected result.")
+        }
     }
     
     func testFilteringListOfIntersections() {
@@ -87,8 +120,28 @@ class CSGTests: XCTestCase {
 //    | union        | 0  | 3  |
 //    | intersection | 1  | 2  |
 //    | difference   | 0  | 1  |
+
+        let s1 = Sphere()
+        s1.name = "s1"
+        let s2 = Cube()
+        s2.name = "s2"
         
-        XCTFail()
+        let xs = [Intersection(t: 1, object: s1), Intersection(t: 2, object: s2), Intersection(t: 3, object: s1), Intersection(t: 4, object: s2)]
+        
+        let cUnion = CSG(oper: .union, left: s1, right: s2)
+        let cIntersection = CSG(oper: .intersection, left: s1, right: s2)
+        let cDifference = CSG(oper: .difference, left: s1, right: s2)
+        
+        let unionResult = cUnion.filterIntersections(xs)
+        let intersectionResult = cIntersection.filterIntersections(xs)
+        let differenceResult = cDifference.filterIntersections(xs)
+        
+        XCTAssertEqual(unionResult[0], xs[0])
+        XCTAssertEqual(unionResult[1], xs[3])
+        XCTAssertEqual(intersectionResult[0], xs[1])
+        XCTAssertEqual(intersectionResult[1], xs[2])
+        XCTAssertEqual(differenceResult[0], xs[0])
+        XCTAssertEqual(differenceResult[1], xs[1])
     }
     
     func testRayMissesCSGObject() {
@@ -97,8 +150,11 @@ class CSGTests: XCTestCase {
 //    And r ← ray(point(0, 2, -5), vector(0, 0, 1))
 //    When xs ← local_intersect(c, r)
 //    Then xs is empty
-        
-        XCTFail()
+
+        let c = CSG(oper: .union, left: Sphere(), right: Cube())
+        let r = Ray(origin: .Point(x: 0, y: 2, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let xs = c.localIntersects(ray: r)
+        XCTAssertEqual(xs.count, 0)
     }
     
     func testRayHittingCSGObject() {
@@ -115,7 +171,19 @@ class CSGTests: XCTestCase {
 //    And xs[1].t = 6.5
 //    And xs[1].object = s2
 
-        XCTFail()
+        let s1 = Sphere()
+        s1.name = "s1"
+        let s2 = Sphere()
+        s2.name = "s2"
+        s2.transform = .translated(x: 0, y: 0, z: 0.5)
+        let c = CSG.union(left: s1, right: s2)
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let xs = c.localIntersects(ray: r)
+        XCTAssertEqual(xs.count, 2)
+        XCTAssertEqual(xs[0].t, 4)
+        XCTAssertEqual(xs[0].object, s1)
+        XCTAssertEqual(xs[1].t, 6.5)
+        XCTAssertEqual(xs[1].object, s2)
     }
     
     func testCSGBoundingBox() {
@@ -125,6 +193,11 @@ class CSGTests: XCTestCase {
 //        When box ← parent_space_bounds_of(shape)
 //        Then box.min = point(0.5, -5, 1)
 //        And box.max = point(1.5, -1, 9)
+        let shape = Sphere()
+        shape.transform = .translated(x: 1, y: -3, z: 5) * Matrix4x4.scaled(x: 0.5, y: 2, z: 4)
+        let box = shape.parentSpaceBounds()
+        XCTAssertEqual(box.minimum, Tuple.Point(x: 0.5, y: -5, z: 1))
+        XCTAssertEqual(box.maximum, Tuple.Point(x: 1.5, y: -1, z: 9))
     }
     
     func testCSGContainingChildrenBoundingBox() {
@@ -137,6 +210,13 @@ class CSGTests: XCTestCase {
 //        Then box.min = point(-1, -1, -1)
 //        And box.max = point(3, 4, 5)
         
+        let left = Sphere()
+        let right = Sphere()
+        right.transform = .translated(x: 2, y: 3, z: 4)
+        let shape = CSG.difference(left: left, right: right)
+        let box = shape.boundingBox()
+        XCTAssertEqual(box.minimum, Tuple.Point(x: -1, y: -1, z: -1))
+        XCTAssertEqual(box.maximum, Tuple.Point(x: 3, y: 4, z: 5))
     }
 
     func testInterestMissingBoundingBox() {
@@ -148,7 +228,14 @@ class CSGTests: XCTestCase {
 //    When xs ← intersect(shape, r)
 //    Then left.saved_ray is unset
 //    And right.saved_ray is unset
-        
+
+        let left = TestShape()
+        let right = TestShape()
+        let shape = CSG.difference(left: left, right: right)
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -4), direction: .Vector(x: 0, y: 1, z: 0))
+        let _ = shape.intersects(ray: r)
+        XCTAssertNil(left.savedRay)
+        XCTAssertNil(right.savedRay)
     }
     
     func testIntersectHittingBoundingBox() {
@@ -160,7 +247,14 @@ class CSGTests: XCTestCase {
 //    When xs ← intersect(shape, r)
 //    Then left.saved_ray is set
 //    And right.saved_ray is set
-        
+
+        let left = TestShape()
+        let right = TestShape()
+        let shape = CSG.difference(left: left, right: right)
+        let r = Ray(origin: .Point(x: 0, y: 0, z: -5), direction: .Vector(x: 0, y: 0, z: 1))
+        let _ = shape.intersects(ray: r)
+        XCTAssertNotNil(left.savedRay)
+        XCTAssertNotNil(right.savedRay)
     }
     
     func testSubdividingCSGShape() {
@@ -181,6 +275,38 @@ class CSGTests: XCTestCase {
 //        And left[1] is a group of [s2]
 //        And right[0] is a group of [s3]
 //        And right[1] is a group of [s4]
+
+        let s1 = Sphere()
+        s1.transform = .translated(x: -1.5, y: 0, z: 0)
         
+        let s2 = Sphere()
+        s2.transform = .translated(x: 1.5, y: 0, z: 0)
+        
+        let left = Group()
+        left.addChildren([s1, s2])
+        
+        let s3 = Sphere()
+        s3.transform = .translated(x: 0, y: 0, z: -1.5)
+        
+        let s4 = Sphere()
+        s4.transform = .translated(x: 0, y: 0, z: 1.5)
+        
+        let right = Group()
+        right.addChildren([s3, s4])
+        
+        let shape = CSG.difference(left: left, right: right)
+        shape.divide(threshold: 1)
+        
+        let lg1 = left.children[0]
+        XCTAssertEqual(lg1.children[0], s1)
+
+        let lg2 = left.children[1]
+        XCTAssertEqual(lg2.children[0], s2)
+
+        let rg1 = right.children[0]
+        XCTAssertEqual(rg1.children[0], s3)
+
+        let rg2 = right.children[1]
+        XCTAssertEqual(rg2.children[0], s4)
     }
 }

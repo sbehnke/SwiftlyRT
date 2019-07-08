@@ -722,11 +722,11 @@
                                 </textFieldCell>
                             </textField>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1CF-KI-B4U">
-                                <rect key="frame" x="270" y="55" width="190" height="195"/>
+                                <rect key="frame" x="270" y="26" width="190" height="224"/>
                                 <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AAl-6R-jkc">
-                                        <rect key="frame" x="-6" y="167" width="125" height="32"/>
+                                        <rect key="frame" x="-6" y="196" width="125" height="32"/>
                                         <buttonCell key="cell" type="push" title="Render Scene" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Gdi-Uh-NbJ">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -736,7 +736,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jI0-rr-FIE">
-                                        <rect key="frame" x="-6" y="138" width="172" height="32"/>
+                                        <rect key="frame" x="-6" y="167" width="172" height="32"/>
                                         <buttonCell key="cell" type="push" title="Render Shink X Shear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yTi-AR-km7">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -746,7 +746,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Zsc-me-uet">
-                                        <rect key="frame" x="-6" y="109" width="202" height="32"/>
+                                        <rect key="frame" x="-6" y="138" width="202" height="32"/>
                                         <buttonCell key="cell" type="push" title="Render Shink X and Rotate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="blN-Vy-hFb">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -756,7 +756,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hp1-25-q9w">
-                                        <rect key="frame" x="-6" y="80" width="138" height="32"/>
+                                        <rect key="frame" x="-6" y="109" width="138" height="32"/>
                                         <buttonCell key="cell" type="push" title="Render Shrink X" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="S0J-UH-reX">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -766,7 +766,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="98p-wN-Lwg">
-                                        <rect key="frame" x="-6" y="51" width="138" height="32"/>
+                                        <rect key="frame" x="-6" y="80" width="138" height="32"/>
                                         <buttonCell key="cell" type="push" title="Render Shrink Y" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VIX-ga-a8O">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -776,7 +776,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bc5-cN-nuV">
-                                        <rect key="frame" x="-6" y="22" width="125" height="32"/>
+                                        <rect key="frame" x="-6" y="51" width="125" height="32"/>
                                         <buttonCell key="cell" type="push" title="Render Scene" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1l5-Yl-35Z">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -786,13 +786,23 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5AY-t9-7cb">
-                                        <rect key="frame" x="-6" y="-7" width="179" height="32"/>
+                                        <rect key="frame" x="-6" y="22" width="179" height="32"/>
                                         <buttonCell key="cell" type="push" title="Render Refraction Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="At1-iW-XRt">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="renderRefactionTest:" target="XfG-lQ-9wD" id="rON-km-R9R"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mw6-UA-mtv">
+                                        <rect key="frame" x="-6" y="-7" width="133" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Render Obj File" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ikE-Rv-KuB">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="renderGiraffe:" target="XfG-lQ-9wD" id="Pb4-vb-J3U"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -804,8 +814,10 @@
                                     <integer value="1000"/>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
+                                    <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>

@@ -448,6 +448,66 @@ class ViewController: NSViewController {
         }
     }
     
+    
+    
+    @IBAction func renderGiraffe(_ sender: Any) {
+        let startTime = CACurrentMediaTime()
+        
+        var camera = Camera(w: 400, h: 300, fieldOfView: 1.047)
+        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: 1, y: 2, z: -5), to: .Point(x: 0, y: 1, z: 0), up: .Vector(x: 0, y: 1, z: 0))
+        
+        let world = World()
+        world.light = PointLight(position: .Point(x: -9, y: 9, z: -9), intensity: Color.white)
+        
+        let floor = Plane()
+        floor.material.pattern = CheckerPattern(a: Color(r: 0.7, g: 0.7, b: 0.7), b: Color(r: 0.3, g: 0.3, b: 0.3))
+        floor.material.pattern?.transform = Matrix4x4.scaled(x: 0.6, y: 0.6, z: 0.6)
+        floor.material.ambient = 0.02
+        floor.material.diffuse = 0.7
+        floor.material.specular = 0
+        floor.material.reflective = 0.05
+        
+        let room = Cube()
+        room.material.color = Color(r: 0.7, g: 0.7, b: 0.7)
+        room.material.diffuse = 0.8
+        room.material.ambient = 0.1
+        room.material.specular = 0
+        room.transform = Matrix4x4.translated(x: 0, y: 0.99, z: 0) * Matrix4x4.scaled(x: 10, y: 10, z: 10)
+        
+        world.objects = [floor, room]
+        
+        let bundle = Bundle.main
+        let url = bundle.url(forResource: "teapot", withExtension: "obj")
+        let teapot = ObjParser.parse(objFilePath: url)
+        
+        world.objects.append(teapot.toGroup())
+        
+        DispatchQueue.global(qos: .background).async {
+            
+            let canvas = camera.render(world: world, progress: { (x: Int, y: Int) -> Void in
+                DispatchQueue.main.async {
+                    self.progressLabel.stringValue = "(\(x),\(y))"
+                }
+            })
+            
+            let data = canvas.getPPM()
+            
+            let filename = self.getDocumentsDirectory().appendingPathComponent("giraffe.ppm")
+            do {
+                try data.write(to: filename)
+                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: self.getDocumentsDirectory().absoluteString)
+            } catch {
+                // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+            }
+            
+            DispatchQueue.main.async {
+                let timeElapsed = CACurrentMediaTime() - startTime
+                self.progressLabel.stringValue = "Finished in: " + self.format(duration: timeElapsed)
+            }
+        }
+    }
+    
+    
     @IBAction func renderFullScene(_ sender: Any) {
         let startTime = CACurrentMediaTime()
 

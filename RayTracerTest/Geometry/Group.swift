@@ -104,6 +104,16 @@ class Group: Shape {
         return (left, right)
     }
     
+    override func includes(_ shape: Shape) -> Bool {
+        for child in children {            
+            if (child.includes(shape)) {
+                return true
+            }
+        }
+    
+        return false
+    }
+    
     func makeSubgroup(children: [Shape]) {
         let g = Group()
         g.addChildren(children)

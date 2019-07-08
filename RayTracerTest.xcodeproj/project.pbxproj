@@ -61,6 +61,13 @@
 		64D36E9122D29FB20067ADB4 /* triangles.obj in Resources */ = {isa = PBXBuildFile; fileRef = 64D36E9022D29FB20067ADB4 /* triangles.obj */; };
 		64D36E9322D2B11C0067ADB4 /* SmoothTriangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D36E9222D2B11B0067ADB4 /* SmoothTriangle.swift */; };
 		64D36E9522D2B41F0067ADB4 /* SmoothTriangleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D36E9422D2B41F0067ADB4 /* SmoothTriangleTests.swift */; };
+		64D36EAC22D2C1AC0067ADB4 /* 10021_Giraffe_v05.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EA522D2C1AC0067ADB4 /* 10021_Giraffe_v05.jpg */; };
+		64D36EAD22D2C1AC0067ADB4 /* cow-nonormals.obj in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EA622D2C1AC0067ADB4 /* cow-nonormals.obj */; };
+		64D36EAE22D2C1AC0067ADB4 /* teddy.obj in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EA722D2C1AC0067ADB4 /* teddy.obj */; };
+		64D36EAF22D2C1AC0067ADB4 /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EA822D2C1AC0067ADB4 /* teapot.obj */; };
+		64D36EB022D2C1AC0067ADB4 /* 10021_Giraffe_v04.obj in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EA922D2C1AC0067ADB4 /* 10021_Giraffe_v04.obj */; };
+		64D36EB122D2C1AC0067ADB4 /* pumpkin_tall_10k.obj in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EAA22D2C1AC0067ADB4 /* pumpkin_tall_10k.obj */; };
+		64D36EB222D2C1AC0067ADB4 /* 10021_Giraffe_v04.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EAB22D2C1AC0067ADB4 /* 10021_Giraffe_v04.mtl */; };
 		64EE917922C7D18700FB2699 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE917822C7D18700FB2699 /* AppDelegate.swift */; };
 		64EE917B22C7D18700FB2699 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE917A22C7D18700FB2699 /* ViewController.swift */; };
 		64EE917D22C7D18900FB2699 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64EE917C22C7D18900FB2699 /* Assets.xcassets */; };
@@ -170,6 +177,13 @@
 		64D36E9022D29FB20067ADB4 /* triangles.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = triangles.obj; path = "Book Data/files/triangles.obj"; sourceTree = SOURCE_ROOT; };
 		64D36E9222D2B11B0067ADB4 /* SmoothTriangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmoothTriangle.swift; sourceTree = "<group>"; };
 		64D36E9422D2B41F0067ADB4 /* SmoothTriangleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmoothTriangleTests.swift; sourceTree = "<group>"; };
+		64D36EA522D2C1AC0067ADB4 /* 10021_Giraffe_v05.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 10021_Giraffe_v05.jpg; sourceTree = "<group>"; };
+		64D36EA622D2C1AC0067ADB4 /* cow-nonormals.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "cow-nonormals.obj"; sourceTree = "<group>"; };
+		64D36EA722D2C1AC0067ADB4 /* teddy.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teddy.obj; sourceTree = "<group>"; };
+		64D36EA822D2C1AC0067ADB4 /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
+		64D36EA922D2C1AC0067ADB4 /* 10021_Giraffe_v04.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 10021_Giraffe_v04.obj; sourceTree = "<group>"; };
+		64D36EAA22D2C1AC0067ADB4 /* pumpkin_tall_10k.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pumpkin_tall_10k.obj; sourceTree = "<group>"; };
+		64D36EAB22D2C1AC0067ADB4 /* 10021_Giraffe_v04.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 10021_Giraffe_v04.mtl; sourceTree = "<group>"; };
 		64EE917522C7D18700FB2699 /* RayTracerTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RayTracerTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64EE917822C7D18700FB2699 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64EE917A22C7D18700FB2699 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -302,6 +316,20 @@
 			path = Lights;
 			sourceTree = "<group>";
 		};
+		64D36E9622D2BC430067ADB4 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				64D36EAB22D2C1AC0067ADB4 /* 10021_Giraffe_v04.mtl */,
+				64D36EA922D2C1AC0067ADB4 /* 10021_Giraffe_v04.obj */,
+				64D36EA522D2C1AC0067ADB4 /* 10021_Giraffe_v05.jpg */,
+				64D36EA622D2C1AC0067ADB4 /* cow-nonormals.obj */,
+				64D36EAA22D2C1AC0067ADB4 /* pumpkin_tall_10k.obj */,
+				64D36EA822D2C1AC0067ADB4 /* teapot.obj */,
+				64D36EA722D2C1AC0067ADB4 /* teddy.obj */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
 		64EE916C22C7D18700FB2699 = {
 			isa = PBXGroup;
 			children = (
@@ -326,6 +354,7 @@
 		64EE917722C7D18700FB2699 /* RayTracerTest */ = {
 			isa = PBXGroup;
 			children = (
+				64D36E9622D2BC430067ADB4 /* models */,
 				64EE917822C7D18700FB2699 /* AppDelegate.swift */,
 				64EE917C22C7D18900FB2699 /* Assets.xcassets */,
 				64EE91AE22C7F2F000FB2699 /* Canvas.swift */,
@@ -501,8 +530,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64D36EB122D2C1AC0067ADB4 /* pumpkin_tall_10k.obj in Resources */,
+				64D36EAD22D2C1AC0067ADB4 /* cow-nonormals.obj in Resources */,
 				6416F6C622D0281C005E4797 /* Scenes in Resources */,
+				64D36EAE22D2C1AC0067ADB4 /* teddy.obj in Resources */,
+				64D36EB222D2C1AC0067ADB4 /* 10021_Giraffe_v04.mtl in Resources */,
+				64D36EAC22D2C1AC0067ADB4 /* 10021_Giraffe_v05.jpg in Resources */,
+				64D36EAF22D2C1AC0067ADB4 /* teapot.obj in Resources */,
 				64EE917D22C7D18900FB2699 /* Assets.xcassets in Resources */,
+				64D36EB022D2C1AC0067ADB4 /* 10021_Giraffe_v04.obj in Resources */,
 				64EE918022C7D18900FB2699 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

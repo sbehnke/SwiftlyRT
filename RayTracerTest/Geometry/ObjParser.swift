@@ -87,7 +87,7 @@ struct ObjParser {
         var currentObjectName = ""
         
         objFileData.enumerateLines(invoking: {(line: String, stop: inout Bool) -> () in
-            print(line)
+//            print(line)
             let components = line.split(separator: " ")
             
             if components.count > 1 {
