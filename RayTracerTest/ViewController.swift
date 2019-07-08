@@ -453,7 +453,7 @@ class ViewController: NSViewController {
     @IBAction func renderGiraffe(_ sender: Any) {
         let startTime = CACurrentMediaTime()
         
-        var camera = Camera(w: 400, h: 300, fieldOfView: 1.047)
+        var camera = Camera(w: 200, h: 150, fieldOfView: 1.047)
         camera.transform = Matrix4x4.viewTransformed(from: .Point(x: 1, y: 2, z: -5), to: .Point(x: 0, y: 1, z: 0), up: .Vector(x: 0, y: 1, z: 0))
         
         let world = World()
@@ -479,8 +479,9 @@ class ViewController: NSViewController {
         let bundle = Bundle.main
         let url = bundle.url(forResource: "teapot", withExtension: "obj")
         let teapot = ObjParser.parse(objFilePath: url)
-        
-        world.objects.append(teapot.toGroup())
+        let teapotGroup = teapot.toGroup()
+        // teapotGroup.divide(threshold: 1)
+        world.objects.append(teapotGroup)
         
         DispatchQueue.global(qos: .background).async {
             

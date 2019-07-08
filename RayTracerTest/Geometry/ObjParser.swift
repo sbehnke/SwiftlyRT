@@ -55,17 +55,29 @@ struct ObjParser {
     private func trianglePoints(pIndex1: Int, pIndex2: Int, pIndex3: Int) -> (Tuple, Tuple, Tuple) {
         let vCount = vertices.count
 
-        if (pIndex1 > 0 && pIndex2 > 0 && pIndex3 > 0 &&
-            pIndex1 <= vCount && pIndex2 <= vCount && pIndex3 <= vCount) {
-            
-            let p1 = vertices[pIndex1]
-            let p2 = vertices[pIndex2]
-            let p3 = vertices[pIndex3]
-            
-            return (p1, p2, p3)
+        var p1 = Tuple.pointZero
+        var p2 = Tuple.pointZero
+        var p3 = Tuple.pointZero
+        
+        if (pIndex1 > 0 && pIndex1 <= vCount) {
+            p1 = vertices[pIndex1]
+        } else if (pIndex1 < 0 && abs(pIndex1) <= vCount) {
+            p1 = vertices[vCount + pIndex1]
         }
         
-        return (Tuple.pointZero, Tuple.pointZero, Tuple.pointZero)
+        if (pIndex2 > 0 && pIndex2 <= vCount) {
+            p2 = vertices[pIndex2]
+        } else if (pIndex2 < 0 && abs(pIndex2) <= vCount) {
+            p2 = vertices[vCount + pIndex2]
+        }
+        
+        if (pIndex3 > 0 && pIndex3 <= vCount) {
+            p3 = vertices[pIndex3]
+        } else if (pIndex3 < 0 && abs(pIndex3) <= vCount) {
+            p3 = vertices[vCount + pIndex3]
+        }
+
+        return (p1, p2, p3)
     }
     
     private func normalVectors(nIndex1: Int, nIndex2: Int, nIndex3: Int) -> (Tuple, Tuple, Tuple) {
@@ -179,6 +191,7 @@ struct ObjParser {
 
                 } else if components[0] == "f" {
                     // Polygonal face element
+                    objParser.faces += 1
                     
                     if !scaleFactorsComputed {
                         scaleFactorsComputed = true
@@ -204,9 +217,7 @@ struct ObjParser {
                             let subComponents2 = components[2].split(separator: "/", maxSplits: Int.max, omittingEmptySubsequences: false)
                             let subComponents3 = components[3].split(separator: "/", maxSplits: Int.max, omittingEmptySubsequences: false)
                             
-                            if (subComponents1.count != 3 || subComponents2.count != 3 || subComponents3.count != 3) {
-                                objParser.ignoredLineCount += 1
-                            } else {
+                            if subComponents1.count == 3 || subComponents2.count == 3 || subComponents3.count == 3 {
                                 // Vertex Index
                                 let pIndex1 = Int(subComponents1[0]) ?? 0
                                 let pIndex2 = Int(subComponents2[0]) ?? 0
@@ -227,6 +238,24 @@ struct ObjParser {
                                 let t = SmoothTriangle(point1: p1, point2: p2, point3: p3, normal1: n1, normal2: n2, normal3: n3)
                                 t.name = currentObjectName
                                 currentGroup.addChild(t)
+                            } else if subComponents1.count == 2 || subComponents2.count == 2 || subComponents3.count == 2 {
+                                // Vertex Index
+                                let pIndex1 = Int(subComponents1[0]) ?? 0
+                                let pIndex2 = Int(subComponents2[0]) ?? 0
+                                let pIndex3 = Int(subComponents3[0]) ?? 0
+                                
+                                // Vertex Normal
+                                let nIndex1 = Int(subComponents1[1]) ?? 0
+                                let nIndex2 = Int(subComponents2[1]) ?? 0
+                                let nIndex3 = Int(subComponents3[1]) ?? 0
+                                
+                                let (p1, p2, p3) = objParser.trianglePoints(pIndex1: pIndex1, pIndex2: pIndex2, pIndex3: pIndex3)
+                                let (n1, n2, n3) = objParser.normalVectors(nIndex1: nIndex1, nIndex2: nIndex2, nIndex3: nIndex3)
+                                let t = SmoothTriangle(point1: p1, point2: p2, point3: p3, normal1: n1, normal2: n2, normal3: n3)
+                                t.name = currentObjectName
+                                currentGroup.addChild(t)
+                            } else {
+                                objParser.ignoredLineCount += 1
                             }
                         } else {
                             let pIndex1 = Int(components[1]) ?? 0
@@ -290,6 +319,7 @@ struct ObjParser {
     private(set) var defaultGroup = Group()
     private(set) var vertices = OneBasedArray<Tuple>()
     private(set) var normals = OneBasedArray<Tuple>()
+    private(set) var faces = 0
     
     private(set) var ignoredLineCount = 0
 }
