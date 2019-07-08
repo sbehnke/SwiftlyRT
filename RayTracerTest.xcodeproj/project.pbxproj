@@ -68,6 +68,7 @@
 		64D36EB022D2C1AC0067ADB4 /* 10021_Giraffe_v04.obj in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EA922D2C1AC0067ADB4 /* 10021_Giraffe_v04.obj */; };
 		64D36EB122D2C1AC0067ADB4 /* pumpkin_tall_10k.obj in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EAA22D2C1AC0067ADB4 /* pumpkin_tall_10k.obj */; };
 		64D36EB222D2C1AC0067ADB4 /* 10021_Giraffe_v04.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EAB22D2C1AC0067ADB4 /* 10021_Giraffe_v04.mtl */; };
+		64D36EB422D2E8D60067ADB4 /* dragon.obj in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EB322D2E8D60067ADB4 /* dragon.obj */; };
 		64EE917922C7D18700FB2699 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE917822C7D18700FB2699 /* AppDelegate.swift */; };
 		64EE917B22C7D18700FB2699 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EE917A22C7D18700FB2699 /* ViewController.swift */; };
 		64EE917D22C7D18900FB2699 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64EE917C22C7D18900FB2699 /* Assets.xcassets */; };
@@ -184,6 +185,7 @@
 		64D36EA922D2C1AC0067ADB4 /* 10021_Giraffe_v04.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 10021_Giraffe_v04.obj; sourceTree = "<group>"; };
 		64D36EAA22D2C1AC0067ADB4 /* pumpkin_tall_10k.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pumpkin_tall_10k.obj; sourceTree = "<group>"; };
 		64D36EAB22D2C1AC0067ADB4 /* 10021_Giraffe_v04.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 10021_Giraffe_v04.mtl; sourceTree = "<group>"; };
+		64D36EB322D2E8D60067ADB4 /* dragon.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dragon.obj; sourceTree = "<group>"; };
 		64EE917522C7D18700FB2699 /* RayTracerTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RayTracerTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64EE917822C7D18700FB2699 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64EE917A22C7D18700FB2699 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -323,6 +325,7 @@
 				64D36EA922D2C1AC0067ADB4 /* 10021_Giraffe_v04.obj */,
 				64D36EA522D2C1AC0067ADB4 /* 10021_Giraffe_v05.jpg */,
 				64D36EA622D2C1AC0067ADB4 /* cow-nonormals.obj */,
+				64D36EB322D2E8D60067ADB4 /* dragon.obj */,
 				64D36EAA22D2C1AC0067ADB4 /* pumpkin_tall_10k.obj */,
 				64D36EA822D2C1AC0067ADB4 /* teapot.obj */,
 				64D36EA722D2C1AC0067ADB4 /* teddy.obj */,
@@ -531,6 +534,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				64D36EB122D2C1AC0067ADB4 /* pumpkin_tall_10k.obj in Resources */,
+				64D36EB422D2E8D60067ADB4 /* dragon.obj in Resources */,
 				64D36EAD22D2C1AC0067ADB4 /* cow-nonormals.obj in Resources */,
 				6416F6C622D0281C005E4797 /* Scenes in Resources */,
 				64D36EAE22D2C1AC0067ADB4 /* teddy.obj in Resources */,
