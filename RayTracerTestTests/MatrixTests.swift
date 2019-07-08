@@ -8,6 +8,7 @@
 
 import Foundation
 import XCTest
+import simd
 @testable import RayTracerTest
 
 class MatrixTests: XCTestCase {
@@ -20,6 +21,30 @@ class MatrixTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
+    func test4x4DeterminateSpeed() {
+        measure {
+            for _ in 0..<1000 {
+                let m1 = Matrix4x4(a0: -2, a1: -8, a2: 3, a3: 5,
+                                   b0: -3, b1: 1, b2: 7, b3: 3,
+                                   c0: 1, c1: 2, c2: -9, c3: 6,
+                                   d0: -6, d1: 7, d2: 7, d3: -9)
+                XCTAssertEqual(-4071, m1.determinate())
+            }
+        }
+    }
+    
+    func test4x4DeterminateSIMDSpeed() {
+        measure {
+            for _ in 0..<1000 {
+                let m1 = matrix_double4x4(vector4(-2.0, -8.0, 3.0,  5.0),
+                                          vector4(-3.0,  1.0,  7.0,   3.0),
+                                          vector4(1.0,  2.0, -9.0,   6.0),
+                                          vector4(-6.0,  7.0,  7.0,  -9.0))
+                
+                XCTAssertEqual(-4071, simd_determinant(m1))
+            }
+        }
+    }
     
     func testMatrix4x4() {
         //        Scenario: Constructing and inspecting a 4x4 matrix
