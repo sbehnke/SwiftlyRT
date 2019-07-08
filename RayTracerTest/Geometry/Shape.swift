@@ -69,6 +69,7 @@ class Shape : Equatable {
         return self == shape
     }
     
+    var castsShadow = true
     var name = ""
     var parent: Group? = nil
     var children: [Shape] = []

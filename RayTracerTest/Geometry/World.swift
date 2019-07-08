@@ -138,7 +138,9 @@ class World {
             let hit = Intersection.hit(xs)
             
             if hit != nil && hit!.t < distance {
-                return true
+                if hit!.object!.castsShadow {
+                    return true
+                }
             }
         }
         

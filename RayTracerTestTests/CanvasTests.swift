@@ -177,4 +177,115 @@ P3
         XCTAssertEqual(str?.last!, "\n")
         
     }
+    
+    func testReadingInvalidPPMHeader() {
+//        Scenario: Reading a file with the wrong magic number
+//        Given ppm ← a file containing:
+//        """
+//        P32
+//        1 1
+//        255
+//        0 0 0
+//        """
+//        Then canvas_from_ppm(ppm) should fail
+        
+    }
+    
+    func testReadingPPMHeaderWithAndHeight() {
+//        Scenario: Reading a PPM returns a canvas of the right size
+//        Given ppm ← a file containing:
+//        """
+//        P3
+//        10 2
+//        255
+//        0 0 0  0 0 0  0 0 0  0 0 0  0 0 0
+//        0 0 0  0 0 0  0 0 0  0 0 0  0 0 0
+//        0 0 0  0 0 0  0 0 0  0 0 0  0 0 0
+//        0 0 0  0 0 0  0 0 0  0 0 0  0 0 0
+//        """
+//        When canvas ← canvas_from_ppm(ppm)
+//        Then canvas.width = 10
+//        And canvas.height = 2
+        
+    }
+    
+    func testReadingPPMPixeldData() {
+//        Scenario Outline: Reading pixel data from a PPM file
+//        Given ppm ← a file containing:
+//        """
+//        P3
+//        4 3
+//        255
+//        255 127 0  0 127 255  127 255 0  255 255 255
+//        0 0 0  255 0 0  0 255 0  0 0 255
+//        255 255 0  0 255 255  255 0 255  127 127 127
+//        """
+//        When canvas ← canvas_from_ppm(ppm)
+//        Then pixel_at(canvas, <x>, <y>) = <color>
+//
+//        Examples:
+//        | x | y | color                      |
+//        | 0 | 0 | color(1, 0.498, 0)         |
+//        | 1 | 0 | color(0, 0.498, 1)         |
+//        | 2 | 0 | color(0.498, 1, 0)         |
+//        | 3 | 0 | color(1, 1, 1)             |
+//        | 0 | 1 | color(0, 0, 0)             |
+//        | 1 | 1 | color(1, 0, 0)             |
+//        | 2 | 1 | color(0, 1, 0)             |
+//        | 3 | 1 | color(0, 0, 1)             |
+//        | 0 | 2 | color(1, 1, 0)             |
+//        | 1 | 2 | color(0, 1, 1)             |
+//        | 2 | 2 | color(1, 0, 1)             |
+//        | 3 | 2 | color(0.498, 0.498, 0.498) |
+        
+    }
+    
+    func testParsePPMDataIgnoringComments() {
+//        Scenario: PPM parsing ignores comment lines
+//        Given ppm ← a file containing:
+//        """
+//        P3
+//        # this is a comment
+//        2 1
+//        # this, too
+//        255
+//        # another comment
+//        255 255 255
+//        # oh, no, comments in the pixel data!
+//        255 0 255
+//        """
+//        When canvas ← canvas_from_ppm(ppm)
+//        Then pixel_at(canvas, 0, 0) = color(1, 1, 1)
+//        And pixel_at(canvas, 1, 0) = color(1, 0, 1)
+    }
+    
+    func testParsePPMDataWithRGBAcrossLines() {
+//        Scenario: PPM parsing allows an RGB triple to span lines
+//        Given ppm ← a file containing:
+//        """
+//        P3
+//        1 1
+//        255
+//        51
+//        153
+//
+//        204
+//        """
+//        When canvas ← canvas_from_ppm(ppm)
+//        Then pixel_at(canvas, 0, 0) = color(0.2, 0.6, 0.8)
+    }
+    
+    func testParsePPMReaderRespectsScaleSetting() {
+//        Scenario: PPM parsing respects the scale setting
+//        Given ppm ← a file containing:
+//        """
+//        P3
+//        2 2
+//        100
+//        100 100 100  50 50 50
+//        75 50 25  0 0 0
+//        """
+//        When canvas ← canvas_from_ppm(ppm)
+//        Then pixel_at(canvas, 0, 1) = color(0.75, 0.5, 0.25)
+    }
 }

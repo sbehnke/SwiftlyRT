@@ -1,0 +1,27 @@
+- add: camera
+  width: 400
+  height: 400
+  field-of-view: 0.5
+  from: [1, 2, -5]
+  to: [0, 0, 0]
+  up: [0, 1, 0]
+
+- add: light
+  at: [-10, 10, -10]
+  intensity: [1, 1, 1]
+
+- add: plane
+  material:
+    pattern:
+      type: map
+      mapping: planar
+      uv_pattern:
+        type: align_check
+        colors:
+          main: [1, 1, 1] # white
+          ul: [1, 0, 0]   # red
+          ur: [1, 1, 0]   # yellow
+          bl: [0, 1, 0]   # green
+          br: [0, 1, 1]   # cyan
+    ambient: 0.1
+    diffuse: 0.8

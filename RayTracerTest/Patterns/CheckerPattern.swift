@@ -24,6 +24,20 @@ class CheckerPattern: Pattern {
         }
     }
     
+    override func uvPatternAt(u: Double, v: Double) -> Color {
+        
+        let u2 = floor(u * width)
+        let v2 = floor(v * height)
+        
+        if (fmod(u2 + v2, 2.0) == 0) {
+            return a
+        } else {
+            return b
+        }        
+    }
+    
+    var height = 1.0
+    var width = 1.0
     var a = Color.white
     var b = Color.white
 }

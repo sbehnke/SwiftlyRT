@@ -1,0 +1,52 @@
+- add: camera
+  width: 800
+  height: 400
+  field-of-view: 0.8
+  from: [1, 2, -10]
+  to: [0, 1.1, 0]
+  up: [0, 1, 0]
+
+- add: light
+  at: [-100, 100, -100]
+  intensity: [1, 1, 1]
+
+- add: plane
+  material:
+    color: [1, 1, 1]
+    diffuse: 0.1
+    specular: 0
+    ambient: 0
+    reflective: 0.4
+
+- add: cylinder
+  min: 0
+  max: 0.1
+  closed: true
+  material:
+    color: [1, 1, 1]
+    diffuse: 0.2
+    specular: 0
+    ambient: 0
+    reflective: 0.1
+
+# the earth image map is from
+# http://planetpixelemporium.com/earth.html (see "color map")
+#
+# converted from JPG to PPM via ImageMagick with:
+# $ convert earthmap1k.jpg -compress none earthmap1k.ppm
+
+- add: sphere
+  transform:
+    - [ rotate-y, 1.9 ]
+    - [ translate, 0, 1.1, 0 ]
+  material:
+    pattern:
+      type: map
+      mapping: spherical
+      uv_pattern:
+        type: image
+        file: earthmap1k.ppm
+    diffuse: 0.9
+    specular: 0.1
+    shininess: 10
+    ambient: 0.1

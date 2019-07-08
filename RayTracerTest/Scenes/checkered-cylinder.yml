@@ -1,0 +1,33 @@
+- add: camera
+  width: 400
+  height: 400
+  field-of-view: 0.5
+  from: [0, 0, -10]
+  to: [0, 0, 0]
+  up: [0, 1, 0]
+
+- add: light
+  at: [-10, 10, -10]
+  intensity: [1, 1, 1]
+
+- add: cylinder
+  min: 0
+  max: 1
+  transform:
+    - [translate, 0, -0.5, 0]
+    - [scale, 1, 3.1415, 1]
+  material:
+    pattern:
+      type: map
+      mapping: cylindrical
+      uv_pattern:
+        type: checkers
+        width: 16
+        height: 8
+        colors:
+          - [0, 0.5, 0]
+          - [1, 1, 1]
+    ambient: 0.1
+    specular: 0.6
+    shininess: 15
+    diffuse: 0.8

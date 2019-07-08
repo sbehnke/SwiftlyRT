@@ -1,0 +1,54 @@
+- add: camera
+  width: 800
+  height: 400
+  field-of-view: 1.2
+  from: [0, 0, 0]
+  to: [0, 0, 5]
+  up: [0, 1, 0]
+
+- add: light
+  at: [0, 100, 0]
+  intensity: [1, 1, 1]
+
+- add: sphere
+  transform:
+    - [ scale, 0.75, 0.75, 0.75 ]
+    - [ translate, 0, 0, 5 ]
+  material:
+    diffuse: 0.4
+    specular: 0.6
+    shininess: 20
+    reflective: 0.6
+    ambient: 0
+
+# the cube map image is from Lancellotti Chapel from
+# http://www.humus.name/index.php?page=Textures
+
+- add: cube
+  transform:
+    - [ scale, 1000, 1000, 1000 ]
+  material:
+    pattern:
+      type: map
+      mapping: cube
+      left:
+        type: image
+        file: negx.ppm
+      right:
+        type: image
+        file: posx.ppm
+      front:
+        type: image
+        file: posz.ppm
+      back:
+        type: image
+        file: negz.ppm
+      up:
+        type: image
+        file: posy.ppm
+      down:
+        type: image
+        file: negy.ppm
+    diffuse: 0
+    specular: 0
+    ambient: 1

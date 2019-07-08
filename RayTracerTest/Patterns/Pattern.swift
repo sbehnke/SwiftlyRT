@@ -13,6 +13,10 @@ class Pattern: Equatable {
         return lhs === rhs
     }
     
+    func uvPatternAt(u: Double, v: Double) -> Color {
+        return Color.black
+    }
+    
     func patternAt(point: Tuple) -> Color {
         return point.toColor()
     }
@@ -32,5 +36,6 @@ class Pattern: Equatable {
             inverseTransform = transform.inversed()
         }
     }
+    
     private(set) var inverseTransform = Matrix4x4.identity
 }

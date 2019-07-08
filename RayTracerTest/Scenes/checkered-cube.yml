@@ -1,0 +1,127 @@
+- add: camera
+  width: 800
+  height: 400
+  field-of-view: 0.8
+  from: [0, 0, -20]
+  to: [0, 0, 0]
+  up: [0, 1, 0]
+
+- add: light
+  at: [0, 100, -100]
+  intensity: [0.25, 0.25, 0.25]
+- add: light
+  at: [0, -100, -100]
+  intensity: [0.25, 0.25, 0.25]
+- add: light
+  at: [-100, 0, -100]
+  intensity: [0.25, 0.25, 0.25]
+- add: light
+  at: [100, 0, -100]
+  intensity: [0.25, 0.25, 0.25]
+
+- define: MappedCube
+  value:
+    add: cube
+    material:
+      pattern:
+        type: map
+        mapping: cube
+        left:
+          type: align_check
+          colors:
+            main: [1, 1, 0] # yellow
+            ul: [0, 1, 1]   # cyan
+            ur: [1, 0, 0]   # red
+            bl: [0, 0, 1]   # blue
+            br: [1, 0.5, 0] # brown
+        front:
+          type: align_check
+          colors:
+            main: [0, 1, 1] # cyan
+            ul: [1, 0, 0]   # red
+            ur: [1, 1, 0]   # yellow
+            bl: [1, 0.5, 0] # brown
+            br: [0, 1, 0]   # green
+        right:
+          type: align_check
+          colors:
+            main: [1, 0, 0] # red
+            ul: [1, 1, 0]   # yellow
+            ur: [1, 0, 1]   # purple
+            bl: [0, 1, 0]   # green
+            br: [1, 1, 1]   # white
+        back:
+          type: align_check
+          colors:
+            main: [0, 1, 0] # green
+            ul: [1, 0, 1]   # purple
+            ur: [0, 1, 1]   # cyan
+            bl: [1, 1, 1]   # white
+            br: [0, 0, 1]   # blue
+        up:
+          type: align_check
+          colors:
+            main: [1, 0.5, 0] # brown
+            ul: [0, 1, 1]   # cyan
+            ur: [1, 0, 1]   # purple
+            bl: [1, 0, 0]   # red
+            br: [1, 1, 0]   # yellow
+        down:
+          type: align_check
+          colors:
+            main: [1, 0, 1] # purple
+            ul: [1, 0.5, 0] # brown
+            ur: [0, 1, 0]   # green
+            bl: [0, 0, 1]   # blue
+            br: [1, 1, 1]   # white
+      ambient: 0.2
+      specular: 0
+      diffuse: 0.8
+
+- add: MappedCube
+  transform:
+    - [rotate-y, 0.7854]
+    - [rotate-x, 0.7854]
+    - [translate, -6, 2, 0]
+
+- add: MappedCube
+  transform:
+    - [rotate-y, 2.3562]
+    - [rotate-x, 0.7854]
+    - [translate, -2, 2, 0]
+
+- add: MappedCube
+  transform:
+    - [rotate-y, 3.927]
+    - [rotate-x, 0.7854]
+    - [translate, 2, 2, 0]
+
+- add: MappedCube
+  transform:
+    - [rotate-y, 5.4978]
+    - [rotate-x, 0.7854]
+    - [translate, 6, 2, 0]
+
+- add: MappedCube
+  transform:
+    - [rotate-y, 0.7854]
+    - [rotate-x, -0.7854]
+    - [translate, -6, -2, 0]
+
+- add: MappedCube
+  transform:
+    - [rotate-y, 2.3562]
+    - [rotate-x, -0.7854]
+    - [translate, -2, -2, 0]
+
+- add: MappedCube
+  transform:
+    - [rotate-y, 3.927]
+    - [rotate-x, -0.7854]
+    - [translate, 2, -2, 0]
+
+- add: MappedCube
+  transform:
+    - [rotate-y, 5.4978]
+    - [rotate-x, -0.7854]
+    - [translate, 6, -2, 0]

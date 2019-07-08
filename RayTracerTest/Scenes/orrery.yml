@@ -1,0 +1,685 @@
+# ======================================================
+# orrery.yml
+#
+# This file describes the title image for the "Texture
+# Mapping" bonus chapter at:
+#
+# http://www.raytracerchallenge.com/bonus/texture-mapping.html
+#
+# It requires several additional resources, provided as a
+# separate download. The resources were found on the following
+# sites:
+#
+# * https://www.bittbox.com/freebies/free-hi-resolution-wood-textures
+#   : the wooden texture for the table
+# * https://astrogeology.usgs.gov/search/map/Mercury/Messenger/Global/Mercury_MESSENGER_MDIS_Basemap_LOI_Mosaic_Global_166m
+#   : the map of Mercury
+# * http://planetpixelemporium.com/planets.html
+#   : maps of Earth, Mars, Jupiter, Saturn, Uranus, and Neptune
+# * https://hdrihaven.com/hdri/?c=indoor&h=artist_workshop
+#   : the "artist workshop" environment map
+#
+# by Jamis Buck <jamis@jamisbuck.org>
+# ======================================================
+
+- add: camera
+  width: 800
+  height: 400
+  field-of-view: 1.2
+  from: [2, 4, -10]
+  to: [-1, -1, 0]
+  up: [0, 1, 0]
+
+# The scene as shown in the bonus chapter is rendered using an area light,
+# precisely as described in the "Rendering soft shadows" bonus chapter,
+# here: http://www.raytracerchallenge.com/bonus/area-light.html
+#
+# if you haven't implemented area lights, you can replace this with a point
+# light located at [0, 2.5, -10].
+
+- add: light
+  corner: [-5, 0, -10]
+  uvec: [10, 0, 0]
+  vvec: [0, 5, 0]
+  usteps: 10
+  vsteps: 5
+  jitter: true
+  intensity: [1, 1, 1]
+
+# -------------------------------------------
+# some common textures
+# -------------------------------------------
+
+- define: GOLD
+  value:
+    color: [ 1, 0.8, 0.1 ]
+    ambient: 0.1
+    diffuse: 0.6
+    specular: 0.3
+    shininess: 15
+
+- define: SILVER
+  value:
+    color: [ 1, 1, 1 ]
+    ambient: 0.1
+    diffuse: 0.7
+    specular: 0.3
+    shininess: 15
+
+# -----------------------------------------------
+# CSG definition for the gears used to construct
+# the orrery.
+#
+# NOTCH is a helper object used to create the
+# teeth for the gears.
+#
+# GEAR is the actual gear object itself.
+# -----------------------------------------------
+
+- define: NOTCH
+  value:
+    add: csg
+    operation: difference
+    left:
+      type: cube
+      transform:
+        - [ scale, 1, 0.25, 1 ]
+        - [ translate, 1, 0, 1 ]
+        - [ rotate-y, 0.7854 ]
+        - [ scale, 1, 1, 0.1 ]
+    right:
+      type: cylinder
+      min: -0.26
+      max: 0.26
+      closed: true
+      transform:
+        - [ scale, 0.8, 1, 0.8 ]
+
+- define: GEAR
+  value:
+    add: csg
+    operation: difference
+    left:
+      type: cylinder
+      min: -0.025
+      max: 0.025
+      closed: true
+    right:
+      type: group
+      children:
+        # center hole
+        - add: cylinder
+          min: -0.06
+          max: 0.06
+          closed: true
+          transform:
+            - [ scale, 0.1, 1, 0.1 ]
+        # crescents
+        - add: csg
+          operation: difference
+          left:
+            type: cylinder
+            min: -0.06
+            max: 0.06
+            closed: true
+            transform:
+              - [ scale, 0.7, 1, 0.7 ]
+          right:
+            type: cube
+            transform:
+              - [ scale, 1, 0.1, 0.2 ]
+        # teeth
+        - add: NOTCH
+        - add: NOTCH
+          transform:
+            - [ rotate-y, 0.31415 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, 0.6283 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, 0.94245 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, 1.2566 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, 1.57075 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, 1.8849 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, 2.19905 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, 2.5132 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, 2.82735 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, 3.1415 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, -0.31415 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, -0.6283 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, -0.94245 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, -1.2566 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, -1.57075 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, -1.8849 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, -2.19905 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, -2.5132 ]
+        - add: NOTCH
+          transform:
+            - [ rotate-y, -2.82735 ]
+
+# mechanism: top plate
+- add: csg
+  operation: difference
+  material: GOLD
+  transform:
+    - [ rotate-y, -1 ]
+  left:
+    type: cylinder
+    min: -1.51
+    max: -1.5
+    closed: true
+  right:
+    type: group
+    children:
+      - add: cylinder
+        min: -1.52
+        max: -1.49
+        closed: true
+        transform:
+          - [ scale, 0.1, 1, 0.1 ]
+      - add: csg
+        operation: difference
+        left:
+          type: cylinder
+          min: -1.52
+          max: -1.49
+          closed: true
+          transform:
+            - [ scale, 0.75, 1, 0.75 ]
+        right:
+          type: cube
+          transform:
+            - [ scale, 1, 0.1, 0.2 ]
+            - [ translate, 0, -1.5, 0 ]
+
+# mechanism: gear
+- add: GEAR
+  material: SILVER
+  transform:
+    - [ scale, 0.5, 0.5, 0.5 ]
+    - [ translate, 0.4, -1.45, -0.4 ]
+
+# mechanism: gear
+- add: GEAR
+  material: SILVER
+  transform:
+    - [ rotate-y, 0.8 ]
+    - [ scale, 0.4, 0.4, 0.4 ]
+    - [ translate, -0.4, -1.45, 0.2 ]
+
+# sun
+- add: group
+  children:
+    - add: sphere
+      shadow: false
+      material:
+        color: [1, 1, 0]
+        ambient: 0.1
+        diffuse: 0.6
+        specular: 0 # count on the skybox reflection being the specular highlight
+        reflective: 0.2
+    - add: group
+      material: GOLD
+      children:
+        - add: cylinder
+          min: -4
+          max: -0.5
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+
+# base
+- add: sphere
+  transform:
+    - [ translate, 0, -4, 0 ]
+  material:
+    pattern:
+      type: map
+      mapping: spherical
+      uv_pattern:
+        type: checkers
+        width: 16
+        height: 8
+        colors:
+          - [ 0, 0, 0 ]
+          - [ 0.5, 0.5, 0.5 ]
+    diffuse: 0.6
+    specular: 0 # count on the skybox reflection being the specular highlight
+    ambient: 0.1
+    reflective: 0.2
+
+# table
+- add: cube
+  transform:
+    - [ scale, 5, 0.1, 5 ]
+    - [ translate, 0, -4, 0 ]
+  material:
+    diffuse: 0.9
+    ambient: 0.1
+    specular: 0
+    pattern:
+      type: map
+      mapping: planar
+      uv_pattern:
+        type: image
+        file: res/wood.ppm
+      transform:
+        - [ scale, 0.5, 0.5, 0.5 ]
+
+# mechanism: gear-plate between top & mercury
+- add: GEAR
+  material: SILVER
+  transform:
+    - [ rotate-y, -0.4 ]
+    - [ scale, 0.9, 0.9, 0.9 ]
+    - [ translate, 0, -1.75, 0 ]
+
+# mercury
+- add: group
+  transform:
+    - [ translate, 2, 0, 0 ]
+    - [ rotate-y, 0.7 ]
+  children:
+    - add: sphere
+      transform:
+        - [ scale, 0.25, 0.25, 0.25 ]
+      material:
+        pattern:
+          type: map
+          mapping: spherical
+          uv_pattern:
+            type: image
+            file: res/mercury-small.ppm
+    - add: group
+      material: GOLD
+      children:
+        - add: cylinder
+          min: -2
+          max: 0
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+        - add: sphere
+          transform:
+            - [ scale, 0.025, 0.025, 0.025 ]
+            - [ translate, 0, -2, 0 ]
+        - add: cylinder
+          min: 0
+          max: 2
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+            - [ rotate-z, 1.5708 ]
+            - [ translate, 0, -2, 0 ]
+
+# mechanism: gear-plate between mercury & venus
+- add: GEAR
+  material: SILVER
+  transform:
+    - [ rotate-y, 1.3 ]
+    - [ translate, 0, -2.05, 0 ]
+
+# venus
+- add: group
+  transform:
+    - [ translate, 3, 0, 0 ]
+    - [ rotate-y, 0.3 ]
+  children:
+    - add: sphere
+      transform:
+        - [ scale, 0.25, 0.25, 0.25 ]
+      material:
+        color: [1, 1, 0.8]
+    - add: group
+      material: GOLD
+      children:
+        - add: cylinder
+          min: -2.1
+          max: 0
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+        - add: sphere
+          transform:
+            - [ scale, 0.025, 0.025, 0.025 ]
+            - [ translate, 0, -2.1, 0 ]
+        - add: cylinder
+          min: 0
+          max: 3
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+            - [ rotate-z, 1.5708 ]
+            - [ translate, 0, -2.1, 0 ]
+
+# mechanism: gear-plate between venus & earth
+- add: GEAR
+  material: SILVER
+  transform:
+    - [ scale, 0.9, 0.9, 0.9 ]
+    - [ rotate-y, -2.2 ]
+    - [ translate, 0, -2.15, 0 ]
+
+# earth
+- add: group
+  transform:
+    - [ translate, 4, 0, 0 ]
+    - [ rotate-y, 2 ]
+  children:
+    - add: sphere
+      transform:
+        - [ scale, 0.25, 0.25, 0.25 ]
+      material:
+        pattern:
+          type: map
+          mapping: spherical
+          uv_pattern:
+            type: image
+            file: res/earthmap-small.ppm
+    - add: group
+      material: GOLD
+      children:
+        - add: cylinder
+          min: -2.2
+          max: 0
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+        - add: sphere
+          transform:
+            - [ scale, 0.025, 0.025, 0.025 ]
+            - [ translate, 0, -2.2, 0 ]
+        - add: cylinder
+          min: 0
+          max: 4
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+            - [ rotate-z, 1.5708 ]
+            - [ translate, 0, -2.2, 0 ]
+
+# mechanism: gear-plate between earth & mars
+- add: GEAR
+  material: SILVER
+  transform:
+    - [ scale, 0.8, 0.8, 0.8 ]
+    - [ rotate-y, 1.7 ]
+    - [ translate, 0, -2.25, 0 ]
+
+# mars
+- add: group
+  transform:
+    - [ translate, 5, 0, 0 ]
+    - [ rotate-y, -2 ]
+  children:
+    - add: sphere
+      transform:
+        - [ scale, 0.25, 0.25, 0.25 ]
+      material:
+        pattern:
+          type: map
+          mapping: spherical
+          uv_pattern:
+            type: image
+            file: res/mars-small.ppm
+    - add: group
+      material: GOLD
+      children:
+        - add: cylinder
+          min: -2.3
+          max: 0
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+        - add: sphere
+          transform:
+            - [ scale, 0.025, 0.025, 0.025 ]
+            - [ translate, 0, -2.3, 0 ]
+        - add: cylinder
+          min: 0
+          max: 5
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+            - [ rotate-z, 1.5708 ]
+            - [ translate, 0, -2.3, 0 ]
+
+# mechanism: gear-plate between mars & jupiter
+- add: GEAR
+  material: SILVER
+  transform:
+    - [ rotate-y, -0.9 ]
+    - [ translate, 0, -2.35, 0 ]
+
+# jupiter
+- add: group
+  transform:
+    - [ translate, 6.5, 0, 0 ]
+    - [ rotate-y, -0.75 ]
+  children:
+    - add: sphere
+      transform:
+        - [ scale, 0.67, 0.67, 0.67 ]
+      material:
+        pattern:
+          type: map
+          mapping: spherical
+          uv_pattern:
+            type: image
+            file: res/jupitermap-small.ppm
+    - add: group
+      material: GOLD
+      children:
+        - add: cylinder
+          min: -2.4
+          max: 0
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+        - add: sphere
+          transform:
+            - [ scale, 0.025, 0.025, 0.025 ]
+            - [ translate, 0, -2.4, 0 ]
+        - add: cylinder
+          min: 0
+          max: 6.5
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+            - [ rotate-z, 1.5708 ]
+            - [ translate, 0, -2.4, 0 ]
+
+# mechanism: gear-plate between jupiter & saturn
+- add: GEAR
+  material: SILVER
+  transform:
+    - [ scale, 0.95, 0.95, 0.95 ]
+    - [ rotate-y, -1.1 ]
+    - [ translate, 0, -2.45, 0 ]
+
+# saturn
+- add: group
+  transform:
+    - [ translate, 8, 0, 0 ]
+    - [ rotate-y, -2.5 ]
+  children:
+    - add: sphere
+      transform:
+        - [ scale, 0.5, 0.5, 0.5 ]
+      material:
+        pattern:
+          type: map
+          mapping: spherical
+          uv_pattern:
+            type: image
+            file: res/saturnmap-small.ppm
+    # rings
+    - add: csg
+      operation: difference
+      transform:
+        - [ rotate-z, 0.2 ]
+      material:
+        pattern:
+          type: rings
+          colors:
+            - [ 1, 1, 0.5 ]
+            - [ 1, 1, 0 ]
+          transform:
+            - [ scale, 0.05, 1, 0.05 ]
+      left:
+        type: cylinder
+        min: -0.01
+        max: 0.01
+        closed: true
+        transform:
+          - [ scale, 1.2, 1, 1.2 ]
+      right:
+        type: cylinder
+        min: -0.02
+        max: 0.02
+        closed: true
+        transform:
+          - [ scale, 0.75, 1, 0.75 ]
+    - add: group
+      material: GOLD
+      children:
+        - add: cylinder
+          min: -2.5
+          max: 0
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+        - add: sphere
+          transform:
+            - [ scale, 0.025, 0.025, 0.025 ]
+            - [ translate, 0, -2.5, 0 ]
+        - add: cylinder
+          min: 0
+          max: 8
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+            - [ rotate-z, 1.5708 ]
+            - [ translate, 0, -2.5, 0 ]
+
+# mechanism: gear-plate between saturn & uranus
+- add: GEAR
+  material: SILVER
+  transform:
+    - [ scale, 0.9, 0.9, 0.9 ]
+    - [ rotate-y, 1 ]
+    - [ translate, 0, -2.55, 0 ]
+
+# uranus
+- add: group
+  transform:
+    - [ translate, 9, 0, 0 ]
+    - [ rotate-y, -3 ]
+  children:
+    - add: sphere
+      transform:
+        - [ scale, 0.4, 0.4, 0.4 ]
+      material:
+        pattern:
+          type: map
+          mapping: spherical
+          uv_pattern:
+            type: image
+            file: res/uranusmap-small.ppm
+    - add: group
+      material: GOLD
+      children:
+        - add: cylinder
+          min: -2.6
+          max: 0
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+        - add: sphere
+          transform:
+            - [ scale, 0.025, 0.025, 0.025 ]
+            - [ translate, 0, -2.6, 0 ]
+        - add: cylinder
+          min: 0
+          max: 9
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+            - [ rotate-z, 1.5708 ]
+            - [ translate, 0, -2.6, 0 ]
+
+# mechanism: gear-plate between uranus & neptune
+- add: GEAR
+  material: SILVER
+  transform:
+    - [ rotate-y, -1 ]
+    - [ translate, 0, -2.65, 0 ]
+
+# neptune
+- add: group
+  transform:
+    - [ translate, 10, 0, 0 ]
+    - [ rotate-y, -1.25 ]
+  children:
+    - add: sphere
+      transform:
+        - [ scale, 0.4, 0.4, 0.4 ]
+      material:
+        pattern:
+          type: map
+          mapping: spherical
+          uv_pattern:
+            type: image
+            file: res/neptunemap-small.ppm
+    - add: group
+      material: GOLD
+      children:
+        - add: cylinder
+          min: -2.7
+          max: 0
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+        - add: sphere
+          transform:
+            - [ scale, 0.025, 0.025, 0.025 ]
+            - [ translate, 0, -2.7, 0 ]
+        - add: cylinder
+          min: 0
+          max: 10
+          transform:
+            - [ scale, 0.025, 1, 0.025 ]
+            - [ rotate-z, 1.5708 ]
+            - [ translate, 0, -2.7, 0 ]
+
+# outer sphere as the surrounding environment
+- add: sphere
+  transform:
+    - [ scale, 1000, 1000, 1000 ]
+  material:
+    pattern:
+      type: map
+      mapping: spherical
+      uv_pattern:
+        type: image
+        file: res/artist_workshop.ppm
+      transform:
+        - [ rotate-y, -2.7 ]
+    diffuse: 0
+    specular: 0
+    ambient: 1

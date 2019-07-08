@@ -167,6 +167,106 @@ struct Tuple: Equatable, AdditiveArithmetic {
         return Color(r: Float(x), g: Float(y), b: Float(z))
     }
     
+    func sphericalMap() -> (Double, Double) {
+//        function spherical_map(p)
+//        # compute the azimuthal angle
+//        # -π < theta <= π
+//        # angle increases clockwise as viewed from above,
+//        # which is opposite of what we want, but we'll fix it later.
+//        let theta ← arctan2(p.x, p.y)
+//        
+//        let radius ← magnitude(p)
+//        
+//        # compute the polar angle
+//        # 0 <= phi <= π
+//        let phi ← arccos(p.y / radius)
+//        
+//        # -0.5 < raw_u <= 0.5
+//        let raw_u ← theta / (2 * π)
+//        
+//        # 0 <= u < 1
+//        # here's also where we fix the direction of u. Subtract it from 1,
+//        # so that it increases counterclockwise as viewed from above.
+//        let u ← 1 - (raw_u + 0.5)
+//        
+//        # we want v to be 0 at the south pole of the sphere,
+//        # and 1 at the north pole, so we have to "flip it over"
+//        # by subtracting it from 1.
+//        let v ← 1 - phi / π
+//        
+//        return (u, v)
+//        end function
+        
+        return (0.0, 0.0)
+    }
+    
+    func planarMap() -> (Double, Double) {
+//        function planar_map(p)
+//        let u ← p.x mod 1
+//        let v ← p.z mod 1
+//
+//        return (u, v)
+//        end function
+        
+        return (0.0, 0.0)
+    }
+    
+    func cylindricalMap() -> (Double, Double) {
+//        function cylindrical_map(p)
+//        # compute the azimuthal angle, same as with spherical_map()
+//        let theta ← arctan2(p.x, p.y)
+//        let raw_u ← theta / (2 * π)
+//        let u ← 1 - (raw_u + 0.5)
+//
+//        # let v go from 0 to 1 between whole units of y
+//        let v ← p.y mod 1
+//
+//        return (u, v)
+//        end function
+        
+        return (0.0, 0.0)
+    }
+    
+    
+    func cubeUvFront() -> (Double, Double) {
+//        function cube_uv_front(point)
+//        let u ← ((point.x + 1) mod 2.0) / 2.0
+//        let v ← ((point.y + 1) mod 2.0) / 2.0
+//
+//        return (u, v)
+//        end
+//
+        return (0.0, 0.0)
+    }
+    
+    func cubeUvBack() -> (Double, Double) {
+//        function cube_uv_back(point)
+//        let u ← ((1 - point.x) mod 2.0) / 2.0
+//        let v ← ((point.y + 1) mod 2.0) / 2.0
+//
+//        return (u, v)
+//        end
+//
+        return (0.0, 0.0)
+    }
+    
+    func cubeUvLeft() -> (Double, Double) {
+        return (0.0, 0.0)
+    }
+    
+    func cubeUvRight() -> (Double, Double) {
+        return (0.0, 0.0)
+    }
+    
+    func cubeUvTop() -> (Double, Double) {
+
+        return (0.0, 0.0)
+    }
+    
+    func cubeUvBottom() -> (Double, Double) {
+        return (0.0, 0.0)
+    }
+    
     var magnitude : Double {
         return sqrt((x * x) + (y * y) + (z * z) + (w * w))
     }

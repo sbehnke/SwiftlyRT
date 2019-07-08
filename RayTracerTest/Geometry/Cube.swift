@@ -10,6 +10,15 @@ import Foundation
 
 class Cube: Shape {
     
+    enum Face {
+        case right
+        case left
+        case up
+        case down
+        case front
+    }
+    
+    
     private func checkAxis(origin: Double, direction: Double) -> (Double, Double) {
         let tmin =  (-1 - origin) / direction
         let tmax = (1 - origin) / direction
@@ -49,5 +58,9 @@ class Cube: Shape {
     
     override func boundingBox() -> BoundingBox {
         return BoundingBox(minimum: Tuple.Point(x: -1, y: -1, z: -1), maximum: Tuple.Point(x: 1, y: 1, z: 1))
+    }
+    
+    func faceFromPoint(point: Tuple) -> Face {
+        return .down
     }
 }

@@ -567,4 +567,19 @@ class WorldTests: XCTestCase {
         let color = w.shadeHit(computation: comps, remaining: 5)
         XCTAssertEqual(color, Color(r: 0.93391, g: 0.69643, b: 0.69243))
     }
+    
+    func testOcclusionBetweenTwoPoints() {
+//        Scenario Outline: is_shadow tests for occlusion between two points
+//        Given w ← default_world()
+//        And light_position ← point(-10, -10, -10)
+//        And point ← <point>
+//        Then is_shadowed(w, light_position, point) is <result>
+//        
+//        Examples:
+//        | point                | result |
+//        | point(-10, -10, 10)  | false  |
+//        | point(10, 10, 10)    | true   |
+//        | point(-20, -20, -20) | false  |
+//        | point(-5, -5, -5)    | false  |
+    }
 }
