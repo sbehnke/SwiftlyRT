@@ -111,6 +111,7 @@ struct ObjParser {
                         
                         let point = Tuple.Point(x: a, y: b, z: c)
                         objParser.vertices.append(point)
+                        bounds.addPoint(point: point)
                     } else if components.count == 5 {
                         let a = Double(components[1]) ?? 0
                         let b = Double(components[2]) ?? 0
