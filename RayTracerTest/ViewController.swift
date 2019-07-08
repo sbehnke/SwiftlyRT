@@ -453,35 +453,61 @@ class ViewController: NSViewController {
     @IBAction func renderGiraffe(_ sender: Any) {
         let startTime = CACurrentMediaTime()
         
-        var camera = Camera(w: 200, h: 150, fieldOfView: 1.047)
-        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: 1, y: 2, z: -5), to: .Point(x: 0, y: 1, z: 0), up: .Vector(x: 0, y: 1, z: 0))
+//        var camera = Camera(w: 200, h: 150, fieldOfView: 1.047)
+//        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: 1, y: 2, z: -5), to: .Point(x: 0, y: 1, z: 0), up: .Vector(x: 0, y: 1, z: 0))
+//
+//        let world = World()
+//        world.light = PointLight(position: .Point(x: -9, y: 9, z: -9), intensity: Color.white)
+//
+//        let floor = Plane()
+//        floor.material.pattern = CheckerPattern(a: Color(r: 0.7, g: 0.7, b: 0.7), b: Color(r: 0.3, g: 0.3, b: 0.3))
+//        floor.material.pattern?.transform = Matrix4x4.scaled(x: 0.6, y: 0.6, z: 0.6)
+//        floor.material.ambient = 0.02
+//        floor.material.diffuse = 0.7
+//        floor.material.specular = 0
+//        floor.material.reflective = 0.05
+//
+//        let room = Cube()
+//        room.material.color = Color(r: 0.7, g: 0.7, b: 0.7)
+//        room.material.diffuse = 0.8
+//        room.material.ambient = 0.1
+//        room.material.specular = 0
+//        room.transform = Matrix4x4.translated(x: 0, y: 0.99, z: 0) * Matrix4x4.scaled(x: 10, y: 10, z: 10)
+        
+//        world.objects = [floor, room]
+//
+//            - add: camera
+//        width: 400
+//        height: 400
+//        field-of-view: 0.5
+//        from: [0, 0, -5]
+//        to: [0, 0, 0]
+//        up: [0, 1, 0]
+
+        var camera = Camera(w: 400, h: 400, fieldOfView: 1.0)
+        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: 0, y: 0, z: -5), to: .Point(x: 0, y: 0, z: 0), up: .Vector(x: 0, y: 1, z: 0))
+        
+//        - add: light
+//        at: [-10, 10, -10]
+//        intensity: [1, 1, 1]
         
         let world = World()
-        world.light = PointLight(position: .Point(x: -9, y: 9, z: -9), intensity: Color.white)
-        
-        let floor = Plane()
-        floor.material.pattern = CheckerPattern(a: Color(r: 0.7, g: 0.7, b: 0.7), b: Color(r: 0.3, g: 0.3, b: 0.3))
-        floor.material.pattern?.transform = Matrix4x4.scaled(x: 0.6, y: 0.6, z: 0.6)
-        floor.material.ambient = 0.02
-        floor.material.diffuse = 0.7
-        floor.material.specular = 0
-        floor.material.reflective = 0.05
-        
-        let room = Cube()
-        room.material.color = Color(r: 0.7, g: 0.7, b: 0.7)
-        room.material.diffuse = 0.8
-        room.material.ambient = 0.1
-        room.material.specular = 0
-        room.transform = Matrix4x4.translated(x: 0, y: 0.99, z: 0) * Matrix4x4.scaled(x: 10, y: 10, z: 10)
-        
-        world.objects = [floor, room]
+        world.light = PointLight(position: .Point(x: -10, y: 10, z: -10), intensity: Color.white)
         
         let bundle = Bundle.main
-        let url = bundle.url(forResource: "teapot", withExtension: "obj")
-        let teapot = ObjParser.parse(objFilePath: url)
-        let teapotGroup = teapot.toGroup()
+        let url = bundle.url(forResource: "cube", withExtension: "obj")
+        let cube = ObjParser.parse(objFilePath: url)
+        let cubeGroup = cube.toGroup()
+        cubeGroup.transform = .rotatedX(.pi / 3) * Matrix4x4.rotatedY(.pi / 3)
+        cubeGroup.material.color = Color.init(r: 1, g: 0, b: 0)
+        
+        let cyl = Cylinder()
+        cyl.material.color = Color.init(r: 0, g: 0, b: 1)
+        
+        let csg = CSG.difference(left: cyl, right: cubeGroup)
+        
         // teapotGroup.divide(threshold: 1)
-        world.objects.append(teapotGroup)
+        world.objects.append(csg)
         
         DispatchQueue.global(qos: .background).async {
             
@@ -493,7 +519,7 @@ class ViewController: NSViewController {
             
             let data = canvas.getPPM()
             
-            let filename = self.getDocumentsDirectory().appendingPathComponent("giraffe.ppm")
+            let filename = self.getDocumentsDirectory().appendingPathComponent("cube.ppm")
             do {
                 try data.write(to: filename)
                 NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: self.getDocumentsDirectory().absoluteString)

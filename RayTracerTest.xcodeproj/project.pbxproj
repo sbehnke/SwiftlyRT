@@ -40,7 +40,9 @@
 		646C32DD22CBA53700A6B321 /* TransformationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32DC22CBA53700A6B321 /* TransformationTests.swift */; };
 		646C32DF22CBA55300A6B321 /* TriangleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32DE22CBA55300A6B321 /* TriangleTests.swift */; };
 		646C32E122CBA56A00A6B321 /* WorldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32E022CBA56A00A6B321 /* WorldTests.swift */; };
-		646C330F22D3C9B100A6B321 /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 646C330E22D3C7D000A6B321 /* teapot.obj */; };
+		646C332122D3E86F00A6B321 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 646C332022D3E86E00A6B321 /* cube.obj */; };
+		646C332222D3E86F00A6B321 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 646C332022D3E86E00A6B321 /* cube.obj */; };
+		646C332322D3E88600A6B321 /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 64D36EA822D2C1AC0067ADB4 /* teapot.obj */; };
 		64A92B3822D1845D00C2F4B7 /* BoundingBoxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A92B3722D1845D00C2F4B7 /* BoundingBoxTests.swift */; };
 		64A92B3A22D18A4900C2F4B7 /* CSG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A92B3922D18A4900C2F4B7 /* CSG.swift */; };
 		64D1FB2022C8731700AA05AE /* Matrix4x4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D1FB1F22C8731700AA05AE /* Matrix4x4.swift */; };
@@ -163,7 +165,7 @@
 		646C32DC22CBA53700A6B321 /* TransformationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformationTests.swift; sourceTree = "<group>"; };
 		646C32DE22CBA55300A6B321 /* TriangleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleTests.swift; sourceTree = "<group>"; };
 		646C32E022CBA56A00A6B321 /* WorldTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldTests.swift; sourceTree = "<group>"; };
-		646C330E22D3C7D000A6B321 /* teapot.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
+		646C332022D3E86E00A6B321 /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
 		64A92B3722D1845D00C2F4B7 /* BoundingBoxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingBoxTests.swift; sourceTree = "<group>"; };
 		64A92B3922D18A4900C2F4B7 /* CSG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSG.swift; sourceTree = "<group>"; };
 		64D1FB1F22C8731700AA05AE /* Matrix4x4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix4x4.swift; sourceTree = "<group>"; };
@@ -295,7 +297,6 @@
 		646C32D122CBA3D400A6B321 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				646C330E22D3C7D000A6B321 /* teapot.obj */,
 				64D36E9022D29FB20067ADB4 /* triangles.obj */,
 				64EE918D22C7D18900FB2699 /* Info.plist */,
 			);
@@ -338,6 +339,7 @@
 		64D36E9622D2BC430067ADB4 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				646C332022D3E86E00A6B321 /* cube.obj */,
 				64D36EAB22D2C1AC0067ADB4 /* 10021_Giraffe_v04.mtl */,
 				64D36EA922D2C1AC0067ADB4 /* 10021_Giraffe_v04.obj */,
 				64D36EA522D2C1AC0067ADB4 /* 10021_Giraffe_v05.jpg */,
@@ -551,6 +553,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				646C332122D3E86F00A6B321 /* cube.obj in Resources */,
 				64D36EB122D2C1AC0067ADB4 /* pumpkin_tall_10k.obj in Resources */,
 				64D36EB422D2E8D60067ADB4 /* dragon.obj in Resources */,
 				64D36EAD22D2C1AC0067ADB4 /* cow-nonormals.obj in Resources */,
@@ -569,8 +572,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				646C330F22D3C9B100A6B321 /* teapot.obj in Resources */,
+				646C332222D3E86F00A6B321 /* cube.obj in Resources */,
 				64D36E9122D29FB20067ADB4 /* triangles.obj in Resources */,
+				646C332322D3E88600A6B321 /* teapot.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

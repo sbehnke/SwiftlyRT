@@ -308,4 +308,14 @@ f 1/0/3 2/102/1 3/14/2
             XCTFail()
         }
     }
+    
+    func testObjFileDivideSpeed() {
+        self.measure() {
+            let bundle = Bundle(for: RayTracerTestTests.self)
+            let url = bundle.url(forResource: "cube", withExtension: "obj")
+            let parser = ObjParser.parse(objFilePath: url)
+            let g = parser.toGroup()
+            g.divide(threshold: 1)
+        }
+    }
 }
