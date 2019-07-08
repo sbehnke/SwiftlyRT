@@ -9,6 +9,14 @@
 import Foundation
 
 class SmoothTriangle: Triangle {
+    static func equals(lhs: SmoothTriangle, rhs: SmoothTriangle) -> Bool {
+        return  lhs.p1 == rhs.p1 &&
+                lhs.p2 == rhs.p2 &&
+                lhs.p3 == rhs.p3 &&
+                lhs.n1 == rhs.n1 &&
+                lhs.n2 == rhs.n2 &&
+                lhs.n3 == rhs.n3
+    }
     
     override init() {
         super.init()

@@ -287,7 +287,25 @@ f 1//3 2//1 3//2
 f 1/0/3 2/102/1 3/14/2
 """
         let parser = ObjParser.parse(objFileData: file)
-
-
+        XCTAssertEqual(parser.defaultGroup.children.count, 2)
+        
+        if parser.defaultGroup.children[0] is SmoothTriangle {
+            let t1 = parser.defaultGroup.children[0] as! SmoothTriangle
+            XCTAssertEqual(t1.p1, parser.vertices[1])
+            XCTAssertEqual(t1.p2, parser.vertices[2])
+            XCTAssertEqual(t1.p3, parser.vertices[3])
+            XCTAssertEqual(t1.n1, parser.normals[3])
+            XCTAssertEqual(t1.n2, parser.normals[1])
+            XCTAssertEqual(t1.n3, parser.normals[2])
+            
+            if parser.defaultGroup.children[1] is SmoothTriangle {
+                let t2 = parser.defaultGroup.children[1] as! SmoothTriangle
+                XCTAssertTrue(SmoothTriangle.equals(lhs: t1, rhs: t2))
+            } else {
+                XCTFail()
+            }
+        } else {
+            XCTFail()
+        }
     }
 }

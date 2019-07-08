@@ -170,9 +170,9 @@ struct ObjParser {
                     
                     if (components.count == 4) {
                         if (line.contains("/")) {
-                            let subComponents1 = components[1].split(separator: "/")
-                            let subComponents2 = components[2].split(separator: "/")
-                            let subComponents3 = components[3].split(separator: "/")
+                            let subComponents1 = components[1].split(separator: "/", maxSplits: Int.max, omittingEmptySubsequences: false)
+                            let subComponents2 = components[2].split(separator: "/", maxSplits: Int.max, omittingEmptySubsequences: false)
+                            let subComponents3 = components[3].split(separator: "/", maxSplits: Int.max, omittingEmptySubsequences: false)
                             
                             if (subComponents1.count != 3 || subComponents2.count != 3 || subComponents3.count != 3) {
                                 objParser.ignoredLineCount += 1

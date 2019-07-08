@@ -10,6 +10,12 @@ import Foundation
 
 class Triangle: Shape {
     
+    static func equals(lhs: Triangle, rhs: Triangle) -> Bool {
+        return  lhs.p1 == rhs.p1 &&
+            lhs.p2 == rhs.p2 &&
+            lhs.p3 == rhs.p3
+    }
+    
     override init() {
         super.init()
         
