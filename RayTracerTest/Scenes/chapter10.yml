@@ -1,0 +1,98 @@
+- add: camera
+  width: 480
+  height: 320
+  field-of-view: 1.047197551196598
+  from: [-5, 2, -4]
+  to: [0, 2, 0]
+  up: [0, 1, 0]
+
+- add: light
+  at: [-3, 6, -8]
+  intensity: [1.2, 1.2, 1.2]
+
+  # get floor() {
+  #   const pattern = Checkers.of(Color.WHITE, Color.BLACK)
+  #   pattern.transform = Matrix.transform({
+  #     rotate: { y: 45 },
+  #     scale: 2,
+  #   })
+
+  #   return Plane.create({
+  #     pattern,
+  #     diffuse: 0.7,
+  #     ambient: 0.3,
+  #   })
+  # }
+
+# floor
+- add: plane
+  material:
+    pattern:
+      type: checkers
+      transform:
+        - [ scale, 2, 2, 2 ]
+        - [ rotate-y, 45 ]
+      colors:
+        - [1, 1, 1]
+        - [0, 0, 0]
+    ambient: 0.3
+    diffuse: 0.7
+
+  # get wall() {
+  #   const pattern = Ring.of(Color.WHITE, Color.of(1, 0, 0))
+  #   return Plane.create({
+  #     pattern,
+  #     diffuse: 0.7,
+  #     ambient: 0.2,
+  #     transform: Matrix.transform({
+  #       rotate: { x: 90 },
+  #       move: { z: 5 },
+  #     })
+  #   })
+  # }
+
+# wall
+- add: plane
+  transform:
+    - [ translate, 0, 0, 5 ]
+    - [ rotate-x, 90 ]
+  material:
+    pattern:
+      type: rings
+      colors:
+        - [1, 1, 1]
+        - [1, 0, 0]
+    diffuse: 0.7
+    ambient: 0.2
+
+  # get sphere() {
+  #   const pattern = Stripe.of(Color.of(1, 0.5, 0), Color.of(1, 0.3, 0))
+  #   pattern.transform = Matrix.transform({
+  #     rotate: { z: 90 },
+  #     scale: 0.05
+  #   })
+
+  #   return Sphere.create({
+  #     pattern,
+  #     ambient: 0.15,
+  #     transform: Matrix.transform({
+  #       scale: { x: 0.5, y: 4.5, z: 0.5 },
+  #       move: { x: 1.5 },
+  #     })
+  #   })
+
+# sphere
+- add: sphere
+  transform: 
+    - [ translate, 1.5, 0, 0 ]
+    - [ scale, 0.5, 4.5, 0.5 ]
+  material:
+    pattern:
+      type: stripes
+      colors:
+        - [1, 0.5, 0]
+        - [1, 0.3, 0]
+      transform: 
+        - [ scale, 0.05, 0.05, 0.05 ]
+        - [ rotate-z, 90 ]
+    ambient: 0.15

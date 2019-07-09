@@ -124,8 +124,32 @@ class ViewController: NSViewController {
     @IBAction func multiThreadedTest(_ sender: Any) {
         let startTime = CACurrentMediaTime()
 
-        let path = Bundle.main.url(forResource: "scenes/earth", withExtension: "yml")
+        let path = Bundle.main.url(forResource: "scenes/table", withExtension: "yml")
         let world = World.fromYamlFile(path)
+        
+//        let world2 = World()
+//        world2.camera = Camera(w: 480, h: 320, fieldOfView: .pi / 3)
+//        world2.camera?.transform = .viewTransformed(from: .Point(x: -5, y: -2, z: -4), to: .Point(x: 0, y: 2, z: 0), up: .Vector(x: 0, y: 1, z: 0))
+//        world2.light = PointLight(position: .Point(x: -3, y: 6, z: -8), intensity: Color(r: 1.2, g: 1.2, b: 1.2))
+//
+//        let floor = Plane()
+//        floor.material.pattern = CheckerPattern(a: Color.white, b: Color.black)
+//        floor.material.pattern?.transform = Matrix4x4.scaled(x: 2, y: 2, z: 2) * Matrix4x4.rotatedY(.pi / 4)
+//        floor.material.ambient = 0.3
+//        floor.material.diffuse = 0.7
+//
+//        let wall = Plane()
+//        wall.material.pattern = RingPattern(a: Color.white, b: Color(r: 1, g: 0, b: 0))
+//        wall.material.diffuse = 0.7
+//        wall.material.ambient = 0.2
+//        wall.transform = Matrix4x4.rotatedX(.pi / 2) * Matrix4x4.translated(x: 0, y: 0, z: 5)
+//
+//        let sphere = Sphere()
+//        sphere.material.pattern = StripePattern(a: Color.init(r: 1, g: 0.5, b: 0), b: Color(r: 1, g: 0.3, b: 0))
+//        sphere.material.pattern?.transform = Matrix4x4.rotatedZ(.pi / 2) * Matrix4x4.scaled(x: 0.05, y: 0.05, z: 0.05)
+//        sphere.transform = Matrix4x4.scaled(x: 0.5, y: 4.5, z: 0.5) * Matrix4x4.translated(x: 1.5, y: 0, z: 0)
+//
+//        world2.objects.append(contentsOf: [floor, wall, sphere])
         
         DispatchQueue.global(qos: .background).async {
             let canvas = world.camera!.render(world: world, progress: { (x: Int, y: Int) -> Void in

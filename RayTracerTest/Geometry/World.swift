@@ -148,37 +148,27 @@ class World {
         return false
     }
     
-    static func convertTo<T>(_ value: Any?) -> T where T: ScalarConstructible {
+    static func convertTo<T>(_ value: Any?) -> T {
         
         if T.self is Double.Type {
-            if let newValue = value as? Int {
-                return Double(newValue) as! T
-            }
-            
-            if let newValue = value as? Double {
-                return Double(newValue) as! T
-            }
+            return ((value as? NSNumber)?.doubleValue as! T)
             
         } else if T.self is Float.Type {
-            if let newValue = value as? Int {
-                return Float(newValue) as! T
-            }
-            
-            if let newValue = value as? Float {
-                return Float(newValue) as! T
-            }
-            
-            if let newValue = value as? Double {
-                return Float(newValue) as! T
-            }
+            return ((value as? NSNumber)?.floatValue as! T)
             
         } else if T.self is Int.Type {
-            if let newValue = value as? Int {
-                return Int(newValue) as! T
-            }
+            return ((value as? NSNumber)?.intValue as! T)
         }
         
-        return 0 as! T
+        else if T.self is String.Type {
+            return (value as? String ?? "") as! T
+        }
+        
+        else if T.self is Bool.Type {
+            return ((value as? Bool) ?? false) as! T
+        }
+        
+        return value as! T
     }
     
     static func toArray<T>(_ values: [Any]?) -> [T] {
@@ -186,19 +176,7 @@ class World {
         
         if let v = values {
             for value in v {
-                if T.self is Double.Type {
-                    if let newValue = value as? Int {
-                        output.append(Double(newValue) as! T)
-                    }
-                    
-                    if let newValue = value as? Double {
-                        output.append(Double(newValue) as! T)
-                    }
-                } else if T.self is Int.Type {
-                    if let newValue = value as? Int {
-                        output.append(Double(newValue) as! T)
-                    }
-                }
+                output.append(convertTo(value))
             }
         }
         
@@ -239,15 +217,70 @@ class World {
         return Color.white
     }
     
+    static func toPattern(_ values: [String:Any]) -> Pattern? {
+        let type: String = convertTo(values["type"])
+        var pattern: Pattern? = nil
+    
+        switch (type) {
+        case "checkers":
+            if let colors = values["colors"] {
+                let a = toColor((colors as? [Any])?.first as? [Any])
+                let b = toColor((colors as? [Any])?.last as? [Any])
+                pattern = CheckerPattern(a: a, b: b)
+            }
+            break
+            
+        case "gradients":
+            if let colors = values["colors"] {
+                let a = toColor((colors as? [Any])?.first as? [Any])
+                let b = toColor((colors as? [Any])?.last as? [Any])
+                pattern = GradientPattern(a: a, b: b)
+            }
+            break
+            
+        case "stripes":
+            if let colors = values["colors"] {
+                let a = toColor((colors as? [Any])?.first as? [Any])
+                let b = toColor((colors as? [Any])?.last as? [Any])
+                pattern = CheckerPattern(a: a, b: b)
+            }
+            break
+            
+        case "solid-color":
+            if let colors = values["colors"] {
+                let a = toColor((colors as? [Any])?.first as? [Any])
+                pattern = SolidColorPattern(a)
+            }
+            break
+            
+        case "test":
+            pattern = TestPattern()
+            break
+        
+        case "rings":
+            if let colors = values["colors"] {
+                let a = toColor((colors as? [Any])?.first as? [Any])
+                let b = toColor((colors as? [Any])?.last as? [Any])
+                pattern = RingPattern(a: a, b: b)
+            }
+            break
+            
+        default:
+            return pattern
+        }
+        
+        pattern?.transform = toTransform(values["transform"] as? [Any])
+        
+        return pattern
+    }
+    
     static func toMaterial(_ values: [String:Any]?) -> Material {
         var m = Material()
         
         if values != nil {
             
             if let pattern = values!["pattern"] as? [String:Any] {
-                // TODO, parse patterns
-                print(pattern)
-                m.pattern = TestPattern()
+                m.pattern = toPattern(pattern)
             }
         
             if let color = values!["color"] as? [Any] {
@@ -295,35 +328,35 @@ class World {
                     if let type = tran[0] as? String {
                         switch(type) {
                         case "scale":
-                            let a = tran[1] as? Double ?? 0.0
-                            let b = tran[2] as? Double ?? 0.0
-                            let c = tran[3] as? Double ?? 0.0
+                            let a: Double = convertTo(tran[1])
+                            let b: Double = convertTo(tran[2])
+                            let c: Double = convertTo(tran[3])
                             let m = Matrix4x4.scaled(x: a, y: b, z: c)
                             operations.insert(m, at: 0)
                             break
                             
                         case "rotate-x":
-                            let a = tran[1] as? Double ?? 0.0
-                            let m = Matrix4x4.rotatedZ(a)
+                            let a: Double = convertTo(tran[1])
+                            let m = Matrix4x4.rotatedX(a)
                             operations.insert(m, at: 0)
                             break
                             
                         case "rotate-y":
-                            let a = tran[1] as? Double ?? 0.0
-                            let m = Matrix4x4.rotatedZ(a)
+                            let a: Double = convertTo(tran[1])
+                            let m = Matrix4x4.rotatedY(a)
                             operations.insert(m, at: 0)
                             break
                             
                         case "rotate-z":
-                            let a = tran[1] as? Double ?? 0.0
+                            let a: Double = convertTo(tran[1])
                             let m = Matrix4x4.rotatedZ(a)
                             operations.insert(m, at: 0)
                             break
                             
                         case "translate":
-                            let a = tran[1] as? Double ?? 0.0
-                            let b = tran[2] as? Double ?? 0.0
-                            let c = tran[3] as? Double ?? 0.0
+                            let a: Double = convertTo(tran[1])
+                            let b: Double = convertTo(tran[2])
+                            let c: Double = convertTo(tran[3])
                             let m = Matrix4x4.translated(x: a, y: b, z: c)
                             operations.insert(m, at: 0)
                             break
@@ -355,7 +388,6 @@ class World {
         
         if let url = filePath {
             
-            
             do {
                 let contents: String = try String.init(contentsOf: url, encoding: .ascii)
                 let loadedArray = try Yams.load(yaml: contents) as? [Any]
@@ -365,14 +397,16 @@ class World {
                     if let newEntry = entry as? [String:Any] {
                         if let add = newEntry["add"] as? String {
 
+                            var newShape: Shape? = nil
+                            
                             switch add {
                             case "camera":
-                                let fieldOfView = newEntry["field-of-view"] as? Double ?? 1.0
+                                let fieldOfView: Double = convertTo(newEntry["field-of-view"])
                                 let from = toPoint(newEntry["from"] as? [Any])
                                 let to = toPoint(newEntry["to"] as? [Any])
                                 let up = toVector(newEntry["up"] as? [Any])
-                                let height = newEntry["height"] as? Int ?? 0
-                                let width = newEntry["width"] as? Int ?? 0
+                                let height: Int = convertTo(newEntry["height"])
+                                let width: Int = convertTo(newEntry["width"])
                                 
                                 if width > 0 && height > 0 {
                                     var camera = Camera(w: width, h: height, fieldOfView: fieldOfView)
@@ -389,75 +423,60 @@ class World {
                                 break
                                 
                             case "sphere":
-                                let shape = Sphere()
-                                shape.name = String(describing: shape.self)
-                                shape.material = toMaterial(newEntry["material"] as? [String:Any])
-                                shape.transform = toTransform(newEntry["transform"] as? [Any])
-                                world.objects.append(shape)
-                                
+                                newShape = Sphere()
                                 break
                                 
                             case "cube":
-                                let shape = Cube()
-                                shape.name = String(describing: shape.self)
-                                shape.material = toMaterial(newEntry["material"] as? [String:Any])
-                                shape.transform = toTransform(newEntry["transform"] as? [Any])
-                                world.objects.append(shape)
-                                
+                                newShape = Cube()
                                 break
                                 
                                 
                             case "plane":
-                                let shape = Plane()
-                                shape.name = String(describing: shape.self)
-                                shape.material = toMaterial(newEntry["material"] as? [String:Any])
-                                shape.transform = toTransform(newEntry["transform"] as? [Any])
-                                world.objects.append(shape)
-                                
+                                newShape = Plane()
                                 break
                                 
                                 
                             case "cylinder":
                                 let shape = Cylinder()
-                                shape.name = String(describing: shape.self)
-                                shape.material = toMaterial(newEntry["material"] as? [String:Any])
-                                shape.transform = toTransform(newEntry["transform"] as? [Any])
                                 if let min = newEntry["min"] {
                                     shape.minimum = convertTo(min)
                                 }
                                 if let max = newEntry["max"] {
                                     shape.maximum = convertTo(max)
                                 }
-                                if let closed = newEntry["closed"] as? Bool {
-                                    shape.closed = closed
-                                }
                                 
-                                world.objects.append(shape)
-                                
+                                shape.closed = convertTo(newEntry["closed"])
+                                newShape = shape
                                 break
                                 
                             case "cone":
                                 let shape = Cone()
-                                shape.name = String(describing: shape.self)
-                                shape.material = toMaterial(newEntry["material"] as? [String:Any])
-                                shape.transform = toTransform(newEntry["transform"] as? [Any])
                                 if let min = newEntry["min"] {
                                     shape.minimum = convertTo(min)
                                 }
                                 if let max = newEntry["max"] {
                                     shape.maximum = convertTo(max)
                                 }
-                                if let closed = newEntry["closed"] as? String {
-                                    shape.closed = closed == "true"
-                                }
-                                
-                                world.objects.append(shape)
-                                
+
+                                shape.closed = convertTo(newEntry["closed"])
+                                newShape = shape
                                 break
                                 
                             default:
                                 break;
                                 
+                            }
+                            
+                            if let shape = newShape {
+                                shape.name = String(describing: shape.self)
+                                shape.material = toMaterial(newEntry["material"] as? [String:Any])
+                                shape.transform = toTransform(newEntry["transform"] as? [Any])
+                                
+                                if let shadows = newEntry["shadow"] {
+                                    shape.castsShadow = convertTo(shadows)
+                                }
+                                
+                                world.objects.append(shape)
                             }
                         }
                         
