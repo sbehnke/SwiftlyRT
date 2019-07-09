@@ -109,10 +109,14 @@ class CSG : Group {
     }
     
     override func boundingBox() -> BoundingBox {
-        var box = BoundingBox()
-        box.addBox(box: left.parentSpaceBounds())
-        box.addBox(box: right.parentSpaceBounds())
-        return box
+        if bounds == nil {
+            var box = BoundingBox()
+            box.addBox(box: left.parentSpaceBounds())
+            box.addBox(box: right.parentSpaceBounds())
+            bounds = box
+        }
+        
+        return bounds!
     }
     
     var oper: GeometryOperation = GeometryOperation.union

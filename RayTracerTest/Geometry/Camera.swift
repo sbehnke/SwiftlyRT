@@ -62,13 +62,19 @@ struct Camera {
     public typealias RenderProgress = (Int, Int) -> Void
     static func render(c: Camera, world: World, progress: RenderProgress? = nil) -> Canvas {
         let image = Canvas(width: c.width, height: c.height)
+        let progressInterval = c.width / 4
         
         for y in 0..<c.height {
+            progress?(0, y)
+            
             for x in 0..<c.width {
                 let ray = c.rayForPixel(x: x, y: y)
                 let color = world.colorAt(ray: ray)
                 image.setPixel(x: x, y: y, color: color)
-                progress?(x, y)
+                
+                if (x % progressInterval == 0) {
+                    progress?(x, y)
+                }
             }
         }
         

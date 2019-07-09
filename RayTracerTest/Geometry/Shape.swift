@@ -49,11 +49,19 @@ class Shape : Equatable {
     }
     
     func parentSpaceBounds() -> BoundingBox {
-        return boundingBox().transformed(transform: transform)
+        if parentBounds == nil {
+            parentBounds = boundingBox().transformed(transform: transform)
+        }
+        
+        return parentBounds!
     }
     
     func boundingBox() -> BoundingBox {
-        return BoundingBox()
+        if bounds == nil {
+            bounds = BoundingBox()
+        }
+        
+        return bounds!
     }
     
     func removeFromParent() {
@@ -69,13 +77,26 @@ class Shape : Equatable {
         return self == shape
     }
     
+    private func invalidateBounds() {
+        bounds = nil
+        parentBounds = nil
+    }
+    
+    internal var bounds: BoundingBox? = nil
+    internal var parentBounds: BoundingBox? = nil
+    
     var castsShadow = true
     var name = ""
-    var parent: Group? = nil
+    var parent: Group? = nil {
+        didSet {
+            invalidateBounds()
+        }
+    }
     var children: [Shape] = []
     var transform = Matrix4x4.identity {
         didSet {
             inverseTransform = transform.inversed()
+            invalidateBounds()
         }
     }
     private(set) var inverseTransform = Matrix4x4.identity

@@ -58,13 +58,16 @@ class Group: Shape {
     }
     
     override func boundingBox() -> BoundingBox {
-        var bounds = BoundingBox()
-        
-        for child in children {
-            bounds.addBox(box: child.parentSpaceBounds())
+        if bounds == nil {
+            var box = BoundingBox()
+            for child in children {
+                box.addBox(box: child.parentSpaceBounds())
+            }
+            
+            bounds = box
         }
         
-        return bounds
+        return bounds!
     }
     
     override func divide(threshold: Int) {
@@ -105,7 +108,7 @@ class Group: Shape {
     }
     
     override func includes(_ shape: Shape) -> Bool {
-        for child in children {            
+        for child in children {
             if (child.includes(shape)) {
                 return true
             }
