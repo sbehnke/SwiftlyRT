@@ -22,13 +22,11 @@ class Pattern: Equatable {
     }
     
     func patternAtShape(object: Shape?, point: Tuple) -> Color {
-        var t = self.inverseTransform
         if let o = object {
-            t *= o.inverseTransform
+            return patternAt(point: self.inverseTransform * o.inverseTransform * point)
         }
         
-        let transformedPoint = t * point
-        return patternAt(point: transformedPoint)
+        return patternAt(point: self.inverseTransform * point)
     }
     
     var transform = Matrix4x4.identity {

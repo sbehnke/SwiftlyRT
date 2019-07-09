@@ -30,8 +30,8 @@
     pattern:
       type: checkers
       transform:
-        - [ scale, 2, 2, 2 ]
         - [ rotate-y, 45 ]
+        - [ scale, 2, 2, 2 ]
       colors:
         - [1, 1, 1]
         - [0, 0, 0]
@@ -54,8 +54,8 @@
 # wall
 - add: plane
   transform:
-    - [ translate, 0, 0, 5 ]
     - [ rotate-x, 90 ]
+    - [ translate, 0, 0, 5 ]
   material:
     pattern:
       type: rings
@@ -83,9 +83,6 @@
 
 # sphere
 - add: sphere
-  transform: 
-    - [ translate, 1.5, 0, 0 ]
-    - [ scale, 0.5, 4.5, 0.5 ]
   material:
     pattern:
       type: stripes
@@ -93,6 +90,9 @@
         - [1, 0.5, 0]
         - [1, 0.3, 0]
       transform: 
-        - [ scale, 0.05, 0.05, 0.05 ]
         - [ rotate-z, 90 ]
-    ambient: 0.15
+        - [ scale, 0.05, 0.05, 0.05 ]
+  ambient: 0.15
+  transform: 
+  - [ scale, 0.5, 4.5, 0.5 ]
+  - [ translate, 1.5, 0, 0 ]

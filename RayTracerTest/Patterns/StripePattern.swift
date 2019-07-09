@@ -16,7 +16,7 @@ class StripePattern: Pattern {
     }
     
     override func patternAt(point: Tuple) -> Color {
-        if Int(floor(point.x)) % 2 == 0 {
+        if fmod(floor(point.x), 2.0) == 0.0 {
             return a
         } else {
             return b

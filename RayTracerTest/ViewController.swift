@@ -124,7 +124,7 @@ class ViewController: NSViewController {
     @IBAction func multiThreadedTest(_ sender: Any) {
         let startTime = CACurrentMediaTime()
 
-        let path = Bundle.main.url(forResource: "scenes/table", withExtension: "yml")
+        let path = Bundle.main.url(forResource: "scenes/chapter10", withExtension: "yml")
         let world = World.fromYamlFile(path)
         
 //        let world2 = World()
