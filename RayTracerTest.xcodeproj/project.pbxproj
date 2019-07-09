@@ -24,6 +24,7 @@
 		6435B50A22CE92CF00270210 /* CheckerPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50922CE92CF00270210 /* CheckerPattern.swift */; };
 		6435B50C22CE9A9300270210 /* SolidColorPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50B22CE9A9300270210 /* SolidColorPattern.swift */; };
 		6435B50E22CE9B0100270210 /* BlendedPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50D22CE9B0100270210 /* BlendedPattern.swift */; };
+		6441957822D41E4400894AC9 /* Yams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6441957522D41E2300894AC9 /* Yams.framework */; };
 		646C32BE22CB9EE300A6B321 /* LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32BD22CB9EE300A6B321 /* LightsTests.swift */; };
 		646C32C422CB9FEA00A6B321 /* MaterialsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32C322CB9FEA00A6B321 /* MaterialsTests.swift */; };
 		646C32C622CBA2B600A6B321 /* CameraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32C522CBA2B600A6B321 /* CameraTests.swift */; };
@@ -93,6 +94,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6441957422D41E2300894AC9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6441956F22D41E2300894AC9 /* Yams.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = OBJ_28;
+			remoteInfo = Yams;
+		};
+		6441957622D41E2300894AC9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6441956F22D41E2300894AC9 /* Yams.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = OBJ_29;
+			remoteInfo = YamsTests;
+		};
 		64EE918822C7D18900FB2699 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 64EE916D22C7D18700FB2699 /* Project object */;
@@ -127,6 +142,7 @@
 		6435B50922CE92CF00270210 /* CheckerPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckerPattern.swift; sourceTree = "<group>"; };
 		6435B50B22CE9A9300270210 /* SolidColorPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidColorPattern.swift; sourceTree = "<group>"; };
 		6435B50D22CE9B0100270210 /* BlendedPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendedPattern.swift; sourceTree = "<group>"; };
+		6441956F22D41E2300894AC9 /* Yams.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Yams.xcodeproj; path = "RayTracerTest/Frameworks/Yams-2.0.0/Yams.xcodeproj"; sourceTree = "<group>"; };
 		646C32A722CB9EAA00A6B321 /* patterns.feature */ = {isa = PBXFileReference; lastKnownFileType = text; name = patterns.feature; path = "Book Data/features/patterns.feature"; sourceTree = "<group>"; };
 		646C32A822CB9EAA00A6B321 /* matrices.feature */ = {isa = PBXFileReference; lastKnownFileType = text; name = matrices.feature; path = "Book Data/features/matrices.feature"; sourceTree = "<group>"; };
 		646C32A922CB9EAA00A6B321 /* obj_file.feature */ = {isa = PBXFileReference; lastKnownFileType = text; name = obj_file.feature; path = "Book Data/features/obj_file.feature"; sourceTree = "<group>"; };
@@ -226,6 +242,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6441957822D41E4400894AC9 /* Yams.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +280,15 @@
 				64D36EBB22D2F2280067ADB4 /* TexturePattern.swift */,
 			);
 			path = Patterns;
+			sourceTree = "<group>";
+		};
+		6441957022D41E2300894AC9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6441957522D41E2300894AC9 /* Yams.framework */,
+				6441957722D41E2300894AC9 /* YamsTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		646C32A222CB9E3200A6B321 /* Features */ = {
@@ -352,6 +378,14 @@
 			path = models;
 			sourceTree = "<group>";
 		};
+		64D36EBF22D418850067ADB4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6441956F22D41E2300894AC9 /* Yams.xcodeproj */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		64EE916C22C7D18700FB2699 = {
 			isa = PBXGroup;
 			children = (
@@ -360,6 +394,7 @@
 				64EE918A22C7D18900FB2699 /* RayTracerTestTests */,
 				64EE919522C7D18900FB2699 /* RayTracerTestUITests */,
 				64EE917622C7D18700FB2699 /* Products */,
+				64D36EBF22D418850067ADB4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -539,6 +574,12 @@
 			mainGroup = 64EE916C22C7D18700FB2699;
 			productRefGroup = 64EE917622C7D18700FB2699 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 6441957022D41E2300894AC9 /* Products */;
+					ProjectRef = 6441956F22D41E2300894AC9 /* Yams.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				64EE917422C7D18700FB2699 /* RayTracerTest */,
@@ -547,6 +588,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		6441957522D41E2300894AC9 /* Yams.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Yams.framework;
+			remoteRef = 6441957422D41E2300894AC9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6441957722D41E2300894AC9 /* YamsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = YamsTests.xctest;
+			remoteRef = 6441957622D41E2300894AC9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		64EE917322C7D18700FB2699 /* Resources */ = {
@@ -828,6 +886,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/RayTracerTest/Frameworks",
+				);
 				INFOPLIST_FILE = RayTracerTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -849,6 +911,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/RayTracerTest/Frameworks",
+				);
 				INFOPLIST_FILE = RayTracerTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

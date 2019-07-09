@@ -19,9 +19,9 @@
   intensity: [ 1, 1, 1 ]
 
 # an optional second light for additional illumination
-- add: light
-  at: [ -400, 50, -10 ]
-  intensity: [ 0.2, 0.2, 0.2 ]
+# - add: light
+#   at: [ -400, 50, -10 ]
+#   intensity: [ 0.2, 0.2, 0.2 ]
 
 # ======================================================
 # define some constants to avoid duplication

@@ -122,8 +122,30 @@ class ViewController: NSViewController {
     }
     
     @IBAction func multiThreadedTest(_ sender: Any) {
-//        let camera = Camera(w: 400, h: 200, fieldOfView: .pi / 3)
-//        let _ = camera.multiThreadedRender(world: World.defaultWorld(), numberOfJobs: 4)
+        let startTime = CACurrentMediaTime()
+
+        let path = Bundle.main.url(forResource: "scenes/earth", withExtension: "yml")
+        let world = World.fromYamlFile(path)
+        
+        DispatchQueue.global(qos: .background).async {
+            let canvas = world.camera!.render(world: world, progress: { (x: Int, y: Int) -> Void in
+                DispatchQueue.main.async {
+                    self.progressLabel.stringValue = "(\(x),\(y))"
+                }
+            })
+            
+            let data = canvas.getPPM()
+            let filename = self.getDocumentsDirectory().appendingPathComponent("yaml.ppm")
+            do {
+                try data.write(to: filename)
+                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: self.getDocumentsDirectory().absoluteString)
+            } catch {}
+            
+            DispatchQueue.main.async {
+                let timeElapsed = CACurrentMediaTime() - startTime
+                self.progressLabel.stringValue = "Finished in: " + self.format(duration: timeElapsed)
+            }
+        }
     }
     
     @IBAction func renderRefactionTest(_ sender: Any) {
@@ -141,7 +163,7 @@ class ViewController: NSViewController {
 //        to: [-0.6, 1, -0.8]
 //        up: [0, 1, 0]
         
-        var camera = Camera(w: 400, h: 200, fieldOfView: 1.152)
+        var camera = Camera(w: 2000, h: 1000, fieldOfView: 1.152)
         camera.transform = Matrix4x4.viewTransformed(from: .Point(x: -2.6, y: 1.5, z: -3.9),
                                                    to: .Point(x: -0.6, y: 1, z: -0.8),
                                                    up: .Vector(x: 0, y: 1, z: 0))
@@ -486,7 +508,7 @@ class ViewController: NSViewController {
 
         var camera = Camera(w: 400, h: 400, fieldOfView: 1.0)
         camera.transform = Matrix4x4.viewTransformed(from: .Point(x: 0, y: 0, z: -5), to: .Point(x: 0, y: 0, z: 0), up: .Vector(x: 0, y: 1, z: 0))
-        
+                
 //        - add: light
 //        at: [-10, 10, -10]
 //        intensity: [1, 1, 1]
@@ -503,8 +525,11 @@ class ViewController: NSViewController {
         
         let cyl = Cylinder()
         cyl.material.color = Color.init(r: 0, g: 0, b: 1)
+        cyl.maximum = 1.5
+        cyl.minimum = -1.5
         
         let csg = CSG.difference(left: cyl, right: cubeGroup)
+        csg.transform = .rotatedZ(-.pi / 6) * .translated(x: 0, y: 0.5, z: 0)
         
         // teapotGroup.divide(threshold: 1)
         world.objects.append(csg)
