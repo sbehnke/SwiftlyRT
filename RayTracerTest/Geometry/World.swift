@@ -299,25 +299,25 @@ class World {
                             let b = tran[2] as? Double ?? 0.0
                             let c = tran[3] as? Double ?? 0.0
                             let m = Matrix4x4.scaled(x: a, y: b, z: c)
-                            operations.append(m)
+                            operations.insert(m, at: 0)
                             break
                             
                         case "rotate-x":
                             let a = tran[1] as? Double ?? 0.0
                             let m = Matrix4x4.rotatedZ(a)
-                            operations.append(m)
+                            operations.insert(m, at: 0)
                             break
                             
                         case "rotate-y":
                             let a = tran[1] as? Double ?? 0.0
                             let m = Matrix4x4.rotatedZ(a)
-                            operations.append(m)
+                            operations.insert(m, at: 0)
                             break
                             
                         case "rotate-z":
                             let a = tran[1] as? Double ?? 0.0
                             let m = Matrix4x4.rotatedZ(a)
-                            operations.append(m)
+                            operations.insert(m, at: 0)
                             break
                             
                         case "translate":
@@ -325,7 +325,7 @@ class World {
                             let b = tran[2] as? Double ?? 0.0
                             let c = tran[3] as? Double ?? 0.0
                             let m = Matrix4x4.translated(x: a, y: b, z: c)
-                            operations.append(m)
+                            operations.insert(m, at: 0)
                             break
                             
                         default:
