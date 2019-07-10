@@ -287,6 +287,7 @@ class PatternTests: XCTestCase {
 //    | 0.0 | 0.5 | white    |
 //    | 0.5 | 0.5 | black    |
 //    | 1.0 | 1.0 | black    |
+        XCTFail()
 
     }
     
@@ -306,7 +307,8 @@ class PatternTests: XCTestCase {
 //        | point(0, 1, 0)       | 0.5  | 1.0  |
 //        | point(0, -1, 0)      | 0.5  | 0.0  |
 //        | point(√2/2, √2/2, 0) | 0.25 | 0.75 |
-        
+        XCTFail()
+
     }
     
     func testUsingTextureMapPatternWithSphericalMap() {
@@ -327,6 +329,9 @@ class PatternTests: XCTestCase {
 //        | point(-0.5734, -0.2162, -0.7903) | white |
 //        | point(0.7688, -0.1470, 0.6223)   | black |
 //        | point(-0.7652, 0.2175, 0.6060)   | black |
+        
+        XCTFail()
+
     }
     
     func testPlanarMaping() {
@@ -345,6 +350,9 @@ class PatternTests: XCTestCase {
 //        | point(0.25, 0, -1.75)   | 0.25 | 0.25 |
 //        | point(1, 0, -1)         | 0.0  | 0.0  |
 //        | point(0, 0, 0)          | 0.0  | 0.0  |
+        
+        XCTFail()
+
         
     }
     
@@ -368,6 +376,9 @@ class PatternTests: XCTestCase {
 //        | point(-1, 1.25, 0)             | 0.75  | 0.25 |
 //        | point(-0.70711, 0.5, -0.70711) | 0.875 | 0.5  |
         
+        XCTFail()
+
+        
     }
     
     func testAlignCheckPattern() {
@@ -389,6 +400,9 @@ class PatternTests: XCTestCase {
 //        | 0.1  | 0.1  | bl       |
 //        | 0.9  | 0.1  | br       |
         
+        XCTFail()
+
+        
     }
     
     func testCubeFaceIdentification() {
@@ -405,6 +419,9 @@ class PatternTests: XCTestCase {
 //        | point(0.5, 1, 0.9)     | "up"    |
 //        | point(-0.2, -1.3, 1.1) | "down"  |
         
+        XCTFail()
+
+        
     }
     
     func testUVMappingFronFaceOfCube() {
@@ -417,6 +434,9 @@ class PatternTests: XCTestCase {
 //    | point                | u    | v    |
 //    | point(-0.5, 0.5, 1)  | 0.25 | 0.75 |
 //    | point(0.5, -0.5, 1)  | 0.75 | 0.25 |
+        
+        XCTFail()
+
     }
     
     func testUVMappingBackFaceOfCube() {
@@ -429,6 +449,9 @@ class PatternTests: XCTestCase {
 //    | point                 | u    | v    |
 //    | point(0.5, 0.5, -1)   | 0.25 | 0.75 |
 //    | point(-0.5, -0.5, -1) | 0.75 | 0.25 |
+        
+        XCTFail()
+
     }
     
     func testUVMappingLeftFaceOfCube() {
@@ -441,6 +464,9 @@ class PatternTests: XCTestCase {
 //    | point                | u    | v    |
 //    | point(-1, 0.5, -0.5) | 0.25 | 0.75 |
 //    | point(-1, -0.5, 0.5) | 0.75 | 0.25 |
+        
+        XCTFail()
+
     }
     
     func testUVMappingRightFaceOfCube() {
@@ -453,6 +479,9 @@ class PatternTests: XCTestCase {
 //    | point                | u    | v    |
 //    | point(1, 0.5, 0.5)   | 0.25 | 0.75 |
 //    | point(1, -0.5, -0.5) | 0.75 | 0.25 |
+        
+        XCTFail()
+
     }
         
     func testUVMappingUpperFaceOfCube() {
@@ -465,6 +494,9 @@ class PatternTests: XCTestCase {
 //    | point               | u    | v    |
 //    | point(-0.5, 1, -0.5) | 0.25 | 0.75 |
 //    | point(0.5, 1, 0.5) | 0.75 | 0.25 |
+        
+        XCTFail()
+
     }
     
     func testUVMappingLowerFaceOfCube() {
@@ -477,6 +509,9 @@ class PatternTests: XCTestCase {
 //    | point                 | u    | v    |
 //    | point(-0.5, -1, 0.5) | 0.25 | 0.75 |
 //    | point(0.5, -1, -0.5)   | 0.75 | 0.25 |
+        
+        XCTFail()
+
     
     }
     
@@ -531,6 +566,9 @@ class PatternTests: XCTestCase {
 //        |   | point(0.9, -1, 0.9)   | green  |
 //        |   | point(-0.9, -1, -0.9) | blue   |
 //        |   | point(0.9, -1, -0.9)  | white  |
+        
+        XCTFail()
+
     }
     
     func testCheckerPatternIn2D() {
@@ -563,6 +601,8 @@ class PatternTests: XCTestCase {
 //        | 0.6 | 0.3 | color(0.1, 0.1, 0.1) |
 //        | 1   | 1   | color(0.9, 0.9, 0.9) |
         
+        XCTFail()
+
     }
 }
 

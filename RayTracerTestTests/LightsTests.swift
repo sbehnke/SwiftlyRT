@@ -51,7 +51,9 @@ class LightsTests: XCTestCase {
 //        | point(1.0001, 0, 0)  | 0.0    |
 //        | point(0, -1.0001, 0) | 0.0    |
 //        | point(0, 0, 0)       | 0.0    |
-        
+     
+        XCTFail()
+
     }
     
     func testAreaLightIntensityFunction() {
@@ -72,6 +74,8 @@ class LightsTests: XCTestCase {
 //        | point(1.5, 0, 2)     | 0.5    |
 //        | point(1.25, 1.25, 3) | 0.75   |
 //        | point(0, 0, -2)      | 1.0    |
+        XCTFail()
+
     }
     
     func testFindingSinglePointOnJitteredAreaLight() {
@@ -91,6 +95,8 @@ class LightsTests: XCTestCase {
 //        | 0 | 1 | point(0.15, 0, 0.85) |
 //        | 2 | 0 | point(1.15, 0, 0.35) |
 //        | 3 | 1 | point(1.65, 0, 0.85) |
+        XCTFail()
+
         
     }
     
@@ -113,6 +119,7 @@ class LightsTests: XCTestCase {
 //        | point(1.5, 0, 2)     | 0.75   |
 //        | point(1.25, 1.25, 3) | 0.75   |
 //        | point(0, 0, -2)      | 1.0    |
-        
+        XCTFail()
+
     }
 }

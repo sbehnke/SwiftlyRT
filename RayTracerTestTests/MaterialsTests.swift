@@ -202,6 +202,9 @@ class MaterialsTests: XCTestCase {
 //        | 1.0       | color(1, 1, 1)          |
 //        | 0.5       | color(0.55, 0.55, 0.55) |
 //        | 0.0       | color(0.1, 0.1, 0.1)    |
+        
+        XCTFail()
+
     }
     
     func testAreaLight() {
@@ -218,6 +221,9 @@ class MaterialsTests: XCTestCase {
 //        And light.vsteps = 2
 //        And light.samples = 8
 //        And light.position = point(1, 0, 0.5)
+        
+        XCTFail()
+
     }
     
     func testLightingSamplesAreaLight() {
@@ -243,5 +249,7 @@ class MaterialsTests: XCTestCase {
 //        | point(0, 0, -1)            | color(0.9965, 0.9965, 0.9965) |
 //        | point(0, 0.7071, -0.7071)  | color(0.6232, 0.6232, 0.6232) |
         
+        XCTFail()
+
     }
 }

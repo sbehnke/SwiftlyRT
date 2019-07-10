@@ -189,6 +189,7 @@ P3
 //        """
 //        Then canvas_from_ppm(ppm) should fail
         
+        XCTFail()
     }
     
     func testReadingPPMHeaderWithAndHeight() {
@@ -206,7 +207,8 @@ P3
 //        When canvas ← canvas_from_ppm(ppm)
 //        Then canvas.width = 10
 //        And canvas.height = 2
-        
+        XCTFail()
+
     }
     
     func testReadingPPMPixeldData() {
@@ -237,7 +239,8 @@ P3
 //        | 1 | 2 | color(0, 1, 1)             |
 //        | 2 | 2 | color(1, 0, 1)             |
 //        | 3 | 2 | color(0.498, 0.498, 0.498) |
-        
+        XCTFail()
+
     }
     
     func testParsePPMDataIgnoringComments() {
@@ -257,6 +260,8 @@ P3
 //        When canvas ← canvas_from_ppm(ppm)
 //        Then pixel_at(canvas, 0, 0) = color(1, 1, 1)
 //        And pixel_at(canvas, 1, 0) = color(1, 0, 1)
+        XCTFail()
+
     }
     
     func testParsePPMDataWithRGBAcrossLines() {
@@ -273,6 +278,8 @@ P3
 //        """
 //        When canvas ← canvas_from_ppm(ppm)
 //        Then pixel_at(canvas, 0, 0) = color(0.2, 0.6, 0.8)
+        XCTFail()
+
     }
     
     func testParsePPMReaderRespectsScaleSetting() {
@@ -287,5 +294,7 @@ P3
 //        """
 //        When canvas ← canvas_from_ppm(ppm)
 //        Then pixel_at(canvas, 0, 1) = color(0.75, 0.5, 0.25)
+        XCTFail()
+
     }
 }

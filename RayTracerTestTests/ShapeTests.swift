@@ -251,5 +251,6 @@ class ShapeTests: XCTestCase {
 
         let s = Sphere()
         s.divide(threshold: 1)
+//        XCTAssertTrue(s is Sphere)
     }
 }

@@ -19,5 +19,8 @@ class SequencesTests: XCTestCase {
 //    And next(gen) = 0.5
 //    And next(gen) = 1.0
 //    And next(gen) = 0.1
+        
+        XCTFail()
+
     }
 }

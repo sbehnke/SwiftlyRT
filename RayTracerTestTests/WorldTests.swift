@@ -581,5 +581,7 @@ class WorldTests: XCTestCase {
 //        | point(10, 10, 10)    | true   |
 //        | point(-20, -20, -20) | false  |
 //        | point(-5, -5, -5)    | false  |
+        
+        XCTFail()
     }
 }
