@@ -242,7 +242,7 @@ class World {
             if let colors = values["colors"] {
                 let a = toColor((colors as? [Any])?.first as? [Any])
                 let b = toColor((colors as? [Any])?.last as? [Any])
-                pattern = CheckerPattern(a: a, b: b)
+                pattern = StripePattern(a: a, b: b)
             }
             break
             
