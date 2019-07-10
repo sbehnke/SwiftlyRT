@@ -1,0 +1,200 @@
+# ======================================================
+# cylinders.yml
+#
+# This file describes the scene illustrated at the start
+# of chapter 13, "Cylinders", in "The Ray Tracer
+# Challenge"
+#
+# by Jamis Buck <jamis@jamisbuck.org>
+# ======================================================
+
+# ======================================================
+# the camera
+# ======================================================
+
+- add: camera
+  width: 400
+  height: 200
+  field-of-view: 0.314
+  from: [8, 3.5, -9]
+  to: [0, 0.3, 0]
+  up: [0, 1, 0]
+
+# ======================================================
+# light sources
+# ======================================================
+
+- add: light
+  at: [1, 6.9, -4.9]
+  intensity: [1, 1, 1]
+
+# ======================================================
+# describe the elements of the scene
+# ======================================================
+
+# floor
+- add: plane
+  material:
+    pattern:
+      type: checkers
+      colors:
+        - [0.5, 0.5, 0.5]
+        - [0.75, 0.75, 0.75]
+      transform:
+        - [ scale, 0.25, 0.25, 0.25 ]
+        - [ rotate-y, 0.3 ]
+    ambient: 0.2
+    diffuse: 0.9
+    specular: 0
+
+- add: cylinder
+  min: 0
+  max: 0.75
+  closed: true
+  transform:
+    - [ scale, 0.5, 1, 0.5 ]
+    - [ translate, -1, 0, 1 ]
+  material:
+    color: [0, 0, 0.6]
+    diffuse: 0.1
+    specular: 0.9
+    shininess: 300
+    reflective: 0.9
+
+# concentric cylinders
+
+- add: cylinder
+  min: 0
+  max: 0.2
+  closed: false
+  transform:
+    - [ scale, 0.8, 1, 0.8 ]
+    - [ translate, 1, 0, 0 ]
+  material:
+    color: [1, 1, 0.3]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.9
+    shininess: 300
+
+- add: cylinder
+  min: 0
+  max: 0.3
+  closed: false
+  transform:
+    - [ scale, 0.6, 1, 0.6 ]
+    - [ translate, 1, 0, 0 ]
+  material:
+    color: [1, 0.9, 0.4]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.9
+    shininess: 300
+
+- add: cylinder
+  min: 0
+  max: 0.4
+  closed: false
+  transform:
+    - [ scale, 0.4, 1, 0.4 ]
+    - [ translate, 1, 0, 0 ]
+  material:
+    color: [1, 0.8, 0.5]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.9
+    shininess: 300
+
+- add: cylinder
+  min: 0
+  max: 0.5
+  closed: true
+  transform:
+    - [ scale, 0.2, 1, 0.2 ]
+    - [ translate, 1, 0, 0 ]
+  material:
+    color: [1, 0.7, 0.6]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.9
+    shininess: 300
+
+# decorative cylinders
+- add: cylinder
+  min: 0
+  max: 0.3
+  closed: true
+  transform:
+    - [ scale, 0.05, 1, 0.05 ]
+    - [ translate, 0, 0, -0.75 ]
+  material:
+    color: [1, 0, 0]
+    ambient: 0.1
+    diffuse: 0.9
+    specular: 0.9
+    shininess: 300
+
+- add: cylinder
+  min: 0
+  max: 0.3
+  closed: true
+  transform:
+    - [ scale, 0.05, 1, 0.05 ]
+    - [ translate, 0, 0, 1.5 ]
+    - [ rotate-y, -0.15 ]
+    - [ translate, 0, 0, -2.25 ]
+  material:
+    color: [1, 1, 0]
+    ambient: 0.1
+    diffuse: 0.9
+    specular: 0.9
+    shininess: 300
+
+- add: cylinder
+  min: 0
+  max: 0.3
+  closed: true
+  transform:
+    - [ scale, 0.05, 1, 0.05 ]
+    - [ translate, 0, 0, 1.5 ]
+    - [ rotate-y, -0.3 ]
+    - [ translate, 0, 0, -2.25 ]
+  material:
+    color: [0, 1, 0]
+    ambient: 0.1
+    diffuse: 0.9
+    specular: 0.9
+    shininess: 300
+
+- add: cylinder
+  min: 0
+  max: 0.3
+  closed: true
+  transform:
+    - [ scale, 0.05, 1, 0.05 ]
+    - [ translate, 0, 0, 1.5 ]
+    - [ rotate-y, -0.45 ]
+    - [ translate, 0, 0, -2.25 ]
+  material:
+    color: [0, 1, 1]
+    ambient: 0.1
+    diffuse: 0.9
+    specular: 0.9
+    shininess: 300
+
+# glass cylinder
+- add: cylinder
+  min: 0.0001
+  max: 0.5
+  closed: true
+  transform:
+    - [ scale, 0.33, 1, 0.33 ]
+    - [ translate, 0, 0, -1.5 ]
+  material:
+    color: [0.25, 0, 0]
+    diffuse: 0.1
+    specular: 0.9
+    shininess: 300
+    reflective: 0.9
+    transparency: 0.9
+    refractive-index: 1.5
