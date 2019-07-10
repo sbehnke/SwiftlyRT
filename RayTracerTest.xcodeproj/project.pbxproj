@@ -24,7 +24,8 @@
 		6435B50A22CE92CF00270210 /* CheckerPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50922CE92CF00270210 /* CheckerPattern.swift */; };
 		6435B50C22CE9A9300270210 /* SolidColorPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50B22CE9A9300270210 /* SolidColorPattern.swift */; };
 		6435B50E22CE9B0100270210 /* BlendedPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6435B50D22CE9B0100270210 /* BlendedPattern.swift */; };
-		6441957822D41E4400894AC9 /* Yams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6441957522D41E2300894AC9 /* Yams.framework */; };
+		644EE7A022D63E6B004A832B /* Yams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6441957522D41E2300894AC9 /* Yams.framework */; };
+		644EE7A122D63E6B004A832B /* Yams.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6441957522D41E2300894AC9 /* Yams.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		646C32BE22CB9EE300A6B321 /* LightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32BD22CB9EE300A6B321 /* LightsTests.swift */; };
 		646C32C422CB9FEA00A6B321 /* MaterialsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32C322CB9FEA00A6B321 /* MaterialsTests.swift */; };
 		646C32C622CBA2B600A6B321 /* CameraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646C32C522CBA2B600A6B321 /* CameraTests.swift */; };
@@ -108,6 +109,13 @@
 			remoteGlobalIDString = OBJ_29;
 			remoteInfo = YamsTests;
 		};
+		644EE7A222D63E6B004A832B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6441956F22D41E2300894AC9 /* Yams.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_45;
+			remoteInfo = Yams;
+		};
 		64EE918822C7D18900FB2699 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 64EE916D22C7D18700FB2699 /* Project object */;
@@ -123,6 +131,20 @@
 			remoteInfo = RayTracerTest;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		644EE7A422D63E6C004A832B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				644EE7A122D63E6B004A832B /* Yams.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		6416F6C522D0281B005E4797 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Scenes; sourceTree = "<group>"; };
@@ -242,7 +264,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6441957822D41E4400894AC9 /* Yams.framework in Frameworks */,
+				644EE7A022D63E6B004A832B /* Yams.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,10 +516,12 @@
 				64EE917122C7D18700FB2699 /* Sources */,
 				64EE917222C7D18700FB2699 /* Frameworks */,
 				64EE917322C7D18700FB2699 /* Resources */,
+				644EE7A422D63E6C004A832B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				644EE7A322D63E6B004A832B /* PBXTargetDependency */,
 			);
 			name = RayTracerTest;
 			productName = RayTracerTest;
@@ -738,6 +762,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		644EE7A322D63E6B004A832B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Yams;
+			targetProxy = 644EE7A222D63E6B004A832B /* PBXContainerItemProxy */;
+		};
 		64EE918922C7D18900FB2699 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 64EE917422C7D18700FB2699 /* RayTracerTest */;
@@ -880,6 +909,7 @@
 		64EE919C22C7D18900FB2699 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
@@ -905,6 +935,7 @@
 		64EE919D22C7D18900FB2699 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";

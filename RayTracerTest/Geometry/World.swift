@@ -311,7 +311,7 @@ class World {
                 m.transparency = convertTo(transparency)
             }
             
-            if let refractiveIndex = values!["refractiveIndex"] {
+            if let refractiveIndex = values!["refractive-index"] {
                 m.refractiveIndex = convertTo(refractiveIndex)
             }
         }
