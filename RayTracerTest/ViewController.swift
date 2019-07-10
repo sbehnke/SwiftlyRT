@@ -24,6 +24,7 @@ class ViewController: NSViewController {
     }
 
     @IBOutlet weak var progressLabel: NSTextFieldCell!
+    @IBOutlet weak var imageView: NSImageView!
     
     @IBAction func buttonRenderScene(_ sender: Any) {
         renderScene()
@@ -123,6 +124,7 @@ class ViewController: NSViewController {
     
     func renderYamlFile(_ url: URL?) {
         let startTime = CACurrentMediaTime()
+        imageView.image = nil
 
         let world = World.fromYamlFile(url)
         DispatchQueue.global(qos: .background).async {
@@ -133,13 +135,16 @@ class ViewController: NSViewController {
             })
             
             let data = canvas.getPPM()
-            let filename = self.getDocumentsDirectory().appendingPathComponent("yaml.ppm")
-            do {
-                try data.write(to: filename)
-                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: self.getDocumentsDirectory().absoluteString)
-            } catch {}
+            let img = NSImage(data: data)
+//            let filename = self.getDocumentsDirectory().appendingPathComponent("yaml.ppm")
+//            do {
+//                try data.write(to: filename)
+//                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: self.getDocumentsDirectory().absoluteString)
+//            } catch {}
             
             DispatchQueue.main.async {
+                self.imageView.image = img
+
                 let timeElapsed = CACurrentMediaTime() - startTime
                 self.progressLabel.stringValue = "Finished in: " + self.format(duration: timeElapsed)
             }
