@@ -1,0 +1,145 @@
+
+# ======================================================
+# puppets.yml
+#
+# This file describes the scene illustrated at the end
+# of chapter 8, "Shadows", in "The Ray Tracer Challenge"
+#
+# by Jamis Buck <jamis@jamisbuck.org>
+# ======================================================
+
+# ======================================================
+# the camera
+# ======================================================
+
+- add: camera
+  width: 400
+  height: 200
+  field-of-view: 0.524
+  from: [ 40, 0, -70 ]
+  to: [ 0, 0, -5 ]
+  up: [ 0, 1, 0 ]
+
+# ======================================================
+# light sources
+# ======================================================
+
+- add: light
+  at: [ 0, 0, -100 ]
+  intensity: [ 1, 1, 1 ]
+
+# ======================================================
+# define some constants to avoid duplication
+# ======================================================
+
+- define: sphere-material
+  value:
+    ambient: 0.2
+    diffuse: 0.8
+    specular: 0.3
+    shininess: 200
+
+- define: wrist-material
+  extend: sphere-material
+  value:
+    color: [ 0.1, 1, 1 ]
+
+- define: palm-material
+  extend: sphere-material
+  value:
+    color: [ 0.1, 0.1, 1 ]
+
+- define: thumb-material
+  extend: sphere-material
+  value:
+    color: [ 0.1, 0.1, 1 ]
+
+- define: index-material
+  extend: sphere-material
+  value:
+    color: [ 1, 1, 0.1 ]
+
+- define: middle-material
+  extend: sphere-material
+  value:
+    color: [ 0.1, 1, 0.5 ]
+
+- define: ring-material
+  extend: sphere-material
+  value:
+    color: [ 0.1, 1, 0.1 ]
+
+- define: pinky-material
+  extend: sphere-material
+  value:
+    color: [ 0.1, 0.5, 1 ]
+
+# ======================================================
+# a backdrop onto which to cast the shadow
+# ======================================================
+
+- add: sphere
+  material:
+    color: [ 1, 1, 1 ]
+    ambient: 0
+    diffuse: 0.5
+    specular: 0
+  transform:
+    - [ scale, 200, 200, 0.01 ]
+    - [ translate, 0, 0, 20 ]
+
+# ======================================================
+# describe the elements of the scene
+# ======================================================
+
+# the wrist
+- add: sphere
+  material: wrist-material
+  transform:
+    - [ scale, 3, 3, 3 ]
+    - [ translate, -4, 0, -21 ]
+    - [ rotate-z, 0.785398163397448 ] # pi/4
+
+# the palm
+- add: sphere
+  material: palm-material
+  transform:
+    - [ scale, 4, 3, 3 ]
+    - [ translate, 0, 0, -15 ]
+
+# the thumb
+- add: sphere
+  material: thumb-material
+  transform:
+    - [ scale, 1, 3, 1 ]
+    - [ translate, -2, 2, -16 ]
+
+# the index finger
+- add: sphere
+  material: index-material
+  transform:
+    - [ scale, 3, 0.75, 0.75 ]
+    - [ translate, 3, 2, -22 ]
+
+# the middle finger
+- add: sphere
+  material: middle-material
+  transform:
+    - [ scale, 3, 0.75, 0.75 ]
+    - [ translate, 4, 1, -19 ]
+
+# the ring finger
+- add: sphere
+  material: ring-material
+  transform:
+    - [ scale, 3, 0.75, 0.75 ]
+    - [ translate, 4, 0, -18 ]
+
+# the pinky finger
+- add: sphere
+  material: pinky-material
+  transform:
+    - [ scale, 2.5, 0.6, 0.6 ]
+    - [ translate, 1, 0, 0 ]
+    - [ rotate-z, -0.314159265358979 ] # pi/10
+    - [ translate, 3, -1.5, -20]
