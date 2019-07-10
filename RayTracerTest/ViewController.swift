@@ -121,36 +121,10 @@ class ViewController: NSViewController {
         return formatter.string(from: duration)!
     }
     
-    @IBAction func multiThreadedTest(_ sender: Any) {
+    func renderYamlFile(_ url: URL?) {
         let startTime = CACurrentMediaTime()
 
-        let path = Bundle.main.url(forResource: "scenes/chapter10", withExtension: "yml")
-        let world = World.fromYamlFile(path)
-        
-//        let world2 = World()
-//        world2.camera = Camera(w: 480, h: 320, fieldOfView: .pi / 3)
-//        world2.camera?.transform = .viewTransformed(from: .Point(x: -5, y: -2, z: -4), to: .Point(x: 0, y: 2, z: 0), up: .Vector(x: 0, y: 1, z: 0))
-//        world2.light = PointLight(position: .Point(x: -3, y: 6, z: -8), intensity: Color(r: 1.2, g: 1.2, b: 1.2))
-//
-//        let floor = Plane()
-//        floor.material.pattern = CheckerPattern(a: Color.white, b: Color.black)
-//        floor.material.pattern?.transform = Matrix4x4.scaled(x: 2, y: 2, z: 2) * Matrix4x4.rotatedY(.pi / 4)
-//        floor.material.ambient = 0.3
-//        floor.material.diffuse = 0.7
-//
-//        let wall = Plane()
-//        wall.material.pattern = RingPattern(a: Color.white, b: Color(r: 1, g: 0, b: 0))
-//        wall.material.diffuse = 0.7
-//        wall.material.ambient = 0.2
-//        wall.transform = Matrix4x4.rotatedX(.pi / 2) * Matrix4x4.translated(x: 0, y: 0, z: 5)
-//
-//        let sphere = Sphere()
-//        sphere.material.pattern = StripePattern(a: Color.init(r: 1, g: 0.5, b: 0), b: Color(r: 1, g: 0.3, b: 0))
-//        sphere.material.pattern?.transform = Matrix4x4.rotatedZ(.pi / 2) * Matrix4x4.scaled(x: 0.05, y: 0.05, z: 0.05)
-//        sphere.transform = Matrix4x4.scaled(x: 0.5, y: 4.5, z: 0.5) * Matrix4x4.translated(x: 1.5, y: 0, z: 0)
-//
-//        world2.objects.append(contentsOf: [floor, wall, sphere])
-        
+        let world = World.fromYamlFile(url)
         DispatchQueue.global(qos: .background).async {
             let canvas = world.camera!.render(world: world, progress: { (x: Int, y: Int) -> Void in
                 DispatchQueue.main.async {
@@ -169,6 +143,28 @@ class ViewController: NSViewController {
                 let timeElapsed = CACurrentMediaTime() - startTime
                 self.progressLabel.stringValue = "Finished in: " + self.format(duration: timeElapsed)
             }
+        }
+    }
+    
+    @IBAction func multiThreadedTest(_ sender: Any) {
+        let dialog = NSOpenPanel();
+        
+        dialog.title                   = "Choose a .yml file";
+        dialog.showsResizeIndicator    = true;
+        dialog.showsHiddenFiles        = false;
+        dialog.canChooseDirectories    = false;
+        dialog.canCreateDirectories    = true;
+        dialog.allowsMultipleSelection = false;
+        dialog.allowedFileTypes        = ["yml"];
+        
+        if (dialog.runModal() == NSApplication.ModalResponse.OK) {
+            let result = dialog.url // Pathname of the file
+            if (result != nil) {
+                renderYamlFile(result)
+            }
+        } else {
+            // User clicked on "Cancel"
+            return
         }
     }
     
@@ -499,64 +495,54 @@ class ViewController: NSViewController {
     @IBAction func renderGiraffe(_ sender: Any) {
         let startTime = CACurrentMediaTime()
         
-//        var camera = Camera(w: 200, h: 150, fieldOfView: 1.047)
-//        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: 1, y: 2, z: -5), to: .Point(x: 0, y: 1, z: 0), up: .Vector(x: 0, y: 1, z: 0))
-//
-//        let world = World()
-//        world.light = PointLight(position: .Point(x: -9, y: 9, z: -9), intensity: Color.white)
-//
-//        let floor = Plane()
-//        floor.material.pattern = CheckerPattern(a: Color(r: 0.7, g: 0.7, b: 0.7), b: Color(r: 0.3, g: 0.3, b: 0.3))
-//        floor.material.pattern?.transform = Matrix4x4.scaled(x: 0.6, y: 0.6, z: 0.6)
-//        floor.material.ambient = 0.02
-//        floor.material.diffuse = 0.7
-//        floor.material.specular = 0
-//        floor.material.reflective = 0.05
-//
-//        let room = Cube()
-//        room.material.color = Color(r: 0.7, g: 0.7, b: 0.7)
-//        room.material.diffuse = 0.8
-//        room.material.ambient = 0.1
-//        room.material.specular = 0
-//        room.transform = Matrix4x4.translated(x: 0, y: 0.99, z: 0) * Matrix4x4.scaled(x: 10, y: 10, z: 10)
-        
-//        world.objects = [floor, room]
-//
-//            - add: camera
-//        width: 400
-//        height: 400
-//        field-of-view: 0.5
-//        from: [0, 0, -5]
-//        to: [0, 0, 0]
-//        up: [0, 1, 0]
-
-        var camera = Camera(w: 400, h: 400, fieldOfView: 1.0)
-        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: 0, y: 0, z: -5), to: .Point(x: 0, y: 0, z: 0), up: .Vector(x: 0, y: 1, z: 0))
-                
-//        - add: light
-//        at: [-10, 10, -10]
-//        intensity: [1, 1, 1]
         
         let world = World()
-        world.light = PointLight(position: .Point(x: -10, y: 10, z: -10), intensity: Color.white)
+        var camera = Camera(w: 400, h: 400, fieldOfView: 1.152)
+        camera.transform = Matrix4x4.viewTransformed(from: .Point(x: -2.6, y: 1.5, z: -3.9),
+                                                     to: .Point(x: -0.6, y: 1, z: -0.8),
+                                                     up: .Vector(x: 0, y: 1, z: 0))
+        let light = PointLight(position: .Point(x: -4.9, y: 4.9, z: -1),
+                               intensity: Color.white)
+        world.light = light
+        
+        var wallMaterial = Material()
+        let stripeColors = [Color(r: 0.45, g: 0.45, b: 0.45),
+                            Color(r: 0.55, g: 0.55, b: 0.55)]
+        wallMaterial.pattern = StripePattern(a: stripeColors[0], b: stripeColors[1])
+        wallMaterial.pattern!.transform = Matrix4x4.rotatedY(1.5708) *
+            Matrix4x4.scaled(x: 0.25, y: 0.25, z: 0.25)
+        wallMaterial.ambient = 0
+        wallMaterial.diffuse = 0.4
+        wallMaterial.specular = 0
+        wallMaterial.reflective = 0.3
+        
+        let floor = Plane()
+        floor.transform = .rotatedY(0.31415)
+        floor.material.pattern = CheckerPattern(a: Color(r: 0.35, g: 0.35, b: 0.35),
+                                                b: Color(r: 0.65, g: 0.65, b: 0.65))
+        floor.material.specular = 0
+        floor.material.reflective = 0.4
         
         let bundle = Bundle.main
-        let url = bundle.url(forResource: "cube", withExtension: "obj")
+        let url = bundle.url(forResource: "teapot", withExtension: "obj")
         let cube = ObjParser.parse(objFilePath: url)
         let cubeGroup = cube.toGroup()
-        cubeGroup.transform = .rotatedX(.pi / 3) * Matrix4x4.rotatedY(.pi / 3)
+//        cubeGroup.transform = .rotatedX(.pi / 3) * Matrix4x4.rotatedY(.pi / 3)
+        cubeGroup.transform = Matrix4x4.rotatedZ(.pi / 2) * Matrix4x4.translated(x: 0, y: 1, z: 0)
         cubeGroup.material.color = Color.init(r: 1, g: 0, b: 0)
+        cubeGroup.divide(threshold: 1)
         
-        let cyl = Cylinder()
-        cyl.material.color = Color.init(r: 0, g: 0, b: 1)
-        cyl.maximum = 1.5
-        cyl.minimum = -1.5
-        
-        let csg = CSG.difference(left: cyl, right: cubeGroup)
-        csg.transform = .rotatedZ(-.pi / 6) * .translated(x: 0, y: 0.5, z: 0)
+//        let cyl = Cylinder()
+//        cyl.material.color = Color.init(r: 0, g: 0, b: 1)
+//        cyl.maximum = 1.5
+//        cyl.minimum = -1.5
+//
+//        let csg = CSG.difference(left: cyl, right: cubeGroup)
+//        csg.transform = .rotatedZ(-.pi / 6) * .translated(x: 0, y: 0.5, z: 0)
         
         // teapotGroup.divide(threshold: 1)
-        world.objects.append(csg)
+        world.objects.append(floor)
+        world.objects.append(cubeGroup)
         
         DispatchQueue.global(qos: .background).async {
             
