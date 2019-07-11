@@ -436,6 +436,45 @@ class World {
             newShape = shape
             break
             
+        case "csg":
+            var csg: CSG? = nil
+            var leftShape: Shape? = nil
+            var rightShape: Shape? = nil
+            
+            if let left = newEntry["left"] as? [String: Any] {
+                if let type = left["type"] as? String {
+                    leftShape = toShape(type, newEntry: left)
+                }
+            }
+            
+            if let right = newEntry["right"] as? [String: Any] {
+                if let type = right["type"] as? String {
+                    rightShape = toShape(type, newEntry: right)
+                }
+            }
+            
+            if let operation = newEntry["operation"] as? String {
+                if leftShape != nil && rightShape != nil {
+                switch (operation) {
+                    case "difference":
+                        csg = CSG.difference(left: leftShape!, right: rightShape!)
+                        break
+                    case "intersection":
+                        csg = CSG.intersection(left: leftShape!, right: rightShape!)
+                        break
+                    case "union":
+                        csg = CSG.union(left: leftShape!, right: rightShape!)
+                        break
+                        
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            newShape = csg
+            break
+            
         case "group":
             let group = Group()
             
