@@ -553,6 +553,9 @@ class World {
                                 if width > 0 && height > 0 {
                                     var camera = Camera(w: width, h: height, fieldOfView: fieldOfView)
                                     camera.transform = Matrix4x4.viewTransformed(from: from, to: to, up: up)
+                                    camera.from = from
+                                    camera.to = to
+                                    camera.up = up
                                     world.camera = camera
                                 }
                                 break

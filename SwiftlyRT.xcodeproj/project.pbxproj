@@ -316,21 +316,21 @@
 			isa = PBXGroup;
 			children = (
 				6496FE7022D6B69A0024322D /* BoundingBox.swift */,
-				6496FE7122D6B69A0024322D /* Cylinder.swift */,
-				6496FE7222D6B69A0024322D /* Cube.swift */,
-				6496FE7322D6B69A0024322D /* Sphere.swift */,
-				6496FE7422D6B69A0024322D /* ObjParser.swift */,
-				6496FE7522D6B69A0024322D /* Shape.swift */,
-				6496FE7622D6B69A0024322D /* Group.swift */,
-				6496FE7722D6B69A0024322D /* TestShape.swift */,
-				6496FE7822D6B69A0024322D /* Plane.swift */,
-				6496FE7922D6B69A0024322D /* World.swift */,
-				6496FE7A22D6B69A0024322D /* Projecile.swift */,
-				6496FE7B22D6B69A0024322D /* Cone.swift */,
 				6496FE7C22D6B69A0024322D /* Camera.swift */,
-				6496FE7D22D6B69A0024322D /* SmoothTriangle.swift */,
+				6496FE7B22D6B69A0024322D /* Cone.swift */,
 				6496FE7E22D6B69A0024322D /* CSG.swift */,
+				6496FE7222D6B69A0024322D /* Cube.swift */,
+				6496FE7122D6B69A0024322D /* Cylinder.swift */,
+				6496FE7622D6B69A0024322D /* Group.swift */,
+				6496FE7422D6B69A0024322D /* ObjParser.swift */,
+				6496FE7822D6B69A0024322D /* Plane.swift */,
+				6496FE7A22D6B69A0024322D /* Projecile.swift */,
+				6496FE7522D6B69A0024322D /* Shape.swift */,
+				6496FE7D22D6B69A0024322D /* SmoothTriangle.swift */,
+				6496FE7322D6B69A0024322D /* Sphere.swift */,
+				6496FE7722D6B69A0024322D /* TestShape.swift */,
 				6496FE7F22D6B69A0024322D /* Triangle.swift */,
+				6496FE7922D6B69A0024322D /* World.swift */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";

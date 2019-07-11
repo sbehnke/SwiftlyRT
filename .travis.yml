@@ -1,6 +1,6 @@
 os: osx
 osx_image: xcode10.2
 language: swift
-xcode_project: RayTracerTest.xcodeproj
-xcode_scheme: RayTracerTest
+xcode_project: SwiftlyRT.xcodeproj
+xcode_scheme: SwiftlyRT
 platform: macOS

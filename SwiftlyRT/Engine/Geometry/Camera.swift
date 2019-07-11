@@ -61,14 +61,25 @@ struct Camera {
     
     public typealias RenderProgress = (Int, Int) -> Void
     static func render(c: Camera, world: World, progress: RenderProgress? = nil) -> Canvas {
-        let image = Canvas(width: c.width, height: c.height)
-        let progressInterval = c.width / 4
         
-        for y in 0..<c.height {
+        var camera = c
+        
+        if let fromPoint = camera.from,
+            let toPoint = camera.to,
+            let upVector = camera.up {
+            
+            camera.transform = Matrix4x4.viewTransformed(from: fromPoint, to: toPoint, up: upVector)
+        }
+        
+        
+        let image = Canvas(width: camera.width, height: camera.height)
+        let progressInterval = camera.width / 4
+        
+        for y in 0..<camera.height {
             progress?(0, y)
             
-            for x in 0..<c.width {
-                let ray = c.rayForPixel(x: x, y: y)
+            for x in 0..<camera.width {
+                let ray = camera.rayForPixel(x: x, y: y)
                 let color = world.colorAt(ray: ray)
                 image.setPixel(x: x, y: y, color: color)
                 
@@ -148,6 +159,10 @@ struct Camera {
             computePixelSize()
         }
     }
+    
+    var to: Tuple? = nil
+    var from: Tuple? = nil
+    var up: Tuple? = nil
     
     private var halfWidth = 0.0
     private var halfHeight = 0.0

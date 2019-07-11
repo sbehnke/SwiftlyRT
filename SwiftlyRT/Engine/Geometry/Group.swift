@@ -123,11 +123,11 @@ class Group: Shape {
         addChild(g)
     }
     
-    override var material: Material {
-        didSet {
-            for child in children {
-                child.material = material
-            }
+    func setMaterialAndChildrenMaterial(_ m: Material) {
+        material = m
+        
+        for child in children {
+            child.material = material
         }
-    }    
+    }
 }

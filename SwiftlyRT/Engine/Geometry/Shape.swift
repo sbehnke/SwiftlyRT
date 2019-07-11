@@ -100,6 +100,25 @@ class Shape : Equatable {
         }
     }
     private(set) var inverseTransform = Matrix4x4.identity
-    var material = Material()
+    private(set) var hasMaterial: Bool = false
+    private var internalMaterial = Material()
+    
+    var material: Material {
+        get {
+            if hasMaterial {
+                return internalMaterial
+            } else if parent != nil {
+                return parent!.material
+            }
+            
+            return internalMaterial
+        }
+        set {
+            if (newValue != Material()) {
+                hasMaterial = true
+                internalMaterial = newValue
+            }
+        }
+    }
     var filename: String? = nil
 }
