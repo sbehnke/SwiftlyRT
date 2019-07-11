@@ -274,44 +274,54 @@ class World {
         return pattern
     }
     
-    static func toMaterial(_ values: [String:Any]?) -> Material {
+    static func toMaterial(_ key: String?, values: [String:Any]?) -> Material {
         var m = Material()
+        var localValues = values
         
-        if values != nil {
-            
-            if let pattern = values!["pattern"] as? [String:Any] {
+        if localValues == nil && key != nil {
+            if let materialValues = definedMaterials[key!] as? [String: Any] {
+                if let extendedMaterial = materialValues["extend"] as? String {
+                    m = toMaterial(extendedMaterial, values: materialValues["value"] as? [String: Any])
+                } else {
+                    localValues = definedMaterials[key!] as? [String: Any]
+                }
+            }
+        }
+        
+        if localValues != nil {
+            if let pattern = localValues!["pattern"] as? [String:Any] {
                 m.pattern = toPattern(pattern)
             }
         
-            if let color = values!["color"] as? [Any] {
+            if let color = localValues!["color"] as? [Any] {
                 m.color = toColor(color)
             }
             
-            if let ambient = values!["ambient"] {
+            if let ambient = localValues!["ambient"] {
                 m.ambient = convertTo(ambient)
             }
             
-            if let specular = values!["specular"] {
+            if let specular = localValues!["specular"] {
                 m.specular = convertTo(specular)
             }
             
-            if let shininess = values!["shininess"] {
+            if let shininess = localValues!["shininess"] {
                 m.shininess = convertTo(shininess)
             }
             
-            if let diffuse = values!["diffuse"] {
+            if let diffuse = localValues!["diffuse"] {
                 m.diffuse = convertTo(diffuse)
             }
             
-            if let reflective = values!["reflective"] {
+            if let reflective = localValues!["reflective"] {
                 m.reflective = convertTo(reflective)
             }
             
-            if let transparency = values!["transparency"] {
+            if let transparency = localValues!["transparency"] {
                 m.transparency = convertTo(transparency)
             }
             
-            if let refractiveIndex = values!["refractive-index"] {
+            if let refractiveIndex = localValues!["refractive-index"] {
                 m.refractiveIndex = convertTo(refractiveIndex)
             }
         }
@@ -383,7 +393,103 @@ class World {
         return output
     }
     
+    static func toShape(_ type: String, newEntry: [String:Any]) -> Shape? {
+        var newShape: Shape? = nil
+        
+        switch type {
+        case "sphere":
+            newShape = Sphere()
+            break
+            
+        case "cube":
+            newShape = Cube()
+            break
+            
+            
+        case "plane":
+            newShape = Plane()
+            break
+            
+        case "cylinder":
+            let shape = Cylinder()
+            if let min = newEntry["min"] {
+                shape.minimum = convertTo(min)
+            }
+            if let max = newEntry["max"] {
+                shape.maximum = convertTo(max)
+            }
+            
+            shape.closed = convertTo(newEntry["closed"])
+            newShape = shape
+            break
+            
+        case "cone":
+            let shape = Cone()
+            if let min = newEntry["min"] {
+                shape.minimum = convertTo(min)
+            }
+            if let max = newEntry["max"] {
+                shape.maximum = convertTo(max)
+            }
+            
+            shape.closed = convertTo(newEntry["closed"])
+            newShape = shape
+            break
+            
+        case "group":
+            let group = Group()
+            
+            if let children = newEntry["children"] as? [Any] {
+                for c in children{
+                    if let childEntry = c as? [String: Any]  {
+                        if let add = childEntry["add"] as? String {
+                            let child = toShape(add, newEntry: childEntry)
+                            if child != nil {
+                                group.addChild(child!)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            newShape = group
+            break
+            
+        case "obj":
+            let group = Group()
+            group.filename = newEntry["file"] as? String
+            newShape = group
+            
+            break
+            
+        default:
+            if let definedEntry = definedShapes[type] as? [String: Any] {
+                if let addType = definedEntry["add"] as? String {
+                    let shape = toShape(addType, newEntry: definedEntry)
+                    newShape = shape
+                }
+            }
+            
+            break
+        }
+        
+        if let shape = newShape {
+            shape.name = String(describing: shape.self)
+            shape.material = toMaterial(newEntry["material"] as? String, values: newEntry["material"] as? [String:Any])
+            shape.transform *= toTransform(newEntry["transform"] as? [Any])
+            
+            if let shadows = newEntry["shadow"] {
+                shape.castsShadow = convertTo(shadows)
+            }
+        }
+        
+        return newShape
+    }
+    
     static func fromYamlFile(_ filePath: URL?) -> World {
+        definedShapes.removeAll()
+        definedMaterials.removeAll()
+        
         let world = World()
         
         if let url = filePath {
@@ -393,12 +499,9 @@ class World {
                 let loadedArray = try Yams.load(yaml: contents) as? [Any]
                 
                 for entry in loadedArray!{
-                    
                     if let newEntry = entry as? [String:Any] {
                         if let add = newEntry["add"] as? String {
 
-                            var newShape: Shape? = nil
-                            
                             switch add {
                             case "camera":
                                 let fieldOfView: Double = convertTo(newEntry["field-of-view"])
@@ -419,86 +522,46 @@ class World {
                                 let at = toPoint(newEntry["at"] as? [Any])
                                 let intensity = toColor(newEntry["intensity"] as? [Any])
                                 world.light = PointLight(position: at, intensity: intensity)
-                                
-                                break
-                                
-                            case "sphere":
-                                newShape = Sphere()
-                                break
-                                
-                            case "cube":
-                                newShape = Cube()
-                                break
-                                
-                                
-                            case "plane":
-                                newShape = Plane()
-                                break
-                                
-                                
-                            case "cylinder":
-                                let shape = Cylinder()
-                                if let min = newEntry["min"] {
-                                    shape.minimum = convertTo(min)
-                                }
-                                if let max = newEntry["max"] {
-                                    shape.maximum = convertTo(max)
-                                }
-                                
-                                shape.closed = convertTo(newEntry["closed"])
-                                newShape = shape
-                                break
-                                
-                            case "cone":
-                                let shape = Cone()
-                                if let min = newEntry["min"] {
-                                    shape.minimum = convertTo(min)
-                                }
-                                if let max = newEntry["max"] {
-                                    shape.maximum = convertTo(max)
-                                }
-
-                                shape.closed = convertTo(newEntry["closed"])
-                                newShape = shape
                                 break
                                 
                             default:
+                                let newShape: Shape? = toShape(add, newEntry: newEntry)
+                                if let shape = newShape {
+                                    world.objects.append(shape)
+                                } else {
+                                    print("Invalid option: \(String(describing: newEntry))")
+                                }
                                 break;
                                 
-                            }
-                            
-                            if let shape = newShape {
-                                shape.name = String(describing: shape.self)
-                                shape.material = toMaterial(newEntry["material"] as? [String:Any])
-                                shape.transform = toTransform(newEntry["transform"] as? [Any])
-                                
-                                if let shadows = newEntry["shadow"] {
-                                    shape.castsShadow = convertTo(shadows)
-                                }
-                                
-                                world.objects.append(shape)
                             }
                         }
                         
                         if let define = newEntry["define"] as? String {
-                            switch define {
-                                
-                            default:
-                                break;
-                                
+                            if define.hasSuffix("-material") {
+                                if let extendsKey = newEntry["extend"] as? String {
+                                    let extendedEntry = ["extend": extendsKey, "value": newEntry["value"]]
+                                    definedMaterials[define] = extendedEntry as [String : Any]
+                                }
+                                else if let value = newEntry["value"] as? [String: Any]{
+                                    definedMaterials[define] = value
+                                }
+                            } else {
+                                if let value = newEntry["value"] as? [String: Any]{
+                                    definedShapes[define] = value
+                                }
                             }
                         }
                     }
                 }
-                
-
-                print("f")
 
             } catch {}
         }
         
         return world
     }
+    
+    private static var definedShapes: [String: Any] = [:]
+    private static var definedMaterials: [String: [String: Any]?] = [:]
     
     var objects: [Shape] = []
     var light: PointLight? = nil

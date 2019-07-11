@@ -131,9 +131,23 @@ struct Camera {
     }
     
     private(set) var pixelSize = 0.0
-    private(set) var width = 0
-    private(set) var height = 0
-    private(set) var fieldOfView: Double = 0.0
+    public var width = 0 {
+        didSet {
+            computePixelSize()
+        }
+    }
+    
+    public var height = 0 {
+        didSet {
+            computePixelSize()
+        }
+    }
+    
+    public var fieldOfView: Double = 0.0 {
+        didSet {
+            computePixelSize()
+        }
+    }
     
     private var halfWidth = 0.0
     private var halfHeight = 0.0

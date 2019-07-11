@@ -57,7 +57,6 @@
 		6496FF5F22D6B8380024322D /* SmoothTriangleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF4622D6B8370024322D /* SmoothTriangleTests.swift */; };
 		6496FF6022D6B8380024322D /* PatternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF4722D6B8370024322D /* PatternTests.swift */; };
 		6496FF6122D6B8380024322D /* TransformationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF4822D6B8370024322D /* TransformationTests.swift */; };
-		6496FF6222D6B8380024322D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6496FF4922D6B8370024322D /* Info.plist */; };
 		6496FF6322D6B8380024322D /* SequencesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF4A22D6B8370024322D /* SequencesTests.swift */; };
 		6496FF6422D6B8380024322D /* ShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF4B22D6B8370024322D /* ShapeTests.swift */; };
 		6496FF6522D6B8380024322D /* TupleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF4C22D6B8370024322D /* TupleTests.swift */; };
@@ -83,6 +82,7 @@
 		6496FF7D22D6BC8D0024322D /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6496FF7A22D6BC8D0024322D /* cube.obj */; };
 		6496FF7E22D6BC8D0024322D /* triangles.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6496FF7B22D6BC8D0024322D /* triangles.obj */; };
 		64F51E8922D6BEB10053546F /* TestCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F51E8822D6BEB10053546F /* TestCode.swift */; };
+		64F51E8E22D6EB5D0053546F /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 64F51E8D22D6EB5D0053546F /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,7 +184,6 @@
 		6496FF4622D6B8370024322D /* SmoothTriangleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmoothTriangleTests.swift; sourceTree = "<group>"; };
 		6496FF4722D6B8370024322D /* PatternTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternTests.swift; sourceTree = "<group>"; };
 		6496FF4822D6B8370024322D /* TransformationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformationTests.swift; sourceTree = "<group>"; };
-		6496FF4922D6B8370024322D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../../../SwiftlyRT/RayTracerTestTests/Info.plist; sourceTree = "<group>"; };
 		6496FF4A22D6B8370024322D /* SequencesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequencesTests.swift; sourceTree = "<group>"; };
 		6496FF4B22D6B8370024322D /* ShapeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShapeTests.swift; sourceTree = "<group>"; };
 		6496FF4C22D6B8370024322D /* TupleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TupleTests.swift; sourceTree = "<group>"; };
@@ -210,6 +209,7 @@
 		6496FF7A22D6BC8D0024322D /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
 		6496FF7B22D6BC8D0024322D /* triangles.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = triangles.obj; sourceTree = "<group>"; };
 		64F51E8822D6BEB10053546F /* TestCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCode.swift; sourceTree = "<group>"; };
+		64F51E8D22D6EB5D0053546F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -374,7 +374,7 @@
 				6496FF5022D6B8370024322D /* CubeTests.swift */,
 				6496FF5B22D6B8380024322D /* CylinderTests.swift */,
 				6496FF5222D6B8370024322D /* GroupTests.swift */,
-				6496FF4922D6B8370024322D /* Info.plist */,
+				64F51E8D22D6EB5D0053546F /* Info.plist */,
 				6496FF5322D6B8370024322D /* IntersectionsTest.swift */,
 				6496FF5822D6B8370024322D /* LightsTests.swift */,
 				6496FF5522D6B8370024322D /* MaterialsTests.swift */,
@@ -523,7 +523,7 @@
 			files = (
 				6496FF7D22D6BC8D0024322D /* cube.obj in Resources */,
 				6496FF7C22D6BC8D0024322D /* plane.obj in Resources */,
-				6496FF6222D6B8380024322D /* Info.plist in Resources */,
+				64F51E8E22D6EB5D0053546F /* Info.plist in Resources */,
 				6496FF7E22D6BC8D0024322D /* triangles.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

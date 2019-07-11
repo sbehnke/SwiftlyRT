@@ -27,10 +27,14 @@ extension NSImage {
 class ViewController: NSViewController {
     var imageReady: Bool = false
     var filename: String = ""
+    var world: World? = nil
     
     @IBOutlet weak var progressLabel: NSTextFieldCell!
     @IBOutlet weak var imageView: NSImageView!
-
+    @IBOutlet weak var widthField: NSTextField!
+    @IBOutlet weak var heightField: NSTextField!
+    @IBOutlet weak var fieldOfViewField: NSTextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.progressLabel.stringValue = ""
@@ -53,16 +57,32 @@ class ViewController: NSViewController {
         return formatter.string(from: duration)!
     }
     
-    func renderYamlFile(_ url: URL?) {
-        if url != nil {
+    
+    func updateUI() {
+        if let w = world {
+            widthField.stringValue = String(w.camera!.width)
+            heightField.stringValue = String(w.camera!.height)
+            fieldOfViewField.stringValue = String(w.camera!.fieldOfView)
+        }
+    }
+    
+    
+    @IBAction func renderScene(_ sender: Any) {
+        if let w = world {
             let startTime = CACurrentMediaTime()
-            filename = NSString(string: url!.lastPathComponent).deletingPathExtension
             imageView.image = nil
             imageReady = false
-
-            let world = World.fromYamlFile(url)
+            
+            let width = NSString(string: widthField.stringValue).intValue
+            let height = NSString(string: heightField.stringValue).intValue
+            let fov = NSString(string: fieldOfViewField.stringValue).doubleValue
+            
+            w.camera?.width = Int(width)
+            w.camera?.height = Int(height)
+            w.camera?.fieldOfView = fov
+            
             DispatchQueue.global(qos: .background).async {
-                let canvas = world.camera!.render(world: world, progress: { (x: Int, y: Int) -> Void in
+                let canvas = w.camera!.render(world: w, progress: { (x: Int, y: Int) -> Void in
                     DispatchQueue.main.async {
                         self.progressLabel.stringValue = "(\(x),\(y))"
                     }
@@ -73,7 +93,7 @@ class ViewController: NSViewController {
                 DispatchQueue.main.async {
                     self.imageReady = true
                     self.imageView.image = img
-
+                    
                     let timeElapsed = CACurrentMediaTime() - startTime
                     self.progressLabel.stringValue = "Finished in: " + self.format(duration: timeElapsed)
                 }
@@ -81,7 +101,7 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func loadImage(_ sender: Any) {
+    @IBAction func loadYamlFile(_ sender: Any) {
         let dialog = NSOpenPanel();
     
         dialog.title                   = "Choose a .yml file";
@@ -95,7 +115,9 @@ class ViewController: NSViewController {
         if (dialog.runModal() == NSApplication.ModalResponse.OK) {
             let result = dialog.url // Pathname of the file
             if (result != nil) {
-                renderYamlFile(result)
+                filename = NSString(string: result!.lastPathComponent).deletingPathExtension
+                world = World.fromYamlFile(result)
+                updateUI()
             }
         } else {
             // User clicked on "Cancel"

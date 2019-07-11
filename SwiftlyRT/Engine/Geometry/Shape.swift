@@ -101,4 +101,5 @@ class Shape : Equatable {
     }
     private(set) var inverseTransform = Matrix4x4.identity
     var material = Material()
+    var filename: String? = nil
 }
