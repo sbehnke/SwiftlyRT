@@ -38,17 +38,17 @@ struct BoundingBox : Equatable {
     func transformed(transform: Matrix4x4) -> BoundingBox {
         var points: [Tuple] = []
         points.append(minimum)
-        points.append(transform * .Point(x: minimum.x, y: minimum.y, z: maximum.z))
-        points.append(transform * .Point(x: minimum.x, y: maximum.y, z: minimum.z))
-        points.append(transform * .Point(x: minimum.x, y: maximum.y, z: maximum.z))
-        points.append(transform * .Point(x: maximum.x, y: minimum.y, z: minimum.z))
-        points.append(transform * .Point(x: maximum.x, y: minimum.y, z: maximum.z))
-        points.append(transform * .Point(x: maximum.x, y: maximum.y, z: minimum.z))
+        points.append(.Point(x: minimum.x, y: minimum.y, z: maximum.z))
+        points.append(.Point(x: minimum.x, y: maximum.y, z: minimum.z))
+        points.append(.Point(x: minimum.x, y: maximum.y, z: maximum.z))
+        points.append(.Point(x: maximum.x, y: minimum.y, z: minimum.z))
+        points.append(.Point(x: maximum.x, y: minimum.y, z: maximum.z))
+        points.append(.Point(x: maximum.x, y: maximum.y, z: minimum.z))
         points.append(maximum)
         var box = BoundingBox()
         
         for point in points {
-            box.addPoint(point: point)
+            box.addPoint(point: transform * point)
         }
         
         return box

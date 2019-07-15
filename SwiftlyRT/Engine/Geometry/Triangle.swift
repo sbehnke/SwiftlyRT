@@ -80,11 +80,15 @@ class Triangle: Shape {
     }
     
     override func boundingBox() -> BoundingBox {
-        var box = BoundingBox()
-        box.addPoint(point: p1)
-        box.addPoint(point: p2)
-        box.addPoint(point: p3)
-        return box
+        if bounds == nil {
+            var box = BoundingBox()
+            box.addPoint(point: p1)
+            box.addPoint(point: p2)
+            box.addPoint(point: p3)
+            bounds = box
+        }
+        
+        return bounds!
     }
     
     var p1: Tuple = Tuple.pointZero {

@@ -168,16 +168,27 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
     
     func sphericalMap() -> (Double, Double) {
-//        let theta = atan2(x, y)
-//        let radius = magnitude
-//        let phi = acos(y / radius)
-//        let rawU = theta / (2 * .pi)
-//        let u = 1 - (rawU + 0.5)
-//        let v = 1 - phi / .pi
-//        return (u, v)
-
-        let u = 0.5 + (atan2(z, x) / (2 * .pi))
-        let v = 0.5 - (asin(y) / .pi)
+        let π = Double.pi
+        
+        // let theta ← arctan2(p.x, p.y)
+        let theta = atan2(x, y)
+        
+        // let radius ← magnitude(p)
+        let radius = magnitude
+        
+        // let phi ← arccos(p.y / radius)
+        let phi = acos(y / radius)
+        
+        // let raw_u ← theta / (2 * π)
+        let rawU = theta / (2 * π)
+        
+        // let u ← 1 - (raw_u + 0.5)
+        let u = 1 - (rawU + 0.5)
+        
+        // let v ← 1 - phi / π
+        let v = 1 - phi / π
+        
+        // return (u, v)
         return (u, v)
     }
     
@@ -249,7 +260,7 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
     
     var magnitude : Double {
-        return sqrt((x * x) + (y * y) + (z * z) + (w * w))
+        return sqrt((x * x) + (y * y) + (z * z) /* + (w * w) */)
     }
 
     subscript(index:Int) -> Double {

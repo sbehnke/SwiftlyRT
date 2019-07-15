@@ -90,10 +90,14 @@ class Cone: Shape {
     }
     
     override func boundingBox() -> BoundingBox {
-        let a = abs(minimum)
-        let b = abs(maximum)
-        let limit = max(a, b)
-        return BoundingBox(minimum: Tuple.Point(x: -limit, y: minimum, z: -limit), maximum: Tuple.Point(x: limit, y: maximum, z: limit))
+        if bounds == nil {
+            let a = abs(minimum)
+            let b = abs(maximum)
+            let limit = max(a, b)
+            bounds = BoundingBox(minimum: Tuple.Point(x: -limit, y: minimum, z: -limit), maximum: Tuple.Point(x: limit, y: maximum, z: limit))
+        }
+        
+        return bounds!
     }
     
     var minimum = -Double.infinity

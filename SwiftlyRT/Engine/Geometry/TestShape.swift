@@ -20,7 +20,11 @@ class TestShape : Shape {
     }
     
     override func boundingBox() -> BoundingBox {
-        return BoundingBox(minimum: .Point(x: -1, y: -1, z: -1), maximum: .Point(x: 1, y: 1, z: 1))
+        if bounds == nil {
+            bounds = BoundingBox(minimum: .Point(x: -1, y: -1, z: -1), maximum: .Point(x: 1, y: 1, z: 1))
+        }
+        
+        return bounds!
     }
     
     var savedRay: Ray? = nil

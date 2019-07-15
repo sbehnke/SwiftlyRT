@@ -24,6 +24,10 @@ class Plane: Shape {
     }
     
     override func boundingBox() -> BoundingBox {
-        return BoundingBox(minimum: Tuple.Point(x: -.infinity, y: 0, z: -.infinity), maximum: Tuple.Point(x: .infinity, y: 0, z: .infinity))
+        if bounds == nil {
+            bounds = BoundingBox(minimum: Tuple.Point(x: -.infinity, y: 0, z: -.infinity), maximum: Tuple.Point(x: .infinity, y: 0, z: .infinity))
+        }
+        
+        return bounds!
     }
 }
