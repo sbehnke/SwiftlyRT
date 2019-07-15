@@ -260,7 +260,11 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
     
     var magnitude : Double {
-        return sqrt((x * x) + (y * y) + (z * z) /* + (w * w) */)
+        if isVector() {
+            return sqrt((x * x) + (y * y) + (z * z))
+        } else {
+            return sqrt((x * x)/w + (y * y)/w + (z * z)/w)
+        }
     }
 
     subscript(index:Int) -> Double {
