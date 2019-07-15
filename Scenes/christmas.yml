@@ -1,0 +1,307 @@
+# ======================================================
+# christmas.yml
+#
+# This file describes a scene depicting a red Christmas
+# ornament nestled among several fir branches.
+#
+# As each branch is generated programmatically, they
+# cannot be described in this YAML format. Here is
+# pseudo-code for the fir_branch object that appears in
+# the YAML description.
+#
+#   function fir_branch()
+#     # the length of the branch
+#     let length ← 2.0
+#
+#     # the radius of the branch
+#     let radius ← 0.025
+#
+#     # how many groups of needles cover the branch
+#     let segments ← 20
+#
+#     # how needles per group, or segment
+#     let per_segment ← 24
+#
+#     # the branch itself, just a cylinder
+#     let branch ← closed cylinder from y=0 to y=length
+#     set_transform(branch, scaling(radius, 1, radius))
+#     branch.material ← material with:
+#                           color ← color(0.5, 0.35, 0.26)
+#                           ambient ← 0.2
+#                           specular ← 0.0
+#                           diffuse ← 0.6
+#
+#     # how much branch each segment gets
+#     let seg_size ← length / (segments - 1)
+#
+#     # the radial distance, in radians, between adjacent needles
+#     # in a group
+#     let theta ← 2.1 * π / per_segment
+#
+#     # the maximum length of each needle
+#     let max_length ← 20.0 * radius
+#
+#     # the group that will contain the branch and all needles
+#     let object ← group(branch)
+#
+#     for y ← 0 to segments - 1
+#       # create a subgroup for each segment of needles
+#       let subgroup ← group()
+#
+#       for i ← 0 to per_segment - 1
+#         # each needle is a triangle.
+#         # y_base y coordinate of the base of the triangle
+#         let y_base ← seg_size * y + rand() * seg_size
+#
+#         # y_tip is the y coordinate of the tip of the triangle
+#         let y_tip ← y_base - rand() * seg_size
+#
+#         # y_angle is angle (in radians) that the needle should be
+#         # rotated around the branch.
+#         let y_angle ← i * theta + rand() * theta
+#
+#         # how long is the needle?
+#         let needle_length ← max_length / 2 * (1 + rand())
+#
+#         # how much is the needle offset from the center of the branch?
+#         let ofs ← radius / 2
+#
+#         # the three points of the triangle that form the needle
+#         let p1 ← point(ofs, y_base, ofs)
+#         let p2 ← point(-ofs, y_base, ofs)
+#         let p3 ← point(0.0, y_tip, needle_length)
+#
+#         # create, transform, and texture the needle
+#         let tri ← triangle(p1, p2, p3)
+#         set_transform(tri, rotation_y(y_angle))
+#         tri.material ← material with:
+#                           color ← color(0.26, 0.36, 0.16)
+#                           specular ← 0.1
+#
+#         add_child(subgroup, tri)
+#       end for
+#
+#       add_child(object, subgroup)
+#     end for
+#
+#     return object
+#   end function
+#
+# by Jamis Buck <jamis@jamisbuck.org>
+# ======================================================
+
+# ======================================================
+# the camera
+# ======================================================
+
+- add: camera
+  width: 400
+  height: 300
+  field-of-view: 1.047
+  from: [0, 0, -4]
+  to: [0, 0, 0]
+  up: [0, 1, 0]
+
+# ======================================================
+# the light sources are all coupled with physical
+# objects, so that they appear as reflections on the
+# ornament.
+# ======================================================
+
+- add: light
+  at: [-10, 10, -10]
+  intensity: [0.6, 0.6, 0.6]
+- add: sphere
+  shadow: false
+  transform:
+    - [ scale, 1.5, 1.5, 1.5 ]
+    - [ translate, -10, 10, -10 ]
+  material:
+    color: [1, 1, 1]
+    ambient: 0.6
+    diffuse: 0
+    specular: 0
+
+- add: light
+  at: [10, 10, -10]
+  intensity: [0.6, 0.6, 0.6]
+- add: sphere
+  shadow: false
+  transform:
+    - [ scale, 1.5, 1.5, 1.5 ]
+    - [ translate, 10, 10, -10 ]
+  material:
+    color: [1, 1, 1]
+    ambient: 0.6
+    diffuse: 0
+    specular: 0
+
+- add: light
+  at: [-2, 1, -6]
+  intensity: [0.2, 0.1, 0.1]
+- add: sphere
+  shadow: false
+  transform:
+    - [ scale, 0.4, 0.4, 0.4 ]
+    - [ translate, -2, 1, -6 ]
+  material:
+    color: [1, 0.5, 0.5]
+    ambient: 0.6
+    diffuse: 0
+    specular: 0
+
+- add: light
+  at: [-1, -2, -6]
+  intensity: [0.1, 0.2, 0.1]
+- add: sphere
+  shadow: false
+  transform:
+    - [ scale, 0.4, 0.4, 0.4 ]
+    - [ translate, -1, -2, -6 ]
+  material:
+    color: [0.5, 1, 0.5]
+    ambient: 0.6
+    diffuse: 0
+    specular: 0
+
+- add: light
+  at: [3, -1, -6]
+  intensity: [0.2, 0.2, 0.2]
+- add: sphere
+  shadow: false
+  transform:
+    - [ scale, 0.5, 0.5, 0.5 ]
+    - [ translate, 3, -1, -6 ]
+  material:
+    color: [1, 1, 1]
+    ambient: 0.6
+    diffuse: 0
+    specular: 0
+
+# ======================================================
+# the scene
+# ======================================================
+
+# The ornament itself. Note that specular=0, because we're
+# making the ornament reflective and then putting each light
+# source inside another sphere, so that they show up as
+# reflections. The specular component of Phong shading
+# simulates this sort of reflection, so we don't need it here.
+- add: sphere
+  material:
+    color: [1, 0.25, 0.25]
+    ambient: 0
+    specular: 0
+    diffuse: 0.5
+    reflective: 0.5
+
+# the silver crown atop the ornament
+- add: cylinder
+  min: 0.0
+  max: 1.0
+  transform:
+    - [ scale, 0.2, 0.3, 0.2 ]
+    - [ translate, 0, 0.9, 0 ]
+    - [ rotate-z, -0.1 ]
+  material:
+    pattern:
+      type: checkers
+      colors:
+        - [ 1, 1, 1 ]
+        - [ 0.94, 0.94, 0.94 ]
+      transform:
+        - [ scale, 0.2, 0.2, 0.2 ]
+    ambient: 0.02
+    diffuse: 0.7
+    specular: 0.8
+    shininess: 20
+    reflective: 0.05
+
+# the branches
+# WARNING: by default, each branch consists of 20 segments * 24 needles per
+#   segment, or 480 triangles. There are 11 branches, so there are
+#   5,280 triangles used by default. While bounding boxes are not necessary
+#   to render this, you will find your ray tracer works much, MUCH more quickly
+#   with them, than without them.
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-y, 0.349 ]
+    - [ translate, -1, -1, 0 ]
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-y, 0.349 ]
+    - [ translate, -1, 1, 0 ]
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-y, -0.1745 ]
+    - [ translate, 1, -1, 0 ]
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-y, -0.349 ]
+    - [ translate, 1, 1, 0 ]
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-y, -0.349 ]
+    - [ translate, 0.2, -1.25, 0 ]
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-y, 0.349 ]
+    - [ translate, -0.2, -1.25, 0 ]
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-x, 0.087 ]
+    - [ rotate-y, 0.5236 ]
+    - [ translate, -1.2, 0.1, 0 ]
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-x, -0.1745 ]
+    - [ rotate-y, 0.5236 ]
+    - [ translate, -1.2, -0.35, 0.5 ]
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-x, 0.087 ]
+    - [ rotate-y, -0.5236 ]
+    - [ translate, -0.2, 1.5, 0.25 ]
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-x, -0.087 ]
+    - [ rotate-y, -0.5236 ]
+    - [ translate, 1.3, 0.4, 0 ]
+
+- add: fir_branch
+  transform:
+    - [ translate, 0, -0.5, 0 ]
+    - [ rotate-x, -1.5708 ]
+    - [ rotate-x, 0.087 ]
+    - [ rotate-y, -0.1745 ]
+    - [ translate, 1.5, -0.4, 0 ]
