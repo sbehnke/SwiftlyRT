@@ -10,8 +10,23 @@
   at: [-5, 0, -5]
   intensity: [1, 1, 1]
 
+- add: plane
+  material:
+    pattern:
+      type: checkers
+      transform:
+        - [ rotate-y, 0.785398163397448 ]
+        - [ scale, 2, 2, 2 ]
+      colors:
+        - [1, 1, 1]
+        - [0, 0, 0]
+    ambient: 0.3
+    diffuse: 0.7
+  transform:
+    - [ translate, 0, -1, 0 ]
+
 - add: obj
-  file: cube.obj
+  file: teapot.obj
   material:
     color: [1.0, 0.0, 0.2]
     ambient: 0.1
