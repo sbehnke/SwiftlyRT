@@ -96,7 +96,7 @@ struct ObjParser {
         return (Tuple.pointZero, Tuple.pointZero, Tuple.pointZero)
     }
     
-    static func parse(objFileData: String, withFilename: String = "") -> ObjParser {
+    static func parse(objFileData: String, withFilename: String = "", normalizeObject: Bool = true) -> ObjParser {
         var scaleFactorsComputed = false
         var sx = 0.0
         var sy = 0.0
@@ -193,21 +193,23 @@ struct ObjParser {
                     // Polygonal face element
                     objParser.faces += 1
                     
-                    if !scaleFactorsComputed {
-                        scaleFactorsComputed = true
-                        
-                        sx = bounds.maximum.x - bounds.minimum.x
-                        sy = bounds.maximum.y - bounds.minimum.y
-                        sz = bounds.maximum.z - bounds.minimum.z
-                        
-                        let scale = max (sx, sy, sz) / 2.0
-                        
-                        for index in 1...objParser.vertices.count {
-                            var v = objParser.vertices[index]
-                            v.x = (v.x - (bounds.minimum.x + sx / 2.0)) / scale
-                            v.y = (v.y - (bounds.minimum.y + sy / 2.0)) / scale
-                            v.z = (v.z - (bounds.minimum.z + sz / 2.0)) / scale
-                            objParser.vertices[index] = v
+                    if normalizeObject {
+                        if !scaleFactorsComputed {
+                            scaleFactorsComputed = true
+                            
+                            sx = bounds.maximum.x - bounds.minimum.x
+                            sy = bounds.maximum.y - bounds.minimum.y
+                            sz = bounds.maximum.z - bounds.minimum.z
+                            
+                            let scale = max (sx, sy, sz) / 2.0
+                            
+                            for index in 1...objParser.vertices.count {
+                                var v = objParser.vertices[index]
+                                v.x = (v.x - (bounds.minimum.x + sx / 2.0)) / scale
+                                v.y = (v.y - (bounds.minimum.y + sy / 2.0)) / scale
+                                v.z = (v.z - (bounds.minimum.z + sz / 2.0)) / scale
+                                objParser.vertices[index] = v
+                            }
                         }
                     }
                     

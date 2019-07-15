@@ -68,6 +68,7 @@ class ViewController: NSViewController {
     
     
     @IBAction func renderScene(_ sender: Any) {
+        progressLabel.stringValue = "Rendering!"
         if let w = world {
             let startTime = CACurrentMediaTime()
             imageView.image = nil
@@ -102,6 +103,8 @@ class ViewController: NSViewController {
     }
     
     @IBAction func loadYamlFile(_ sender: Any) {
+        progressLabel.stringValue = ""
+        
         let dialog = NSOpenPanel();
     
         dialog.title                   = "Choose a .yml file";
@@ -116,8 +119,10 @@ class ViewController: NSViewController {
             let result = dialog.url // Pathname of the file
             if (result != nil) {
                 filename = NSString(string: result!.lastPathComponent).deletingPathExtension
-                world = World.fromYamlFile(result)
+                var loader = WorldLoader()
+                world = loader.loadWorld(fromYamlFile: result)
                 updateUI()
+                progressLabel.stringValue = "Loaded file!"
             }
         } else {
             // User clicked on "Cancel"
@@ -134,6 +139,7 @@ class ViewController: NSViewController {
                 if result == .OK {
                     if let exportedUrl = savePanel.url {
                         let _ = image.pngWrite(to: exportedUrl)
+                        self.progressLabel.stringValue = "Image Saved!"
                     }
                 }
             })

@@ -29,18 +29,6 @@ struct Material : Equatable {
     }
     
     func lighting(object: Shape?, light: PointLight, position: Tuple, eyeVector: Tuple, normalVector: Tuple, inShadow: Bool = false) -> Color {
-//        function lighting(material, object, light, point, eyev, normalv, intensity)
-//        color ← get base color from material.color or material.pattern
-//        ambient ← compute ambient contribution
-//
-//        sum ← black
-//        for each sample on the light
-//        sum ← sum + diffuse contribution from sample
-//        sum ← sum + specular contribution from sample
-//        end for
-//
-//        return ambient + (sum / number of samples) * intensity
-//        end function
         
         var specular: Color
         var diffuse: Color

@@ -287,8 +287,16 @@ class PatternTests: XCTestCase {
 //    | 0.0 | 0.5 | white    |
 //    | 0.5 | 0.5 | black    |
 //    | 1.0 | 1.0 | black    |
-        XCTFail()
 
+        let u: [Double] = [0.0, 0.5, 0.0, 0.5, 1.0]
+        let v: [Double] = [0.0, 0.0, 0.5, 0.5, 1.0]
+        let color: [Color] = [Color.black, Color.white, Color.white, Color.black, Color.black]
+        
+        let checkers = UVCheckers(width: 2, height: 2, a: Color.black, b: Color.white)
+        
+        for index in 0..<u.count {
+            XCTAssertEqual(checkers.uvPatternAt(u: u[index], v: v[index]), color[index], "Color does not match at index: \(index)")
+        }
     }
     
     func testSphereicalMapping() {
@@ -307,8 +315,23 @@ class PatternTests: XCTestCase {
 //        | point(0, 1, 0)       | 0.5  | 1.0  |
 //        | point(0, -1, 0)      | 0.5  | 0.0  |
 //        | point(√2/2, √2/2, 0) | 0.25 | 0.75 |
-        XCTFail()
-
+        
+        let points: [Tuple] = [.Point(x: 0,  y: 0,  z: -1),
+                               .Point(x: 1,  y: 0,  z: 0),
+                               .Point(x: 0,  y: 0,  z: 1),
+                               .Point(x: -1, y: 0,  z: 0),
+                               .Point(x: 0,  y: 1,  z: 0),
+                               .Point(x: 0,  y: -1, z:  0),
+                               .Point(x: sqrt(2)/2, y: sqrt(2)/2, z: 0),]
+        let u: [Double] = [0.0, 0.25, 0.5, 0.75, 0.5, 0.5, 0.25, ]
+        let v: [Double] = [0.5, 0.5, 0.5, 0.5, 1.0, 0.0, 0.75, ]
+        
+        for index in 0..<points.count {
+            let (uOut, vOut) = points[index].sphericalMap()
+            print("Values: \(uOut), \(vOut)")
+            XCTAssertEqual(uOut, u[index], "u does not match for index: \(index)")
+            XCTAssertEqual(vOut, v[index], "v does not match for index: \(index)")
+        }
     }
     
     func testUsingTextureMapPatternWithSphericalMap() {

@@ -28,7 +28,7 @@ class WorldTests: XCTestCase {
         
         let world = World()
         XCTAssertEqual(world.objects.count, 0)
-        XCTAssertNil(world.light)
+        XCTAssertEqual(world.lights.count, 0)
     }
     
     func testDefaultWorld() {
@@ -56,9 +56,9 @@ class WorldTests: XCTestCase {
         let world = World()
         world.objects.append(s1)
         world.objects.append(s2)
-        world.light = light
+        world.lights.append(light)
         
-        XCTAssertEqual(world.light!, light)
+        XCTAssertEqual(world.lights.first!, light)
         XCTAssertTrue(world.objects.contains(s1))
         XCTAssertTrue(world.objects.contains(s1))
     }
@@ -116,13 +116,13 @@ class WorldTests: XCTestCase {
 //    Then c = color(0.90498, 0.90498, 0.90498)
     
         let w = World.defaultWorld()
-        w.light = PointLight(position: Tuple.Point(x: 0, y: 0.25, z: 0), intensity: Color(r: 1, g: 1, b: 1))
+        w.lights[0] = PointLight(position: Tuple.Point(x: 0, y: 0.25, z: 0), intensity: Color(r: 1, g: 1, b: 1))
         let r = Ray(origin: Tuple.Point(x: 0, y: 0, z: 0), direction: Tuple.Vector(x: 0, y: 0, z: 1))
         let shape = w.objects[1]
         let i = Intersection(t: 0.5, object: shape)
         let comps = i.prepareComputation(ray: r)
         let c = w.shadeHit(computation: comps)
-        if w.isShadowed(point: comps.point) {
+        if w.isShadowed(point: comps.point, light: w.lights.first!) {
             XCTAssertEqual(Color.init(r: 0.1, g: 0.1, b: 0.1), c)
         } else {
             // XCTAssertEqual(Color.init(r: 0.90498, g: 0.90498, b: 0.90498), c)
@@ -184,7 +184,7 @@ class WorldTests: XCTestCase {
 
         let w = World.defaultWorld()
         let p = Tuple.Point(x: 0, y: 10, z: 0)
-        XCTAssertFalse(w.isShadowed(point: p))
+        XCTAssertFalse(w.isShadowed(point: p, light: w.lights.first!))
     }
     
     func testShadowOnPointBetweenLight() {
@@ -195,7 +195,7 @@ class WorldTests: XCTestCase {
         
         let w = World.defaultWorld()
         let p = Tuple.Point(x: 10, y: -10, z: 10)
-        XCTAssertTrue(w.isShadowed(point: p))
+        XCTAssertTrue(w.isShadowed(point: p, light: w.lights.first!))
     }
     
     func testNoShadowWhenObjectBehindLight() {
@@ -206,7 +206,7 @@ class WorldTests: XCTestCase {
      
         let w = World.defaultWorld()
         let p = Tuple.Point(x: -20, y: 20, z: -20)
-        XCTAssertFalse(w.isShadowed(point: p))
+        XCTAssertFalse(w.isShadowed(point: p, light: w.lights.first!))
     }
     
     func testNoShadowWhenObjectBehindPoint() {
@@ -217,7 +217,7 @@ class WorldTests: XCTestCase {
         
         let w = World.defaultWorld()
         let p = Tuple.Point(x: -2, y: 2, z: -2)
-        XCTAssertFalse(w.isShadowed(point: p))
+        XCTAssertFalse(w.isShadowed(point: p, light: w.lights.first!))
     }
     
     func testShadeHitWithIntersectionInShadow() {
@@ -236,7 +236,7 @@ class WorldTests: XCTestCase {
 //    Then c = color(0.1, 0.1, 0.1)
         
         let w = World()
-        w.light = PointLight(position: .Point(x: 0, y: 0, z: -10), intensity: Color(r: 1, g: 1, b: 1))
+        w.lights.append(PointLight(position: .Point(x: 0, y: 0, z: -10), intensity: Color(r: 1, g: 1, b: 1)))
         let s1 = Sphere()
         w.objects.append(s1)
         
@@ -339,7 +339,7 @@ class WorldTests: XCTestCase {
 //    Then color_at(w, r) should terminate successfully
 
         let w = World()
-        w.light = PointLight(position: .Point(x: 0, y: 0, z: 0), intensity: Color.white)
+        w.lights.append(PointLight(position: .Point(x: 0, y: 0, z: 0), intensity: Color.white))
         let lower = Plane()
         lower.material.reflective = 1.0
         lower.transform = Matrix4x4.translated(x: 0, y: -1, z: 0)
@@ -368,7 +368,7 @@ class WorldTests: XCTestCase {
 //    Then color = color(0, 0, 0)
 
         let w = World.defaultWorld()
-        w.light = PointLight(position: .Point(x: 0, y: 0, z: 0), intensity: Color.white)
+        w.lights.append(PointLight(position: .Point(x: 0, y: 0, z: 0), intensity: Color.white))
         let shape = Plane()
         shape.material.reflective = 0.5
         shape.transform = Matrix4x4.translated(x: 0, y: -1, z: 0)

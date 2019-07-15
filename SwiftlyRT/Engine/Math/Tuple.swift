@@ -168,36 +168,17 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
     
     func sphericalMap() -> (Double, Double) {
-//        function spherical_map(p)
-//        # compute the azimuthal angle
-//        # -π < theta <= π
-//        # angle increases clockwise as viewed from above,
-//        # which is opposite of what we want, but we'll fix it later.
-//        let theta ← arctan2(p.x, p.y)
-//        
-//        let radius ← magnitude(p)
-//        
-//        # compute the polar angle
-//        # 0 <= phi <= π
-//        let phi ← arccos(p.y / radius)
-//        
-//        # -0.5 < raw_u <= 0.5
-//        let raw_u ← theta / (2 * π)
-//        
-//        # 0 <= u < 1
-//        # here's also where we fix the direction of u. Subtract it from 1,
-//        # so that it increases counterclockwise as viewed from above.
-//        let u ← 1 - (raw_u + 0.5)
-//        
-//        # we want v to be 0 at the south pole of the sphere,
-//        # and 1 at the north pole, so we have to "flip it over"
-//        # by subtracting it from 1.
-//        let v ← 1 - phi / π
-//        
+//        let theta = atan2(x, y)
+//        let radius = magnitude
+//        let phi = acos(y / radius)
+//        let rawU = theta / (2 * .pi)
+//        let u = 1 - (rawU + 0.5)
+//        let v = 1 - phi / .pi
 //        return (u, v)
-//        end function
-        
-        return (0.0, 0.0)
+
+        let u = 0.5 + (atan2(z, x) / (2 * .pi))
+        let v = 0.5 - (asin(y) / .pi)
+        return (u, v)
     }
     
     func planarMap() -> (Double, Double) {
