@@ -158,7 +158,7 @@ class BoundingBoxTests: XCTestCase {
         
         let box = BoundingBox(minimum: .Point(x: -1, y: -1, z: -1), maximum: .Point(x: 1, y: 1, z: 1))
         let matrix = Matrix4x4.rotatedX(.pi / 4) * Matrix4x4.rotatedY(.pi / 4)
-        let box2 = box.transform(transform: matrix)
+        let box2 = box.transformed(transform: matrix)
 
         XCTAssertEqual(box2.minimum, Tuple.Point(x: -1.414213562373095, y: -1.7071067811865475, z: -1.7071067811865475))
         XCTAssertEqual(box2.maximum, Tuple.Point(x: 1.414213562373095, y: 1.7071067811865475, z: 1.7071067811865475))

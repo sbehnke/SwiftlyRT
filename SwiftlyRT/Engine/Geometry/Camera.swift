@@ -92,6 +92,11 @@ struct Camera {
         return image
     }
     
+    static func renderSinglePixel(c: Camera, world: World, x: Int, y: Int) -> Color {
+        let ray = c.rayForPixel(x: x, y: y)
+        return world.colorAt(ray: ray)
+    }
+    
     public typealias MultiThreadedProgress = (Int, Int, Int) -> Void
     func partialRender(dispatchGroup: DispatchGroup, jobNumber: Int, startingY: Int, endingY: Int, image: Canvas, world: World, progress: MultiThreadedProgress? = nil) {
 

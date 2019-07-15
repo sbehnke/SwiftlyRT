@@ -48,6 +48,8 @@ class Group: Shape {
         let box = boundingBox()
         let intersects = box.intersects(ray: ray)
         
+//        print("This object: \(name): \(intersects)")
+        // TODO: Figure out why this is breaking things.
         if intersects {
             for child in children {
                 let xs = child.intersects(ray: ray)

@@ -35,7 +35,7 @@ struct BoundingBox : Equatable {
         return containsPoint(point: box.minimum) && containsPoint(point: box.maximum)
     }
     
-    func transform(transform: Matrix4x4) -> BoundingBox {
+    func transformed(transform: Matrix4x4) -> BoundingBox {
         var points: [Tuple] = []
         points.append(minimum)
         points.append(transform * .Point(x: minimum.x, y: minimum.y, z: maximum.z))
@@ -52,10 +52,6 @@ struct BoundingBox : Equatable {
         }
         
         return box
-    }
-    
-    func transformed(transform: Matrix4x4) -> BoundingBox {
-        return BoundingBox(minimum: transform * minimum, maximum: transform * maximum)
     }
     
     func intersects(ray: Ray) -> Bool {

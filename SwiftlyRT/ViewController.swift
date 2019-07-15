@@ -57,6 +57,111 @@ class ViewController: NSViewController {
         return formatter.string(from: duration)!
     }
     
+    func hexagonCorner(_ n: Int) -> Shape {
+//        function hexagon_corner()
+//        corner ← sphere()
+//        set_transform(corner, translation(0, 0, -1) *
+//            scaling(0.25, 0.25, 0.25))
+//        return corner
+//        end function
+//
+        let corner = Sphere()
+        corner.name = "Corner: \(n)"
+        corner.transform = .translated(x: 0, y: 0, z: -1) * Matrix4x4.scaled(x: 0.25, y: 0.25, z: 0.25)
+        return corner
+    }
+    
+    func hexagonEdge(_ n: Int) -> Shape {
+//    function hexagon_edge()
+//    edge ← cylinder()
+//    edge.minimum ← 0
+//    edge.maximum ← 1
+//    set_transform(edge, translation(0, 0, -1) *
+//    rotation_y(-π/6) *
+//    rotation_z(-π/2) *
+//    scaling(0.25, 1, 0.25))
+//    return edge
+//    end function
+     
+        let edge = Cylinder()
+        edge.name = "Edge: \(n)"
+        edge.minimum = 0
+        edge.maximum = 1
+        edge.transform = .translated(x: 0, y: 0, z: -1) *
+            Matrix4x4.rotatedY(-.pi / 6) *
+            Matrix4x4.rotatedZ(-.pi / 2) *
+            Matrix4x4.scaled(x: 0.25, y: 1, z: 0.25)
+        return edge
+    }
+    
+    func hexagonSide(_ n: Int) -> Group {
+//    function hexagon_side()
+//    side ← group()
+//
+//    add_child(side, hexagon_corner())
+//    add_child(side, hexagon_edge())
+//
+//    return side
+//    end function
+
+        let side = Group()
+        side.name = "InnerSideGroup: \(n)"
+        side.addChild(hexagonCorner(n))
+        side.addChild(hexagonEdge(n))
+        
+        print(side.name)
+        switch n {
+        case 0:
+            side.material.color = Color(r: 1, g: 1, b: 0)
+            break
+        case 1:
+            side.material.color = Color(r: 1, g: 0, b: 0)
+            break
+        case 2:
+            side.material.color = Color(r: 1, g: 0, b: 1)
+            break
+        case 3:
+            side.material.color = Color(r: 0, g: 0, b: 1)
+            break
+        case 4:
+            side.material.color = Color(r: 0, g: 1, b: 1)
+            break
+        case 5:
+            side.material.color = Color(r: 0, g: 1, b: 0)
+            break
+            
+        default:
+            side.material.color = Color(r: 1, g: 1, b: 1)
+            break
+        }
+        
+        return side
+    }
+
+    func hexagon() -> Group {
+//    function hexagon()
+//    hex ← group()
+//
+//    for n ← 0 to 5
+//    side ← hexagon_side()
+//    set_transform(side, rotation_y(n*π/3))
+//    add_child(hex, side)
+//    end for
+//
+//    return hex
+//    end function
+     
+        let hex = Group()
+        for n in 0...5 {
+            let side = hexagonSide(n)
+            side.name = "HexGroupSide: \(n)"
+            side.transform = .rotatedY(Double(n) * .pi / 3)
+            hex.addChild(side)
+        }
+        
+        return hex
+    }
+    
     
     func updateUI() {
         if let w = world {
@@ -66,6 +171,25 @@ class ViewController: NSViewController {
         }
     }
     
+    @IBAction func testButton(_ sender: Any) {
+        let w = World.defaultWorld()
+        w.objects.removeAll()
+        w.objects.append(hexagon())
+        world = w
+        
+        var camera = Camera(w: 200, h: 200, fieldOfView: 0.5)
+        camera.transform = .viewTransformed(from: .Point(x: 1, y: 2, z: -5), to: .pointZero, up: .Vector(x: 0, y: 1, z: 0))
+        w.camera = camera
+        updateUI()
+        
+        let color1 = Camera.renderSinglePixel(c: camera, world: world!, x: 145, y: 120)
+        let color2 = Camera.renderSinglePixel(c: camera, world: world!, x: 153, y: 120)
+        
+        print(color1)
+        print(color2)
+        
+        renderScene(self)
+    }
     
     @IBAction func renderScene(_ sender: Any) {
         progressLabel.stringValue = "Rendering!"
