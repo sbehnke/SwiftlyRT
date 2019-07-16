@@ -189,10 +189,7 @@ struct Matrix3x3 : Equatable, AdditiveArithmetic {
     }
     
     func cofactor(row: Int, column: Int) -> Double {
-        var factor = 1.0
-        if (row + column % 2 != 0) {
-            factor = -1.0
-        }
+        let factor = (row + column) % 2 == 0 ? 1.0 : -1.0
         assert(indexIsValid(row: row, column: column))
         return subMatrix(row: row, column: column).determinate() * factor
     }

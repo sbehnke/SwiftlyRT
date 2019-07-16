@@ -195,13 +195,9 @@ struct Matrix4x4 : Equatable, AdditiveArithmetic {
     }
     
     func cofactor(row: Int, column: Int) -> Double {
-        let m1 = Matrix4x4(a0: 1, a1: -1, a2: 1, a3: -1,
-                           b0: -1, b1: 1, b2: -1, b3: 1,
-                           c0: 1, c1: -1, c2: 1, c3: -1,
-                           d0: -1, d1: 1, d2: -1, d3: 1)
-
+        let factor = (row + column) % 2 == 0 ? 1.0 : -1.0
         assert(indexIsValid(row: row, column: column))
-        return subMatrix(row: row, column: column).determinate() * m1[row, column]
+        return subMatrix(row: row, column: column).determinate() * factor
     }
     
     func determinate() -> Double {
