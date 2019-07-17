@@ -169,26 +169,13 @@ struct Tuple: Equatable, AdditiveArithmetic {
     
     func sphericalMap() -> (Double, Double) {
         let π = Double.pi
-        
-        // let theta ← arctan2(p.x, p.y)
         let theta = atan2(x, y)
-        
-        // let radius ← magnitude(p)
-        let radius = magnitude
-        
-        // let phi ← arccos(p.y / radius)
+        let vec = Tuple.Vector(x: x, y: y, z: z)
+        let radius = vec.magnitude
         let phi = acos(y / radius)
-        
-        // let raw_u ← theta / (2 * π)
         let rawU = theta / (2 * π)
-        
-        // let u ← 1 - (raw_u + 0.5)
         let u = 1 - (rawU + 0.5)
-        
-        // let v ← 1 - phi / π
         let v = 1 - phi / π
-        
-        // return (u, v)
         return (u, v)
     }
     
