@@ -23,7 +23,7 @@ class UVCheckers: Pattern {
         let u2 = floor(u * Double(width))
         let v2 = floor(v * Double(height))
 
-        if (u2 + v2).remainder(dividingBy: 2.0) == 0.0 {
+        if (u2 + v2).modulo(2.0) == 0.0 {
             return a
         } else {
             return b

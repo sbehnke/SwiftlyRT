@@ -8,6 +8,12 @@
 
 import Foundation
 
+extension Double {
+    func modulo(_ b: Double) -> Double {
+        return self - b * floor(self / b)
+    }
+}
+
 struct Tuple: Equatable, AdditiveArithmetic {
     
     static let epsilon = 0.00001
@@ -180,16 +186,8 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
     
     func planarMap() -> (Double, Double) {
-        var u = x.remainder(dividingBy: 1.0)
-        var v = z.remainder(dividingBy: 1.0)
-        
-        if u < 0 {
-            u += 1.0
-        }
-        
-        if v < 0 {
-            v += 1.0
-        }
+        let u = x.modulo(1.0)
+        let v = z.modulo(1.0)
         
         return (u, v)
     }

@@ -17,7 +17,7 @@ class CheckerPattern: Pattern {
     
     override func patternAt(point: Tuple) -> Color {
         let sum = floor(point.x) + floor(point.y) + floor(point.z)
-        if sum.remainder(dividingBy: 2) == 0.0 {
+        if sum.modulo(2.0) == 0.0 {
             return a
         } else {
             return b
@@ -29,7 +29,7 @@ class CheckerPattern: Pattern {
         let u2 = floor(u * width)
         let v2 = floor(v * height)
         
-        if ((u2 + v2).remainder(dividingBy: 2.0) == 0) {
+        if ((u2 + v2).modulo(2.0) == 0) {
             return a
         } else {
             return b
