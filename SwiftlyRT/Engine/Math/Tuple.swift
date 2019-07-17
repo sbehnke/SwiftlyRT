@@ -180,14 +180,18 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
     
     func planarMap() -> (Double, Double) {
-//        function planar_map(p)
-//        let u ← p.x mod 1
-//        let v ← p.z mod 1
-//
-//        return (u, v)
-//        end function
+        var u = x.remainder(dividingBy: 1.0)
+        var v = z.remainder(dividingBy: 1.0)
         
-        return (0.0, 0.0)
+        if u < 0 {
+            u += 1.0
+        }
+        
+        if v < 0 {
+            v += 1.0
+        }
+        
+        return (u, v)
     }
     
     func cylindricalMap() -> (Double, Double) {

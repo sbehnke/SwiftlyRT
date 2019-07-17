@@ -373,10 +373,24 @@ class PatternTests: XCTestCase {
 //        | point(0.25, 0, -1.75)   | 0.25 | 0.25 |
 //        | point(1, 0, -1)         | 0.0  | 0.0  |
 //        | point(0, 0, 0)          | 0.0  | 0.0  |
-        
-        XCTFail()
 
+        let points: [Tuple] = [
+            .Point(x: 0.25, y: 0,   z:  0.5),
+            .Point(x: 0.25, y: 0,   z: -0.25),
+            .Point(x: 0.25, y: 0.5, z: -0.25),
+            .Point(x: 1.25, y: 0,   z:  0.5),
+            .Point(x: 0.25, y: 0,   z: -1.75),
+            .Point(x: 1,    y: 0,   z: -1),
+            .Point(x: 0,    y: 0,   z:  0),
+        ]
+        let u = [0.25, 0.25, 0.25, 0.25, 0.25, 0.0, 0.0,]
+        let v = [0.5, 0.75, 0.75, 0.5, 0.25, 0.0, 0.0,]
         
+        for index in 0..<points.count {
+            let (uOut, vOut) = points[index].planarMap()
+            XCTAssertEqual(u[index], uOut, "u does not match index: \(index)")
+            XCTAssertEqual(v[index], vOut, "v does not match index: \(index)")
+        }
     }
     
     func testCylindricalMapping() {
