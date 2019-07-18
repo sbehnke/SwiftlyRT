@@ -306,13 +306,58 @@ struct ObjParser {
         var tris: [Triangle] = []
         
         for index in 2..<components.count - 1 {
-            let pIndex1 = 1
-            let pIndex2 = Int(components[index]) ?? 0
-            let pIndex3 = Int(components[index + 1]) ?? 0
-            
-            let (p1, p2, p3) = trianglePoints(pIndex1: pIndex1, pIndex2: pIndex2, pIndex3: pIndex3)
-            let t = Triangle(point1: p1, point2: p2, point3: p3)
-            tris.append(t)
+            if components[1].contains("/") {
+                let subComponents1 = components[1].split(separator: "/", maxSplits: Int.max, omittingEmptySubsequences: false)
+                let subComponents2 = components[index].split(separator: "/", maxSplits: Int.max, omittingEmptySubsequences: false)
+                let subComponents3 = components[index + 1].split(separator: "/", maxSplits: Int.max, omittingEmptySubsequences: false)
+                
+                if subComponents1.count == 3 || subComponents2.count == 3 || subComponents3.count == 3 {
+                    // Vertex Index
+                    let pIndex1 = Int(subComponents1[0]) ?? 0
+                    let pIndex2 = Int(subComponents2[0]) ?? 0
+                    let pIndex3 = Int(subComponents3[0]) ?? 0
+                    
+                    //                                // Vertex Texture Index
+                    //                                let tIndex1 = Int(subComponents1[1]) ?? 0
+                    //                                let tIndex2 = Int(subComponents2[1]) ?? 0
+                    //                                let tIndex3 = Int(subComponents3[1]) ?? 0
+                    
+                    // Vertex Normal
+                    let nIndex1 = Int(subComponents1[2]) ?? 0
+                    let nIndex2 = Int(subComponents2[2]) ?? 0
+                    let nIndex3 = Int(subComponents3[2]) ?? 0
+                    
+                    let (p1, p2, p3) = trianglePoints(pIndex1: pIndex1, pIndex2: pIndex2, pIndex3: pIndex3)
+                    let (n1, n2, n3) = normalVectors(nIndex1: nIndex1, nIndex2: nIndex2, nIndex3: nIndex3)
+                    let t = SmoothTriangle(point1: p1, point2: p2, point3: p3, normal1: n1, normal2: n2, normal3: n3)
+                    tris.append(t)
+                    
+                } else if subComponents1.count == 2 || subComponents2.count == 2 || subComponents3.count == 2 {
+                    // Vertex Index
+                    let pIndex1 = Int(subComponents1[0]) ?? 0
+                    let pIndex2 = Int(subComponents2[0]) ?? 0
+                    let pIndex3 = Int(subComponents3[0]) ?? 0
+                    
+                    // Vertex Normal
+                    let nIndex1 = Int(subComponents1[1]) ?? 0
+                    let nIndex2 = Int(subComponents2[1]) ?? 0
+                    let nIndex3 = Int(subComponents3[1]) ?? 0
+                    
+                    let (p1, p2, p3) = trianglePoints(pIndex1: pIndex1, pIndex2: pIndex2, pIndex3: pIndex3)
+                    let (n1, n2, n3) = normalVectors(nIndex1: nIndex1, nIndex2: nIndex2, nIndex3: nIndex3)
+                    let t = SmoothTriangle(point1: p1, point2: p2, point3: p3, normal1: n1, normal2: n2, normal3: n3)
+                    
+                    tris.append(t)
+                }
+            } else {
+                let pIndex1 = Int(components[1]) ?? 0
+                let pIndex2 = Int(components[index]) ?? 0
+                let pIndex3 = Int(components[index + 1]) ?? 0
+                
+                let (p1, p2, p3) = trianglePoints(pIndex1: pIndex1, pIndex2: pIndex2, pIndex3: pIndex3)
+                let t = Triangle(point1: p1, point2: p2, point3: p3)
+                tris.append(t)
+            }
         }
         
         return tris
