@@ -182,12 +182,6 @@ class ViewController: NSViewController {
         w.camera = camera
         updateUI()
         
-        let color1 = Camera.renderSinglePixel(c: camera, world: world!, x: 145, y: 120)
-        let color2 = Camera.renderSinglePixel(c: camera, world: world!, x: 153, y: 120)
-        
-        print(color1)
-        print(color2)
-        
         renderScene(self)
     }
     

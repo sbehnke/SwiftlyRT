@@ -399,8 +399,11 @@ struct WorldLoader {
         
         if let shape = newShape {
             shape.name = String(describing: shape.self)
-            shape.material = toMaterial(newEntry["material"] as? String, values: newEntry["material"] as? [String:Any])
-            shape.transform *= toTransform(newEntry["transform"] as? [Any])
+            let material = toMaterial(newEntry["material"] as? String, values: newEntry["material"] as? [String:Any])
+            if material != Material() {
+                shape.material = material
+            }
+            shape.transform = toTransform(newEntry["transform"] as? [Any]) * shape.transform
             
             if let shadows = newEntry["shadow"] {
                 shape.castsShadow = WorldLoader.convertTo(shadows)
