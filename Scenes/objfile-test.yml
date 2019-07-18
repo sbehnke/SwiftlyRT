@@ -26,7 +26,7 @@
     - [ translate, 0, -1, 0 ]
 
 - add: obj
-  file: teapot.obj
+  file: blendedCube-triangulated.obj
   material:
     color: [1.0, 0.0, 0.2]
     ambient: 0.1

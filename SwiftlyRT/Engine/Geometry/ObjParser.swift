@@ -203,12 +203,14 @@ struct ObjParser {
                             
                             let scale = max (sx, sy, sz) / 2.0
                             
-                            for index in 1...objParser.vertices.count {
-                                var v = objParser.vertices[index]
-                                v.x = (v.x - (bounds.minimum.x + sx / 2.0)) / scale
-                                v.y = (v.y - (bounds.minimum.y + sy / 2.0)) / scale
-                                v.z = (v.z - (bounds.minimum.z + sz / 2.0)) / scale
-                                objParser.vertices[index] = v
+                            if scale != 1.0 {
+                                for index in 1...objParser.vertices.count {
+                                    var v = objParser.vertices[index]
+                                    v.x = (v.x - (bounds.minimum.x + sx / 2.0)) / scale
+                                    v.y = (v.y - (bounds.minimum.y + sy / 2.0)) / scale
+                                    v.z = (v.z - (bounds.minimum.z + sz / 2.0)) / scale
+                                    objParser.vertices[index] = v
+                                }
                             }
                         }
                     }
@@ -291,7 +293,8 @@ struct ObjParser {
     func toGroup() -> Group {
         let g = Group()
         g.name = fileName
-
+        g.children.append(defaultGroup)
+        
         for group in groups.values {
             g.addChild(group)
         }
