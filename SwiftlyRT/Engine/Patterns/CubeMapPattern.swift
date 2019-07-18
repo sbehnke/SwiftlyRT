@@ -11,7 +11,7 @@ import Foundation
 
 class CubeMapPattern: Pattern {
     
-    func uvPatternAt(face: Cube.Face, u: Double, v: Double) -> Color {
+    func uvPatternAt(face: Face, u: Double, v: Double) -> Color {
         return Color.black
     }
 
@@ -36,7 +36,7 @@ class CubeMapPattern: Pattern {
 //        return uv_pattern_at(cube_map.faces[face], u, v)
 //        end
         
-        return uvPatternAt(face: .front, u: 0.0, v: 0.0)
+        return uvPatternAt(face: .Front, u: 0.0, v: 0.0)
     }
     
 }

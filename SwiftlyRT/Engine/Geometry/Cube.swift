@@ -8,16 +8,16 @@
 
 import Foundation
 
+enum Face {
+    case Right
+    case Left
+    case Up
+    case Down
+    case Front
+    case Back
+}
+
 class Cube: Shape {
-    
-    enum Face {
-        case right
-        case left
-        case up
-        case down
-        case front
-    }
-    
     
     private func checkAxis(origin: Double, direction: Double) -> (Double, Double) {
         let tmin =  (-1 - origin) / direction
@@ -61,9 +61,5 @@ class Cube: Shape {
             bounds = BoundingBox(minimum: Tuple.Point(x: -1, y: -1, z: -1), maximum: Tuple.Point(x: 1, y: 1, z: 1))
         }
         return bounds!
-    }
-    
-    func faceFromPoint(point: Tuple) -> Face {
-        return .down
     }
 }

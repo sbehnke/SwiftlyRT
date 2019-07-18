@@ -205,7 +205,43 @@ struct Tuple: Equatable, AdditiveArithmetic {
 //        return (u, v)
 //        end function
         
-        return (0.0, 0.0)
+        let theta = atan2(x, z)
+        let rawU = theta / (2 * .pi)
+        let u = 1 - (rawU + 0.5)
+        
+        let v = y.modulo(1)
+        
+        return (u, v)
+    }
+    
+    func faceFromPoint() -> Face {
+        let absX = abs(x)
+        let absY = abs(y)
+        let absZ = abs(z)
+        
+        let coord = max(absX, absY, absZ)
+        
+        if coord == x {
+            return .Right
+        }
+        
+        if coord == -x {
+            return .Left
+        }
+        
+        if coord == y {
+            return .Up
+        }
+        
+        if coord == -y {
+            return .Down
+        }
+        
+        if coord == z {
+            return .Front
+        }
+        
+        return .Back
     }
     
     
@@ -216,8 +252,10 @@ struct Tuple: Equatable, AdditiveArithmetic {
 //
 //        return (u, v)
 //        end
-//
-        return (0.0, 0.0)
+        
+        let u = (x + 1).modulo(2.0) / 2.0
+        let v = (y + 1).modulo(2.0) / 2.0
+        return (u, v)
     }
     
     func cubeUvBack() -> (Double, Double) {
@@ -228,24 +266,38 @@ struct Tuple: Equatable, AdditiveArithmetic {
 //        return (u, v)
 //        end
 //
-        return (0.0, 0.0)
+        let u = (1 - x).modulo(2.0) / 2.0
+        let v = (y + 1).modulo(2.0) / 2.0
+        
+        return (u, v)
     }
     
     func cubeUvLeft() -> (Double, Double) {
-        return (0.0, 0.0)
+        let u = (z - 1).modulo(2.0) / 2.0
+        let v = (y + 1).modulo(2.0) / 2.0
+        
+        return (u, v)
     }
     
     func cubeUvRight() -> (Double, Double) {
-        return (0.0, 0.0)
+        let u = (1 - z).modulo(2.0) / 2.0
+        let v = (y + 1).modulo(2.0) / 2.0
+        
+        return (u, v)
     }
     
     func cubeUvTop() -> (Double, Double) {
-
-        return (0.0, 0.0)
+        let u = (z + 1).modulo(2.0) / 2.0
+        let v = (1 - x).modulo(2.0) / 2.0
+        
+        return (u, v)
     }
     
     func cubeUvBottom() -> (Double, Double) {
-        return (0.0, 0.0)
+        let u = (x - 1).modulo(2.0) / 2.0
+        let v = (z + 1).modulo(2.0) / 2.0
+        
+        return (u, v)
     }
     
     var magnitude : Double {

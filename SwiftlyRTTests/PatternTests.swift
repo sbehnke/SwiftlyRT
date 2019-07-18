@@ -413,9 +413,25 @@ class PatternTests: XCTestCase {
 //        | point(-1, 1.25, 0)             | 0.75  | 0.25 |
 //        | point(-0.70711, 0.5, -0.70711) | 0.875 | 0.5  |
         
-        XCTFail()
-
+        let u = [0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875,]
+        let v = [0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 0.75, 0.5, 0.25, 0.5,]
         
+        let points: [Tuple] = [.Point(x: 0, y: 0,   z: -1),
+                               .Point(x: 0, y: 0.5, z: -1),
+                               .Point(x: 0, y: 1,   z: -1),
+                               .Point(x: 0.70711, y: 0.5, z: -0.70711),
+                               .Point(x: 1, y: 0.5, z: 0),
+                               .Point(x: 0.70711, y: 0.5, z: 0.70711),
+                               .Point(x: 0, y: -0.25, z: 1),
+                               .Point(x: -0.70711, y: 0.5, z: 0.70711),
+                               .Point(x: -1, y: 1.25, z: 0),
+                               .Point(x: -0.70711, y: 0.5, z: -0.70711),]
+        
+        for index in 0..<points.count {
+            let (uOut, vOut) = points[index].cylindricalMap()
+            XCTAssertEqual(uOut, u[index], "u does not match index: \(index)")
+            XCTAssertEqual(vOut, v[index], "v does not match index: \(index)")
+        }
     }
     
     func testAlignCheckPattern() {
@@ -456,12 +472,21 @@ class PatternTests: XCTestCase {
 //        | point(0.5, 1, 0.9)     | "up"    |
 //        | point(-0.2, -1.3, 1.1) | "down"  |
         
-        XCTFail()
-
+        let points: [Tuple] = [.Point(x: -1,   y:  0.5,  z: -0.25),
+                               .Point(x: 1.1,  y: -0.75, z: 0.8),
+                               .Point(x: 0.1,  y:  0.6,  z: 0.9),
+                               .Point(x: -0.7, y:  0,    z: -2),
+                               .Point(x: 0.5,  y:  1,    z: 0.9),
+                               .Point(x: -0.2, y:  -1.3, z: 1.1),]
+        let faces: [Face] = [.Left, .Right, .Front, .Back, .Up, .Down]
+        
+        for index in 0..<points.count {
+            XCTAssertEqual(points[index].faceFromPoint(), faces[index], "face does not match for index: \(index)")
+        }
         
     }
     
-    func testUVMappingFronFaceOfCube() {
+    func testUVMappingFrontFaceOfCube() {
 //    Scenario Outline: UV mapping the front face of a cube
 //    When (u, v) ← cube_uv_front(<point>)
 //    Then u = <u>
@@ -472,8 +497,17 @@ class PatternTests: XCTestCase {
 //    | point(-0.5, 0.5, 1)  | 0.25 | 0.75 |
 //    | point(0.5, -0.5, 1)  | 0.75 | 0.25 |
         
-        XCTFail()
 
+        let points: [Tuple] = [ .Point(x: -0.5, y: 0.5, z: 1),
+                                .Point(x: 0.5, y: -0.5, z: 1) ]
+        let u: [Double] = [0.25, 0.75]
+        let v: [Double] = [0.75, 0.25]
+        
+        for index in 0..<points.count {
+            let (uOut, vOut) = points[index].cubeUvFront()
+            XCTAssertEqual(uOut, u[index], "u does not match index: \(index)")
+            XCTAssertEqual(vOut, v[index], "v does not match index: \(index)")
+        }
     }
     
     func testUVMappingBackFaceOfCube() {
@@ -487,8 +521,16 @@ class PatternTests: XCTestCase {
 //    | point(0.5, 0.5, -1)   | 0.25 | 0.75 |
 //    | point(-0.5, -0.5, -1) | 0.75 | 0.25 |
         
-        XCTFail()
-
+        let points: [Tuple] = [ .Point(x: 0.5, y: 0.5, z: -1),
+                                .Point(x: -0.5, y: -0.5, z: -1) ]
+        let u: [Double] = [0.25, 0.75]
+        let v: [Double] = [0.75, 0.25]
+        
+        for index in 0..<points.count {
+            let (uOut, vOut) = points[index].cubeUvBack()
+            XCTAssertEqual(uOut, u[index], "u does not match index: \(index)")
+            XCTAssertEqual(vOut, v[index], "v does not match index: \(index)")
+        }
     }
     
     func testUVMappingLeftFaceOfCube() {
@@ -502,8 +544,16 @@ class PatternTests: XCTestCase {
 //    | point(-1, 0.5, -0.5) | 0.25 | 0.75 |
 //    | point(-1, -0.5, 0.5) | 0.75 | 0.25 |
         
-        XCTFail()
-
+        let points: [Tuple] = [ .Point(x: -1, y:  0.5, z: -0.5),
+                                .Point(x: -1, y: -0.5, z: 0.5) ]
+        let u: [Double] = [0.25, 0.75]
+        let v: [Double] = [0.75, 0.25]
+        
+        for index in 0..<points.count {
+            let (uOut, vOut) = points[index].cubeUvLeft()
+            XCTAssertEqual(uOut, u[index], "u does not match index: \(index)")
+            XCTAssertEqual(vOut, v[index], "v does not match index: \(index)")
+        }
     }
     
     func testUVMappingRightFaceOfCube() {
@@ -517,8 +567,16 @@ class PatternTests: XCTestCase {
 //    | point(1, 0.5, 0.5)   | 0.25 | 0.75 |
 //    | point(1, -0.5, -0.5) | 0.75 | 0.25 |
         
-        XCTFail()
-
+        let points: [Tuple] = [ .Point(x: 1, y: 0.5, z: 0.5),
+                                .Point(x: 1, y: -0.5, z: -0.5) ]
+        let u: [Double] = [0.25, 0.75]
+        let v: [Double] = [0.75, 0.25]
+        
+        for index in 0..<points.count {
+            let (uOut, vOut) = points[index].cubeUvRight()
+            XCTAssertEqual(uOut, u[index], "u does not match index: \(index)")
+            XCTAssertEqual(vOut, v[index], "v does not match index: \(index)")
+        }
     }
         
     func testUVMappingUpperFaceOfCube() {
@@ -532,8 +590,16 @@ class PatternTests: XCTestCase {
 //    | point(-0.5, 1, -0.5) | 0.25 | 0.75 |
 //    | point(0.5, 1, 0.5) | 0.75 | 0.25 |
         
-        XCTFail()
-
+        let points: [Tuple] = [ .Point(x: -0.5, y: 1, z: -0.5),
+                                .Point(x: 0.5, y: 1, z: 0.5) ]
+        let u: [Double] = [0.25, 0.75]
+        let v: [Double] = [0.75, 0.25]
+        
+        for index in 0..<points.count {
+            let (uOut, vOut) = points[index].cubeUvTop()
+            XCTAssertEqual(uOut, u[index], "u does not match index: \(index)")
+            XCTAssertEqual(vOut, v[index], "v does not match index: \(index)")
+        }
     }
     
     func testUVMappingLowerFaceOfCube() {
@@ -547,9 +613,16 @@ class PatternTests: XCTestCase {
 //    | point(-0.5, -1, 0.5) | 0.25 | 0.75 |
 //    | point(0.5, -1, -0.5)   | 0.75 | 0.25 |
         
-        XCTFail()
-
-    
+        let points: [Tuple] = [ .Point(x: -0.5, y: -1, z: 0.5),
+                                .Point(x: 0.5, y: -1, z: -0.5) ]
+        let u: [Double] = [0.25, 0.75]
+        let v: [Double] = [0.75, 0.25]
+        
+        for index in 0..<points.count {
+            let (uOut, vOut) = points[index].cubeUvBottom()
+            XCTAssertEqual(uOut, u[index], "u does not match index: \(index)")
+            XCTAssertEqual(vOut, v[index], "v does not match index: \(index)")
+        }
     }
     
     func testColorsOnMappedCube() {
