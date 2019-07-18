@@ -193,7 +193,7 @@ f 1 2 3 4 5
 
         let bundle = Bundle(for: SwiftlyRTTests.self)
         let url = bundle.url(forResource: "triangles", withExtension: "obj")
-        let parser = ObjParser.parse(objFilePath: url)
+        let parser = ObjParser.parse(objFilePath: url, resizeObject: false)
         let g1 = parser.groups["FirstGroup"]!
         let g2 = parser.groups["SecondGroup"]!
         let t1 = g1.children[0] as! Triangle
@@ -216,7 +216,7 @@ f 1 2 3 4 5
     
         let bundle = Bundle(for: SwiftlyRTTests.self)
         let url = bundle.url(forResource: "triangles", withExtension: "obj")
-        let parser = ObjParser.parse(objFilePath: url)
+        let parser = ObjParser.parse(objFilePath: url, resizeObject: false)
         let g = parser.toGroup()
         
         XCTAssertTrue(g.children.contains(parser.groups["FirstGroup"]!))
@@ -313,7 +313,7 @@ f 1/0/3 2/102/1 3/14/2
         self.measure() {
             let bundle = Bundle(for: SwiftlyRTTests.self)
             let url = bundle.url(forResource: "cube", withExtension: "obj")
-            let parser = ObjParser.parse(objFilePath: url)
+            let parser = ObjParser.parse(objFilePath: url, resizeObject: false)
             let g = parser.toGroup()
             g.divide(threshold: 1)
         }

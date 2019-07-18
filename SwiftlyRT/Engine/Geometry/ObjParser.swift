@@ -39,11 +39,11 @@ struct ObjParser {
         var values: [T] = []
     }
 
-    static func parse(objFilePath: URL?) -> ObjParser {
+    static func parse(objFilePath: URL?, resizeObject: Bool) -> ObjParser {
         if let path = objFilePath {
             do {
                 let contents: String = try String.init(contentsOf: path, encoding: .ascii)
-                return ObjParser.parse(objFileData: contents, withFilename: path.lastPathComponent)
+                return ObjParser.parse(objFileData: contents, withFilename: path.lastPathComponent, resizeObject: resizeObject)
             } catch {}
         }
         
@@ -96,7 +96,7 @@ struct ObjParser {
         return (Tuple.pointZero, Tuple.pointZero, Tuple.pointZero)
     }
     
-    static func parse(objFileData: String, withFilename: String = "", normalizeObject: Bool = false) -> ObjParser {
+    static func parse(objFileData: String, withFilename: String = "", resizeObject: Bool = false) -> ObjParser {
         var scaleFactorsComputed = false
         var sx = 0.0
         var sy = 0.0
@@ -193,7 +193,7 @@ struct ObjParser {
                     // Polygonal face element
                     objParser.faces += 1
                     
-                    if normalizeObject {
+                    if resizeObject {
                         if !scaleFactorsComputed {
                             scaleFactorsComputed = true
                             
@@ -293,7 +293,7 @@ struct ObjParser {
     func toGroup() -> Group {
         let g = Group()
         g.name = fileName
-        g.children.append(defaultGroup)
+        g.addChildren(defaultGroup.children)
         
         for group in groups.values {
             g.addChild(group)

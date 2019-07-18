@@ -375,9 +375,10 @@ struct WorldLoader {
         case "obj":
             let group = Group()
             group.filename = newEntry["file"] as? String
+            let resize = (newEntry["resize"] as? Bool) ?? false
             if let file = group.filename {
                 let objUrl = URL.init(fileURLWithPath: (rootPath as NSString).appendingPathComponent(file))
-                let objParser = ObjParser.parse(objFilePath: objUrl)
+                let objParser = ObjParser.parse(objFilePath: objUrl, resizeObject: resize)
                 group.addChild(objParser.toGroup())
                 group.divide(threshold: 1)
             }
