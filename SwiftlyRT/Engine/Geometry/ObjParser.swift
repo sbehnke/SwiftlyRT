@@ -96,7 +96,7 @@ struct ObjParser {
         return (Tuple.pointZero, Tuple.pointZero, Tuple.pointZero)
     }
     
-    static func parse(objFileData: String, withFilename: String = "", normalizeObject: Bool = true) -> ObjParser {
+    static func parse(objFileData: String, withFilename: String = "", normalizeObject: Bool = false) -> ObjParser {
         var scaleFactorsComputed = false
         var sx = 0.0
         var sy = 0.0

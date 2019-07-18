@@ -379,6 +379,7 @@ struct WorldLoader {
                 let objUrl = URL.init(fileURLWithPath: (rootPath as NSString).appendingPathComponent(file))
                 let objParser = ObjParser.parse(objFilePath: objUrl)
                 group.addChild(objParser.toGroup())
+                group.divide(threshold: 1)
             }
             
             newShape = group
