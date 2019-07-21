@@ -129,6 +129,14 @@ struct WorldLoader {
                     uvPattern = UVAlignCheck(main: main, ul: ul, ur: ur, bl: bl, br: br)
                 }
                 
+            case "image":
+                if let file = uvEntry["file"] as? String {
+                    let objUrl = URL.init(fileURLWithPath: (rootPath as NSString).appendingPathComponent(file))
+                    if let canvas = Canvas(fromUrl: objUrl) {
+                        uvPattern = UVImage(canvas: canvas)
+                    }
+                }
+                
             default:
                 print("Unsupported type")
             }
@@ -226,7 +234,6 @@ struct WorldLoader {
                     pattern = TextureMapPattern(mapping: mapping, uvPattern: uvPattern)
                 }
             }
-            
             
         default:
             return pattern

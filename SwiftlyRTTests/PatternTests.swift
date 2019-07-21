@@ -870,9 +870,37 @@ class PatternTests: XCTestCase {
 //        | 0.6 | 0.3 | color(0.1, 0.1, 0.1) |
 //        | 1   | 1   | color(0.9, 0.9, 0.9) |
         
-        XCTFail()
-
+        let ppm = """
+P3
+10 10
+10
+0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8  9 9 9
+1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8  9 9 9  0 0 0
+2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8  9 9 9  0 0 0  1 1 1
+3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8  9 9 9  0 0 0  1 1 1  2 2 2
+4 4 4  5 5 5  6 6 6  7 7 7  8 8 8  9 9 9  0 0 0  1 1 1  2 2 2  3 3 3
+5 5 5  6 6 6  7 7 7  8 8 8  9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4
+6 6 6  7 7 7  8 8 8  9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5
+7 7 7  8 8 8  9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6
+8 8 8  9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7
+9 9 9  0 0 0  1 1 1  2 2 2  3 3 3  4 4 4  5 5 5  6 6 6  7 7 7  8 8 8
+"""
+        let canvasValue = Canvas(fromString: ppm)
+        if let canvas = canvasValue {
+            let pattern = UVImage(canvas: canvas)
+            
+            let u: [Double] = [0, 0.3, 0.6, 1]
+            let v: [Double] = [0, 0, 0.3, 1]
+            let colors: [Color] = [Color(r: 0.9, g: 0.9, b: 0.9),
+                                   Color(r: 0.2, g: 0.2, b: 0.2),
+                                   Color(r: 0.1, g: 0.1, b: 0.1),
+                                   Color(r: 0.9, g: 0.9, b: 0.9),]
+            
+            for index in 0..<u.count {
+                XCTAssertEqual(pattern.uvPatternAt(u: u[index], v: v[index]) , colors[index], "Color does not match for index: \(index)")
+            }
+        }
+        
+        XCTAssertNotNil(canvasValue)
     }
 }
-
-

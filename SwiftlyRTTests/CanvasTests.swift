@@ -188,8 +188,15 @@ P3
 //        0 0 0
 //        """
 //        Then canvas_from_ppm(ppm) should fail
-        
-        XCTFail()
+
+        let ppm = """
+P32
+1 1
+255
+0 0 0
+"""
+        let canvas = Canvas(fromString: ppm)
+        XCTAssertNil(canvas)
     }
     
     func testReadingPPMHeaderWithAndHeight() {
@@ -207,8 +214,23 @@ P3
 //        When canvas ← canvas_from_ppm(ppm)
 //        Then canvas.width = 10
 //        And canvas.height = 2
-        XCTFail()
 
+        let ppm = """
+P3
+10 2
+255
+0 0 0  0 0 0  0 0 0  0 0 0  0 0 0
+0 0 0  0 0 0  0 0 0  0 0 0  0 0 0
+0 0 0  0 0 0  0 0 0  0 0 0  0 0 0
+0 0 0  0 0 0  0 0 0  0 0 0  0 0 0
+"""
+        let canvasTest = Canvas(fromString: ppm)
+        if let canvas = canvasTest {
+            XCTAssertEqual(canvas.height, 2)
+            XCTAssertEqual(canvas.width, 10)
+        } else {
+            XCTAssertNotNil(canvasTest)
+        }
     }
     
     func testReadingPPMPixeldData() {
@@ -227,9 +249,9 @@ P3
 //
 //        Examples:
 //        | x | y | color                      |
-//        | 0 | 0 | color(1, 0.498, 0)         |
-//        | 1 | 0 | color(0, 0.498, 1)         |
-//        | 2 | 0 | color(0.498, 1, 0)         |
+//        | 0 | 0 | color(1, 0.49803922, 0)         |
+//        | 1 | 0 | color(0, 0.49803922, 1)         |
+//        | 2 | 0 | color(0.49803922, 1, 0)         |
 //        | 3 | 0 | color(1, 1, 1)             |
 //        | 0 | 1 | color(0, 0, 0)             |
 //        | 1 | 1 | color(1, 0, 0)             |
@@ -238,9 +260,40 @@ P3
 //        | 0 | 2 | color(1, 1, 0)             |
 //        | 1 | 2 | color(0, 1, 1)             |
 //        | 2 | 2 | color(1, 0, 1)             |
-//        | 3 | 2 | color(0.498, 0.498, 0.498) |
-        XCTFail()
+//        | 3 | 2 | color(0.49803922, 0.49803922, 0.49803922) |
 
+        var x: [Int] = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3,]
+        var y: [Int] = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2,]
+        var colors: [Color] = [Color(r:1, g: 0.49803922, b: 0),
+                               Color(r:0, g: 0.49803922, b: 1),
+                               Color(r:0.49803922, g: 1, b: 0),
+                               Color(r:1, g: 1, b: 1),
+                               Color(r:0, g: 0, b: 0),
+                               Color(r:1, g: 0, b: 0),
+                               Color(r:0, g: 1, b: 0),
+                               Color(r:0, g: 0, b: 1),
+                               Color(r:1, g: 1, b: 0),
+                               Color(r:0, g: 1, b: 1),
+                               Color(r:1, g: 0, b: 1),
+                               Color(r:0.49803922, g: 0.49803922, b: 0.49803922),]
+        
+        let ppm = """
+P3
+4 3
+255
+255 127 0  0 127 255  127 255 0  255 255 255
+0 0 0  255 0 0  0 255 0  0 0 255
+255 255 0  0 255 255  255 0 255  127 127 127
+"""
+        let canvasValue = Canvas(fromString: ppm)
+        
+        if let canvas = canvasValue {
+            for index in 0..<x.count {
+                XCTAssertEqual(canvas.getPixel(x: x[index], y: y[index]), colors[index], "Color does not match for index: \(index)")
+            }
+        }
+        
+        XCTAssertNotNil(canvasValue)
     }
     
     func testParsePPMDataIgnoringComments() {
@@ -260,8 +313,22 @@ P3
 //        When canvas ← canvas_from_ppm(ppm)
 //        Then pixel_at(canvas, 0, 0) = color(1, 1, 1)
 //        And pixel_at(canvas, 1, 0) = color(1, 0, 1)
-        XCTFail()
-
+        
+        let ppm = """
+P3
+# this is a comment
+2 1
+# this, too
+255
+# another comment
+255 255 255
+# oh, no, comments in the pixel data!
+255 0 255
+"""
+        if let canvas = Canvas(fromString: ppm) {
+            XCTAssertEqual(canvas.getPixel(x: 0, y: 0), Color.white)
+            XCTAssertEqual(canvas.getPixel(x: 1, y: 0), Color(r: 1, g: 0, b: 1))
+        }
     }
     
     func testParsePPMDataWithRGBAcrossLines() {
@@ -278,8 +345,19 @@ P3
 //        """
 //        When canvas ← canvas_from_ppm(ppm)
 //        Then pixel_at(canvas, 0, 0) = color(0.2, 0.6, 0.8)
-        XCTFail()
 
+        let ppm = """
+P3
+1 1
+255
+51
+153
+
+204
+"""
+        if let canvas = Canvas(fromString: ppm) {
+            XCTAssertEqual(canvas.getPixel(x: 0, y: 0), Color(r: 0.2, g: 0.6, b: 0.8))
+        }
     }
     
     func testParsePPMReaderRespectsScaleSetting() {
@@ -294,7 +372,17 @@ P3
 //        """
 //        When canvas ← canvas_from_ppm(ppm)
 //        Then pixel_at(canvas, 0, 1) = color(0.75, 0.5, 0.25)
-        XCTFail()
 
+        let ppm = """
+P3
+2 2
+100
+100 100 100  50 50 50
+75 50 25  0 0 0
+"""
+        
+        if let canvas = Canvas(fromString: ppm) {
+            XCTAssertEqual(canvas.getPixel(x: 0, y: 1), Color(r: 0.75, g: 0.5, b: 0.25))
+        }
     }
 }

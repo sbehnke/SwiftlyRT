@@ -15,7 +15,98 @@ class Canvas {
         self.width = width
         self.height = height
         
-        pixels = Array<Color>(repeating: Color(), count: width * height)
+        pixels = [Color](repeating: Color(), count: width * height)
+    }
+    
+    convenience init?(fromUrl: URL?) {
+        if let path = fromUrl {
+            do {
+                let contents: String = try String.init(contentsOf: path, encoding: .ascii)
+                self.init(fromString: contents)
+            } catch {
+                return nil
+            }
+        } else {
+            return nil
+        }
+    }
+    
+    init?(fromString: String) {
+        var w = 0
+        var h = 0
+        var divisor = 0
+        
+        let lines = fromString.lines
+        
+        var readHeader = false
+        var readDimension = false
+        var readDivisor = false
+        
+        var pixelData = [Float]()
+        
+        if lines.count >= 0 {
+            for index in 0..<lines.count {
+                if lines[index].hasPrefix("#") {
+                    continue
+                }
+                
+                if !readHeader {
+                    if lines[index] == "P3" {
+                        readHeader = true
+                        continue
+                    } else {
+                        return nil
+                    }
+                }
+                
+                if readHeader && !readDimension {
+                    let sizeLines = lines[index].split(separator: " ")
+                    if sizeLines.count == 2 {
+                        w = Int(sizeLines[0]) ?? 0
+                        h = Int(sizeLines[1]) ?? 0
+                    }
+                    
+                    if w > 0 && h > 0 {
+                        readDimension = true
+                        width = w
+                        height = h
+                        
+                        pixels = [Color](repeating: Color(), count: w * h)
+                        continue
+                    } else {
+                        return nil
+                    }
+                }
+                
+                if readHeader && readDimension && !readDivisor {
+                    divisor = Int(lines[index]) ?? 0
+
+                    if divisor > 0 {
+                        readDivisor = true
+                        continue
+                    } else {
+                        return nil
+                    }
+                }
+                
+                if readHeader && readDimension && readDivisor {
+                    let components = lines[index].split(separator: " ")
+                    pixelData.append(contentsOf: components.map { Float(Int($0) ?? 0) / Float(divisor) })
+                    continue
+                }
+            }
+        }
+        
+        if pixelData.count == 0 {
+            return nil
+        } else {
+            var index = 0
+            for rgbIndex in stride(from: 0, to: pixelData.count, by: 3) {
+                let color = Color(r: pixelData[rgbIndex], g: pixelData[rgbIndex + 1], b: pixelData[rgbIndex + 2])
+                pixels[index] = color
+                index += 1
+            }
+        }
     }
     
     func indexIsValid(x: Int, y: Int) -> Bool {
@@ -120,7 +211,7 @@ class Canvas {
         return output.data(using: .ascii)!
     }
     
-    var width : Int = 0
-    var height : Int = 0
-    var pixels : [Color]
+    var width: Int = 0
+    var height: Int = 0
+    var pixels: [Color] = []
 }
