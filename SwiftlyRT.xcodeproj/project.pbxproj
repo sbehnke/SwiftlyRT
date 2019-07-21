@@ -82,6 +82,7 @@
 		6496FF7D22D6BC8D0024322D /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6496FF7A22D6BC8D0024322D /* cube.obj */; };
 		6496FF7E22D6BC8D0024322D /* triangles.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6496FF7B22D6BC8D0024322D /* triangles.obj */; };
 		64C23CF622DBF82B0009C60E /* WorldLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C23CF522DBF82B0009C60E /* WorldLoader.swift */; };
+		64ECDD8122E4FE3B00779669 /* UVAlignCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ECDD8022E4FE3B00779669 /* UVAlignCheck.swift */; };
 		64F51E8922D6BEB10053546F /* TestCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F51E8822D6BEB10053546F /* TestCode.swift */; };
 		64F51E8E22D6EB5D0053546F /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 64F51E8D22D6EB5D0053546F /* Info.plist */; };
 		64F51E9122DBE8DE0053546F /* UVCheckers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F51E9022DBE8DE0053546F /* UVCheckers.swift */; };
@@ -211,6 +212,7 @@
 		6496FF7A22D6BC8D0024322D /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
 		6496FF7B22D6BC8D0024322D /* triangles.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = triangles.obj; sourceTree = "<group>"; };
 		64C23CF522DBF82B0009C60E /* WorldLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldLoader.swift; sourceTree = "<group>"; };
+		64ECDD8022E4FE3B00779669 /* UVAlignCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVAlignCheck.swift; sourceTree = "<group>"; };
 		64F51E8822D6BEB10053546F /* TestCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCode.swift; sourceTree = "<group>"; };
 		64F51E8D22D6EB5D0053546F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		64F51E9022DBE8DE0053546F /* UVCheckers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVCheckers.swift; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 				6496FE5F22D6B69A0024322D /* TextureMapPattern.swift */,
 				6496FE6022D6B69A0024322D /* TexturePattern.swift */,
 				64F51E9022DBE8DE0053546F /* UVCheckers.swift */,
+				64ECDD8022E4FE3B00779669 /* UVAlignCheck.swift */,
 			);
 			path = Patterns;
 			sourceTree = "<group>";
@@ -566,6 +569,7 @@
 				6496FEDA22D6B69A0024322D /* Matrix2x2.swift in Sources */,
 				6496FED122D6B69A0024322D /* TexturePattern.swift in Sources */,
 				6496FED022D6B69A0024322D /* TextureMapPattern.swift in Sources */,
+				64ECDD8122E4FE3B00779669 /* UVAlignCheck.swift in Sources */,
 				6496FEE922D6B69A0024322D /* Projecile.swift in Sources */,
 				6496FED422D6B69A0024322D /* CheckerPattern.swift in Sources */,
 				6496FED622D6B69A0024322D /* Environment.swift in Sources */,

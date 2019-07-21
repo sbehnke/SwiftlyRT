@@ -80,6 +80,64 @@ struct WorldLoader {
         return Color.white
     }
     
+    func toUvPattern(_ uvEntry: [String:Any]) -> Pattern? {
+        var uvPattern: Pattern? = nil
+        
+        if let uvType = uvEntry["type"] as? String {
+            
+            switch uvType {
+            case "checkers":
+                if let colors = uvEntry["colors"] {
+                    let a = WorldLoader.toColor((colors as? [Any])?.first as? [Any])
+                    let b = WorldLoader.toColor((colors as? [Any])?.last as? [Any])
+                    
+                    let width = uvEntry["width"] as? Int ?? 1
+                    let height = uvEntry["height"] as? Int ?? 1
+                    
+                    uvPattern = UVCheckers(width: width, height: height, a: a, b: b)
+                }
+                
+            case "align_check":
+                if let colors = uvEntry["colors"] as? [String:[Any]] {
+                    
+                    var main = Color.white
+                    var ul = Color.white
+                    var ur = Color.white
+                    var bl = Color.white
+                    var br = Color.white
+                    
+                    if let colorValues = colors["main"] {
+                        main = WorldLoader.toColor(colorValues)
+                    }
+                    
+                    if let colorValues = colors["ul"] {
+                        ul = WorldLoader.toColor(colorValues)
+                    }
+                    
+                    if let colorValues = colors["ur"] {
+                        ur = WorldLoader.toColor(colorValues)
+                    }
+                    
+                    if let colorValues = colors["bl"] {
+                        bl = WorldLoader.toColor(colorValues)
+                    }
+                    
+                    if let colorValues = colors["br"] {
+                        br = WorldLoader.toColor(colorValues)
+                    }
+                    
+                    uvPattern = UVAlignCheck(main: main, ul: ul, ur: ur, bl: bl, br: br)
+                }
+                
+            default:
+                print("Unsupported type")
+            }
+        }
+        
+//        uvPattern?.transform = toTransform(uvEntry["transform"] as? [Any])
+        return uvPattern
+    }
+    
     func toPattern(_ values: [String:Any]) -> Pattern? {
         let type: String = WorldLoader.convertTo(values["type"])
         var pattern: Pattern? = nil
@@ -91,7 +149,6 @@ struct WorldLoader {
                 let b = WorldLoader.toColor((colors as? [Any])?.last as? [Any])
                 pattern = CheckerPattern(a: a, b: b)
             }
-            break
             
         case "gradients":
             if let colors = values["colors"] {
@@ -99,7 +156,6 @@ struct WorldLoader {
                 let b = WorldLoader.toColor((colors as? [Any])?.last as? [Any])
                 pattern = GradientPattern(a: a, b: b)
             }
-            break
             
         case "stripes":
             if let colors = values["colors"] {
@@ -107,18 +163,15 @@ struct WorldLoader {
                 let b = WorldLoader.toColor((colors as? [Any])?.last as? [Any])
                 pattern = StripePattern(a: a, b: b)
             }
-            break
             
         case "solid-color":
             if let colors = values["colors"] {
                 let a = WorldLoader.toColor((colors as? [Any])?.first as? [Any])
                 pattern = SolidColorPattern(a)
             }
-            break
             
         case "test":
             pattern = TestPattern()
-            break
             
         case "rings":
             if let colors = values["colors"] {
@@ -126,7 +179,54 @@ struct WorldLoader {
                 let b = WorldLoader.toColor((colors as? [Any])?.last as? [Any])
                 pattern = RingPattern(a: a, b: b)
             }
-            break
+            
+        case "map":
+            var mapping = Mapping.Spherical
+            if let mapType = values["mapping"] as? String {
+                mapping = Mapping(rawValue: mapType) ?? Mapping.Spherical
+            }
+            
+            if mapping == .Cube {
+                var left: Pattern? = nil
+                var right: Pattern? = nil
+                var up: Pattern? = nil
+                var down: Pattern? = nil
+                var front: Pattern? = nil
+                var back: Pattern? = nil
+                
+                if let sideEntry = values["left"] as? [String:Any] {
+                    left = toUvPattern(sideEntry)
+                }
+                
+                if let sideEntry = values["right"] as? [String:Any] {
+                    right = toUvPattern(sideEntry)
+                }
+                
+                if let sideEntry = values["up"] as? [String:Any] {
+                    up = toUvPattern(sideEntry)
+                }
+                
+                if let sideEntry = values["down"] as? [String:Any] {
+                    down = toUvPattern(sideEntry)
+                }
+                
+                if let sideEntry = values["back"] as? [String:Any] {
+                    back = toUvPattern(sideEntry)
+                }
+                
+                if let sideEntry = values["front"] as? [String:Any] {
+                    front = toUvPattern(sideEntry)
+                }
+                
+                pattern = CubeMapPattern(left: left, front: front, right: right, back: back, up: up, down: down)
+            }
+            
+            if let uvEntry = values["uv_pattern"] as? [String:Any] {
+                if let uvPattern = toUvPattern(uvEntry) {
+                    pattern = TextureMapPattern(mapping: mapping, uvPattern: uvPattern)
+                }
+            }
+            
             
         default:
             return pattern

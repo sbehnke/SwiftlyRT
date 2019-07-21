@@ -11,32 +11,60 @@ import Foundation
 
 class CubeMapPattern: Pattern {
     
+    init(left: Pattern?, front: Pattern?, right: Pattern?, back: Pattern?, up: Pattern?, down: Pattern?) {
+        self.left = left
+        self.front = front
+        self.right = right
+        self.back = back
+        self.up = up
+        self.down = down
+    }
+    
     func uvPatternAt(face: Face, u: Double, v: Double) -> Color {
-        return Color.black
+        switch face {
+        case .Front:
+            return front?.uvPatternAt(u: u, v: v) ?? Color.white
+        case .Back:
+            return back?.uvPatternAt(u: u, v: v) ?? Color.white
+        case .Left:
+            return left?.uvPatternAt(u: u, v: v) ?? Color.white
+        case .Right:
+            return right?.uvPatternAt(u: u, v: v) ?? Color.white
+        case .Up:
+            return up?.uvPatternAt(u: u, v: v) ?? Color.white
+        case .Down:
+            return down?.uvPatternAt(u: u, v: v) ?? Color.white
+        }
     }
 
     override func patternAt(point: Tuple) -> Color {
-//        function pattern_at(cube_map, point)
-//        let face ← face_from_point(point)
-//
-//        if face = "left" then
-//        (u, v) ← uv_cube_left(point)
-//        else if face = "right" then
-//        (u, v) ← uv_cube_right(point)
-//        else if face = "front" then
-//        (u, v) ← uv_cube_front(point)
-//        else if face = "back" then
-//        (u, v) ← uv_cube_back(point)
-//        else if face = "up" then
-//        (u, v) ← uv_cube_up(point)
-//        else # down
-//        (u, v) ← uv_cube_down(point)
-//        end
-//
-//        return uv_pattern_at(cube_map.faces[face], u, v)
-//        end
+        let face = point.faceFromPoint()
         
-        return uvPatternAt(face: .Front, u: 0.0, v: 0.0)
+        var u = 0.0
+        var v = 0.0
+        
+        switch face {
+        case .Front:
+            (u, v) = point.cubeUvFront()
+        case .Back:
+            (u, v) = point.cubeUvBack()
+        case .Left:
+            (u, v) = point.cubeUvLeft()
+        case .Right:
+            (u, v) = point.cubeUvRight()
+        case .Up:
+            (u, v) = point.cubeUvUp()
+        case .Down:
+            (u, v) = point.cubeUvDown()
+        }
+        
+        return uvPatternAt(face: face, u: u, v: v)
     }
     
+    var left: Pattern? = nil
+    var front: Pattern? = nil
+    var right: Pattern? = nil
+    var back: Pattern? = nil
+    var up: Pattern? = nil
+    var down: Pattern? = nil
 }

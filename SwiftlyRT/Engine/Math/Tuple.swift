@@ -286,14 +286,14 @@ struct Tuple: Equatable, AdditiveArithmetic {
         return (u, v)
     }
     
-    func cubeUvTop() -> (Double, Double) {
-        let u = (z + 1).modulo(2.0) / 2.0
-        let v = (1 - x).modulo(2.0) / 2.0
+    func cubeUvUp() -> (Double, Double) {
+        let u = (x + 1).modulo(2.0) / 2.0
+        let v = (1 - z).modulo(2.0) / 2.0
         
         return (u, v)
     }
     
-    func cubeUvBottom() -> (Double, Double) {
+    func cubeUvDown() -> (Double, Double) {
         let u = (x - 1).modulo(2.0) / 2.0
         let v = (z + 1).modulo(2.0) / 2.0
         

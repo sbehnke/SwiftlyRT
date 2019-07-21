@@ -353,8 +353,37 @@ class PatternTests: XCTestCase {
 //        | point(0.7688, -0.1470, 0.6223)   | black |
 //        | point(-0.7652, 0.2175, 0.6060)   | black |
         
-        XCTFail()
-
+        let points: [Tuple] = [
+            .Point(x: 0.4315,  y: 0.4670,   z: 0.7719),
+            .Point(x: -0.9654, y:  0.2552,  z: -0.0534),
+            .Point(x: 0.1039,  y: 0.7090,   z: 0.6975),
+            .Point(x: -0.4986, y:  -0.7856, z: -0.3663),
+            .Point(x: -0.0317, y:  -0.9395, z:  0.3411),
+            .Point(x: 0.4809,  y: -0.7721,  z:  0.4154),
+            .Point(x: 0.0285,  y: -0.9612,  z: -0.2745),
+            .Point(x: -0.5734, y:  -0.2162, z: -0.7903),
+            .Point(x: 0.7688,  y: -0.1470,  z:  0.6223),
+            .Point(x: -0.7652, y:  0.2175,  z:  0.6060),
+        ]
+        let colors: [Color] = [
+            Color.white,
+            Color.black,
+            Color.white,
+            Color.black,
+            Color.black,
+            Color.black,
+            Color.black,
+            Color.white,
+            Color.black,
+            Color.black,
+        ]
+        
+        let uvCheckers = UVCheckers(width: 16, height: 8, a: Color.black, b: Color.white)
+        let pattern = TextureMapPattern(mapping: .Spherical, uvPattern: uvCheckers)
+        
+        for index in 0..<points.count {
+            XCTAssertEqual(pattern.patternAt(point: points[index]), colors[index], "Color does not match for index: \(index)")
+        }
     }
     
     func testPlanarMaping() {
@@ -452,10 +481,22 @@ class PatternTests: XCTestCase {
 //        | 0.9  | 0.9  | ur       |
 //        | 0.1  | 0.1  | bl       |
 //        | 0.9  | 0.1  | br       |
-        
-        XCTFail()
 
+        let main = Color.white
+        let ul = Color(r: 1, g: 0, b: 0)
+        let ur = Color(r: 1, g: 1, b: 0)
+        let bl = Color(r: 0, g: 1, b: 0)
+        let br = Color(r: 0, g: 1, b: 1)
         
+        let pattern = UVAlignCheck(main: main, ul: ul, ur: ur, bl: bl, br: br)
+        
+        let u: [Double] = [0.5, 0.1, 0.9, 0.1, 0.9]
+        let v: [Double] = [0.5, 0.9, 0.9, 0.1, 0.1]
+        let expected: [Color] = [main, ul, ur, bl, br]
+        
+        for index in 0..<u.count {
+            XCTAssertEqual(expected[index], pattern.uvPatternAt(u: u[index], v: v[index]), "Color does not match at index: \(index)")
+        }
     }
     
     func testCubeFaceIdentification() {
@@ -596,7 +637,7 @@ class PatternTests: XCTestCase {
         let v: [Double] = [0.75, 0.25]
         
         for index in 0..<points.count {
-            let (uOut, vOut) = points[index].cubeUvTop()
+            let (uOut, vOut) = points[index].cubeUvUp()
             XCTAssertEqual(uOut, u[index], "u does not match index: \(index)")
             XCTAssertEqual(vOut, v[index], "v does not match index: \(index)")
         }
@@ -619,7 +660,7 @@ class PatternTests: XCTestCase {
         let v: [Double] = [0.75, 0.25]
         
         for index in 0..<points.count {
-            let (uOut, vOut) = points[index].cubeUvBottom()
+            let (uOut, vOut) = points[index].cubeUvDown()
             XCTAssertEqual(uOut, u[index], "u does not match index: \(index)")
             XCTAssertEqual(vOut, v[index], "v does not match index: \(index)")
         }
@@ -677,9 +718,127 @@ class PatternTests: XCTestCase {
 //        |   | point(-0.9, -1, -0.9) | blue   |
 //        |   | point(0.9, -1, -0.9)  | white  |
         
-        XCTFail()
+        
+        let red = Color(r: 1, g: 0, b: 0)
+        let yellow = Color(r: 1, g: 1, b: 0)
+        let brown = Color(r: 1, g: 0.5, b: 0)
+        let green = Color(r: 0, g: 1, b: 0)
+        let cyan = Color(r: 0, g: 1, b: 1)
+        let blue = Color(r: 0, g: 0, b: 1)
+        let purple = Color(r: 1, g: 0, b: 1)
+        let white = Color.white
+        
+        let left = UVAlignCheck(main: yellow, ul: cyan, ur: red, bl: blue, br: brown)
+        let front = UVAlignCheck(main: cyan, ul: red, ur: yellow, bl: brown, br: green)
+        let right = UVAlignCheck(main: red, ul: yellow, ur: purple, bl: green, br: white)
+        let back = UVAlignCheck(main: green, ul: purple, ur: cyan, bl: white, br: blue)
+        let up = UVAlignCheck(main: brown, ul: cyan, ur: purple, bl: red, br: yellow)
+        let down = UVAlignCheck(main: purple, ul: brown, ur: green, bl: blue, br: white)
+        
+        let pattern = CubeMapPattern(left: left, front: front, right: right, back: back, up: up, down: down)
+        
+        //        And pattern ← cube_map(left, front, right, back, up, down)
+        //        Then pattern_at(pattern, <point>) = <color>
+        //
+        //        Examples:
+        //        |   | point                 | color  |
+        //        | L | point(-1, 0, 0)       | yellow |
+        //        |   | point(-1, 0.9, -0.9)  | cyan   |
+        //        |   | point(-1, 0.9, 0.9)   | red    |
+        //        |   | point(-1, -0.9, -0.9) | blue   |
+        //        |   | point(-1, -0.9, 0.9)  | brown  |
+        
+        var points: [Tuple] = [.Point(x: -1, y: 0,    z:  0),
+                                   .Point(x: -1, y: 0.9,  z: -0.9),
+                                   .Point(x: -1, y: 0.9,  z:  0.9),
+                                   .Point(x: -1, y: -0.9, z: -0.9),
+                                   .Point(x: -1, y: -0.9, z:  0.9),]
+        var colors: [Color] = [yellow, cyan, red, blue, brown]
+        
+        for index in 0..<points.count {
+            XCTAssertEqual(pattern.patternAt(point: points[index]), colors[index], "Color does not match for index: \(index)")
+        }
+        
+        //        | F | point(0, 0, 1)        | cyan   |
+        //        |   | point(-0.9, 0.9, 1)   | red    |
+        //        |   | point(0.9, 0.9, 1)    | yellow |
+        //        |   | point(-0.9, -0.9, 1)  | brown  |
+        //        |   | point(0.9, -0.9, 1)   | green  |
+        
+        points = [.Point(x: 0,    y:  0,   z: 1),
+                  .Point(x: -0.9, y:  0.9, z: 1),
+                  .Point(x: 0.9,  y:  0.9, z: 1),
+                  .Point(x: -0.9, y: -0.9, z: 1),
+                  .Point(x: 0.9,  y: -0.9, z: 1),]
+        colors = [cyan, red, yellow, brown, green]
+        
+        for index in 0..<points.count {
+            XCTAssertEqual(pattern.patternAt(point: points[index]), colors[index], "Color does not match for index: \(index)")
+        }
+        
+        //        | R | point(1, 0, 0)        | red    |
+        //        |   | point(1, 0.9, 0.9)    | yellow |
+        //        |   | point(1, 0.9, -0.9)   | purple |
+        //        |   | point(1, -0.9, 0.9)   | green  |
+        //        |   | point(1, -0.9, -0.9)  | white  |
+        points = [.Point(x: 1, y:  0,   z:  0),
+                  .Point(x: 1, y:  0.9, z:  0.9),
+                  .Point(x: 1, y:  0.9, z: -0.9),
+                  .Point(x: 1, y: -0.9, z:  0.9),
+                  .Point(x: 1, y: -0.9, z: -0.9),]
+        colors = [red, yellow, purple, green, white]
+        
+        for index in 0..<points.count {
+            XCTAssertEqual(pattern.patternAt(point: points[index]), colors[index], "Color does not match for index: \(index)")
+        }
+        
+        //        | B | point(0, 0, -1)       | green  |
+        //        |   | point(0.9, 0.9, -1)   | purple |
+        //        |   | point(-0.9, 0.9, -1)  | cyan   |
+        //        |   | point(0.9, -0.9, -1)  | white  |
+        //        |   | point(-0.9, -0.9, -1) | blue   |
+        points = [.Point(x: 0,    y:  0,   z: -1),
+                  .Point(x: 0.9,  y:  0.9, z: -1),
+                  .Point(x: -0.9, y:  0.9, z: -1),
+                  .Point(x: 0.9,  y: -0.9, z: -1),
+                  .Point(x: -0.9, y: -0.9, z: -1),]
+        colors = [green, purple, cyan, white, blue]
+        
+        for index in 0..<points.count {
+            XCTAssertEqual(pattern.patternAt(point: points[index]), colors[index], "Color does not match for index: \(index)")
+        }
 
-    }
+        //        | U | point(0, 1, 0)        | brown  |
+        //        |   | point(-0.9, 1, -0.9)  | cyan   |
+        //        |   | point(0.9, 1, -0.9)   | purple |
+        //        |   | point(-0.9, 1, 0.9)   | red    |
+        //        |   | point(0.9, 1, 0.9)    | yellow |
+        points = [.Point(x:0,    y: 1, z:  0),
+                  .Point(x:-0.9, y: 1, z: -0.9),
+                  .Point(x:0.9,  y: 1, z: -0.9),
+                  .Point(x:-0.9, y: 1, z:  0.9),
+                  .Point(x:0.9,  y: 1, z:  0.9),]
+        colors = [brown, cyan, purple, red, yellow]
+        
+        for index in 0..<points.count {
+            XCTAssertEqual(pattern.patternAt(point: points[index]), colors[index], "Color does not match for index: \(index)")
+        }
+
+        //        | D | point(0, -1, 0)       | purple |
+        //        |   | point(-0.9, -1, 0.9)  | brown  |
+        //        |   | point(0.9, -1, 0.9)   | green  |
+        //        |   | point(-0.9, -1, -0.9) | blue   |
+        //        |   | point(0.9, -1, -0.9)  | white  |
+        points = [.Point(x: 0,    y: -1, z: 0),
+                  .Point(x: -0.9, y: -1, z: 0.9),
+                  .Point(x: 0.9,  y: -1, z: 0.9),
+                  .Point(x: -0.9, y: -1, z: -0.9),
+                  .Point(x: 0.9,  y: -1, z: -0.9),]
+        colors = [purple, brown, green, blue, white]
+        
+        for index in 0..<points.count {
+            XCTAssertEqual(pattern.patternAt(point: points[index]), colors[index], "Color does not match for index: \(index)")
+        }    }
     
     func testCheckerPatternIn2D() {
 //        Scenario Outline: Checker pattern in 2D
