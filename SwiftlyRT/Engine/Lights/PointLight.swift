@@ -14,6 +14,7 @@ protocol Light {
     
     var position: Tuple { get set }
     var intensity: Color { get set }
+    var sampledPoints: [Tuple] {get}
     var samples: Int { get }
 }
 
@@ -27,7 +28,7 @@ struct PointLight: Equatable, Light {
     }
     
     func pointOnLight(u: Double, v: Double) -> Tuple {
-        return Tuple.pointZero
+        return position
     }
     
     init(position: Tuple, intensity : Color) {
@@ -40,5 +41,10 @@ struct PointLight: Equatable, Light {
     var intensity = Color()
     var samples: Int {
         get { return 1 }
+    }
+    var sampledPoints: [Tuple] {
+        get {
+            return [position]
+        }
     }
 }

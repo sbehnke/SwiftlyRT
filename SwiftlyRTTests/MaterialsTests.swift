@@ -148,7 +148,6 @@ class MaterialsTests: XCTestCase {
         let eyev = Tuple.Vector(x: 0, y: 0, z: -1)
         let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: .Point(x: 0, y: 0, z: -10), intensity: Color(r: 1, g: 1, b: 1))
-        let inShadow = true
         let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv, intensity: 0.0)
         XCTAssertEqual(result, Color(r: 0.1, g: 0.1, b: 0.1))
     }
@@ -259,7 +258,7 @@ class MaterialsTests: XCTestCase {
         let eye = Tuple.Point(x: 0, y: 0, z: -5)
         
         let points: [Tuple] = [.Point(x: 0, y: 0, z: -1), .Point(x: 0, y: 0.7071, z: -0.7071)]
-        let colors: [Color] = [Color(r: 0.9965, g: 0.9965, b: 0.9965), Color(r: 0.6232, g: 0.6232, b: 0.6232),]
+        let colors: [Color] = [Color(r: 0.9965, g: 0.9965, b: 0.9965), Color(r: 0.62318283, g: 0.62318283, b: 0.62318283),]
         
         for index in 0..<points.count {
             let pt = points[index]

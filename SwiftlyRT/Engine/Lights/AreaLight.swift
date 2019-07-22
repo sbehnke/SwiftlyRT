@@ -53,8 +53,28 @@ struct AreaLight: Equatable, Light {
             return usteps * vsteps
         }
     }
+    var sampledPoints: [Tuple] {
+        get {
+            var samples: [Tuple] = []
+            for v in 0..<vsteps {
+                for u in 0..<usteps {
+                    samples.append(pointOnLight(u: Double(u), v: Double(v)))
+                }
+            }
+            
+            return samples
+        }
+    }
     var position: Tuple = .pointZero
     var intensity = Color()
-    var jitter = false
+    var jitter = false {
+        didSet {
+            if jitter {
+                jitterBy = CyclicSequence([0.1, 0.5, 1.0])
+            } else {
+                jitterBy = CyclicSequence([0.5])
+            }
+        }
+    }
     var jitterBy = CyclicSequence([0.5])
 }

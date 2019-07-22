@@ -32,21 +32,19 @@ struct Material : Equatable {
         
         let color = pattern?.patternAtShape(object: object, point: position) ?? self.color
         let effectiveColor = color * light.intensity
-        let lightv = (light.position - position).normalized()
         let ambient = effectiveColor * self.ambient
-        let lightDotNormal = lightv.dot(normalVector)
-        
-        if intensity == 0.0 {
-            return ambient
-        }
+        let samples = light.sampledPoints
         
         var sum = Color.black
         
-        for _ in 0..<light.samples {
+        for sample in samples {
             var specular: Color
             var diffuse: Color
             
-            if lightDotNormal < 0 {
+            let lightv = (sample - position).normalized()
+            let lightDotNormal = lightv.dot(normalVector)
+            
+            if lightDotNormal < 0 || intensity == 0.0 {
                 diffuse = Color.black
                 specular = Color.black
             } else {
