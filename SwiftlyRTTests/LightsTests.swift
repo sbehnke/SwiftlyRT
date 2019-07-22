@@ -234,9 +234,7 @@ class LightsTests: XCTestCase {
         let corner = Tuple.Point(x: -0.5, y: -0.5, z: -5)
         let v1 = Tuple.Vector(x: 1, y: 0, z: 0)
         let v2 = Tuple.Vector(x: 0, y: 1, z: 0)
-        var light = AreaLight(corner: corner, uvec: v1, usteps: 2, vvec: v2, vsteps: 2, intensity: .white)
-        light.jitterBy = CyclicSequence([0.7, 0.3, 0.9, 0.1, 0.5])
-        
+
         let points: [Tuple] = [.Point(x: 0,    y: 0,    z: 2),
                                .Point(x: 1,    y: -1,   z: 2),
                                .Point(x: 1.5,  y: 0,    z: 2),
@@ -247,6 +245,9 @@ class LightsTests: XCTestCase {
         
 
         for index in 0..<results.count {
+            var light = AreaLight(corner: corner, uvec: v1, usteps: 2, vvec: v2, vsteps: 2, intensity: .white)
+            light.jitterBy = CyclicSequence([0.7, 0.3, 0.9, 0.1, 0.5])
+            
             let intensity = light.intensityAt(point: points[index], world: w)
             XCTAssertEqual(results[index], intensity, accuracy: Tuple.epsilon, "Intensity does not match for index: \(index)")
         }
