@@ -17,6 +17,10 @@ class CyclicSequence: Equatable {
         self.values = values
     }
     
+    init() {
+        
+    }
+    
     subscript(index:Int) -> Double {
         get {
             return values[index % values.count]
@@ -24,9 +28,13 @@ class CyclicSequence: Equatable {
     }
     
     func next() -> Double {
-        let value = self[index]
-        index += 1
-        return value
+        if values.count > 0 {
+            let value = self[index]
+            index += 1
+            return value
+        } else {
+            return Double.random(in: 0...1)
+        }
     }
     
     private var index: Int = 0

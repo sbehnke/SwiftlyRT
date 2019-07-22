@@ -70,7 +70,7 @@ struct AreaLight: Equatable, Light {
     var jitter = false {
         didSet {
             if jitter {
-                jitterBy = CyclicSequence([0.1, 0.5, 1.0])
+                jitterBy = CyclicSequence()
             } else {
                 jitterBy = CyclicSequence([0.5])
             }
