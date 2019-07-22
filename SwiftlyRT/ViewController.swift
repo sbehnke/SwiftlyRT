@@ -192,12 +192,15 @@ class ViewController: NSViewController {
             imageView.image = nil
             imageReady = false
             
-            let width = NSString(string: widthField.stringValue).intValue
-            let height = NSString(string: heightField.stringValue).intValue
-            let fov = NSString(string: fieldOfViewField.stringValue).doubleValue
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
             
-            w.camera?.width = Int(width)
-            w.camera?.height = Int(height)
+            let width = formatter.number(from: widthField.stringValue)?.intValue ?? 0
+            let height = formatter.number(from: heightField.stringValue)?.intValue ?? 0
+            let fov = formatter.number(from: fieldOfViewField.stringValue)?.doubleValue ?? 0.0
+            
+            w.camera?.width = width
+            w.camera?.height = height
             w.camera?.fieldOfView = fov
             
             DispatchQueue.global(qos: .background).async {
