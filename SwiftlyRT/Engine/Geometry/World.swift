@@ -48,14 +48,14 @@ class World {
         
         var surface = Color.black
         for light in lights {
-            let shadowed = isShadowed(point: computation.overPoint, light: light)
+            let intensity = light.intensityAt(point: computation.overPoint, world: self)
             
             surface += computation.object!.material.lighting(object: computation.object,
                                                                 light: light,
                                                                 position: computation.overPoint,
                                                                 eyeVector: computation.eyeVector,
                                                                 normalVector: computation.normalVector,
-                                                                inShadow: shadowed)
+                                                                intensity: intensity)
         }
         
         var reflected = reflectedColor(computation: computation, remaining: remaining)
@@ -130,8 +130,8 @@ class World {
     }
     
     
-    func isShadowed(point: Tuple, light: PointLight) -> Bool {
-        let v = light.position - point
+    func isShadowed(lightPosition: Tuple, point: Tuple) -> Bool {
+        let v = lightPosition - point
         let distance = v.magnitude
         let direction = v.normalized()
         
@@ -149,6 +149,6 @@ class World {
     }
     
     var objects: [Shape] = []
-    var lights: [PointLight] = []
+    var lights: [Light] = []
     var camera: Camera? = nil
 }

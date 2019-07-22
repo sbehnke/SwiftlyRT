@@ -557,13 +557,25 @@ struct WorldLoader {
                                     camera.up = up
                                     world.camera = camera
                                 }
-                                break
                                 
                             case "light":
-                                let at = WorldLoader.toPoint(newEntry["at"] as? [Any])
                                 let intensity = WorldLoader.toColor(newEntry["intensity"] as? [Any])
-                                world.lights.append(PointLight(position: at, intensity: intensity))
-                                break
+                                if let _ = newEntry["corner"] as? [Any] {
+                                    let corner = WorldLoader.toPoint(newEntry["corner"] as? [Any])
+                                    let uvec = WorldLoader.toVector(newEntry["uvec"] as? [Any])
+                                    let vvec = WorldLoader.toVector(newEntry["vvec"] as? [Any])
+                                    let usteps: Int = WorldLoader.convertTo(newEntry["usteps"])
+                                    let vsteps: Int = WorldLoader.convertTo(newEntry["vsteps"])
+                                    let jitter: Bool = newEntry["jitter"] as? Bool ?? false
+                                    let intensity = WorldLoader.toColor(newEntry["intensity"] as? [Any])
+                                    
+                                    var areaLight = AreaLight(corner: corner, uvec: uvec, usteps: usteps, vvec: vvec, vsteps: vsteps, intensity: intensity)
+                                    areaLight.jitter = jitter
+                                    world.lights.append(areaLight)
+                                } else {
+                                    let at = WorldLoader.toPoint(newEntry["at"] as? [Any])
+                                    world.lights.append(PointLight(position: at, intensity: intensity))
+                                }
                                 
                             default:
                                 let newShape: Shape? = toShape(add, newEntry: newEntry)
@@ -572,8 +584,6 @@ struct WorldLoader {
                                 } else {
                                     print("Invalid option: \(String(describing: newEntry))")
                                 }
-                                break;
-                                
                             }
                         }
                         

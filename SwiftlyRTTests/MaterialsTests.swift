@@ -72,7 +72,7 @@ class MaterialsTests: XCTestCase {
         let eyev = Tuple.Vector(x: 0, y: 0, z: -1)
         let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: Tuple.Point(x: 0, y: 0, z: -10), intensity: Color.white)
-        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv)
+        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv, intensity: 1.0)
         XCTAssertEqual(result, Color(r: 1.9, g: 1.9, b: 1.9))
     }
     
@@ -87,7 +87,7 @@ class MaterialsTests: XCTestCase {
         let eyev = Tuple.Vector(x: 0, y: sqrt(2.0)/2.0, z: -sqrt(2.0)/2.0)
         let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: Tuple.Point(x: 0, y: 0, z: -10), intensity: Color.white)
-        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv)
+        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv, intensity: 1.0)
         XCTAssertEqual(result, Color.white)
     }
     
@@ -102,7 +102,7 @@ class MaterialsTests: XCTestCase {
         let eyev = Tuple.Vector(x: 0, y: 0, z: -1)
         let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: Tuple.Point(x: 0, y: 10, z: -10), intensity: Color.white)
-        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv)
+        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv, intensity: 1.0)
         XCTAssertEqual(result, Color.init(r: 0.7364, g: 0.7364, b: 0.7364))
     }
     
@@ -117,7 +117,7 @@ class MaterialsTests: XCTestCase {
         let eyev = Tuple.Vector(x: 0, y: -sqrt(2.0)/2.0, z: -sqrt(2.0)/2.0)
         let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: Tuple.Point(x: 0, y: 10, z: -10), intensity: Color.white)
-        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv)
+        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv, intensity: 1.0)
         XCTAssertEqual(result, Color.init(r: 1.6364, g: 1.6364, b: 1.6364))
     }
     
@@ -132,7 +132,7 @@ class MaterialsTests: XCTestCase {
         let eyev = Tuple.Vector(x: 0, y: 0, z: -1)
         let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: Tuple.Point(x: 0, y: 0, z: 10), intensity: Color.white)
-        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv)
+        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv, intensity: 1.0)
         XCTAssertEqual(result, Color.init(r: 0.1, g: 0.1, b: 0.1))
     }
 
@@ -149,7 +149,7 @@ class MaterialsTests: XCTestCase {
         let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: .Point(x: 0, y: 0, z: -10), intensity: Color(r: 1, g: 1, b: 1))
         let inShadow = true
-        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv, inShadow: inShadow)
+        let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv, intensity: 0.0)
         XCTAssertEqual(result, Color(r: 0.1, g: 0.1, b: 0.1))
     }
     
@@ -175,8 +175,8 @@ class MaterialsTests: XCTestCase {
         let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: .Point(x: 0, y: 0, z: -10), intensity: Color.white)
         
-        let c1 = m.lighting(object: Sphere(), light: light, position: .Point(x: 0.9, y: 0, z: 0), eyeVector: eyev, normalVector: normalv)
-        let c2 = m.lighting(object: Sphere(), light: light, position: .Point(x: 1.1, y: 0, z: 0), eyeVector: eyev, normalVector: normalv)
+        let c1 = m.lighting(object: Sphere(), light: light, position: .Point(x: 0.9, y: 0, z: 0), eyeVector: eyev, normalVector: normalv, intensity: 1.0)
+        let c2 = m.lighting(object: Sphere(), light: light, position: .Point(x: 1.1, y: 0, z: 0), eyeVector: eyev, normalVector: normalv, intensity: 1.0)
         
         XCTAssertEqual(c1, Color.white)
         XCTAssertEqual(c2, Color.black)
@@ -203,27 +203,25 @@ class MaterialsTests: XCTestCase {
 //        | 0.5       | color(0.55, 0.55, 0.55) |
 //        | 0.0       | color(0.1, 0.1, 0.1)    |
         
-        XCTFail()
-
-    }
-    
-    func testAreaLight() {
-//        
-//        Scenario: Creating an area light
-//        Given corner ← point(0, 0, 0)
-//        And v1 ← vector(2, 0, 0)
-//        And v2 ← vector(0, 0, 1)
-//        When light ← area_light(corner, v1, 4, v2, 2, color(1, 1, 1))
-//        Then light.corner = corner
-//        And light.uvec = vector(0.5, 0, 0)
-//        And light.usteps = 4
-//        And light.vvec = vector(0, 0, 0.5)
-//        And light.vsteps = 2
-//        And light.samples = 8
-//        And light.position = point(1, 0, 0.5)
+        let w = World.defaultWorld()
+        w.lights[0] = PointLight(position: .Point(x: 0, y: 0, z: -10), intensity: .white)
+        let shape = w.objects.first!
+        shape.material.ambient = 0.1
+        shape.material.diffuse = 0.9
+        shape.material.specular = 0
+        shape.material.color = Color.white
+        let pt = Tuple.Point(x: 0, y: 0, z: -1)
+        let eyev = Tuple.Vector(x: 0, y: 0, z: -1)
+        let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
         
-        XCTFail()
-
+        let intensity = [1.0, 0.5, 0.0]
+        let colors: [Color] = [Color.white, Color(r: 0.55, g: 0.55, b: 0.55), Color(r: 0.1, g: 0.1, b: 0.1)]
+    
+    
+        for index in 0..<intensity.count {
+            let result = shape.material.lighting(object: shape, light: w.lights.first!, position: pt, eyeVector: eyev, normalVector: normalv, intensity: intensity[index])
+            XCTAssertEqual(result, colors[index])
+        }
     }
     
     func testLightingSamplesAreaLight() {
@@ -249,7 +247,27 @@ class MaterialsTests: XCTestCase {
 //        | point(0, 0, -1)            | color(0.9965, 0.9965, 0.9965) |
 //        | point(0, 0.7071, -0.7071)  | color(0.6232, 0.6232, 0.6232) |
         
-        XCTFail()
+        let corner = Tuple.Point(x: -0.5, y: -0.5, z: -5)
+        let v1 = Tuple.Vector(x: 1, y: 0, z: 0)
+        let v2 = Tuple.Vector(x: 0, y: 1, z: 0)
+        let light = AreaLight(corner: corner, uvec: v1, usteps: 2, vvec: v2, vsteps: 2, intensity: .white)
+        let shape = Sphere()
+        shape.material.ambient = 0.1
+        shape.material.diffuse = 0.9
+        shape.material.specular = 0
+        shape.material.color = .white
+        let eye = Tuple.Point(x: 0, y: 0, z: -5)
+        
+        let points: [Tuple] = [.Point(x: 0, y: 0, z: -1), .Point(x: 0, y: 0.7071, z: -0.7071)]
+        let colors: [Color] = [Color(r: 0.9965, g: 0.9965, b: 0.9965), Color(r: 0.6232, g: 0.6232, b: 0.6232),]
+        
+        for index in 0..<points.count {
+            let pt = points[index]
+            let eyev = (eye - pt).normalized()
+            let normalv = Tuple.Vector(x: pt.x, y: pt.y, z: pt.z)
 
+            let result = shape.material.lighting(object: shape, light: light, position: pt, eyeVector: eyev, normalVector: normalv, intensity: 1.0)
+            XCTAssertEqual(result, colors[index], "Color does not match for index: \(index)")
+        }
     }
 }

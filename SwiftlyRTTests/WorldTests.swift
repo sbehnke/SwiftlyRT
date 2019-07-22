@@ -58,7 +58,7 @@ class WorldTests: XCTestCase {
         world.objects.append(s2)
         world.lights.append(light)
         
-        XCTAssertEqual(world.lights.first!, light)
+        XCTAssertEqual(world.lights.first! as! PointLight, light)
         XCTAssertTrue(world.objects.contains(s1))
         XCTAssertTrue(world.objects.contains(s1))
     }
@@ -122,7 +122,7 @@ class WorldTests: XCTestCase {
         let i = Intersection(t: 0.5, object: shape)
         let comps = i.prepareComputation(ray: r)
         let c = w.shadeHit(computation: comps)
-        if w.isShadowed(point: comps.point, light: w.lights.first!) {
+        if w.isShadowed(lightPosition: w.lights.first!.position, point: comps.point) {
             XCTAssertEqual(Color.init(r: 0.1, g: 0.1, b: 0.1), c)
         } else {
             // XCTAssertEqual(Color.init(r: 0.90498, g: 0.90498, b: 0.90498), c)
@@ -184,7 +184,7 @@ class WorldTests: XCTestCase {
 
         let w = World.defaultWorld()
         let p = Tuple.Point(x: 0, y: 10, z: 0)
-        XCTAssertFalse(w.isShadowed(point: p, light: w.lights.first!))
+        XCTAssertFalse(w.isShadowed(lightPosition: w.lights.first!.position, point: p))
     }
     
     func testShadowOnPointBetweenLight() {
@@ -195,7 +195,7 @@ class WorldTests: XCTestCase {
         
         let w = World.defaultWorld()
         let p = Tuple.Point(x: 10, y: -10, z: 10)
-        XCTAssertTrue(w.isShadowed(point: p, light: w.lights.first!))
+        XCTAssertTrue(w.isShadowed(lightPosition: w.lights.first!.position, point: p))
     }
     
     func testNoShadowWhenObjectBehindLight() {
@@ -206,7 +206,7 @@ class WorldTests: XCTestCase {
      
         let w = World.defaultWorld()
         let p = Tuple.Point(x: -20, y: 20, z: -20)
-        XCTAssertFalse(w.isShadowed(point: p, light: w.lights.first!))
+        XCTAssertFalse(w.isShadowed(lightPosition: w.lights.first!.position, point: p))
     }
     
     func testNoShadowWhenObjectBehindPoint() {
@@ -217,7 +217,7 @@ class WorldTests: XCTestCase {
         
         let w = World.defaultWorld()
         let p = Tuple.Point(x: -2, y: 2, z: -2)
-        XCTAssertFalse(w.isShadowed(point: p, light: w.lights.first!))
+        XCTAssertFalse(w.isShadowed(lightPosition: w.lights.first!.position, point: p))
     }
     
     func testShadeHitWithIntersectionInShadow() {
@@ -581,7 +581,19 @@ class WorldTests: XCTestCase {
 //        | point(10, 10, 10)    | true   |
 //        | point(-20, -20, -20) | false  |
 //        | point(-5, -5, -5)    | false  |
+
+        let w = World.defaultWorld()
+        let lightPosition = Tuple.Point(x: -10, y: -10, z: -10)
         
-        XCTFail()
+        let points: [Tuple] = [.Point(x: -10, y: -10, z:  10),
+                               .Point(x:  10, y:  10, z:  10),
+                               .Point(x: -20, y: -20, z: -20),
+                               .Point(x: -5,  y: -5,  z: -5),]
+        
+        let results = [false, true, false, false]
+        
+        for index in 0..<results.count {
+            XCTAssertEqual(w.isShadowed(lightPosition: lightPosition, point: points[index]), results[index], "Value does not match at index: \(index)")
+        }
     }
 }

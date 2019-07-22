@@ -28,10 +28,7 @@ struct Material : Equatable {
         self.shininess = shininess
     }
     
-    func lighting(object: Shape?, light: PointLight, position: Tuple, eyeVector: Tuple, normalVector: Tuple, inShadow: Bool = false) -> Color {
-        
-        var specular: Color
-        var diffuse: Color
+    func lighting(object: Shape?, light: Light, position: Tuple, eyeVector: Tuple, normalVector: Tuple, intensity: Double) -> Color {
         
         let color = pattern?.patternAtShape(object: object, point: position) ?? self.color
         let effectiveColor = color * light.intensity
@@ -39,27 +36,37 @@ struct Material : Equatable {
         let ambient = effectiveColor * self.ambient
         let lightDotNormal = lightv.dot(normalVector)
         
-        if inShadow {
+        if intensity == 0.0 {
             return ambient
         }
         
-        if lightDotNormal < 0 {
-            diffuse = Color.black
-            specular = Color.black
-        } else {
-            diffuse = effectiveColor * self.diffuse * lightDotNormal
+        var sum = Color.black
+        
+        for _ in 0..<light.samples {
+            var specular: Color
+            var diffuse: Color
             
-            let reflectv = -lightv.reflected(normal: normalVector)
-            let reflectDotEye = reflectv.dot(eyeVector)
-            
-            if reflectDotEye <= 0 {
+            if lightDotNormal < 0 {
+                diffuse = Color.black
                 specular = Color.black
             } else {
-                let factor = pow(reflectDotEye, Double(shininess))
-                specular = light.intensity * self.specular * factor
+                diffuse = effectiveColor * self.diffuse * lightDotNormal
+                
+                let reflectv = -lightv.reflected(normal: normalVector)
+                let reflectDotEye = reflectv.dot(eyeVector)
+                
+                if reflectDotEye <= 0 {
+                    specular = Color.black
+                } else {
+                    let factor = pow(reflectDotEye, Double(shininess))
+                    specular = light.intensity * self.specular * factor
+                }
             }
+            
+            sum += diffuse
+            sum += specular
         }
-        return ambient + diffuse + specular
+        return ambient + (sum / Float(light.samples) * intensity)
     }
     
     var pattern: Pattern? = nil
