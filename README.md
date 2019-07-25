@@ -33,4 +33,7 @@ Image Formats:
 Scene Description Format:
 * Yaml
 
+Bounding Boxes:
+* Dividing Scene based on largest dimension
+
 All existing tests from the book's 17 chapters have been implemented and currently pass. In addition the 3 available bonus chapters have also been implemented along wifh multiple light support and material inheritance. This was a project for me to learn Swift while doing something enjoyable like tranforming mathematics into pretty pictures.
