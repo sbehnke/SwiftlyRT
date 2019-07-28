@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		647B7E0622EDFBDF003D40F8 /* Yams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 647B7E0222EDFBB1003D40F8 /* Yams.framework */; };
+		647B7E0722EDFBE7003D40F8 /* Yams.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 647B7E0222EDFBB1003D40F8 /* Yams.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6496FDD622D6B6020024322D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FDD522D6B6020024322D /* AppDelegate.swift */; };
 		6496FDD822D6B6020024322D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FDD722D6B6020024322D /* ViewController.swift */; };
 		6496FDDA22D6B6030024322D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6496FDD922D6B6030024322D /* Assets.xcassets */; };
@@ -51,8 +53,6 @@
 		6496FEEF22D6B69A0024322D /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FE8122D6B69A0024322D /* Material.swift */; };
 		6496FEF022D6B69A0024322D /* PointLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FE8222D6B69A0024322D /* PointLight.swift */; };
 		6496FEF122D6B69A0024322D /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FE8322D6B69A0024322D /* Color.swift */; };
-		6496FEFC22D6B6F70024322D /* Yams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6496FEF922D6B6EC0024322D /* Yams.framework */; };
-		6496FEFD22D6B6F70024322D /* Yams.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6496FEF922D6B6EC0024322D /* Yams.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6496FF3F22D6B8000024322D /* SwiftlyRTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF3E22D6B8000024322D /* SwiftlyRTTests.swift */; };
 		6496FF5F22D6B8380024322D /* SmoothTriangleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF4622D6B8370024322D /* SmoothTriangleTests.swift */; };
 		6496FF6022D6B8380024322D /* PatternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF4722D6B8370024322D /* PatternTests.swift */; };
@@ -92,26 +92,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6496FEF822D6B6EC0024322D /* PBXContainerItemProxy */ = {
+		647B7E0122EDFBB1003D40F8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6496FEF322D6B6EB0024322D /* Yams.xcodeproj */;
+			containerPortal = 647B7DFC22EDFBB1003D40F8 /* Yams.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = OBJ_28;
 			remoteInfo = Yams;
 		};
-		6496FEFA22D6B6EC0024322D /* PBXContainerItemProxy */ = {
+		647B7E0322EDFBB1003D40F8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6496FEF322D6B6EB0024322D /* Yams.xcodeproj */;
+			containerPortal = 647B7DFC22EDFBB1003D40F8 /* Yams.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = OBJ_29;
 			remoteInfo = YamsTests;
-		};
-		6496FEFE22D6B6F70024322D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6496FEF322D6B6EB0024322D /* Yams.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = OBJ_45;
-			remoteInfo = Yams;
 		};
 		6496FF4122D6B8000024322D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -129,7 +122,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6496FEFD22D6B6F70024322D /* Yams.framework in Embed Frameworks */,
+				647B7E0722EDFBE7003D40F8 /* Yams.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,6 +130,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		647B7DFC22EDFBB1003D40F8 /* Yams.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Yams.xcodeproj; path = SwiftlyRT/Frameworks/Yams/Yams.xcodeproj; sourceTree = "<group>"; };
 		6496FDD222D6B6020024322D /* SwiftlyRT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftlyRT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6496FDD522D6B6020024322D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6496FDD722D6B6020024322D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -184,7 +178,6 @@
 		6496FE8122D6B69A0024322D /* Material.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		6496FE8222D6B69A0024322D /* PointLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointLight.swift; sourceTree = "<group>"; };
 		6496FE8322D6B69A0024322D /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
-		6496FEF322D6B6EB0024322D /* Yams.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Yams.xcodeproj; path = "SwiftlyRT/Frameworks/Yams-2.0.0/Yams.xcodeproj"; sourceTree = "<group>"; };
 		6496FF3C22D6B8000024322D /* SwiftlyRTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftlyRTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6496FF3E22D6B8000024322D /* SwiftlyRTTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftlyRTTests.swift; sourceTree = "<group>"; };
 		6496FF4622D6B8370024322D /* SmoothTriangleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmoothTriangleTests.swift; sourceTree = "<group>"; };
@@ -229,7 +222,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6496FEFC22D6B6F70024322D /* Yams.framework in Frameworks */,
+				647B7E0622EDFBDF003D40F8 /* Yams.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +236,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		647B7DFD22EDFBB1003D40F8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				647B7E0222EDFBB1003D40F8 /* Yams.framework */,
+				647B7E0422EDFBB1003D40F8 /* YamsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		647B7E0522EDFBDF003D40F8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6496FDC922D6B6020024322D = {
 			isa = PBXGroup;
 			children = (
@@ -251,6 +260,7 @@
 				6496FDD322D6B6020024322D /* Products */,
 				6496FDD422D6B6020024322D /* SwiftlyRT */,
 				6496FF3D22D6B8000024322D /* SwiftlyRTTests */,
+				647B7E0522EDFBDF003D40F8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -366,18 +376,9 @@
 		6496FEF222D6B6D90024322D /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				6496FEF322D6B6EB0024322D /* Yams.xcodeproj */,
+				647B7DFC22EDFBB1003D40F8 /* Yams.xcodeproj */,
 			);
 			name = Dependencies;
-			sourceTree = "<group>";
-		};
-		6496FEF422D6B6EB0024322D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6496FEF922D6B6EC0024322D /* Yams.framework */,
-				6496FEFB22D6B6EC0024322D /* YamsTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		6496FF3D22D6B8000024322D /* SwiftlyRTTests */ = {
@@ -439,7 +440,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6496FEFF22D6B6F70024322D /* PBXTargetDependency */,
 			);
 			name = SwiftlyRT;
 			productName = SwiftlyRT;
@@ -496,8 +496,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 6496FEF422D6B6EB0024322D /* Products */;
-					ProjectRef = 6496FEF322D6B6EB0024322D /* Yams.xcodeproj */;
+					ProductGroup = 647B7DFD22EDFBB1003D40F8 /* Products */;
+					ProjectRef = 647B7DFC22EDFBB1003D40F8 /* Yams.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -509,18 +509,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		6496FEF922D6B6EC0024322D /* Yams.framework */ = {
+		647B7E0222EDFBB1003D40F8 /* Yams.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Yams.framework;
-			remoteRef = 6496FEF822D6B6EC0024322D /* PBXContainerItemProxy */;
+			remoteRef = 647B7E0122EDFBB1003D40F8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		6496FEFB22D6B6EC0024322D /* YamsTests.xctest */ = {
+		647B7E0422EDFBB1003D40F8 /* YamsTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = YamsTests.xctest;
-			remoteRef = 6496FEFA22D6B6EC0024322D /* PBXContainerItemProxy */;
+			remoteRef = 647B7E0322EDFBB1003D40F8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -640,11 +640,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6496FEFF22D6B6F70024322D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Yams;
-			targetProxy = 6496FEFE22D6B6F70024322D /* PBXContainerItemProxy */;
-		};
 		6496FF4222D6B8000024322D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6496FDD122D6B6020024322D /* SwiftlyRT */;
