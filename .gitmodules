@@ -1,6 +1,6 @@
 [submodule "SwiftlyRT/Frameworks/SwiftGD"]
 	path = SwiftlyRT/Frameworks/SwiftGD
-	url = git@github.com:twostraws/SwiftGD.git
+url=https://github.com/twostraws/SwiftGD.git
 [submodule "SwiftlyRT/Frameworks/Yams"]
 	path = SwiftlyRT/Frameworks/Yams
-	url = git@github.com:jpsim/Yams.git
+url=https://github.com/jpsim/Yams.git
