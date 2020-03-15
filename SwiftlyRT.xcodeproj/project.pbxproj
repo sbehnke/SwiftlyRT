@@ -3,12 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		647B7E0622EDFBDF003D40F8 /* Yams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 647B7E0222EDFBB1003D40F8 /* Yams.framework */; };
-		647B7E0722EDFBE7003D40F8 /* Yams.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 647B7E0222EDFBB1003D40F8 /* Yams.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		645E2EB6241ECEEC006C138F /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 645E2EB5241ECEEC006C138F /* Yams */; };
+		645E2EB9241ED238006C138F /* SwiftGD in Frameworks */ = {isa = PBXBuildFile; productRef = 645E2EB8241ED238006C138F /* SwiftGD */; };
 		6496FDD622D6B6020024322D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FDD522D6B6020024322D /* AppDelegate.swift */; };
 		6496FDD822D6B6020024322D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FDD722D6B6020024322D /* ViewController.swift */; };
 		6496FDDA22D6B6030024322D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6496FDD922D6B6030024322D /* Assets.xcassets */; };
@@ -91,20 +91,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		647B7E0122EDFBB1003D40F8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 647B7DFC22EDFBB1003D40F8 /* Yams.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = OBJ_28;
-			remoteInfo = Yams;
-		};
-		647B7E0322EDFBB1003D40F8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 647B7DFC22EDFBB1003D40F8 /* Yams.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = OBJ_29;
-			remoteInfo = YamsTests;
-		};
 		6496FF4122D6B8000024322D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6496FDCA22D6B6020024322D /* Project object */;
@@ -114,22 +100,7 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		6496FF0022D6B6F70024322D /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				647B7E0722EDFBE7003D40F8 /* Yams.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		647B7DFC22EDFBB1003D40F8 /* Yams.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Yams.xcodeproj; path = SwiftlyRT/Frameworks/Yams/Yams.xcodeproj; sourceTree = "<group>"; };
 		6496FDD222D6B6020024322D /* SwiftlyRT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftlyRT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6496FDD522D6B6020024322D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6496FDD722D6B6020024322D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -221,7 +192,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				647B7E0622EDFBDF003D40F8 /* Yams.framework in Frameworks */,
+				645E2EB6241ECEEC006C138F /* Yams in Frameworks */,
+				645E2EB9241ED238006C138F /* SwiftGD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,15 +207,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		647B7DFD22EDFBB1003D40F8 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				647B7E0222EDFBB1003D40F8 /* Yams.framework */,
-				647B7E0422EDFBB1003D40F8 /* YamsTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		647B7E0522EDFBDF003D40F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -375,7 +338,6 @@
 		6496FEF222D6B6D90024322D /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				647B7DFC22EDFBB1003D40F8 /* Yams.xcodeproj */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -434,13 +396,16 @@
 				6496FDCE22D6B6020024322D /* Sources */,
 				6496FDCF22D6B6020024322D /* Frameworks */,
 				6496FDD022D6B6020024322D /* Resources */,
-				6496FF0022D6B6F70024322D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = SwiftlyRT;
+			packageProductDependencies = (
+				645E2EB5241ECEEC006C138F /* Yams */,
+				645E2EB8241ED238006C138F /* SwiftGD */,
+			);
 			productName = SwiftlyRT;
 			productReference = 6496FDD222D6B6020024322D /* SwiftlyRT.app */;
 			productType = "com.apple.product-type.application";
@@ -491,14 +456,13 @@
 				Base,
 			);
 			mainGroup = 6496FDC922D6B6020024322D;
+			packageReferences = (
+				645E2EB4241ECEEC006C138F /* XCRemoteSwiftPackageReference "Yams" */,
+				645E2EB7241ED238006C138F /* XCRemoteSwiftPackageReference "SwiftGD" */,
+				645E2EBA241ED4A7006C138F /* XCRemoteSwiftPackageReference "Cgd" */,
+			);
 			productRefGroup = 6496FDD322D6B6020024322D /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 647B7DFD22EDFBB1003D40F8 /* Products */;
-					ProjectRef = 647B7DFC22EDFBB1003D40F8 /* Yams.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				6496FDD122D6B6020024322D /* SwiftlyRT */,
@@ -506,23 +470,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		647B7E0222EDFBB1003D40F8 /* Yams.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Yams.framework;
-			remoteRef = 647B7E0122EDFBB1003D40F8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		647B7E0422EDFBB1003D40F8 /* YamsTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = YamsTests.xctest;
-			remoteRef = 647B7E0322EDFBB1003D40F8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6496FDD022D6B6020024322D /* Resources */ = {
@@ -689,7 +636,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -750,7 +697,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -775,13 +722,12 @@
 		6496FDEE22D6B6030024322D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SwiftlyRT/SwiftlyRT.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S5CDMXC69X;
 				INFOPLIST_FILE = SwiftlyRT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -797,13 +743,12 @@
 		6496FDEF22D6B6030024322D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SwiftlyRT/SwiftlyRT.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S5CDMXC69X;
 				INFOPLIST_FILE = SwiftlyRT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -820,11 +765,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S5CDMXC69X;
 				INFOPLIST_FILE = SwiftlyRTTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -843,11 +788,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S5CDMXC69X;
 				INFOPLIST_FILE = SwiftlyRTTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -893,6 +838,46 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		645E2EB4241ECEEC006C138F /* XCRemoteSwiftPackageReference "Yams" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:jpsim/Yams.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		645E2EB7241ED238006C138F /* XCRemoteSwiftPackageReference "SwiftGD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/SwiftGD.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.0;
+			};
+		};
+		645E2EBA241ED4A7006C138F /* XCRemoteSwiftPackageReference "Cgd" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/Cgd";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		645E2EB5241ECEEC006C138F /* Yams */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 645E2EB4241ECEEC006C138F /* XCRemoteSwiftPackageReference "Yams" */;
+			productName = Yams;
+		};
+		645E2EB8241ED238006C138F /* SwiftGD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 645E2EB7241ED238006C138F /* XCRemoteSwiftPackageReference "SwiftGD" */;
+			productName = SwiftGD;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6496FDCA22D6B6020024322D /* Project object */;
 }
