@@ -87,7 +87,6 @@
 		64ECDD8622E5358A00779669 /* AreaLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ECDD8522E5358A00779669 /* AreaLight.swift */; };
 		64ECDD8822E53DE200779669 /* CyclicSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ECDD8722E53DE200779669 /* CyclicSequence.swift */; };
 		64F51E8922D6BEB10053546F /* TestCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F51E8822D6BEB10053546F /* TestCode.swift */; };
-		64F51E8E22D6EB5D0053546F /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 64F51E8D22D6EB5D0053546F /* Info.plist */; };
 		64F51E9122DBE8DE0053546F /* UVCheckers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F51E9022DBE8DE0053546F /* UVCheckers.swift */; };
 /* End PBXBuildFile section */
 
@@ -471,7 +470,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1020;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Luster Images";
 				TargetAttributes = {
 					6496FDD122D6B6020024322D = {
@@ -541,7 +540,6 @@
 			files = (
 				6496FF7D22D6BC8D0024322D /* cube.obj in Resources */,
 				6496FF7C22D6BC8D0024322D /* plane.obj in Resources */,
-				64F51E8E22D6EB5D0053546F /* Info.plist in Resources */,
 				6496FF7E22D6BC8D0024322D /* triangles.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -780,7 +778,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SwiftlyRT/SwiftlyRT.entitlements;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
@@ -802,7 +800,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SwiftlyRT/SwiftlyRT.entitlements;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";

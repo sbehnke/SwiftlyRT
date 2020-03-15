@@ -20,7 +20,7 @@ class SequencesTests: XCTestCase {
 //    And next(gen) = 1.0
 //    And next(gen) = 0.1
 
-        var gen = CyclicSequence([0.1, 0.5, 1.0])
+        let gen = CyclicSequence([0.1, 0.5, 1.0])
         XCTAssertEqual(gen.next(), 0.1)
         XCTAssertEqual(gen.next(), 0.5)
         XCTAssertEqual(gen.next(), 1.0)
