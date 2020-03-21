@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		645E2EB6241ECEEC006C138F /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 645E2EB5241ECEEC006C138F /* Yams */; };
-		645E2EB9241ED238006C138F /* SwiftGD in Frameworks */ = {isa = PBXBuildFile; productRef = 645E2EB8241ED238006C138F /* SwiftGD */; };
 		6496FDD622D6B6020024322D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FDD522D6B6020024322D /* AppDelegate.swift */; };
 		6496FDD822D6B6020024322D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FDD722D6B6020024322D /* ViewController.swift */; };
 		6496FDDA22D6B6030024322D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6496FDD922D6B6030024322D /* Assets.xcassets */; };
@@ -193,7 +192,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				645E2EB6241ECEEC006C138F /* Yams in Frameworks */,
-				645E2EB9241ED238006C138F /* SwiftGD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,7 +402,6 @@
 			name = SwiftlyRT;
 			packageProductDependencies = (
 				645E2EB5241ECEEC006C138F /* Yams */,
-				645E2EB8241ED238006C138F /* SwiftGD */,
 			);
 			productName = SwiftlyRT;
 			productReference = 6496FDD222D6B6020024322D /* SwiftlyRT.app */;
@@ -458,8 +455,6 @@
 			mainGroup = 6496FDC922D6B6020024322D;
 			packageReferences = (
 				645E2EB4241ECEEC006C138F /* XCRemoteSwiftPackageReference "Yams" */,
-				645E2EB7241ED238006C138F /* XCRemoteSwiftPackageReference "SwiftGD" */,
-				645E2EBA241ED4A7006C138F /* XCRemoteSwiftPackageReference "Cgd" */,
 			);
 			productRefGroup = 6496FDD322D6B6020024322D /* Products */;
 			projectDirPath = "";
@@ -848,22 +843,6 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		645E2EB7241ED238006C138F /* XCRemoteSwiftPackageReference "SwiftGD" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/twostraws/SwiftGD.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.5.0;
-			};
-		};
-		645E2EBA241ED4A7006C138F /* XCRemoteSwiftPackageReference "Cgd" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/twostraws/Cgd";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.3.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -871,11 +850,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 645E2EB4241ECEEC006C138F /* XCRemoteSwiftPackageReference "Yams" */;
 			productName = Yams;
-		};
-		645E2EB8241ED238006C138F /* SwiftGD */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 645E2EB7241ED238006C138F /* XCRemoteSwiftPackageReference "SwiftGD" */;
-			productName = SwiftGD;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
