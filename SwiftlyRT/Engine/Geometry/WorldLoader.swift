@@ -621,7 +621,9 @@ struct WorldLoader {
                     }
                 }
 
-            } catch {}
+            } catch {
+                print("Error loading file: \(error)")
+            }
         }
 
         return world

@@ -11,72 +11,72 @@
 #
 #   function fir_branch()
 #     # the length of the branch
-#     let length ← 2.0
+#     let length <- 2.0
 #
 #     # the radius of the branch
-#     let radius ← 0.025
+#     let radius <- 0.025
 #
 #     # how many groups of needles cover the branch
-#     let segments ← 20
+#     let segments <- 20
 #
 #     # how needles per group, or segment
-#     let per_segment ← 24
+#     let per_segment <- 24
 #
 #     # the branch itself, just a cylinder
-#     let branch ← closed cylinder from y=0 to y=length
+#     let branch <- closed cylinder from y=0 to y=length
 #     set_transform(branch, scaling(radius, 1, radius))
-#     branch.material ← material with:
-#                           color ← color(0.5, 0.35, 0.26)
-#                           ambient ← 0.2
-#                           specular ← 0.0
-#                           diffuse ← 0.6
+#     branch.material <- material with:
+#                           color <- color(0.5, 0.35, 0.26)
+#                           ambient <- 0.2
+#                           specular <- 0.0
+#                           diffuse <- 0.6
 #
 #     # how much branch each segment gets
-#     let seg_size ← length / (segments - 1)
+#     let seg_size <- length / (segments - 1)
 #
 #     # the radial distance, in radians, between adjacent needles
 #     # in a group
-#     let theta ← 2.1 * π / per_segment
+#     let theta <- 2.1 * pi / per_segment
 #
 #     # the maximum length of each needle
-#     let max_length ← 20.0 * radius
+#     let max_length <- 20.0 * radius
 #
 #     # the group that will contain the branch and all needles
-#     let object ← group(branch)
+#     let object <- group(branch)
 #
-#     for y ← 0 to segments - 1
+#     for y <- 0 to segments - 1
 #       # create a subgroup for each segment of needles
-#       let subgroup ← group()
+#       let subgroup <- group()
 #
-#       for i ← 0 to per_segment - 1
+#       for i <- 0 to per_segment - 1
 #         # each needle is a triangle.
 #         # y_base y coordinate of the base of the triangle
-#         let y_base ← seg_size * y + rand() * seg_size
+#         let y_base <- seg_size * y + rand() * seg_size
 #
 #         # y_tip is the y coordinate of the tip of the triangle
-#         let y_tip ← y_base - rand() * seg_size
+#         let y_tip <- y_base - rand() * seg_size
 #
 #         # y_angle is angle (in radians) that the needle should be
 #         # rotated around the branch.
-#         let y_angle ← i * theta + rand() * theta
+#         let y_angle <- i * theta + rand() * theta
 #
 #         # how long is the needle?
-#         let needle_length ← max_length / 2 * (1 + rand())
+#         let needle_length <- max_length / 2 * (1 + rand())
 #
 #         # how much is the needle offset from the center of the branch?
-#         let ofs ← radius / 2
+#         let ofs <- radius / 2
 #
 #         # the three points of the triangle that form the needle
-#         let p1 ← point(ofs, y_base, ofs)
-#         let p2 ← point(-ofs, y_base, ofs)
-#         let p3 ← point(0.0, y_tip, needle_length)
+#         let p1 <- point(ofs, y_base, ofs)
+#         let p2 <- point(-ofs, y_base, ofs)
+#         let p3 <- point(0.0, y_tip, needle_length)
 #
 #         # create, transform, and texture the needle
-#         let tri ← triangle(p1, p2, p3)
+#         let tri <- triangle(p1, p2, p3)
 #         set_transform(tri, rotation_y(y_angle))
-#         tri.material ← material with:
-#                           color ← color(0.26, 0.36, 0.16)
-#                           specular ← 0.1
+#         tri.material <- material with:
+#                           color <- color(0.26, 0.36, 0.16)
+#                           specular <- 0.1
 #
 #         add_child(subgroup, tri)
 #       end for

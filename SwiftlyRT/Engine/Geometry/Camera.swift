@@ -92,6 +92,32 @@ struct Camera {
         return image
     }
 
+    func render(c: Camera, world: World, startX: Int, startY: Int, width: Int, height: Int) -> Canvas {
+
+        var camera = c
+
+        if let fromPoint = camera.from,
+            let toPoint = camera.to,
+            let upVector = camera.up
+        {
+            camera.transform = Matrix4x4.viewTransformed(from: fromPoint, to: toPoint, up: upVector)
+        }
+
+        let endY = (startY + height) < camera.height ? startY + height : camera.height
+        let endX = (startX + width) < camera.width ? startX + width : camera.width
+        let image = Canvas(width: endX - startX, height: endY - startY)
+
+        for y in startY..<endY {
+            for x in startX..<endX {
+                let ray = camera.rayForPixel(x: x, y: y)
+                let color = world.colorAt(ray: ray)
+                image.setPixel(x: x - startX, y: y - startY, color: color)
+            }
+        }
+
+        return image
+    }
+
     static func renderSinglePixel(c: Camera, world: World, x: Int, y: Int) -> Color {
         let ray = c.rayForPixel(x: x, y: y)
         return world.colorAt(ray: ray)

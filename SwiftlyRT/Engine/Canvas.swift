@@ -10,11 +10,17 @@ import Foundation
 
 class Canvas {
 
-    init(width: Int, height: Int) {
+    init(width: Int, height: Int, color: Color = Color()) {
         self.width = width
         self.height = height
 
-        pixels = [Color](repeating: Color(), count: width * height)
+        pixels = [Color](repeating: color, count: width * height)
+    }
+
+    init(width: Int, height: Int, pixels: [Color]) {
+        self.width = width
+        self.height = height
+        self.pixels = pixels
     }
 
     convenience init?(fromUrl: URL?) {
@@ -146,6 +152,22 @@ class Canvas {
 
     func getPixel(x: Int, y: Int) -> Color {
         return pixels[x + (y * width)]
+    }
+
+    func setPixels(source: Canvas, destX: Int = 0, destY: Int = 0) {
+        for y in 0..<source.height {
+            if y + destY >= self.height {
+                continue
+            }
+
+            for x in 0..<source.width {
+                if x + destX >= self.width {
+                    continue
+                }
+
+                pixels[(x + destX) + ((y + destY) * width)] = source[x, y]
+            }
+        }
     }
 
     private func clamp(value: Double) -> Double {

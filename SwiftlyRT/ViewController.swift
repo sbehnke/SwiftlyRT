@@ -166,9 +166,11 @@ class ViewController: NSViewController {
 
     func updateUI() {
         if let w = world {
-            widthField.stringValue = String(w.camera!.width)
-            heightField.stringValue = String(w.camera!.height)
-            fieldOfViewField.stringValue = String(w.camera!.fieldOfView)
+            if let camera = w.camera {
+                widthField.stringValue = String(camera.width)
+                heightField.stringValue = String(camera.height)
+                fieldOfViewField.stringValue = String(camera.fieldOfView)
+            }
         }
     }
 
@@ -188,6 +190,9 @@ class ViewController: NSViewController {
     }
 
     @IBAction func renderScene(_ sender: Any) {
+/*
+        // Single Threaded
+
         progressLabel.stringValue = "Rendering!"
         if let w = world {
             let startTime = CACurrentMediaTime()
@@ -222,7 +227,76 @@ class ViewController: NSViewController {
 
                     let timeElapsed = CACurrentMediaTime() - startTime
                     self.progressLabel.stringValue =
-                        "Finished in: " + self.format(duration: timeElapsed)
+                    "Finished in: " + self.format(duration: timeElapsed)
+                }
+            }
+        }
+*/
+
+        // Multithreaded
+        progressLabel.stringValue = "Rendering!"
+        if let w = world {
+            let startTime = CACurrentMediaTime()
+            imageView.image = nil
+            imageReady = false
+
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+
+            let width = formatter.number(from: widthField.stringValue)?.intValue ?? 0
+            let height = formatter.number(from: heightField.stringValue)?.intValue ?? 0
+            let fov = formatter.number(from: fieldOfViewField.stringValue)?.doubleValue ?? 0.0
+
+            w.camera?.width = width
+            w.camera?.height = height
+            w.camera?.fieldOfView = fov
+
+            let dest = Canvas(width: width, height: height)
+            let queue = TaskQueue()
+            queue.dispatch {
+                await withTaskGroup(of: Void.self) { group in
+
+                    let sizeX = 16
+                    let sizeY = 16
+
+                    for y in stride(from: 0, to: height, by: sizeY) {
+                        for x in stride(from: 0, to: width, by: sizeX) {
+                            group.addTask(priority: TaskPriority.medium) {
+                                DispatchQueue.main.async {
+                                    self.progressLabel.stringValue = "(\(x),\(y))"
+                                }
+
+                                let canvas = w.camera!.render(
+                                    c: w.camera!,
+                                    world: w,
+                                    startX: x,
+                                    startY: y,
+                                    width: sizeX,
+                                    height: sizeY)
+
+                                dest.setPixels(source: canvas, destX: x, destY: y)
+
+                                // TODO: Figure out how to update the UI while the image renders
+//                                DispatchQueue.main.async {
+//                                    let data = dest.getPPM()
+//                                    let img = NSImage(data: data)
+//                                    self.imageView.image = img
+//                                }
+                            }
+                        }
+                    }
+
+                    await group.waitForAll()
+                    DispatchQueue.main.async {
+                        let data = dest.getPPM()
+                        let img = NSImage(data: data)
+                        self.imageView.image = img
+
+                        self.imageReady = true
+                        let timeElapsed = CACurrentMediaTime() - startTime
+                        let labelValue = "Finished in: " + self.format(duration: timeElapsed)
+                        self.progressLabel.stringValue = labelValue
+                    }
                 }
             }
         }
