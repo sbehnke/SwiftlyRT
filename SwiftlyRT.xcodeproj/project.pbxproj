@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		645E2EB6241ECEEC006C138F /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 645E2EB5241ECEEC006C138F /* Yams */; };
 		6496FDD622D6B6020024322D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FDD522D6B6020024322D /* AppDelegate.swift */; };
 		6496FDD822D6B6020024322D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FDD722D6B6020024322D /* ViewController.swift */; };
 		6496FDDA22D6B6030024322D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6496FDD922D6B6030024322D /* Assets.xcassets */; };
@@ -81,6 +80,7 @@
 		6496FF7D22D6BC8D0024322D /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6496FF7A22D6BC8D0024322D /* cube.obj */; };
 		6496FF7E22D6BC8D0024322D /* triangles.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6496FF7B22D6BC8D0024322D /* triangles.obj */; };
 		64C23CF622DBF82B0009C60E /* WorldLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C23CF522DBF82B0009C60E /* WorldLoader.swift */; };
+		64C31A12285190E6006CA8FE /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 64C31A11285190E6006CA8FE /* Yams */; };
 		64ECDD8122E4FE3B00779669 /* UVAlignCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ECDD8022E4FE3B00779669 /* UVAlignCheck.swift */; };
 		64ECDD8422E524F000779669 /* UVImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ECDD8322E524F000779669 /* UVImage.swift */; };
 		64ECDD8622E5358A00779669 /* AreaLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ECDD8522E5358A00779669 /* AreaLight.swift */; };
@@ -191,7 +191,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				645E2EB6241ECEEC006C138F /* Yams in Frameworks */,
+				64C31A12285190E6006CA8FE /* Yams in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,7 +401,7 @@
 			);
 			name = SwiftlyRT;
 			packageProductDependencies = (
-				645E2EB5241ECEEC006C138F /* Yams */,
+				64C31A11285190E6006CA8FE /* Yams */,
 			);
 			productName = SwiftlyRT;
 			productReference = 6496FDD222D6B6020024322D /* SwiftlyRT.app */;
@@ -432,7 +432,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1020;
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1400;
 				ORGANIZATIONNAME = "Luster Images";
 				TargetAttributes = {
 					6496FDD122D6B6020024322D = {
@@ -454,7 +454,7 @@
 			);
 			mainGroup = 6496FDC922D6B6020024322D;
 			packageReferences = (
-				645E2EB4241ECEEC006C138F /* XCRemoteSwiftPackageReference "Yams" */,
+				64C31A10285190E6006CA8FE /* XCRemoteSwiftPackageReference "Yams" */,
 			);
 			productRefGroup = 6496FDD322D6B6020024322D /* Products */;
 			projectDirPath = "";
@@ -634,6 +634,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -696,6 +697,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -724,8 +726,10 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = S5CDMXC69X;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				INFOPLIST_FILE = SwiftlyRT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -746,8 +750,10 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = S5CDMXC69X;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				INFOPLIST_FILE = SwiftlyRT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -768,6 +774,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = S5CDMXC69X;
 				INFOPLIST_FILE = SwiftlyRTTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -791,6 +798,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = S5CDMXC69X;
 				INFOPLIST_FILE = SwiftlyRTTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -839,20 +847,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		645E2EB4241ECEEC006C138F /* XCRemoteSwiftPackageReference "Yams" */ = {
+		64C31A10285190E6006CA8FE /* XCRemoteSwiftPackageReference "Yams" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:jpsim/Yams.git";
+			repositoryURL = "https://github.com/jpsim/Yams.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
+				minimumVersion = 5.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		645E2EB5241ECEEC006C138F /* Yams */ = {
+		64C31A11285190E6006CA8FE /* Yams */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 645E2EB4241ECEEC006C138F /* XCRemoteSwiftPackageReference "Yams" */;
+			package = 64C31A10285190E6006CA8FE /* XCRemoteSwiftPackageReference "Yams" */;
 			productName = Yams;
 		};
 /* End XCSwiftPackageProductDependency section */
