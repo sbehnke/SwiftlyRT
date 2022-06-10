@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Material : Equatable {
+struct Material: Equatable {
     enum RefractiveIndex: Float {
         case Vacuum = 1.0
         case Air = 1.00029
@@ -16,10 +16,10 @@ struct Material : Equatable {
         case Glass = 1.52
         case Diamond = 2.417
     }
-    
+
     init() {
     }
-    
+
     init(color: Color, ambient: Float, diffuse: Float, specular: Float, shininess: Float) {
         self.color = color
         self.ambient = ambient
@@ -27,32 +27,35 @@ struct Material : Equatable {
         self.specular = specular
         self.shininess = shininess
     }
-    
-    func lighting(object: Shape?, light: Light, position: Tuple, eyeVector: Tuple, normalVector: Tuple, intensity: Double) -> Color {
-        
+
+    func lighting(
+        object: Shape?, light: Light, position: Tuple, eyeVector: Tuple, normalVector: Tuple,
+        intensity: Double
+    ) -> Color {
+
         let color = pattern?.patternAtShape(object: object, point: position) ?? self.color
         let effectiveColor = color * light.intensity
         let ambient = effectiveColor * self.ambient
         let samples = light.sampledPoints
-        
+
         var sum = Color.black
-        
+
         for sample in samples {
             var specular: Color
             var diffuse: Color
-            
+
             let lightv = (sample - position).normalized()
             let lightDotNormal = lightv.dot(normalVector)
-            
+
             if lightDotNormal < 0 || intensity == 0.0 {
                 diffuse = Color.black
                 specular = Color.black
             } else {
                 diffuse = effectiveColor * self.diffuse * lightDotNormal
-                
+
                 let reflectv = -lightv.reflected(normal: normalVector)
                 let reflectDotEye = reflectv.dot(eyeVector)
-                
+
                 if reflectDotEye <= 0 {
                     specular = Color.black
                 } else {
@@ -60,13 +63,13 @@ struct Material : Equatable {
                     specular = light.intensity * self.specular * factor
                 }
             }
-            
+
             sum += diffuse
             sum += specular
         }
         return ambient + (sum / Float(light.samples) * intensity)
     }
-    
+
     var pattern: Pattern? = nil
     var color = Color(r: 1, g: 1, b: 1)
     var ambient: Float = 0.1

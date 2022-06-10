@@ -9,17 +9,17 @@
 import Foundation
 
 class UVAlignCheck: Pattern {
-    
+
     init(main: Color, ul: Color, ur: Color, bl: Color, br: Color) {
         super.init()
-        
+
         self.main = main
         self.ul = ul
         self.ur = ur
         self.bl = bl
         self.br = br
     }
-    
+
     override func uvPatternAt(u: Double, v: Double) -> Color {
         if v > 0.8 {
             if u < 0.2 {
@@ -36,14 +36,13 @@ class UVAlignCheck: Pattern {
                 return br
             }
         }
-        
+
         return main
     }
-    
+
     var main = Color.white
     var ul = Color.white
     var ur = Color.white
     var bl = Color.white
     var br = Color.white
 }
-

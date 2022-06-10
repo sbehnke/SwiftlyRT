@@ -8,10 +8,12 @@
 
 import Foundation
 
-
 class CubeMapPattern: Pattern {
-    
-    init(left: Pattern?, front: Pattern?, right: Pattern?, back: Pattern?, up: Pattern?, down: Pattern?) {
+
+    init(
+        left: Pattern?, front: Pattern?, right: Pattern?, back: Pattern?, up: Pattern?,
+        down: Pattern?
+    ) {
         self.left = left
         self.front = front
         self.right = right
@@ -19,7 +21,7 @@ class CubeMapPattern: Pattern {
         self.up = up
         self.down = down
     }
-    
+
     func uvPatternAt(face: Face, u: Double, v: Double) -> Color {
         switch face {
         case .Front:
@@ -39,10 +41,10 @@ class CubeMapPattern: Pattern {
 
     override func patternAt(point: Tuple) -> Color {
         let face = point.faceFromPoint()
-        
+
         var u = 0.0
         var v = 0.0
-        
+
         switch face {
         case .Front:
             (u, v) = point.cubeUvFront()
@@ -57,10 +59,10 @@ class CubeMapPattern: Pattern {
         case .Down:
             (u, v) = point.cubeUvDown()
         }
-        
+
         return uvPatternAt(face: face, u: u, v: v)
     }
-    
+
     var left: Pattern? = nil
     var front: Pattern? = nil
     var right: Pattern? = nil

@@ -9,26 +9,26 @@
 import Foundation
 
 struct Computation: Equatable {
-    
+
     func schlick() -> Double {
         var cos = eyeVector.dot(normalVector)
-        
+
         if n1 > n2 {
             let n = n1 / n2
             let sin2T = (n * n) * (1.0 - (cos * cos))
-            
-            if (sin2T > 1.0) {
+
+            if sin2T > 1.0 {
                 return 1.0
             }
-            
+
             cos = sqrt(1.0 - sin2T)
         }
-        
+
         let r = (n1 - n2) / (n1 + n2)
         let r0 = r * r
         return r0 + (1 - r0) * pow((1 - cos), 5)
     }
-    
+
     var t = 0.0
     var n1 = 1.0
     var n2 = 1.0

@@ -9,7 +9,7 @@
 import Foundation
 
 class RingPattern: Pattern {
-    
+
     init(a: Color, b: Color) {
         self.a = a
         self.b = b
@@ -23,7 +23,7 @@ class RingPattern: Pattern {
             return b
         }
     }
-    
+
     var a = Color.white
     var b = Color.white
 }

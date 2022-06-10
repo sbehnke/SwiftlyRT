@@ -13,7 +13,7 @@ class Environment {
         self.gravity = gravity
         self.wind = wind
     }
-    
+
     var gravity = Tuple.Vector()
     var wind = Tuple.Vector()
 }

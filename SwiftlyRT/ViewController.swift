@@ -6,11 +6,13 @@
 //  Copyright © 2019 Steven Behnke. All rights reserved.
 //
 
-import Cocoa
+@preconcurrency import Cocoa
 
 extension NSImage {
     var pngData: Data? {
-        guard let tiffRepresentation = tiffRepresentation, let bitmapImage = NSBitmapImageRep(data: tiffRepresentation) else { return nil }
+        guard let tiffRepresentation = tiffRepresentation,
+            let bitmapImage = NSBitmapImageRep(data: tiffRepresentation)
+        else { return nil }
         return bitmapImage.representation(using: .png, properties: [:])
     }
     func pngWrite(to url: URL, options: Data.WritingOptions = .atomic) -> Bool {
@@ -28,13 +30,13 @@ class ViewController: NSViewController {
     var imageReady: Bool = false
     var filename: String = ""
     var world: World? = nil
-    
+
     @IBOutlet weak var progressLabel: NSTextFieldCell!
     @IBOutlet weak var imageView: NSImageView!
     @IBOutlet weak var widthField: NSTextField!
     @IBOutlet weak var heightField: NSTextField!
     @IBOutlet weak var fieldOfViewField: NSTextField!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.progressLabel.stringValue = ""
@@ -44,7 +46,7 @@ class ViewController: NSViewController {
 
     override var representedObject: Any? {
         didSet {
-        // Update the view, if already loaded.
+            // Update the view, if already loaded.
         }
     }
 
@@ -53,62 +55,62 @@ class ViewController: NSViewController {
         formatter.allowedUnits = [.day, .hour, .minute, .second]
         formatter.unitsStyle = .abbreviated
         formatter.maximumUnitCount = 1
-        
+
         return formatter.string(from: duration)!
     }
-    
+
     func hexagonCorner(_ n: Int) -> Shape {
-//        function hexagon_corner()
-//        corner ← sphere()
-//        set_transform(corner, translation(0, 0, -1) *
-//            scaling(0.25, 0.25, 0.25))
-//        return corner
-//        end function
-//
+        //        function hexagon_corner()
+        //        corner ← sphere()
+        //        set_transform(corner, translation(0, 0, -1) *
+        //            scaling(0.25, 0.25, 0.25))
+        //        return corner
+        //        end function
+        //
         let corner = Sphere()
         corner.name = "Corner: \(n)"
-        corner.transform = .translated(x: 0, y: 0, z: -1) * Matrix4x4.scaled(x: 0.25, y: 0.25, z: 0.25)
+        corner.transform =
+            .translated(x: 0, y: 0, z: -1) * Matrix4x4.scaled(x: 0.25, y: 0.25, z: 0.25)
         return corner
     }
-    
+
     func hexagonEdge(_ n: Int) -> Shape {
-//    function hexagon_edge()
-//    edge ← cylinder()
-//    edge.minimum ← 0
-//    edge.maximum ← 1
-//    set_transform(edge, translation(0, 0, -1) *
-//    rotation_y(-π/6) *
-//    rotation_z(-π/2) *
-//    scaling(0.25, 1, 0.25))
-//    return edge
-//    end function
-     
+        //    function hexagon_edge()
+        //    edge ← cylinder()
+        //    edge.minimum ← 0
+        //    edge.maximum ← 1
+        //    set_transform(edge, translation(0, 0, -1) *
+        //    rotation_y(-π/6) *
+        //    rotation_z(-π/2) *
+        //    scaling(0.25, 1, 0.25))
+        //    return edge
+        //    end function
+
         let edge = Cylinder()
         edge.name = "Edge: \(n)"
         edge.minimum = 0
         edge.maximum = 1
-        edge.transform = .translated(x: 0, y: 0, z: -1) *
-            Matrix4x4.rotatedY(-.pi / 6) *
-            Matrix4x4.rotatedZ(-.pi / 2) *
-            Matrix4x4.scaled(x: 0.25, y: 1, z: 0.25)
+        edge.transform =
+            .translated(x: 0, y: 0, z: -1) * Matrix4x4.rotatedY(-.pi / 6)
+            * Matrix4x4.rotatedZ(-.pi / 2) * Matrix4x4.scaled(x: 0.25, y: 1, z: 0.25)
         return edge
     }
-    
+
     func hexagonSide(_ n: Int) -> Group {
-//    function hexagon_side()
-//    side ← group()
-//
-//    add_child(side, hexagon_corner())
-//    add_child(side, hexagon_edge())
-//
-//    return side
-//    end function
+        //    function hexagon_side()
+        //    side ← group()
+        //
+        //    add_child(side, hexagon_corner())
+        //    add_child(side, hexagon_edge())
+        //
+        //    return side
+        //    end function
 
         let side = Group()
         side.name = "InnerSideGroup: \(n)"
         side.addChild(hexagonCorner(n))
         side.addChild(hexagonEdge(n))
-        
+
         print(side.name)
         switch n {
         case 0:
@@ -129,28 +131,28 @@ class ViewController: NSViewController {
         case 5:
             side.material.color = Color(r: 0, g: 1, b: 0)
             break
-            
+
         default:
             side.material.color = Color(r: 1, g: 1, b: 1)
             break
         }
-        
+
         return side
     }
 
     func hexagon() -> Group {
-//    function hexagon()
-//    hex ← group()
-//
-//    for n ← 0 to 5
-//    side ← hexagon_side()
-//    set_transform(side, rotation_y(n*π/3))
-//    add_child(hex, side)
-//    end for
-//
-//    return hex
-//    end function
-     
+        //    function hexagon()
+        //    hex ← group()
+        //
+        //    for n ← 0 to 5
+        //    side ← hexagon_side()
+        //    set_transform(side, rotation_y(n*π/3))
+        //    add_child(hex, side)
+        //    end for
+        //
+        //    return hex
+        //    end function
+
         let hex = Group()
         for n in 0...5 {
             let side = hexagonSide(n)
@@ -158,11 +160,10 @@ class ViewController: NSViewController {
             side.transform = .rotatedY(Double(n) * .pi / 3)
             hex.addChild(side)
         }
-        
+
         return hex
     }
-    
-    
+
     func updateUI() {
         if let w = world {
             widthField.stringValue = String(w.camera!.width)
@@ -170,75 +171,79 @@ class ViewController: NSViewController {
             fieldOfViewField.stringValue = String(w.camera!.fieldOfView)
         }
     }
-    
+
     @IBAction func testButton(_ sender: Any) {
         let w = World.defaultWorld()
         w.objects.removeAll()
         w.objects.append(hexagon())
         world = w
-        
+
         var camera = Camera(w: 200, h: 200, fieldOfView: 0.5)
-        camera.transform = .viewTransformed(from: .Point(x: 1, y: 2, z: -5), to: .pointZero, up: .Vector(x: 0, y: 1, z: 0))
+        camera.transform = .viewTransformed(
+            from: .Point(x: 1, y: 2, z: -5), to: .pointZero, up: .Vector(x: 0, y: 1, z: 0))
         w.camera = camera
         updateUI()
-        
+
         renderScene(self)
     }
-    
+
     @IBAction func renderScene(_ sender: Any) {
         progressLabel.stringValue = "Rendering!"
         if let w = world {
             let startTime = CACurrentMediaTime()
             imageView.image = nil
             imageReady = false
-            
+
             let formatter = NumberFormatter()
             formatter.numberStyle = .decimal
-            
+
             let width = formatter.number(from: widthField.stringValue)?.intValue ?? 0
             let height = formatter.number(from: heightField.stringValue)?.intValue ?? 0
             let fov = formatter.number(from: fieldOfViewField.stringValue)?.doubleValue ?? 0.0
-            
+
             w.camera?.width = width
             w.camera?.height = height
             w.camera?.fieldOfView = fov
-            
+
             DispatchQueue.global(qos: .background).async {
-                let canvas = w.camera!.render(world: w, progress: { (x: Int, y: Int) -> Void in
-                    DispatchQueue.main.async {
-                        self.progressLabel.stringValue = "(\(x),\(y))"
-                    }
-                })
-                
+                let canvas = w.camera!.render(
+                    world: w,
+                    progress: { (x: Int, y: Int) -> Void in
+                        DispatchQueue.main.async {
+                            self.progressLabel.stringValue = "(\(x),\(y))"
+                        }
+                    })
+
                 let data = canvas.getPPM()
                 let img = NSImage(data: data)
                 DispatchQueue.main.async {
                     self.imageReady = true
                     self.imageView.image = img
-                    
+
                     let timeElapsed = CACurrentMediaTime() - startTime
-                    self.progressLabel.stringValue = "Finished in: " + self.format(duration: timeElapsed)
+                    self.progressLabel.stringValue =
+                        "Finished in: " + self.format(duration: timeElapsed)
                 }
             }
         }
     }
-    
+
     @IBAction func loadYamlFile(_ sender: Any) {
         progressLabel.stringValue = ""
-        
-        let dialog = NSOpenPanel();
-    
-        dialog.title                   = "Choose a .yml file";
-        dialog.showsResizeIndicator    = true;
-        dialog.showsHiddenFiles        = false;
-        dialog.canChooseDirectories    = false;
-        dialog.canCreateDirectories    = true;
-        dialog.allowsMultipleSelection = false;
-        dialog.allowedFileTypes        = ["yml"];
-    
-        if (dialog.runModal() == NSApplication.ModalResponse.OK) {
-            let result = dialog.url // Pathname of the file
-            if (result != nil) {
+
+        let dialog = NSOpenPanel()
+
+        dialog.title = "Choose a .yml file"
+        dialog.showsResizeIndicator = true
+        dialog.showsHiddenFiles = false
+        dialog.canChooseDirectories = false
+        dialog.canCreateDirectories = true
+        dialog.allowsMultipleSelection = false
+        dialog.allowedFileTypes = ["yml"]
+
+        if dialog.runModal() == NSApplication.ModalResponse.OK {
+            let result = dialog.url  // Pathname of the file
+            if result != nil {
                 filename = NSString(string: result!.lastPathComponent).deletingPathExtension
                 var loader = WorldLoader()
                 world = loader.loadWorld(fromYamlFile: result)
@@ -250,7 +255,7 @@ class ViewController: NSViewController {
             return
         }
     }
-    
+
     @IBAction func saveImage(_ sender: Any) {
         if let image = imageView.image {
             let savePanel = NSSavePanel()
@@ -267,4 +272,3 @@ class ViewController: NSViewController {
         }
     }
 }
-

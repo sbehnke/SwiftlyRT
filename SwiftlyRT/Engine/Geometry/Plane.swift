@@ -9,25 +9,27 @@
 import Foundation
 
 class Plane: Shape {
-    
+
     override func localIntersects(ray: Ray) -> [Intersection] {
 
         if abs(ray.direction.y) < Tuple.epsilon {
             return []
         }
-        
+
         return [Intersection(t: -ray.origin.y / ray.direction.y, object: self)]
     }
-    
+
     override func localNormalAt(p: Tuple, hit: Intersection) -> Tuple {
         return .Vector(x: 0, y: 1, z: 0)
     }
-    
+
     override func boundingBox() -> BoundingBox {
         if bounds == nil {
-            bounds = BoundingBox(minimum: Tuple.Point(x: -.infinity, y: 0, z: -.infinity), maximum: Tuple.Point(x: .infinity, y: 0, z: .infinity))
+            bounds = BoundingBox(
+                minimum: Tuple.Point(x: -.infinity, y: 0, z: -.infinity),
+                maximum: Tuple.Point(x: .infinity, y: 0, z: .infinity))
         }
-        
+
         return bounds!
     }
 }

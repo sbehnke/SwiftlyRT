@@ -12,21 +12,21 @@ class CyclicSequence: Equatable {
     static func == (lhs: CyclicSequence, rhs: CyclicSequence) -> Bool {
         return lhs.index == rhs.index && lhs.values == rhs.values
     }
-    
+
     init(_ values: [Double]) {
         self.values = values
     }
-    
+
     init() {
-        
+
     }
-    
-    subscript(index:Int) -> Double {
+
+    subscript(index: Int) -> Double {
         get {
             return values[index % values.count]
         }
     }
-    
+
     func next() -> Double {
         if values.count > 0 {
             let value = self[index]
@@ -36,7 +36,7 @@ class CyclicSequence: Equatable {
             return Double.random(in: 0...1)
         }
     }
-    
+
     private var index: Int = 0
     private var values: [Double] = []
 }

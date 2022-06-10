@@ -9,12 +9,12 @@
 import Foundation
 
 struct Projectile {
-    
+
     mutating func tick(environment: Environment) {
         position += velocity
         velocity = velocity + environment.gravity + environment.wind
     }
-    
+
     var position = Tuple.Point()
     var velocity = Tuple.Vector()
 }
