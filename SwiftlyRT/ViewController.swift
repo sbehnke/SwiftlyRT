@@ -6,7 +6,7 @@
 //  Copyright © 2019 Steven Behnke. All rights reserved.
 //
 
-@preconcurrency import Cocoa
+import Cocoa
 
 extension NSImage {
     var pngData: Data? {
