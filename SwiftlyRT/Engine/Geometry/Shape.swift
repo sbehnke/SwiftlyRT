@@ -82,6 +82,15 @@ class Shape: Equatable {
         parentBounds = nil
     }
 
+    func computeBounds() {
+        _ = boundingBox()
+        _ = parentSpaceBounds()
+
+        for child in children {
+            child.computeBounds()
+        }
+    }
+
     internal var bounds: BoundingBox? = nil
     internal var parentBounds: BoundingBox? = nil
 

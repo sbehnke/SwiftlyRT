@@ -150,6 +150,12 @@ class World {
         return false
     }
 
+    func computeBounds() {
+        for obj in objects {
+            obj.computeBounds()
+        }
+    }
+
     var objects: [Shape] = []
     var lights: [Light] = []
     var camera: Camera? = nil

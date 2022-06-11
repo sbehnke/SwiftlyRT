@@ -321,6 +321,7 @@ class ViewController: NSViewController {
                 filename = NSString(string: result!.lastPathComponent).deletingPathExtension
                 var loader = WorldLoader()
                 world = loader.loadWorld(fromYamlFile: result)
+                world?.computeBounds()
                 updateUI()
                 progressLabel.stringValue = "Loaded file!"
             }
