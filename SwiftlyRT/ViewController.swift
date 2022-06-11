@@ -236,6 +236,8 @@ class ViewController: NSViewController {
         // Multithreaded
         progressLabel.stringValue = "Rendering!"
         if let w = world {
+            w.computeBounds()
+
             let startTime = CACurrentMediaTime()
             imageView.image = nil
             imageReady = false
@@ -252,20 +254,25 @@ class ViewController: NSViewController {
             w.camera?.fieldOfView = fov
 
             let dest = Canvas(width: width, height: height)
+            let data = dest.getPPM()
+            let img = NSImage(data: data)
+            self.imageView.image = img
+
             let queue = TaskQueue()
+            var chunks = [CanvasChunk]()
+
+            let sizeX = 16
+            let sizeY = 16
+
+            let total = (width / sizeX) * (height / sizeY)
+            var progress = 0
+            let showProgress = false
+
             queue.dispatch {
-                await withTaskGroup(of: Void.self) { group in
-
-                    let sizeX = 16
-                    let sizeY = 16
-
+                await withTaskGroup(of: CanvasChunk.self) { group in
                     for y in stride(from: 0, to: height, by: sizeY) {
                         for x in stride(from: 0, to: width, by: sizeX) {
                             group.addTask(priority: TaskPriority.medium) {
-                                DispatchQueue.main.async {
-                                    self.progressLabel.stringValue = "(\(x),\(y))"
-                                }
-
                                 let canvas = w.camera!.render(
                                     c: w.camera!,
                                     world: w,
@@ -273,21 +280,39 @@ class ViewController: NSViewController {
                                     startY: y,
                                     width: sizeX,
                                     height: sizeY)
-
-                                dest.setPixels(source: canvas, destX: x, destY: y)
-
-                                // TODO: Figure out how to update the UI while the image renders
-//                                DispatchQueue.main.async {
-//                                    let data = dest.getPPM()
-//                                    let img = NSImage(data: data)
-//                                    self.imageView.image = img
-//                                }
+                                let chunk = CanvasChunk(canvas: canvas, x: x, y: y)
+                                return chunk
                             }
                         }
                     }
 
-                    await group.waitForAll()
+                    while !group.isEmpty {
+                        let chunk = await group.next()
+                        if let chunk = chunk {
+                            chunks.append(chunk)
+                            DispatchQueue.main.async {
+
+                                progress += 1
+                                let percent = (Double(progress) / Double(total) * 100.0)
+                                self.progressLabel.stringValue = "\(String(format: "Value: %.1f", percent))%"
+
+                                if showProgress {
+                                    dest.setPixels(source: chunk.canvas, destX: chunk.x, destY: chunk.y)
+                                    let data = dest.getPPM()
+                                    let img = NSImage(data: data)
+                                    self.imageView.image = img
+                                }
+                            }
+                        }
+                    }
+
                     DispatchQueue.main.async {
+                        if !showProgress {
+                            for chunk in chunks {
+                                dest.setPixels(source: chunk.canvas, destX: chunk.x, destY: chunk.y)
+                            }
+                        }
+
                         let data = dest.getPPM()
                         let img = NSImage(data: data)
                         self.imageView.image = img
@@ -321,7 +346,6 @@ class ViewController: NSViewController {
                 filename = NSString(string: result!.lastPathComponent).deletingPathExtension
                 var loader = WorldLoader()
                 world = loader.loadWorld(fromYamlFile: result)
-                world?.computeBounds()
                 updateUI()
                 progressLabel.stringValue = "Loaded file!"
             }
