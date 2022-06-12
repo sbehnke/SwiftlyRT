@@ -78,7 +78,6 @@
 		6496FF7522D6B8380024322D /* CameraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF5C22D6B8380024322D /* CameraTests.swift */; };
 		6496FF7622D6B8380024322D /* ObjFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF5D22D6B8380024322D /* ObjFileTests.swift */; };
 		6496FF7722D6B8380024322D /* RayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FF5E22D6B8380024322D /* RayTests.swift */; };
-		6496FF7C22D6BC8D0024322D /* plane.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6496FF7922D6BC8D0024322D /* plane.obj */; };
 		6496FF7D22D6BC8D0024322D /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6496FF7A22D6BC8D0024322D /* cube.obj */; };
 		6496FF7E22D6BC8D0024322D /* triangles.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6496FF7B22D6BC8D0024322D /* triangles.obj */; };
 		64C23CF622DBF82B0009C60E /* WorldLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C23CF522DBF82B0009C60E /* WorldLoader.swift */; };
@@ -178,7 +177,6 @@
 		6496FF5C22D6B8380024322D /* CameraTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraTests.swift; sourceTree = "<group>"; };
 		6496FF5D22D6B8380024322D /* ObjFileTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjFileTests.swift; sourceTree = "<group>"; };
 		6496FF5E22D6B8380024322D /* RayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RayTests.swift; sourceTree = "<group>"; };
-		6496FF7922D6BC8D0024322D /* plane.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plane.obj; sourceTree = "<group>"; };
 		6496FF7A22D6BC8D0024322D /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
 		6496FF7B22D6BC8D0024322D /* triangles.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = triangles.obj; sourceTree = "<group>"; };
 		64C23CF522DBF82B0009C60E /* WorldLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldLoader.swift; sourceTree = "<group>"; };
@@ -386,7 +384,6 @@
 		6496FF7822D6BC8D0024322D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				6496FF7922D6BC8D0024322D /* plane.obj */,
 				6496FF7A22D6BC8D0024322D /* cube.obj */,
 				6496FF7B22D6BC8D0024322D /* triangles.obj */,
 			);
@@ -490,7 +487,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6496FF7D22D6BC8D0024322D /* cube.obj in Resources */,
-				6496FF7C22D6BC8D0024322D /* plane.obj in Resources */,
 				6496FF7E22D6BC8D0024322D /* triangles.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

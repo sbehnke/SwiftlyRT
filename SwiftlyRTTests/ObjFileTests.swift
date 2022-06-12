@@ -11,15 +11,15 @@ import XCTest
 @testable import SwiftlyRT
 
 class ObjFileTests: XCTestCase {
-    
+
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-    
+
     func testIgnoringUnrecognizedLines() {
 //    Scenario: Ignoring unrecognized lines
 //    Given gibberish ← a file containing:
@@ -43,7 +43,7 @@ and came back the previous night.
         let parser = ObjParser.parse(objFileData: gibberish)
         XCTAssertEqual(parser.ignoredLineCount, 5)
     }
-    
+
     func testVertexRecords() {
 //    Scenario: Vertex records
 //    Given file ← a file containing:
@@ -73,7 +73,7 @@ v 1 1 0
         XCTAssertEqual(parser.vertices[3], Tuple.Point(x: 1, y: 0, z: 0))
         XCTAssertEqual(parser.vertices[4], Tuple.Point(x: 1, y: 1, z: 0))
     }
-    
+
     func testParsingTriangleFaces() {
 //    Scenario: Parsing triangle faces
 //    Given file ← a file containing:
@@ -96,7 +96,7 @@ v 1 1 0
 //    And t2.p1 = parser.vertices[1]
 //    And t2.p2 = parser.vertices[3]
 //    And t2.p3 = parser.vertices[4]
-        
+
         let file =
 """
 v -1 1 0
@@ -112,7 +112,7 @@ f 1 3 4
         XCTAssertEqual(2, g.children.count)
         let t1 = g.children[0] as! Triangle
         let t2 = g.children[1] as! Triangle
-        
+
         XCTAssertEqual(t1.p1, parser.vertices[1])
         XCTAssertEqual(t1.p2, parser.vertices[2])
         XCTAssertEqual(t1.p3, parser.vertices[3])
@@ -120,7 +120,7 @@ f 1 3 4
         XCTAssertEqual(t2.p2, parser.vertices[3])
         XCTAssertEqual(t2.p3, parser.vertices[4])
     }
-    
+
     func testTriangulatingPolygons() {
 //    Scenario: Triangulating polygons
 //    Given file ← a file containing:
@@ -147,7 +147,7 @@ f 1 3 4
 //    And t3.p1 = parser.vertices[1]
 //    And t3.p2 = parser.vertices[4]
 //    And t3.p3 = parser.vertices[5]
-        
+
         let file =
         """
 v -1 1 0
@@ -164,7 +164,7 @@ f 1 2 3 4 5
         let t1 = g.children[0] as! Triangle
         let t2 = g.children[1] as! Triangle
         let t3 = g.children[2] as! Triangle
-        
+
         XCTAssertEqual(t1.p1, parser.vertices[1])
         XCTAssertEqual(t1.p2, parser.vertices[2])
         XCTAssertEqual(t1.p3, parser.vertices[3])
@@ -175,7 +175,7 @@ f 1 2 3 4 5
         XCTAssertEqual(t3.p2, parser.vertices[4])
         XCTAssertEqual(t3.p3, parser.vertices[5])
     }
-    
+
     func testTrianglesInGroups() {
 //    Scenario: Triangles in groups
 //    Given file ← the file "triangles.obj"
@@ -191,8 +191,12 @@ f 1 2 3 4 5
 //    And t2.p2 = parser.vertices[3]
 //    And t2.p3 = parser.vertices[4]
 
+#if PACKAGE_BUILD
+        let url = Bundle.module.url(forResource: "triangles", withExtension: "obj")
+#else
         let bundle = Bundle(for: SwiftlyRTTests.self)
         let url = bundle.url(forResource: "triangles", withExtension: "obj")
+#endif
         let parser = ObjParser.parse(objFilePath: url, resizeObject: false)
         let g1 = parser.groups["FirstGroup"]!
         let g2 = parser.groups["SecondGroup"]!
@@ -205,7 +209,7 @@ f 1 2 3 4 5
         XCTAssertEqual(t2.p2, parser.vertices[3])
         XCTAssertEqual(t2.p3, parser.vertices[4])
     }
-        
+
     func testConvertingOBJToGroup() {
 //    Scenario: Converting an OBJ file to a group
 //    Given file ← the file "triangles.obj"
@@ -213,16 +217,19 @@ f 1 2 3 4 5
 //    When g ← obj_to_group(parser)
 //    Then g includes "FirstGroup" from parser
 //    And g includes "SecondGroup" from parser
-    
+        #if PACKAGE_BUILD
+        let url = Bundle.module.url(forResource: "triangles", withExtension: "obj")
+        #else
         let bundle = Bundle(for: SwiftlyRTTests.self)
         let url = bundle.url(forResource: "triangles", withExtension: "obj")
+        #endif
         let parser = ObjParser.parse(objFilePath: url, resizeObject: false)
         let g = parser.toGroup()
-        
+
         XCTAssertTrue(g.children.contains(parser.groups["FirstGroup"]!))
         XCTAssertTrue(g.children.contains(parser.groups["SecondGroup"]!))
     }
-        
+
     func testVertexNormalRecords() {
 //    Scenario: Vertex normal records
 //    Given file ← a file containing:
@@ -235,7 +242,7 @@ f 1 2 3 4 5
 //    Then parser.normals[1] = vector(0, 0, 1)
 //    And parser.normals[2] = vector(0.707, 0, -0.707)
 //    And parser.normals[3] = vector(1, 2, 3)
-    
+
         let file = """
 vn 0 0 1
 vn 0.707 0 -0.707
@@ -246,7 +253,7 @@ vn 1 2 3
         XCTAssertEqual(parser.normals[2], Tuple.Vector(x: 0.707, y: 0, z: -0.707))
         XCTAssertEqual(parser.normals[3], Tuple.Vector(x: 1, y: 2, z: 3))
     }
-        
+
     func testFacesWithNormals() {
 //    Scenario: Faces with normals
 //    Given file ← a file containing:
@@ -254,11 +261,11 @@ vn 1 2 3
 //    v 0 1 0
 //    v -1 0 0
 //    v 1 0 0
-//    
+//
 //    vn -1 0 0
 //    vn 1 0 0
 //    vn 0 1 0
-//    
+//
 //    f 1//3 2//1 3//2
 //    f 1/0/3 2/102/1 3/14/2
 //    """
@@ -288,7 +295,7 @@ f 1/0/3 2/102/1 3/14/2
 """
         let parser = ObjParser.parse(objFileData: file)
         XCTAssertEqual(parser.defaultGroup.children.count, 2)
-        
+
         if parser.defaultGroup.children[0] is SmoothTriangle {
             let t1 = parser.defaultGroup.children[0] as! SmoothTriangle
             XCTAssertEqual(t1.p1, parser.vertices[1])
@@ -297,7 +304,7 @@ f 1/0/3 2/102/1 3/14/2
             XCTAssertEqual(t1.n1, parser.normals[3])
             XCTAssertEqual(t1.n2, parser.normals[1])
             XCTAssertEqual(t1.n3, parser.normals[2])
-            
+
             if parser.defaultGroup.children[1] is SmoothTriangle {
                 let t2 = parser.defaultGroup.children[1] as! SmoothTriangle
                 XCTAssertTrue(SmoothTriangle.equals(lhs: t1, rhs: t2))
@@ -308,11 +315,26 @@ f 1/0/3 2/102/1 3/14/2
             XCTFail()
         }
     }
-    
-    func testObjFileDivideSpeed() {
+
+    func testObjFileDivideSpeed() throws {
         self.measure() {
+            #if PACKAGE_BUILD
+            let url = Bundle.module.url(forResource: "cube", withExtension: "obj")
+            #else
             let bundle = Bundle(for: SwiftlyRTTests.self)
             let url = bundle.url(forResource: "cube", withExtension: "obj")
+            #endif
+            do {
+                let reachable = try url?.checkResourceIsReachable()
+                if let reachable = reachable {
+                    XCTAssertTrue(reachable)
+                }
+                else {
+                    XCTFail("Missing resource file")
+                }
+            } catch {
+                XCTFail("Missing resource file")
+            }
             let parser = ObjParser.parse(objFilePath: url, resizeObject: false)
             let g = parser.toGroup()
             g.divide(threshold: 1)
