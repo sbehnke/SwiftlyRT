@@ -8,7 +8,9 @@
 
 import Foundation
 import XCTest
+#if canImport(simd)
 import simd
+#endif
 @testable import SwiftlyRT
 
 class MatrixTests: XCTestCase {
@@ -32,7 +34,8 @@ class MatrixTests: XCTestCase {
             }
         }
     }
-    
+
+    #if canImport(simd)
     func test4x4DeterminateSIMDSpeed() {
         measure {
             for _ in 0..<1000 {
@@ -45,7 +48,8 @@ class MatrixTests: XCTestCase {
             }
         }
     }
-    
+    #endif
+
     func testMatrix4x4() {
         //        Scenario: Constructing and inspecting a 4x4 matrix
         //        Given the following 4x4 matrix M:

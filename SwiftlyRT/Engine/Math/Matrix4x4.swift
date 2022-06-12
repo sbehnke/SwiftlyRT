@@ -7,7 +7,9 @@
 //
 
 import Foundation
+#if canImport(simd)
 import simd
+#endif
 
 struct Matrix4x4: Equatable, AdditiveArithmetic {
     static var identity = Matrix4x4(
@@ -337,6 +339,7 @@ struct Matrix4x4: Equatable, AdditiveArithmetic {
         return Matrix4x4.sheared(xy: xy, xz: xz, yx: yx, yz: yz, zx: zx, zy: zy) * self
     }
 
+    #if canImport(simd)
     func viewTransformedSIMD(from: vector_float3, to: vector_float3, up: vector_float3)
         -> matrix_float4x4
     {
@@ -357,7 +360,8 @@ struct Matrix4x4: Equatable, AdditiveArithmetic {
         translation[2, 3] = -from.z
         return orientation * translation
     }
-
+    #endif
+    
     static func viewTransformed(from: Tuple, to: Tuple, up: Tuple) -> Matrix4x4 {
         assert(from.isPoint())
         assert(to.isPoint())
