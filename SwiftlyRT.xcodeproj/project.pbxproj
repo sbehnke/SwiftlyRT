@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		64046599285541F200F66D0F /* CanvasChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64046598285541F200F66D0F /* CanvasChunk.swift */; };
+		6468EC422856538E0092FD19 /* RenderResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6468EC412856538E0092FD19 /* RenderResults.swift */; };
 		6496FDD622D6B6020024322D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FDD522D6B6020024322D /* AppDelegate.swift */; };
 		6496FDD822D6B6020024322D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496FDD722D6B6020024322D /* ViewController.swift */; };
 		6496FDDA22D6B6030024322D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6496FDD922D6B6030024322D /* Assets.xcassets */; };
@@ -103,6 +104,7 @@
 
 /* Begin PBXFileReference section */
 		64046598285541F200F66D0F /* CanvasChunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasChunk.swift; sourceTree = "<group>"; };
+		6468EC412856538E0092FD19 /* RenderResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderResults.swift; sourceTree = "<group>"; };
 		6496FDD222D6B6020024322D /* SwiftlyRT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftlyRT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6496FDD522D6B6020024322D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6496FDD722D6B6020024322D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				6496FDD922D6B6030024322D /* Assets.xcassets */,
 				6496FDDE22D6B6030024322D /* Info.plist */,
 				6496FDDB22D6B6030024322D /* Main.storyboard */,
+				6468EC412856538E0092FD19 /* RenderResults.swift */,
 				6496FDDF22D6B6030024322D /* SwiftlyRT.entitlements */,
 				64F948162853E68F00978002 /* TaskQueue.swift */,
 				64F51E8822D6BEB10053546F /* TestCode.swift */,
@@ -527,6 +530,7 @@
 				6496FEDA22D6B69A0024322D /* Matrix2x2.swift in Sources */,
 				6496FED122D6B69A0024322D /* TexturePattern.swift in Sources */,
 				6496FED022D6B69A0024322D /* TextureMapPattern.swift in Sources */,
+				6468EC422856538E0092FD19 /* RenderResults.swift in Sources */,
 				64ECDD8122E4FE3B00779669 /* UVAlignCheck.swift in Sources */,
 				6496FEE922D6B69A0024322D /* Projecile.swift in Sources */,
 				6496FED422D6B69A0024322D /* CheckerPattern.swift in Sources */,

@@ -253,75 +253,72 @@ class ViewController: NSViewController {
             w.camera?.height = height
             w.camera?.fieldOfView = fov
 
+            let output = RenderResults()
+            Task {
+                await output.setDimensions(width: width, height: height)
+            }
+
             let dest = Canvas(width: width, height: height)
             let data = dest.getPPM()
             let img = NSImage(data: data)
             self.imageView.image = img
 
             let queue = TaskQueue()
-            var chunks = [CanvasChunk]()
-
-            let sizeX = 16
-            let sizeY = 16
-
-            let total = (width / sizeX) * (height / sizeY)
-            var progress = 0
-            let showProgress = false
+            let total = Int(ceil(Double(width * height) / Double((RenderResults.sizeX * RenderResults.sizeY))))
+            let showProgress = true
 
             queue.dispatch {
-                await withTaskGroup(of: CanvasChunk.self) { group in
-                    for y in stride(from: 0, to: height, by: sizeY) {
-                        for x in stride(from: 0, to: width, by: sizeX) {
+                await withTaskGroup(of: Void.self) { group in
+                    for y in stride(from: 0, to: height, by: RenderResults.sizeY) {
+                        for x in stride(from: 0, to: width, by: RenderResults.sizeX) {
                             group.addTask(priority: TaskPriority.medium) {
                                 let canvas = w.camera!.render(
                                     c: w.camera!,
                                     world: w,
                                     startX: x,
                                     startY: y,
-                                    width: sizeX,
-                                    height: sizeY)
+                                    width: RenderResults.sizeX,
+                                    height: RenderResults.sizeY)
                                 let chunk = CanvasChunk(canvas: canvas, x: x, y: y)
-                                return chunk
+                                await output.addChunk(chunk: chunk)
                             }
                         }
                     }
 
-                    while !group.isEmpty {
-                        let chunk = await group.next()
-                        if let chunk = chunk {
-                            chunks.append(chunk)
-                            DispatchQueue.main.async {
+                    await group.waitForAll()
+                }
+            }
 
-                                progress += 1
-                                let percent = (Double(progress) / Double(total) * 100.0)
-                                self.progressLabel.stringValue = "\(String(format: "Value: %.1f", percent))%"
-
-                                if showProgress {
-                                    dest.setPixels(source: chunk.canvas, destX: chunk.x, destY: chunk.y)
-                                    let data = dest.getPPM()
-                                    let img = NSImage(data: data)
-                                    self.imageView.image = img
-                                }
-                            }
-                        }
-                    }
-
+            Task {
+                var count = 0
+                var lastCount = 0
+                repeat {
+                    count = await output.chunkCount
+                    let percent = (Double)(count) / Double(total) * 100.0
                     DispatchQueue.main.async {
-                        if !showProgress {
-                            for chunk in chunks {
-                                dest.setPixels(source: chunk.canvas, destX: chunk.x, destY: chunk.y)
+                        self.progressLabel.stringValue = "\(String(format: "Value: %.1f", percent))%"
+                    }
+
+                    if (showProgress && count > lastCount) {
+                        lastCount = count
+                        let img = await output.getImage()
+                        DispatchQueue.main.async {
+                            if let img = img {
+                                self.imageView.image = img
                             }
                         }
-
-                        let data = dest.getPPM()
-                        let img = NSImage(data: data)
-                        self.imageView.image = img
-
-                        self.imageReady = true
-                        let timeElapsed = CACurrentMediaTime() - startTime
-                        let labelValue = "Finished in: " + self.format(duration: timeElapsed)
-                        self.progressLabel.stringValue = labelValue
                     }
+                    try await Task.sleep(nanoseconds: 100_000_000)
+                } while (count < total)
+
+                let img = await output.getImage()
+                DispatchQueue.main.async {
+                    self.imageView.image = img
+
+                    self.imageReady = true
+                    let timeElapsed = CACurrentMediaTime() - startTime
+                    let labelValue = "Finished in: " + self.format(duration: timeElapsed)
+                    self.progressLabel.stringValue = labelValue
                 }
             }
         }
