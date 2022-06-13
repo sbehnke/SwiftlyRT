@@ -393,6 +393,10 @@ struct WorldLoader {
             newShape = Plane()
             break
 
+        case "fir_branch":
+            newShape = FirBranch()
+            break
+
         case "cylinder":
             let shape = Cylinder()
             if let min = newEntry["min"] {

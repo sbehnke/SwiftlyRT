@@ -286,6 +286,13 @@ class ViewController: NSViewController {
                     }
 
                     await group.waitForAll()
+                    var finished = await output.isFinished
+                    while !finished {
+                        do {
+                            try await Task.sleep(nanoseconds: 100_000_000)
+                        } catch {}
+                        finished = await output.isFinished
+                    }
                 }
             }
 

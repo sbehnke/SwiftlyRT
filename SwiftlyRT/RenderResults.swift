@@ -25,8 +25,8 @@ actor RenderResults {
         progress += 1
     }
 
-    func getImage() -> NSImage? {
-        guard let dest = dest else { return nil }
+    func applyChunks() {
+        guard let dest = dest else { return }
 
         while !chunks.isEmpty {
             let chunk = chunks.popLast()
@@ -35,6 +35,12 @@ actor RenderResults {
                 chunksApplied += 1
             }
         }
+    }
+
+    func getImage() -> NSImage? {
+        guard let dest = dest else { return nil }
+
+        applyChunks()
 
         let data = dest.getPPM()
         return NSImage(data: data)
@@ -57,7 +63,7 @@ actor RenderResults {
 
     var isFinished: Bool {
         get {
-            return chunksApplied == total
+            return chunksApplied >= total
         }
     }
 
