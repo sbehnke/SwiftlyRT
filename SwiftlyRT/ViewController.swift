@@ -264,7 +264,6 @@ class ViewController: NSViewController {
             self.imageView.image = img
 
             let queue = TaskQueue()
-            let total = Int(ceil(Double(width * height) / Double((RenderResults.sizeX * RenderResults.sizeY))))
             let showProgress = true
 
             queue.dispatch {
@@ -286,20 +285,16 @@ class ViewController: NSViewController {
                     }
 
                     await group.waitForAll()
-                    var finished = await output.isFinished
-                    while !finished {
-                        do {
-                            try await Task.sleep(nanoseconds: 100_000_000)
-                        } catch {}
-                        finished = await output.isFinished
-                    }
                 }
             }
 
             Task {
                 var count = 0
                 var lastCount = 0
+
+                let total = await output.total
                 repeat {
+
                     count = await output.chunkCount
                     let percent = (Double)(count) / Double(total) * 100.0
                     DispatchQueue.main.async {
