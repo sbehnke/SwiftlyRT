@@ -54,14 +54,7 @@ actor RenderResults {
 
     var total: Int {
         get {
-            var total: Int = 0
-            for _ in stride(from: 0, to: height, by: RenderResults.sizeY) {
-                for _ in stride(from: 0, to: width, by: RenderResults.sizeX) {
-                    total += 1
-                }
-            }
-
-            return total
+            return Int((Double(width) / Double(RenderResults.sizeX)).rounded(.up) * (Double(height) / Double(RenderResults.sizeY)).rounded(.up))
         }
     }
 
