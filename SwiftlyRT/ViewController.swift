@@ -27,7 +27,10 @@ extension NSImage {
 }
 
 class ViewController: NSViewController {
-    var imageReady: Bool = false
+    @objc dynamic var imageReady: Bool = false
+    @objc dynamic var isRendering: Bool = false
+    var isCanceled: Bool = false
+
     var filename: String = ""
     var world: World? = nil
 
@@ -36,6 +39,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var widthField: NSTextField!
     @IBOutlet weak var heightField: NSTextField!
     @IBOutlet weak var fieldOfViewField: NSTextField!
+    @IBOutlet weak var renderButton: NSButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -190,48 +194,17 @@ class ViewController: NSViewController {
     }
 
     @IBAction func renderScene(_ sender: Any) {
-/*
-        // Single Threaded
-
-        progressLabel.stringValue = "Rendering!"
-        if let w = world {
-            let startTime = CACurrentMediaTime()
-            imageView.image = nil
+        if isRendering {
+            isRendering = false
             imageReady = false
-
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-
-            let width = formatter.number(from: widthField.stringValue)?.intValue ?? 0
-            let height = formatter.number(from: heightField.stringValue)?.intValue ?? 0
-            let fov = formatter.number(from: fieldOfViewField.stringValue)?.doubleValue ?? 0.0
-
-            w.camera?.width = width
-            w.camera?.height = height
-            w.camera?.fieldOfView = fov
-
-            DispatchQueue.global(qos: .background).async {
-                let canvas = w.camera!.render(
-                    world: w,
-                    progress: { (x: Int, y: Int) -> Void in
-                        DispatchQueue.main.async {
-                            self.progressLabel.stringValue = "(\(x),\(y))"
-                        }
-                    })
-
-                let data = canvas.getPPM()
-                let img = NSImage(data: data)
-                DispatchQueue.main.async {
-                    self.imageReady = true
-                    self.imageView.image = img
-
-                    let timeElapsed = CACurrentMediaTime() - startTime
-                    self.progressLabel.stringValue =
-                    "Finished in: " + self.format(duration: timeElapsed)
-                }
-            }
+            isCanceled = true
+            return
         }
-*/
+
+        let originalTitle = renderButton.title
+        renderButton.title = "Cancel"
+        isRendering = true
+        isCanceled = false
 
         // Multithreaded
         progressLabel.stringValue = "Rendering!"
@@ -263,14 +236,17 @@ class ViewController: NSViewController {
             let img = NSImage(data: data)
             self.imageView.image = img
 
-            let queue = TaskQueue()
             let showProgress = true
 
-            queue.dispatch {
+            let renderTask = Task {
                 await withTaskGroup(of: Void.self) { group in
                     for y in stride(from: 0, to: height, by: RenderResults.sizeY) {
                         for x in stride(from: 0, to: width, by: RenderResults.sizeX) {
                             group.addTask(priority: TaskPriority.medium) {
+                                if Task.isCancelled {
+                                    return
+                                }
+
                                 let canvas = w.camera!.render(
                                     c: w.camera!,
                                     world: w,
@@ -298,6 +274,13 @@ class ViewController: NSViewController {
                     count = await output.chunkCount
                     let percent = (Double)(count) / Double(total) * 100.0
                     DispatchQueue.main.async {
+                        if self.isCanceled {
+                            renderTask.cancel()
+                            self.progressLabel.stringValue = "Canceled"
+                            self.renderButton.title = originalTitle
+                            return
+                        }
+
                         self.progressLabel.stringValue = "\(String(format: "Value: %.1f", percent))%"
                     }
 
@@ -321,6 +304,9 @@ class ViewController: NSViewController {
                     let timeElapsed = CACurrentMediaTime() - startTime
                     let labelValue = "Finished in: " + self.format(duration: timeElapsed)
                     self.progressLabel.stringValue = labelValue
+                    self.renderButton.title = originalTitle
+                    
+                    self.isRendering = false
                 }
             }
         }

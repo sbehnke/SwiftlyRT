@@ -737,6 +737,11 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="loadYamlFile:" target="XfG-lQ-9wD" id="Vqy-Ya-Scn"/>
+                                    <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.isRendering" id="BhQ-wl-ipM">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                        </dictionary>
+                                    </binding>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hc7-bc-QOl">
@@ -764,6 +769,7 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="saveImage:" target="XfG-lQ-9wD" id="eTQ-Pr-DTc"/>
+                                    <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.imageReady" id="szY-hS-hAO"/>
                                 </connections>
                             </button>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pQS-gZ-Inh">
@@ -775,6 +781,13 @@
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
+                                <connections>
+                                    <binding destination="XfG-lQ-9wD" name="editable" keyPath="self.isRendering" id="7o9-wC-8fi">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ADo-W4-gUp">
                                 <rect key="frame" x="265" y="591" width="69" height="17"/>
@@ -794,6 +807,13 @@
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
+                                <connections>
+                                    <binding destination="XfG-lQ-9wD" name="editable" keyPath="self.isRendering" id="3u1-9g-eDq">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sxc-FN-CZg">
                                 <rect key="frame" x="192" y="546" width="82" height="17"/>
@@ -813,6 +833,13 @@
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
+                                <connections>
+                                    <binding destination="XfG-lQ-9wD" name="editable" keyPath="self.isRendering" id="eXF-Ro-Fb9">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oLw-WY-kpa">
                                 <rect key="frame" x="494" y="591" width="228" height="17"/>
@@ -832,6 +859,11 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="testButton:" target="XfG-lQ-9wD" id="8c2-Bl-C7A"/>
+                                    <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.isRendering" id="dBc-iQ-oCN">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                        </dictionary>
+                                    </binding>
                                 </connections>
                             </button>
                         </subviews>
@@ -841,10 +873,12 @@
                         <outlet property="heightField" destination="QCh-30-XEV" id="vi6-d2-vHH"/>
                         <outlet property="imageView" destination="HtS-Bu-2Wx" id="8jp-2E-Akw"/>
                         <outlet property="progressLabel" destination="PNH-l3-9UF" id="ADS-Kx-kzk"/>
+                        <outlet property="renderButton" destination="Hc7-bc-QOl" id="Jva-cD-ZVo"/>
                         <outlet property="widthField" destination="pQS-gZ-Inh" id="mu4-du-Bfe"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <userDefaultsController representsSharedInstance="YES" id="eF2-nH-nCJ"/>
             </objects>
             <point key="canvasLocation" x="204" y="1086"/>
         </scene>
