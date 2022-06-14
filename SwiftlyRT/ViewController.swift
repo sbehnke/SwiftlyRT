@@ -284,6 +284,10 @@ class ViewController: NSViewController {
                         self.progressLabel.stringValue = "\(String(format: "Value: %.1f", percent))%"
                     }
 
+                    if self.isCanceled {
+                        return
+                    }
+
                     if (showProgress && count > lastCount) {
                         lastCount = count
                         let img = await output.getImage()
