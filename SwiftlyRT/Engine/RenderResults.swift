@@ -7,7 +7,9 @@
 //
 
 import Foundation
+#if canImport(Cocoa)
 import Cocoa
+#endif
 
 actor RenderResults {
     init() {}
@@ -37,6 +39,7 @@ actor RenderResults {
         }
     }
 
+#if canImport(Cocoa)
     func getImage() -> NSImage? {
         guard let dest = dest else { return nil }
 
@@ -45,6 +48,15 @@ actor RenderResults {
         let data = dest.getPPM()
         return NSImage(data: data)
     }
+#else
+    func getImage() -> Data? {
+        guard let dest = dest else { return nil }
+
+        applyChunks()
+
+        return dest.getPPM()
+    }
+#endif
 
     var chunkCount: Int {
         get {
