@@ -1,6 +1,6 @@
 # SwiftlyRT
 
-[![Build Status](https://app.bitrise.io/app/fd706400a4da9218/status.svg?token=ywmySMISPsO_1I0YW3lFmA&branch=master)](https://app.bitrise.io/app/fd706400a4da9218)
+[![Build Status](https://app.bitrise.io/app/1477f450-ea5a-41b2-be5c-f61ca747bc82/status.svg?token=v9_ZskgX9STRqurxWqBjQg&branch=master)
 
 An implementation of the Ray Tracer Challenge by Jamis Buck, written in Swift 5.0.
 
