@@ -8,6 +8,12 @@
 
 import Foundation
 import Yams
+import OSLog
+
+extension OSLog {
+    private static var subsystem = Bundle.main.bundleIdentifier!
+    static let worldLoaderLogger = OSLog(subsystem: subsystem, category: "WorldLoader")
+}
 
 struct WorldLoader {
 
@@ -135,7 +141,7 @@ struct WorldLoader {
                 }
 
             default:
-                print("Unsupported type")
+                os_log("Unsupported type", log: OSLog.worldLoaderLogger, type: .error)
             }
         }
 
@@ -593,7 +599,7 @@ struct WorldLoader {
                                 if let shape = newShape {
                                     world.objects.append(shape)
                                 } else {
-                                    print("Invalid option: \(String(describing: newEntry))")
+                                    os_log("Invalid option %{public}@", log: OSLog.worldLoaderLogger, type: .error, String(describing: newEntry))
                                 }
                             }
                         }
@@ -626,7 +632,7 @@ struct WorldLoader {
                 }
 
             } catch {
-                print("Error loading file: \(error)")
+                os_log("Error loading file: %{public}@", log: OSLog.worldLoaderLogger, type: .error, error.localizedDescription)
             }
         }
 

@@ -159,8 +159,6 @@ P3
         let ppm = String(bytes: c.getPPM(), encoding: .ascii)!
         let size1 = ppm.count
         let size2 = output.count
-        print(size1)
-        print(size2)
         XCTAssertEqual(output, ppm)
     }
 

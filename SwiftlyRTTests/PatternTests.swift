@@ -328,7 +328,6 @@ class PatternTests: XCTestCase {
         
         for index in 0..<points.count {
             let (uOut, vOut) = points[index].sphericalMap()
-            print("Values: \(uOut), \(vOut)")
             XCTAssertEqual(uOut, u[index], "u does not match for index: \(index)")
             XCTAssertEqual(vOut, v[index], "v does not match for index: \(index)")
         }

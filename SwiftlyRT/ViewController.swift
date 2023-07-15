@@ -7,6 +7,12 @@
 //
 
 import Cocoa
+import OSLog
+
+extension OSLog {
+    private static var subsystem = Bundle.main.bundleIdentifier!
+    static let viewControllerLogger = OSLog(subsystem: subsystem, category: "ViewController")
+}
 
 extension NSImage {
     var pngData: Data? {
@@ -20,7 +26,7 @@ extension NSImage {
             try pngData?.write(to: url, options: options)
             return true
         } catch {
-            print(error)
+            os_log("%{public}@", log: OSLog.viewControllerLogger, type: .error, error.localizedDescription)
             return false
         }
     }
@@ -115,7 +121,7 @@ class ViewController: NSViewController {
         side.addChild(hexagonCorner(n))
         side.addChild(hexagonEdge(n))
 
-        print(side.name)
+//        os_log("%{public}@", log: OSLog.viewControllerLogger, type: .info, side.name)
         switch n {
         case 0:
             side.material.color = Color(r: 1, g: 1, b: 0)
@@ -293,7 +299,8 @@ class ViewController: NSViewController {
                         let img = await output.getImage()
                         DispatchQueue.main.async {
                             if let img = img {
-                                self.imageView.image = img
+                                
+                                self.imageView.image = NSImage(data: img)
                             }
                         }
                     }
@@ -302,15 +309,17 @@ class ViewController: NSViewController {
 
                 let img = await output.getImage()
                 DispatchQueue.main.async {
-                    self.imageView.image = img
-
-                    self.imageReady = true
-                    let timeElapsed = CACurrentMediaTime() - startTime
-                    let labelValue = "Finished in: " + self.format(duration: timeElapsed)
-                    self.progressLabel.stringValue = labelValue
-                    self.renderButton.title = originalTitle
-                    
-                    self.isRendering = false
+                    if let img = img {
+                        self.imageView.image = NSImage(data: img)
+                        
+                        self.imageReady = true
+                        let timeElapsed = CACurrentMediaTime() - startTime
+                        let labelValue = "Finished in: " + self.format(duration: timeElapsed)
+                        self.progressLabel.stringValue = labelValue
+                        self.renderButton.title = originalTitle
+                        
+                        self.isRendering = false
+                    }
                 }
             }
         }

@@ -7,6 +7,12 @@
 //
 
 import Foundation
+import OSLog
+
+extension OSLog {
+    private static var subsystem = Bundle.main.bundleIdentifier!
+    static let groupLogger = OSLog(subsystem: subsystem, category: "ObjLoader")
+}
 
 class Group: Shape {
 
@@ -47,8 +53,8 @@ class Group: Shape {
 
         let box = boundingBox()
         let intersects = box.intersects(ray: ray)
+//        os_log("This object: %public@: %public@", log: OSLog.groupLogger, type: .info, name, intersects.description)
 
-        //        print("This object: \(name): \(intersects)")
         // TODO: Figure out why this is breaking things.
         if intersects {
             for child in children {

@@ -7,6 +7,12 @@
 //
 
 import Foundation
+import OSLog
+
+extension OSLog {
+    private static var subsystem = Bundle.main.bundleIdentifier!
+    static let objLoaderLogger = OSLog(subsystem: subsystem, category: "ObjLoader")
+}
 
 extension String {
     var lines: [String] {
@@ -47,7 +53,7 @@ struct ObjParser {
                     objFileData: contents, withFilename: path.lastPathComponent,
                     resizeObject: resizeObject)
             } catch {
-                print("Unexpected error: \(error).")
+                os_log("Unexpected Error: %{public}@.", log: OSLog.objLoaderLogger, type: .error, error.localizedDescription)
             }
         }
 
@@ -116,7 +122,7 @@ struct ObjParser {
         var currentObjectName = ""
 
         objFileData.enumerateLines(invoking: { (line: String, stop: inout Bool) -> Void in
-            //            print(line)
+            os_log("%{public}@", log: OSLog.objLoaderLogger, type: .info, line)
             let components = line.split(separator: " ")
 
             if components.count > 1 {
