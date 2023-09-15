@@ -160,6 +160,7 @@ P3
         let size1 = ppm.count
         let size2 = output.count
         XCTAssertEqual(output, ppm)
+        XCTAssertEqual(size1, size2)
     }
 
     func testPPMEndingWithNewLine() {
