@@ -8,6 +8,7 @@
 
 import Cocoa
 import OSLog
+import UniformTypeIdentifiers
 
 extension OSLog {
     private static let subsystem = Bundle.main.bundleIdentifier!
@@ -233,7 +234,7 @@ class ViewController: NSViewController {
             w.camera?.fieldOfView = fov
 
             let output = RenderResults()
-            Task {
+            Task(priority: .utility) {
                 await output.setDimensions(width: width, height: height)
             }
 
@@ -244,11 +245,11 @@ class ViewController: NSViewController {
 
             let showProgress = true
 
-            let renderTask = Task {
+            let renderTask = Task(priority: .utility) {
                 await withTaskGroup(of: Void.self) { group in
                     for y in stride(from: 0, to: height, by: RenderResults.sizeY) {
                         for x in stride(from: 0, to: width, by: RenderResults.sizeX) {
-                            group.addTask(priority: TaskPriority.medium) {
+                            group.addTask(priority: TaskPriority.utility) {
                                 if Task.isCancelled {
                                     return
                                 }
@@ -270,7 +271,7 @@ class ViewController: NSViewController {
                 }
             }
 
-            Task {
+            Task(priority: .userInitiated) {
                 var count = 0
                 var lastCount = 0
 
@@ -279,7 +280,7 @@ class ViewController: NSViewController {
 
                     count = await output.chunkCount
                     let percent = (Double)(count) / Double(total) * 100.0
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         if self.isCanceled {
                             renderTask.cancel()
                             self.progressLabel.stringValue = "Canceled"
@@ -297,7 +298,7 @@ class ViewController: NSViewController {
                     if (showProgress && count > lastCount) {
                         lastCount = count
                         let img = await output.getImage()
-                        DispatchQueue.main.async {
+                        await MainActor.run {
                             if let img = img {
                                 
                                 self.imageView.image = NSImage(data: img)
@@ -308,7 +309,7 @@ class ViewController: NSViewController {
                 } while (count < total)
 
                 let img = await output.getImage()
-                DispatchQueue.main.async {
+                await MainActor.run {
                     if let img = img {
                         self.imageView.image = NSImage(data: img)
                         
@@ -331,12 +332,11 @@ class ViewController: NSViewController {
         let dialog = NSOpenPanel()
 
         dialog.title = "Choose a .yml file"
-        dialog.showsResizeIndicator = true
         dialog.showsHiddenFiles = false
         dialog.canChooseDirectories = false
         dialog.canCreateDirectories = true
         dialog.allowsMultipleSelection = false
-        dialog.allowedFileTypes = ["yml"]
+        dialog.allowedContentTypes = [.yaml]
 
         if dialog.runModal() == NSApplication.ModalResponse.OK {
             let result = dialog.url  // Pathname of the file
@@ -356,7 +356,7 @@ class ViewController: NSViewController {
     @IBAction func saveImage(_ sender: Any) {
         if let image = imageView.image {
             let savePanel = NSSavePanel()
-            savePanel.allowedFileTypes = ["png"]
+            savePanel.allowedContentTypes = [.png]
             savePanel.nameFieldStringValue = filename
             savePanel.begin(completionHandler: { (result: NSApplication.ModalResponse) -> Void in
                 if result == .OK {
