@@ -9,7 +9,8 @@
 import Foundation
 import Yams
 
-class World {
+// Because each thread makes its own canvas chunk, it is thread safe.
+class World: @unchecked Sendable {
     static let MaximumRecursionDepth = 5
 
     static func defaultWorld() -> World {

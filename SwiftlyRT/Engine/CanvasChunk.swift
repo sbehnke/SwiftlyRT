@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CanvasChunk {
+struct CanvasChunk: Sendable {
     let canvas: Canvas
     let x: Int
     let y: Int

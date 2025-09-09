@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Canvas {
+class Canvas: @unchecked Sendable {
 
     init(width: Int, height: Int, color: Color = Color()) {
         self.width = width
