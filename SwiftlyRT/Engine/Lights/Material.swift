@@ -29,7 +29,7 @@ struct Material: Equatable {
     }
 
     func lighting(
-        object: Shape?, light: Light, position: Tuple, eyeVector: Tuple, normalVector: Tuple,
+        object: Shape?, light: any Light, position: Tuple, eyeVector: Tuple, normalVector: Tuple,
         intensity: Double
     ) -> Color {
 

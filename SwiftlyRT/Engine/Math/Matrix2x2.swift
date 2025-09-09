@@ -9,11 +9,11 @@
 import Foundation
 
 struct Matrix2x2: Equatable, AdditiveArithmetic {
-    static var identity = Matrix2x2(
+    static let identity = Matrix2x2(
         a0: 1, a1: 0,
         b0: 0, b1: 1)
 
-    static var zero = Matrix2x2()
+    static let zero = Matrix2x2()
 
     static let rows = 2
     static let columns = 2

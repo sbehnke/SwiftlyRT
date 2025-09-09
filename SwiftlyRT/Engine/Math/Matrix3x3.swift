@@ -9,12 +9,12 @@
 import Foundation
 
 struct Matrix3x3: Equatable, AdditiveArithmetic {
-    static var identity = Matrix3x3(
+    static let identity = Matrix3x3(
         a0: 1, a1: 0, a2: 0,
         b0: 0, b1: 1, b2: 0,
         c0: 0, c1: 0, c2: 1)
 
-    static var zero = Matrix3x3()
+    static let zero = Matrix3x3()
 
     static let rows = 3
     static let columns = 3

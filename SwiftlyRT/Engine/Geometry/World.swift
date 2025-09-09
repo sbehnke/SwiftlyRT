@@ -10,7 +10,7 @@ import Foundation
 import Yams
 
 class World {
-    static var MaximumRecursionDepth = 5
+    static let MaximumRecursionDepth = 5
 
     static func defaultWorld() -> World {
         let light = PointLight(position: Tuple.Point(x: -10, y: 10, z: -10), intensity: Color.white)
@@ -157,6 +157,6 @@ class World {
     }
 
     var objects: [Shape] = []
-    var lights: [Light] = []
+    var lights: [any Light] = []
     var camera: Camera? = nil
 }

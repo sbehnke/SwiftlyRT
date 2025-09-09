@@ -9,9 +9,9 @@
 import Foundation
 
 struct Color: Equatable, AdditiveArithmetic {
-    static var zero = Color(r: 0.0, g: 0.0, b: 0.0 /*, a: 1.0 */)
-    static var white = Color(r: 1.0, g: 1.0, b: 1.0)
-    static var black = Color(r: 0.0, g: 0.0, b: 0)
+    static let zero = Color(r: 0.0, g: 0.0, b: 0.0 /*, a: 1.0 */)
+    static let white = Color(r: 1.0, g: 1.0, b: 1.0)
+    static let black = Color(r: 0.0, g: 0.0, b: 0)
 
     static func *= (lhs: inout Color, rhs: Float) {
         lhs.r *= rhs

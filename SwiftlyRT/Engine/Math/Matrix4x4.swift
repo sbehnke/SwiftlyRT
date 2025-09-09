@@ -12,13 +12,13 @@ import simd
 #endif
 
 struct Matrix4x4: Equatable, AdditiveArithmetic {
-    static var identity = Matrix4x4(
+    static let identity = Matrix4x4(
         a0: 1, a1: 0, a2: 0, a3: 0,
         b0: 0, b1: 1, b2: 0, b3: 0,
         c0: 0, c1: 0, c2: 1, c3: 0,
         d0: 0, d1: 0, d2: 0, d3: 1)
 
-    static var zero = Matrix4x4()
+    static let zero = Matrix4x4()
 
     static let rows = 4
     static let columns = 4

@@ -11,7 +11,7 @@ import Yams
 import OSLog
 
 extension OSLog {
-    private static var subsystem = Bundle.main.bundleIdentifier!
+    private static let subsystem = Bundle.main.bundleIdentifier!
     static let worldLoaderLogger = OSLog(subsystem: subsystem, category: "WorldLoader")
 }
 
