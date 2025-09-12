@@ -7,7 +7,9 @@
 //
 
 import Foundation
+#if canImport(simd)
 import simd
+#endif
 
 struct Matrix4x4: Equatable, AdditiveArithmetic {
     static let identity = Matrix4x4(
@@ -95,20 +97,18 @@ struct Matrix4x4: Equatable, AdditiveArithmetic {
         return lhs
     }
 
-    private var simdMatrix: simd_float4x4 {
-        // Build by COLUMNS: each SIMD4 is a column (m00, m10, m20, m30), etc.
-        let c0 = SIMD4<Float>(Float(self[0,0]), Float(self[1,0]), Float(self[2,0]), Float(self[3,0]))
-        let c1 = SIMD4<Float>(Float(self[0,1]), Float(self[1,1]), Float(self[2,1]), Float(self[3,1]))
-        let c2 = SIMD4<Float>(Float(self[0,2]), Float(self[1,2]), Float(self[2,2]), Float(self[3,2]))
-        let c3 = SIMD4<Float>(Float(self[0,3]), Float(self[1,3]), Float(self[2,3]), Float(self[3,3]))
-        return simd_float4x4(c0, c1, c2, c3)
-    }
-
     static func * (lhs: Matrix4x4, rhs: Tuple) -> Tuple {
-        let M = lhs.simdMatrix
-        let v = SIMD4<Float>(Float(rhs.x), Float(rhs.y), Float(rhs.z), Float(rhs.w))
-        let r = M * v
-        return Tuple(x: Double(r.x), y: Double(r.y), z: Double(r.z), w: Double(r.w))
+        var value = Tuple.zero
+
+        for row in 0..<rows {
+            var sum = 0.0
+            for col in 0..<columns {
+                sum += lhs[row, col] * rhs[col]
+            }
+            value[row] = sum
+        }
+
+        return value
     }
 
     static func * (lhs: Matrix4x4, rhs: Ray) -> Ray {
@@ -361,7 +361,7 @@ struct Matrix4x4: Equatable, AdditiveArithmetic {
         return orientation * translation
     }
     #endif
-    
+
     static func viewTransformed(from: Tuple, to: Tuple, up: Tuple) -> Matrix4x4 {
         assert(from.isPoint())
         assert(to.isPoint())
@@ -400,4 +400,3 @@ struct Matrix4x4: Equatable, AdditiveArithmetic {
 
     private var backing = [Double](repeating: 0.0, count: rows * columns)
 }
-

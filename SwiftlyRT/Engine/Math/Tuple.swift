@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import simd
 
 extension Double {
     func modulo(_ b: Double) -> Double {
@@ -54,7 +53,10 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
 
     internal init(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0, w: Double = 0.0) {
-        self.backingSIMD = SIMD4<Float>(Float(x), Float(y), Float(z), Float(w))
+        self.x = x
+        self.y = y
+        self.z = z
+        self.w = w
     }
 
     static func *= (lhs: inout Tuple, rhs: Double) {
@@ -127,37 +129,34 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
 
     mutating func normalize() {
-        let mag = Float(self.magnitude)
-        if mag != 0 { backingSIMD /= mag }
+        self /= magnitude
     }
 
     func normalized() -> Tuple {
-        let mag = Float(self.magnitude)
-        if mag == 0 { return self }
-        var t = self
-        t.backingSIMD /= mag
-        return t
+        let mag = magnitude
+        return Tuple(x: x / mag, y: y / mag, z: z / mag, w: w / mag)
     }
 
     static func dot(lhs: Tuple, rhs: Tuple) -> Double {
-        let a = lhs.backingSIMD
-        let b = rhs.backingSIMD
-        return Double(simd_dot(a, b))
+        return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w
     }
 
     func dot(_ rhs: Tuple) -> Double {
-        return Tuple.dot(lhs: self, rhs: rhs)
+        return self.x * rhs.x + self.y * rhs.y + self.z * rhs.z + self.w * rhs.w
     }
 
     static func cross(lhs: Tuple, rhs: Tuple) -> Tuple {
-        let a = SIMD3<Float>(Float(lhs.x), Float(lhs.y), Float(lhs.z))
-        let b = SIMD3<Float>(Float(rhs.x), Float(rhs.y), Float(rhs.z))
-        let c = simd_cross(a, b)
-        return Tuple.Vector(x: Double(c.x), y: Double(c.y), z: Double(c.z))
+        return Tuple(
+            x: lhs.y * rhs.z - lhs.z * rhs.y,
+            y: lhs.z * rhs.x - lhs.x * rhs.z,
+            z: lhs.x * rhs.y - lhs.y * rhs.x)
     }
 
     func cross(_ rhs: Tuple) -> Tuple {
-        return Tuple.cross(lhs: self, rhs: rhs)
+        return Tuple(
+            x: self.y * rhs.z - self.z * rhs.y,
+            y: self.z * rhs.x - self.x * rhs.z,
+            z: self.x * rhs.y - self.y * rhs.x)
     }
 
     func reflected(normal: Tuple) -> Tuple {
@@ -296,34 +295,20 @@ struct Tuple: Equatable, AdditiveArithmetic {
 
     var magnitude: Double {
         if isVector() {
-            let v = SIMD3<Float>(backingSIMD.x, backingSIMD.y, backingSIMD.z)
-            return Double(simd_length(v))
+            return sqrt((x * x) + (y * y) + (z * z))
         } else {
-            // Treat as homogeneous point; divide by w
-            let wv = backingSIMD.w
-            let v = SIMD3<Float>(backingSIMD.x / wv, backingSIMD.y / wv, backingSIMD.z / wv)
-            return Double(simd_length(v))
+            return sqrt((x * x) / w + (y * y) / w + (z * z) / w)
         }
     }
 
     subscript(index: Int) -> Double {
         get {
-            assert(index >= 0 && index < 4, "Index out of range")
-            switch index {
-            case 0: return x
-            case 1: return y
-            case 2: return z
-            default: return w
-            }
+            assert(index >= 0 && index < backing.count, "Index out of range")
+            return backing[index]
         }
         set {
-            assert(index >= 0 && index < 4, "Index out of range")
-            switch index {
-            case 0: x = newValue
-            case 1: y = newValue
-            case 2: z = newValue
-            default: w = newValue
-            }
+            assert(index >= 0 && index < backing.count, "Index out of range")
+            backing[index] = newValue
         }
     }
 
@@ -332,21 +317,37 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
 
     var x: Double {
-        get { Double(backingSIMD.x) }
-        set { backingSIMD.x = Float(newValue) }
+        get {
+            return backing[0]
+        }
+        set {
+            backing[0] = newValue
+        }
     }
     var y: Double {
-        get { Double(backingSIMD.y) }
-        set { backingSIMD.y = Float(newValue) }
+        get {
+            return backing[1]
+        }
+        set {
+            backing[1] = newValue
+        }
     }
     var z: Double {
-        get { Double(backingSIMD.z) }
-        set { backingSIMD.z = Float(newValue) }
+        get {
+            return backing[2]
+        }
+        set {
+            backing[2] = newValue
+        }
     }
     var w: Double {
-        get { Double(backingSIMD.w) }
-        set { backingSIMD.w = Float(newValue) }
+        get {
+            return backing[3]
+        }
+        set {
+            backing[3] = newValue
+        }
     }
 
-    private var backingSIMD: SIMD4<Float> = SIMD4<Float>(0, 0, 0, 0)
+    private var backing = [Double](repeating: 0.0, count: 4)
 }
