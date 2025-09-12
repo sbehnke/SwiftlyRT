@@ -531,112 +531,116 @@ struct WorldLoader {
         return newShape
     }
 
+    mutating func loadWorld(contents: String) throws -> World {
+        let world = World()
+        let loadedArray = try Yams.load(yaml: contents) as? [Any]
+
+        for entry in loadedArray! {
+            if let newEntry = entry as? [String: Any] {
+                if let add = newEntry["add"] as? String {
+
+                    switch add {
+                    case "camera":
+                        let fieldOfView: Double = WorldLoader.convertTo(
+                            newEntry["field-of-view"])
+                        let from = WorldLoader.toPoint(newEntry["from"] as? [Any])
+                        let to = WorldLoader.toPoint(newEntry["to"] as? [Any])
+                        let up = WorldLoader.toVector(newEntry["up"] as? [Any])
+                        let height: Int = WorldLoader.convertTo(newEntry["height"])
+                        let width: Int = WorldLoader.convertTo(newEntry["width"])
+
+                        if width > 0 && height > 0 {
+                            var camera = Camera(
+                                w: width, h: height, fieldOfView: fieldOfView)
+                            camera.transform = Matrix4x4.viewTransformed(
+                                from: from, to: to, up: up)
+                            camera.from = from
+                            camera.to = to
+                            camera.up = up
+                            world.camera = camera
+                        }
+
+                    case "light":
+                        let intensity = WorldLoader.toColor(newEntry["intensity"] as? [Any])
+                        if let _ = newEntry["corner"] as? [Any] {
+                            let corner = WorldLoader.toPoint(newEntry["corner"] as? [Any])
+                            let uvec = WorldLoader.toVector(newEntry["uvec"] as? [Any])
+                            let vvec = WorldLoader.toVector(newEntry["vvec"] as? [Any])
+                            let usteps: Int = WorldLoader.convertTo(newEntry["usteps"])
+                            let vsteps: Int = WorldLoader.convertTo(newEntry["vsteps"])
+                            let jitter: Bool = newEntry["jitter"] as? Bool ?? false
+                            let intensity = WorldLoader.toColor(
+                                newEntry["intensity"] as? [Any])
+
+                            var areaLight = AreaLight(
+                                corner: corner, uvec: uvec, usteps: usteps, vvec: vvec,
+                                vsteps: vsteps, intensity: intensity)
+                            areaLight.jitter = jitter
+                            world.lights.append(areaLight)
+                        } else {
+                            let at = WorldLoader.toPoint(newEntry["at"] as? [Any])
+                            world.lights.append(
+                                PointLight(position: at, intensity: intensity))
+                        }
+
+                    default:
+                        let newShape: Shape? = toShape(add, newEntry: newEntry)
+                        if let shape = newShape {
+                            world.objects.append(shape)
+                        } else {
+                            os_log("Invalid option %{public}@", log: OSLog.worldLoaderLogger, type: .error, String(describing: newEntry))
+                        }
+                    }
+                }
+
+                if let define = newEntry["define"] as? String {
+                    if define.hasSuffix("-material") {
+                        if let extendsKey = newEntry["extend"] as? String {
+                            let extendedEntry = [
+                                "extend": extendsKey, "value": newEntry["value"],
+                            ]
+                            definedMaterials[define] = extendedEntry as [String: Any]
+                        } else if let value = newEntry["value"] as? [String: Any] {
+                            definedMaterials[define] = value
+                        }
+                    } else if define.hasSuffix("-transform") {
+                        if let value = newEntry["value"] as? [Any] {
+                            definedTransforms[define] = value
+                        }
+                    } else if define.hasSuffix("-object") {
+                        if let value = newEntry["value"] as? [Any] {
+                            definedObjects[define] = value
+                        }
+                    } else {
+                        if let value = newEntry["value"] as? [String: Any] {
+                            definedShapes[define] = value
+                        }
+                    }
+                }
+            }
+        }
+
+        return world
+    }
+
     mutating func loadWorld(fromYamlFile: URL?) -> World {
         let filePath = fromYamlFile
 
         definedShapes.removeAll()
         definedMaterials.removeAll()
 
-        let world = World()
-
         if let url = filePath {
             rootPath = ((url.path) as NSString).deletingLastPathComponent
 
             do {
                 let contents: String = try String.init(contentsOf: url, encoding: .ascii)
-                let loadedArray = try Yams.load(yaml: contents) as? [Any]
-
-                for entry in loadedArray! {
-                    if let newEntry = entry as? [String: Any] {
-                        if let add = newEntry["add"] as? String {
-
-                            switch add {
-                            case "camera":
-                                let fieldOfView: Double = WorldLoader.convertTo(
-                                    newEntry["field-of-view"])
-                                let from = WorldLoader.toPoint(newEntry["from"] as? [Any])
-                                let to = WorldLoader.toPoint(newEntry["to"] as? [Any])
-                                let up = WorldLoader.toVector(newEntry["up"] as? [Any])
-                                let height: Int = WorldLoader.convertTo(newEntry["height"])
-                                let width: Int = WorldLoader.convertTo(newEntry["width"])
-
-                                if width > 0 && height > 0 {
-                                    var camera = Camera(
-                                        w: width, h: height, fieldOfView: fieldOfView)
-                                    camera.transform = Matrix4x4.viewTransformed(
-                                        from: from, to: to, up: up)
-                                    camera.from = from
-                                    camera.to = to
-                                    camera.up = up
-                                    world.camera = camera
-                                }
-
-                            case "light":
-                                let intensity = WorldLoader.toColor(newEntry["intensity"] as? [Any])
-                                if let _ = newEntry["corner"] as? [Any] {
-                                    let corner = WorldLoader.toPoint(newEntry["corner"] as? [Any])
-                                    let uvec = WorldLoader.toVector(newEntry["uvec"] as? [Any])
-                                    let vvec = WorldLoader.toVector(newEntry["vvec"] as? [Any])
-                                    let usteps: Int = WorldLoader.convertTo(newEntry["usteps"])
-                                    let vsteps: Int = WorldLoader.convertTo(newEntry["vsteps"])
-                                    let jitter: Bool = newEntry["jitter"] as? Bool ?? false
-                                    let intensity = WorldLoader.toColor(
-                                        newEntry["intensity"] as? [Any])
-
-                                    var areaLight = AreaLight(
-                                        corner: corner, uvec: uvec, usteps: usteps, vvec: vvec,
-                                        vsteps: vsteps, intensity: intensity)
-                                    areaLight.jitter = jitter
-                                    world.lights.append(areaLight)
-                                } else {
-                                    let at = WorldLoader.toPoint(newEntry["at"] as? [Any])
-                                    world.lights.append(
-                                        PointLight(position: at, intensity: intensity))
-                                }
-
-                            default:
-                                let newShape: Shape? = toShape(add, newEntry: newEntry)
-                                if let shape = newShape {
-                                    world.objects.append(shape)
-                                } else {
-                                    os_log("Invalid option %{public}@", log: OSLog.worldLoaderLogger, type: .error, String(describing: newEntry))
-                                }
-                            }
-                        }
-
-                        if let define = newEntry["define"] as? String {
-                            if define.hasSuffix("-material") {
-                                if let extendsKey = newEntry["extend"] as? String {
-                                    let extendedEntry = [
-                                        "extend": extendsKey, "value": newEntry["value"],
-                                    ]
-                                    definedMaterials[define] = extendedEntry as [String: Any]
-                                } else if let value = newEntry["value"] as? [String: Any] {
-                                    definedMaterials[define] = value
-                                }
-                            } else if define.hasSuffix("-transform") {
-                                if let value = newEntry["value"] as? [Any] {
-                                    definedTransforms[define] = value
-                                }
-                            } else if define.hasSuffix("-object") {
-                                if let value = newEntry["value"] as? [Any] {
-                                    definedObjects[define] = value
-                                }
-                            } else {
-                                if let value = newEntry["value"] as? [String: Any] {
-                                    definedShapes[define] = value
-                                }
-                            }
-                        }
-                    }
-                }
-
+                return try loadWorld(contents: contents)
             } catch {
                 os_log("Error loading file: %{public}@", log: OSLog.worldLoaderLogger, type: .error, error.localizedDescription)
             }
         }
 
-        return world
+        return World()
     }
 
     private var definedObjects: [String: Any] = [:]

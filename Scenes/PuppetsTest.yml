@@ -1,0 +1,21 @@
+- add: camera
+  width: 10
+  height: 10
+  field-of-view: 0.524
+  from: [ 40, 0, -70 ]
+  to: [ 0, 0, -5 ]
+  up: [ 0, 1, 0 ]
+
+- add: light
+  at: [ 0, 0, -100 ]
+  intensity: [ 1, 1, 1 ]
+
+- add: sphere
+  material:
+    color: [ 1, 1, 1 ]
+    ambient: 0
+    diffuse: 0.5
+    specular: 0
+  transform:
+    - [ scale, 200, 200, 0.01 ]
+    - [ translate, 0, 0, 20 ]
