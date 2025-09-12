@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import OSLog
+
+private let cameraLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "SwiftlyRT", category: "Camera")
 
 extension Array {
     func chunked(into size: Int) -> [[Element]] {
@@ -16,7 +19,7 @@ extension Array {
     }
 }
 
-struct Camera {
+struct Camera: @unchecked Sendable {
 
     private mutating func computePixelSize() {
         halfView = tan(fieldOfView / 2.0)
@@ -65,29 +68,48 @@ struct Camera {
         var camera = c
 
         if let fromPoint = camera.from,
-            let toPoint = camera.to,
-            let upVector = camera.up
-        {
-
+           let toPoint = camera.to,
+           let upVector = camera.up {
             camera.transform = Matrix4x4.viewTransformed(from: fromPoint, to: toPoint, up: upVector)
         }
 
         let image = Canvas(width: camera.width, height: camera.height)
-        let progressInterval = camera.width / 4
+        let progressInterval = max(1, camera.width / 4)
 
+        // Signpost: begin full-frame render
+        let spid = OSSignpostID(log: cameraLog)
+        os_signpost(.begin, log: cameraLog, name: "RenderFullFrame", signpostID: spid, "w:%{public}d h:%{public}d fov:%{public}.3f", camera.width, camera.height, camera.fieldOfView)
+
+        // Render using incremental world coordinates and linear indexing
+        let tileWidth = camera.width
         for y in 0..<camera.height {
             progress?(0, y)
 
-            for x in 0..<camera.width {
-                let ray = camera.rayForPixel(x: x, y: y)
-                let color = world.colorAt(ray: ray)
-                image.setPixel(x: x, y: y, color: color)
+            let worldY = camera.halfHeight - ((Double(y) + 0.5) * camera.pixelSize)
+            var worldX = camera.halfWidth - (0.5 * camera.pixelSize)
 
-                if x % progressInterval == 0 {
-                    progress?(x, y)
-                }
+            var idx = y * tileWidth
+            var x = 0
+            while x < camera.width {
+                // Build ray directly from worldX/worldY using the inverse transform
+                let pixel = camera.inverseTransform * Tuple.Point(x: worldX, y: worldY, z: -1)
+                let origin = camera.inverseTransform * Tuple.pointZero
+                let direction = (pixel - origin).normalized()
+                let ray = Ray(origin: origin, direction: direction)
+
+                let color = world.colorAt(ray: ray)
+                image.setPixelUnchecked(linearIndex: idx, color: color)
+
+                if x % progressInterval == 0 { progress?(x, y) }
+
+                worldX -= camera.pixelSize
+                idx += 1
+                x += 1
             }
         }
+
+        // Signpost: end full-frame render
+        os_signpost(.end, log: cameraLog, name: "RenderFullFrame", signpostID: spid)
 
         return image
     }
@@ -105,17 +127,134 @@ struct Camera {
 
         let endY = (startY + height) < camera.height ? startY + height : camera.height
         let endX = (startX + width) < camera.width ? startX + width : camera.width
-        let image = Canvas(width: endX - startX, height: endY - startY)
+        let tileWidth = endX - startX
+        let tileHeight = endY - startY
+        let image = Canvas(width: tileWidth, height: tileHeight)
 
+        let tileSpid = OSSignpostID(log: cameraLog)
+        os_signpost(.begin, log: cameraLog, name: "RenderTile", signpostID: tileSpid, "x:%{public}d y:%{public}d w:%{public}d h:%{public}d", startX, startY, tileWidth, tileHeight)
+
+        // Precompute worldY per row and increment worldX per pixel to avoid repeated work
         for y in startY..<endY {
-            for x in startX..<endX {
-                let ray = camera.rayForPixel(x: x, y: y)
+            let worldY = camera.halfHeight - ((Double(y) + 0.5) * camera.pixelSize)
+            var worldX = camera.halfWidth - ((Double(startX) + 0.5) * camera.pixelSize)
+
+            // Linear index into tile buffer for this row
+            var idx = (y - startY) * tileWidth
+
+            for _ in startX..<endX {
+                // Build ray directly from worldX/worldY using the inverse transform
+                let pixel = camera.inverseTransform * Tuple.Point(x: worldX, y: worldY, z: -1)
+                let origin = camera.inverseTransform * Tuple.pointZero
+                let direction = (pixel - origin).normalized()
+                let ray = Ray(origin: origin, direction: direction)
+
                 let color = world.colorAt(ray: ray)
-                image.setPixel(x: x - startX, y: y - startY, color: color)
+                image.setPixelUnchecked(linearIndex: idx, color: color)
+
+                worldX -= camera.pixelSize
+                idx += 1
             }
         }
 
+        os_signpost(.end, log: cameraLog, name: "RenderTile", signpostID: tileSpid)
+
         return image
+    }
+
+    /// Renders a tile directly into the destination canvas without intermediate allocations.
+    /// The region is clamped to both the camera's bounds and the destination's bounds.
+    func renderTile(into dest: Canvas,
+                    world: World,
+                    startX: Int,
+                    startY: Int,
+                    width: Int,
+                    height: Int) {
+        var camera = self
+
+        if let fromPoint = camera.from,
+           let toPoint = camera.to,
+           let upVector = camera.up {
+            camera.transform = Matrix4x4.viewTransformed(from: fromPoint, to: toPoint, up: upVector)
+        }
+
+        // Clamp extents to camera and destination bounds
+        let endY = min(startY + height, min(camera.height, dest.height))
+        let endX = min(startX + width, min(camera.width, dest.width))
+        if startX >= endX || startY >= endY { return }
+
+        // Precompute per-row worldY and per-pixel worldX increments
+        for y in startY..<endY {
+            let worldY = camera.halfHeight - ((Double(y) + 0.5) * camera.pixelSize)
+            var worldX = camera.halfWidth - ((Double(startX) + 0.5) * camera.pixelSize)
+
+            // Linear index into destination for this row
+            var destIdx = y * dest.width + startX
+
+            var x = startX
+            while x < endX {
+                // Build ray directly from worldX/worldY using the inverse transform
+                let pixel = camera.inverseTransform * Tuple.Point(x: worldX, y: worldY, z: -1)
+                let origin = camera.inverseTransform * Tuple.pointZero
+                let direction = (pixel - origin).normalized()
+                let ray = Ray(origin: origin, direction: direction)
+
+                let color = world.colorAt(ray: ray)
+                dest.setPixelUnchecked(linearIndex: destIdx, color: color)
+
+                worldX -= camera.pixelSize
+                destIdx += 1
+                x += 1
+            }
+        }
+    }
+
+    /// Concurrently renders the image in tiles and composites the results into a destination canvas.
+    /// Heavy work (ray tracing) is done in parallel per tile; compositing is serialized and fast.
+    /// - Parameters:
+    ///   - world: The world to render.
+    ///   - tileWidth: Tile width (default 64).
+    ///   - tileHeight: Tile height (default 64).
+    /// - Returns: A fully rendered canvas matching the camera dimensions.
+    func renderConcurrent(world: World, tileWidth: Int = 64, tileHeight: Int = 64) async -> Canvas {
+        var camera = self
+
+        if let fromPoint = camera.from,
+           let toPoint = camera.to,
+           let upVector = camera.up {
+            camera.transform = Matrix4x4.viewTransformed(from: fromPoint, to: toPoint, up: upVector)
+        }
+
+        let dest = Canvas(width: camera.width, height: camera.height)
+        let localCamera = camera
+        let localWorld = world
+
+        await withTaskGroup(of: (x: Int, y: Int, canvas: Canvas).self) { group in
+            var y = 0
+            while y < localCamera.height {
+                var x = 0
+                while x < localCamera.width {
+                    let sx = x
+                    let sy = y
+                    group.addTask { @Sendable in
+                        let w = min(tileWidth, localCamera.width - sx)
+                        let h = min(tileHeight, localCamera.height - sy)
+                        // Reuse existing per-tile renderer that returns a Canvas
+                        let tile = localCamera.render(c: localCamera, world: localWorld, startX: sx, startY: sy, width: w, height: h)
+                        return (x: sx, y: sy, canvas: tile)
+                    }
+                    x += tileWidth
+                }
+                y += tileHeight
+            }
+
+            // Composite tiles serially (fast row-wise copy in Canvas.setPixels)
+            for await result in group {
+                dest.setPixels(source: result.canvas, destX: result.x, destY: result.y)
+            }
+        }
+
+        return dest
     }
 
     static func renderSinglePixel(c: Camera, world: World, x: Int, y: Int) -> Color {
@@ -209,3 +348,4 @@ struct Camera {
     }
     private(set) var inverseTransform = Matrix4x4.identity
 }
+

@@ -155,18 +155,34 @@ class Canvas: @unchecked Sendable {
         return pixels[x + (y * width)]
     }
 
+    @inline(__always)
+    func setPixelUnchecked(linearIndex: Int, color: Color) {
+        pixels[linearIndex] = color
+    }
+
     func setPixels(source: Canvas, destX: Int = 0, destY: Int = 0) {
-        for y in 0..<source.height {
-            if y + destY >= self.height {
-                continue
-            }
+        if source.width == 0 || source.height == 0 { return }
+        if destX >= self.width || destY >= self.height { return }
 
-            for x in 0..<source.width {
-                if x + destX >= self.width {
-                    continue
+        // Compute the effective region to copy, clamped to destination bounds
+        let copyWidth = max(0, min(source.width, self.width - destX))
+        let copyHeight = max(0, min(source.height, self.height - destY))
+        if copyWidth == 0 || copyHeight == 0 { return }
+
+        // Fast row-wise copy using unsafe buffers
+        self.pixels.withUnsafeMutableBufferPointer { destBuf in
+            source.pixels.withUnsafeBufferPointer { srcBuf in
+                guard let destBase = destBuf.baseAddress, let srcBase = srcBuf.baseAddress else { return }
+
+                var row = 0
+                while row < copyHeight {
+                    let destStart = (destY + row) * self.width + destX
+                    let srcStart = row * source.width
+                    let destPtr = destBase.advanced(by: destStart)
+                    let srcPtr = srcBase.advanced(by: srcStart)
+                    destPtr.update(from: srcPtr, count: copyWidth)
+                    row += 1
                 }
-
-                pixels[(x + destX) + ((y + destY) * width)] = source[x, y]
             }
         }
     }
@@ -326,3 +342,4 @@ class Canvas: @unchecked Sendable {
         return (data: data, bytesPerRow: bytesPerRow)
     }
 }
+

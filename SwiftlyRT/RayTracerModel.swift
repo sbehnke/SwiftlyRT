@@ -197,6 +197,9 @@ class RayTracerModel: ObservableObject {
                 var lastCount = 0
                 let total = await output.total
                 
+                var lastUIUpdate = CACurrentMediaTime()
+                let uiInterval = 1.0 / 15.0 // ~15 fps
+                
                 repeat {
                     count = await output.chunkCount
                     let percent = Double(count) / Double(total) * 100.0
@@ -217,9 +220,11 @@ class RayTracerModel: ObservableObject {
                         return
                     }
                     
-                    // Update image preview
-                    if count > lastCount {
+                    // Update image preview (throttled)
+                    let now = CACurrentMediaTime()
+                    if count > lastCount && (now - lastUIUpdate) >= uiInterval {
                         lastCount = count
+                        lastUIUpdate = now
                         let img = await output.getNSImage()  // Direct NSImage - no conversion needed
                         await MainActor.run {
                             if let img = img {
@@ -304,3 +309,4 @@ class RayTracerModel: ObservableObject {
         }
     }
 }
+
