@@ -73,6 +73,13 @@ struct Camera: @unchecked Sendable {
             camera.transform = Matrix4x4.viewTransformed(from: fromPoint, to: toPoint, up: upVector)
         }
 
+        let M = camera.inverseTransform
+        let C0 = Tuple(x: M[0,0], y: M[1,0], z: M[2,0], w: M[3,0])
+        let C1 = Tuple(x: M[0,1], y: M[1,1], z: M[2,1], w: M[3,1])
+        let C2 = Tuple(x: M[0,2], y: M[1,2], z: M[2,2], w: M[3,2])
+        let C3 = Tuple(x: M[0,3], y: M[1,3], z: M[2,3], w: M[3,3])
+        let origin = C3 // since origin = M * (0,0,0,1)
+
         let image = Canvas(width: camera.width, height: camera.height)
         let progressInterval = max(1, camera.width / 4)
 
@@ -92,8 +99,7 @@ struct Camera: @unchecked Sendable {
             var x = 0
             while x < camera.width {
                 // Build ray directly from worldX/worldY using the inverse transform
-                let pixel = camera.inverseTransform * Tuple.Point(x: worldX, y: worldY, z: -1)
-                let origin = camera.inverseTransform * Tuple.pointZero
+                let pixel = (C0 * worldX) + (C1 * worldY) + (C2 * -1.0) + C3
                 let direction = (pixel - origin).normalized()
                 let ray = Ray(origin: origin, direction: direction)
 
@@ -125,6 +131,13 @@ struct Camera: @unchecked Sendable {
             camera.transform = Matrix4x4.viewTransformed(from: fromPoint, to: toPoint, up: upVector)
         }
 
+        let M = camera.inverseTransform
+        let C0 = Tuple(x: M[0,0], y: M[1,0], z: M[2,0], w: M[3,0])
+        let C1 = Tuple(x: M[0,1], y: M[1,1], z: M[2,1], w: M[3,1])
+        let C2 = Tuple(x: M[0,2], y: M[1,2], z: M[2,2], w: M[3,2])
+        let C3 = Tuple(x: M[0,3], y: M[1,3], z: M[2,3], w: M[3,3])
+        let origin = C3 // since origin = M * (0,0,0,1)
+
         let endY = (startY + height) < camera.height ? startY + height : camera.height
         let endX = (startX + width) < camera.width ? startX + width : camera.width
         let tileWidth = endX - startX
@@ -144,8 +157,7 @@ struct Camera: @unchecked Sendable {
 
             for _ in startX..<endX {
                 // Build ray directly from worldX/worldY using the inverse transform
-                let pixel = camera.inverseTransform * Tuple.Point(x: worldX, y: worldY, z: -1)
-                let origin = camera.inverseTransform * Tuple.pointZero
+                let pixel = (C0 * worldX) + (C1 * worldY) + (C2 * -1.0) + C3
                 let direction = (pixel - origin).normalized()
                 let ray = Ray(origin: origin, direction: direction)
 
@@ -178,6 +190,13 @@ struct Camera: @unchecked Sendable {
             camera.transform = Matrix4x4.viewTransformed(from: fromPoint, to: toPoint, up: upVector)
         }
 
+        let M = camera.inverseTransform
+        let C0 = Tuple(x: M[0,0], y: M[1,0], z: M[2,0], w: M[3,0])
+        let C1 = Tuple(x: M[0,1], y: M[1,1], z: M[2,1], w: M[3,1])
+        let C2 = Tuple(x: M[0,2], y: M[1,2], z: M[2,2], w: M[3,2])
+        let C3 = Tuple(x: M[0,3], y: M[1,3], z: M[2,3], w: M[3,3])
+        let origin = C3 // since origin = M * (0,0,0,1)
+
         // Clamp extents to camera and destination bounds
         let endY = min(startY + height, min(camera.height, dest.height))
         let endX = min(startX + width, min(camera.width, dest.width))
@@ -194,8 +213,7 @@ struct Camera: @unchecked Sendable {
             var x = startX
             while x < endX {
                 // Build ray directly from worldX/worldY using the inverse transform
-                let pixel = camera.inverseTransform * Tuple.Point(x: worldX, y: worldY, z: -1)
-                let origin = camera.inverseTransform * Tuple.pointZero
+                let pixel = (C0 * worldX) + (C1 * worldY) + (C2 * -1.0) + C3
                 let direction = (pixel - origin).normalized()
                 let ray = Ray(origin: origin, direction: direction)
 
@@ -348,4 +366,3 @@ struct Camera: @unchecked Sendable {
     }
     private(set) var inverseTransform = Matrix4x4.identity
 }
-

@@ -13,6 +13,11 @@ import Yams
 class World: @unchecked Sendable {
     static let MaximumRecursionDepth = 5
 
+    // BVH acceleration structure built from current objects
+    private(set) var bvh: BVH? = nil
+    // Tracks how many objects were present when BVH was last built
+    private var bvhObjectCount: Int = 0
+
     static func defaultWorld() -> World {
         let light = PointLight(position: Tuple.Point(x: -10, y: 10, z: -10), intensity: Color.white)
         let s1 = Sphere()
@@ -30,15 +35,26 @@ class World: @unchecked Sendable {
         world.objects.append(s2)
         world.lights.append(light)
 
+        // Build bounds and BVH for the default scene
+        world.computeBounds()
+
         return world
     }
 
     func intersects(ray: Ray) -> [Intersection] {
+        // Lazy BVH rebuild if objects changed since last build
+        if bvh == nil || bvhObjectCount != objects.count {
+            computeBounds()
+        }
+        if let accel = bvh {
+            let unsorted = accel.gatherIntersections(ray: ray, shapes: objects)
+            return unsorted.sorted()
+        }
+        // Fallback without BVH
         var intersections: [Intersection] = []
         for shape: Shape in objects {
             intersections.append(contentsOf: shape.intersects(ray: ray))
         }
-
         return intersections.sorted()
     }
 
@@ -137,17 +153,20 @@ class World: @unchecked Sendable {
         let v = lightPosition - point
         let distance = v.magnitude
         let direction = v.normalized()
-
         let ray = Ray(origin: point, direction: direction)
-        let xs = intersects(ray: ray)
-        let hit = Intersection.hit(xs)
 
-        if hit != nil && hit!.t < distance {
-            if hit!.object!.castsShadow {
-                return true
-            }
+        // Lazy BVH rebuild if objects changed since last build
+        if bvh == nil || bvhObjectCount != objects.count {
+            computeBounds()
         }
-
+        if let accel = bvh {
+            return accel.anyHit(ray: ray, tMax: distance, shapes: objects)
+        }
+        // Fallback without BVH
+        let xs = intersects(ray: ray)
+        if let hit = Intersection.hit(xs) {
+            if hit.t < distance, hit.object!.castsShadow { return true }
+        }
         return false
     }
 
@@ -155,9 +174,13 @@ class World: @unchecked Sendable {
         for obj in objects {
             obj.computeBounds()
         }
+        // Rebuild BVH after bounds updated
+        bvh = BVH.build(for: objects)
+        bvhObjectCount = objects.count
     }
 
     var objects: [Shape] = []
     var lights: [any Light] = []
     var camera: Camera? = nil
 }
+

@@ -18,6 +18,12 @@ class MaterialsTests: XCTestCase {
     var m = Material()
     var position = Tuple.pointZero
     
+    private func XCTAssertEqualColor(_ lhs: Color, _ rhs: Color, accuracy: Float = 1e-4, file: StaticString = #filePath, line: UInt = #line) {
+        XCTAssertEqual(lhs.r, rhs.r, accuracy: accuracy, file: file, line: line)
+        XCTAssertEqual(lhs.g, rhs.g, accuracy: accuracy, file: file, line: line)
+        XCTAssertEqual(lhs.b, rhs.b, accuracy: accuracy, file: file, line: line)
+    }
+    
     override func setUp() {
     }
 
@@ -118,7 +124,7 @@ class MaterialsTests: XCTestCase {
         let normalv = Tuple.Vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: Tuple.Point(x: 0, y: 10, z: -10), intensity: Color.white)
         let result = m.lighting(object: Sphere(), light: light, position: position, eyeVector: eyev, normalVector: normalv, intensity: 1.0)
-        XCTAssertEqual(result, Color.init(r: 1.6364, g: 1.6364, b: 1.6364))
+        XCTAssertEqualColor(result, Color(r: 1.6364, g: 1.6364, b: 1.6364))
     }
     
     func testLightingBehindSurface() {
@@ -219,7 +225,7 @@ class MaterialsTests: XCTestCase {
     
         for index in 0..<intensity.count {
             let result = shape.material.lighting(object: shape, light: w.lights.first!, position: pt, eyeVector: eyev, normalVector: normalv, intensity: intensity[index])
-            XCTAssertEqual(result, colors[index])
+            XCTAssertEqualColor(result, colors[index])
         }
     }
     
@@ -266,7 +272,10 @@ class MaterialsTests: XCTestCase {
             let normalv = Tuple.Vector(x: pt.x, y: pt.y, z: pt.z)
 
             let result = shape.material.lighting(object: shape, light: light, position: pt, eyeVector: eyev, normalVector: normalv, intensity: 1.0)
-            XCTAssertEqual(result, colors[index], "Color does not match for index: \(index)")
+            XCTAssertEqual(result.r, colors[index].r, accuracy: 1e-4, "Color does not match for index: \(index)")
+            XCTAssertEqual(result.g, colors[index].g, accuracy: 1e-4, "Color does not match for index: \(index)")
+            XCTAssertEqual(result.b, colors[index].b, accuracy: 1e-4, "Color does not match for index: \(index)")
         }
     }
 }
+

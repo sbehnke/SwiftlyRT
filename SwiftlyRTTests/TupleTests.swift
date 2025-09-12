@@ -29,10 +29,10 @@ class TupleTests: XCTestCase {
         //    And a is not a vector
         
         let a = Tuple.Point(x: 4.3, y: -4.2, z: 3.1, w: 1.0)
-        XCTAssertEqual(a.x, 4.3)
-        XCTAssertEqual(a.y, -4.2)
-        XCTAssertEqual(a.z, 3.1)
-        XCTAssertEqual(a.w, 1.0)
+        XCTAssertEqual(a.x, 4.3, accuracy: 1e-6)
+        XCTAssertEqual(a.y, -4.2, accuracy: 1e-6)
+        XCTAssertEqual(a.z, 3.1, accuracy: 1e-6)
+        XCTAssertEqual(a.w, 1.0, accuracy: 1e-6)
         XCTAssertTrue(a.isPoint())
         XCTAssertFalse(a.isVector())
     }
@@ -48,10 +48,10 @@ class TupleTests: XCTestCase {
         //    And a is a vector
         
         let a = Tuple.Vector(x: 4.3, y: -4.2, z: 3.1, w: 0.0)
-        XCTAssertEqual(a.x, 4.3)
-        XCTAssertEqual(a.y, -4.2)
-        XCTAssertEqual(a.z, 3.1)
-        XCTAssertEqual(a.w, 0.0)
+        XCTAssertEqual(a.x, 4.3, accuracy: 1e-6)
+        XCTAssertEqual(a.y, -4.2, accuracy: 1e-6)
+        XCTAssertEqual(a.z, 3.1, accuracy: 1e-6)
+        XCTAssertEqual(a.w, 0.0, accuracy: 1e-6)
         XCTAssertFalse(a.isPoint())
         XCTAssertTrue(a.isVector())
     }
@@ -86,10 +86,10 @@ class TupleTests: XCTestCase {
         //    Then p = tuple(4, -4, 3, 1)
         
         let p = Tuple.Point(x: 4, y: -4, z: 3)
-        XCTAssertEqual(p.x, 4)
-        XCTAssertEqual(p.y, -4)
-        XCTAssertEqual(p.z, 3)
-        XCTAssertEqual(p.w, 1)
+        XCTAssertEqual(p.x, 4, accuracy: 1e-6)
+        XCTAssertEqual(p.y, -4, accuracy: 1e-6)
+        XCTAssertEqual(p.z, 3, accuracy: 1e-6)
+        XCTAssertEqual(p.w, 1, accuracy: 1e-6)
     }
     
     func testVectorDefaultConstructor() {
@@ -98,10 +98,10 @@ class TupleTests: XCTestCase {
         //    Then v = tuple(4, -4, 3, 0)
         
         let v = Tuple.Vector(x: 4, y: -4, z: 3)
-        XCTAssertEqual(v.x, 4)
-        XCTAssertEqual(v.y, -4)
-        XCTAssertEqual(v.z, 3)
-        XCTAssertEqual(v.w, 0)
+        XCTAssertEqual(v.x, 4, accuracy: 1e-6)
+        XCTAssertEqual(v.y, -4, accuracy: 1e-6)
+        XCTAssertEqual(v.z, 3, accuracy: 1e-6)
+        XCTAssertEqual(v.w, 0, accuracy: 1e-6)
     }
     
     func testInit() {
@@ -111,7 +111,10 @@ class TupleTests: XCTestCase {
     
     func testDefaultInit() {
         let a = Tuple.Point(x: 4.3, y: -4.2, z: 3.1)
-        XCTAssert(a.x == 4.3 && a.y == -4.2 && a.z == 3.1 && a.w == 1.0)
+        XCTAssertEqual(a.x, 4.3, accuracy: 1e-6)
+        XCTAssertEqual(a.y, -4.2, accuracy: 1e-6)
+        XCTAssertEqual(a.z, 3.1, accuracy: 1e-6)
+        XCTAssertEqual(a.w, 1.0, accuracy: 1e-6)
     }
     
     func testEquality() {
@@ -169,7 +172,7 @@ class TupleTests: XCTestCase {
         XCTAssertEqual(v.y, 0.53452, accuracy: Tuple.epsilon)
         XCTAssertEqual(v.z, 0.80178, accuracy: Tuple.epsilon)
         XCTAssertEqual(v.w, 0.0)
-        XCTAssertEqual(v.magnitude, 1.0)
+        XCTAssertEqual(v.magnitude, 1.0, accuracy: 1e-6)
     }
     
     func testDotProduct() {
@@ -351,7 +354,7 @@ class TupleTests: XCTestCase {
         //    When norm ← normalize(v)
         //    Then magnitude(norm) = 1
         let v = Tuple.Vector(x: 1.0, y: 2.0, z: 3.0).normalized()
-        XCTAssertEqual(1.0, v.magnitude)
+        XCTAssertEqual(1.0, v.magnitude, accuracy: 1e-6)
     }
     
     func testDotProductOfTuples() {

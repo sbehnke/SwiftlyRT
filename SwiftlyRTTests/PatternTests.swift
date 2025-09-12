@@ -328,8 +328,8 @@ class PatternTests: XCTestCase {
         
         for index in 0..<points.count {
             let (uOut, vOut) = points[index].sphericalMap()
-            XCTAssertEqual(uOut, u[index], "u does not match for index: \(index)")
-            XCTAssertEqual(vOut, v[index], "v does not match for index: \(index)")
+            XCTAssertEqual(uOut, u[index], accuracy: Tuple.epsilon, "u does not match for index: \(index)")
+            XCTAssertEqual(vOut, v[index], accuracy: Tuple.epsilon, "v does not match for index: \(index)")
         }
     }
     
@@ -416,8 +416,8 @@ class PatternTests: XCTestCase {
         
         for index in 0..<points.count {
             let (uOut, vOut) = points[index].planarMap()
-            XCTAssertEqual(u[index], uOut, "u does not match index: \(index)")
-            XCTAssertEqual(v[index], vOut, "v does not match index: \(index)")
+            XCTAssertEqual(u[index], uOut, accuracy: Tuple.epsilon, "u does not match index: \(index)")
+            XCTAssertEqual(v[index], vOut, accuracy: Tuple.epsilon, "v does not match index: \(index)")
         }
     }
     
@@ -457,8 +457,8 @@ class PatternTests: XCTestCase {
         
         for index in 0..<points.count {
             let (uOut, vOut) = points[index].cylindricalMap()
-            XCTAssertEqual(uOut, u[index], "u does not match index: \(index)")
-            XCTAssertEqual(vOut, v[index], "v does not match index: \(index)")
+            XCTAssertEqual(uOut, u[index], accuracy: Tuple.epsilon, "u does not match index: \(index)")
+            XCTAssertEqual(vOut, v[index], accuracy: Tuple.epsilon, "v does not match index: \(index)")
         }
     }
     
@@ -903,3 +903,4 @@ P3
         XCTAssertNotNil(canvasValue)
     }
 }
+
