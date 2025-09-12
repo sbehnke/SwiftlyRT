@@ -160,8 +160,7 @@ class RayTracerModel: ObservableObject {
             
             // Create initial canvas for preview
             let dest = Canvas(width: width, height: height)
-            let data = dest.getPPM()
-            let img = NSImage(data: data)
+            let img = dest.getNSImage()  // Direct NSImage generation - much faster
             
             await MainActor.run {
                 self.renderedImage = img
@@ -221,10 +220,10 @@ class RayTracerModel: ObservableObject {
                     // Update image preview
                     if count > lastCount {
                         lastCount = count
-                        let img = await output.getImage()
+                        let img = await output.getNSImage()  // Direct NSImage - no conversion needed
                         await MainActor.run {
                             if let img = img {
-                                self.renderedImage = NSImage(data: img)
+                                self.renderedImage = img
                             }
                         }
                     }
@@ -233,10 +232,10 @@ class RayTracerModel: ObservableObject {
                 } while (count < total)
                 
                 // Final image update
-                let img = await output.getImage()
+                let img = await output.getFinalNSImage()  // Direct NSImage for final result
                 await MainActor.run {
                     if let img = img {
-                        self.renderedImage = NSImage(data: img)
+                        self.renderedImage = img
                         self.imageReady = true
                         let timeElapsed = CACurrentMediaTime() - startTime
                         let labelValue = "Finished in: " + self.format(duration: timeElapsed)

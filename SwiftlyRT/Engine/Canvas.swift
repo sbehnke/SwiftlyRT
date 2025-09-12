@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Cocoa
 
 class Canvas: @unchecked Sendable {
 
@@ -235,4 +236,93 @@ class Canvas: @unchecked Sendable {
     var width: Int = 0
     var height: Int = 0
     var pixels: [Color] = []
+    
+    // MARK: - Efficient Image Generation
+    
+    // Generate raw RGBA bytes - most efficient for intermediate use
+    func getRGBAData() -> Data {
+        let capacity = width * height * 4
+        var data = Data(capacity: capacity)
+        
+        // Pre-allocate and use unsafe buffer pointer for maximum performance
+        data.count = capacity
+        
+        data.withUnsafeMutableBytes { buffer in
+            let ptr = buffer.bindMemory(to: UInt8.self)
+            var index = 0
+            
+            for pixel in pixels {
+                ptr[index] = pixel.rByte
+                ptr[index + 1] = pixel.gByte
+                ptr[index + 2] = pixel.bByte
+                ptr[index + 3] = 255 // Alpha channel
+                index += 4
+            }
+        }
+        
+        return data
+    }
+    
+    // Generate NSImage directly - fastest for UI display
+    #if canImport(Cocoa)
+    func getNSImage() -> NSImage? {
+        let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
+        let bytesPerPixel = 4
+        let bytesPerRow = width * bytesPerPixel
+        let bitsPerComponent = 8
+        let totalBytes = width * height * bytesPerPixel
+        
+        // Direct memory allocation for maximum performance
+        let pixelData = UnsafeMutablePointer<UInt8>.allocate(capacity: totalBytes)
+        defer { pixelData.deallocate() }
+        
+        // Fill pixel data efficiently
+        var index = 0
+        for pixel in pixels {
+            pixelData[index] = pixel.rByte
+            pixelData[index + 1] = pixel.gByte
+            pixelData[index + 2] = pixel.bByte
+            pixelData[index + 3] = 255 // Alpha
+            index += 4
+        }
+        
+        guard let context = CGContext(
+            data: pixelData,
+            width: width,
+            height: height,
+            bitsPerComponent: bitsPerComponent,
+            bytesPerRow: bytesPerRow,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        ) else { return nil }
+        
+        guard let cgImage = context.makeImage() else { return nil }
+        
+        return NSImage(cgImage: cgImage, size: CGSize(width: width, height: height))
+    }
+    #endif
+    
+    // Generate optimized bitmap data for Core Graphics
+    func getCGImageData() -> (data: Data, bytesPerRow: Int)? {
+        let bytesPerPixel = 4
+        let bytesPerRow = width * bytesPerPixel
+        let capacity = width * height * bytesPerPixel
+        var data = Data(capacity: capacity)
+        data.count = capacity
+        
+        data.withUnsafeMutableBytes { buffer in
+            let ptr = buffer.bindMemory(to: UInt8.self)
+            var index = 0
+            
+            for pixel in pixels {
+                ptr[index] = pixel.rByte
+                ptr[index + 1] = pixel.gByte
+                ptr[index + 2] = pixel.bByte
+                ptr[index + 3] = 255 // Alpha channel
+                index += 4
+            }
+        }
+        
+        return (data: data, bytesPerRow: bytesPerRow)
+    }
 }
