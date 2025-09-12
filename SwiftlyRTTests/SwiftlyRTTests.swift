@@ -3,7 +3,7 @@
 //  SwiftlyRTTests
 //
 //  Created by Steven Behnke on 7/10/19.
-//  Copyright © 2019 Luster Images. All rights reserved.
+//  Copyright © 2025 Luster Images. All rights reserved.
 //
 
 import XCTest

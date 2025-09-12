@@ -3,7 +3,7 @@
 //  SwiftlyRT
 //
 //  Created by Steven Behnke on 6/12/22.
-//  Copyright © 2022 Luster Images. All rights reserved.
+//  Copyright © 2025 Luster Images. All rights reserved.
 //
 
 import Foundation

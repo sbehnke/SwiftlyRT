@@ -3,7 +3,7 @@
 //  RayTracerTestTests
 //
 //  Created by Steven Behnke on 7/6/19.
-//  Copyright © 2019 Steven Behnke. All rights reserved.
+//  Copyright © 2025 Steven Behnke. All rights reserved.
 //
 
 import XCTest
