@@ -1,6 +1,5 @@
 #if canImport(XCTest)
 import Foundation
-import QuartzCore
 import XCTest
 @testable import SwiftlyRT
 
