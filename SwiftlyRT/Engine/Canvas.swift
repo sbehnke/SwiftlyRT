@@ -7,7 +7,9 @@
 //
 
 import Foundation
+#if canImport(Cocoa)
 import Cocoa
+#endif
 
 class Canvas: @unchecked Sendable {
 

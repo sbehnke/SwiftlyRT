@@ -7,12 +7,15 @@
 //
 
 import Foundation
+
+#if canImport(OSLog)
 import OSLog
 
 extension OSLog {
     private static let subsystem = Bundle.main.bundleIdentifier!
     static let groupLogger = OSLog(subsystem: subsystem, category: "ObjLoader")
 }
+#endif
 
 class Group: Shape {
 
@@ -53,7 +56,9 @@ class Group: Shape {
 
         let box = boundingBox()
         let intersects = box.intersects(ray: ray)
+#if canImport(OSLog)
 //        os_log("This object: %public@: %public@", log: OSLog.groupLogger, type: .info, name, intersects.description)
+#endif
 
         // TODO: Figure out why this is breaking things.
         if intersects {

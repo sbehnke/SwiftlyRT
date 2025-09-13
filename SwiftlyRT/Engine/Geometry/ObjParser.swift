@@ -7,12 +7,16 @@
 //
 
 import Foundation
+
+#if canImport(OSLog)
 import OSLog
 
 extension OSLog {
     private static let subsystem = Bundle.main.bundleIdentifier!
     static let objLoaderLogger = OSLog(subsystem: subsystem, category: "ObjLoader")
 }
+
+#endif
 
 extension String {
     var lines: [String] {
@@ -53,7 +57,9 @@ struct ObjParser {
                     objFileData: contents, withFilename: path.lastPathComponent,
                     resizeObject: resizeObject)
             } catch {
+#if canImport(OSLog)
                 os_log("Unexpected Error: %{public}@.", log: OSLog.objLoaderLogger, type: .error, error.localizedDescription)
+#endif
             }
         }
 

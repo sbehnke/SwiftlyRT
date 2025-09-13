@@ -7,9 +7,12 @@
 //
 
 import Foundation
+
+#if canImport(OSLog)
 import OSLog
 
 private let cameraLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "SwiftlyRT", category: "Camera")
+#endif
 
 extension Array {
     func chunked(into size: Int) -> [[Element]] {
@@ -83,9 +86,10 @@ struct Camera: @unchecked Sendable {
         let image = Canvas(width: camera.width, height: camera.height)
         let progressInterval = max(1, camera.width / 4)
 
-        // Signpost: begin full-frame render
+#if canImport(OSLog)
         let spid = OSSignpostID(log: cameraLog)
         os_signpost(.begin, log: cameraLog, name: "RenderFullFrame", signpostID: spid, "w:%{public}d h:%{public}d fov:%{public}.3f", camera.width, camera.height, camera.fieldOfView)
+#endif
 
         // Render using incremental world coordinates and linear indexing
         let tileWidth = camera.width
@@ -114,8 +118,10 @@ struct Camera: @unchecked Sendable {
             }
         }
 
+#if canImport(OSLog)
         // Signpost: end full-frame render
         os_signpost(.end, log: cameraLog, name: "RenderFullFrame", signpostID: spid)
+#endif
 
         return image
     }
@@ -144,8 +150,10 @@ struct Camera: @unchecked Sendable {
         let tileHeight = endY - startY
         let image = Canvas(width: tileWidth, height: tileHeight)
 
+#if canImport(OSLog)
         let tileSpid = OSSignpostID(log: cameraLog)
         os_signpost(.begin, log: cameraLog, name: "RenderTile", signpostID: tileSpid, "x:%{public}d y:%{public}d w:%{public}d h:%{public}d", startX, startY, tileWidth, tileHeight)
+#endif
 
         // Precompute worldY per row and increment worldX per pixel to avoid repeated work
         for y in startY..<endY {
