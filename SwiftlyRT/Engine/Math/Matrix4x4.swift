@@ -95,22 +95,20 @@ struct Matrix4x4: Equatable, AdditiveArithmetic {
         return lhs
     }
 
-    private var simdMatrix: simd_float4x4 {
+    private var simdMatrix: simd_double4x4 {
         // Build by COLUMNS: each SIMD4 is a column (m00, m10, m20, m30), etc.
-        let c0 = SIMD4<Float>(Float(self[0,0]), Float(self[1,0]), Float(self[2,0]), Float(self[3,0]))
-        let c1 = SIMD4<Float>(Float(self[0,1]), Float(self[1,1]), Float(self[2,1]), Float(self[3,1]))
-        let c2 = SIMD4<Float>(Float(self[0,2]), Float(self[1,2]), Float(self[2,2]), Float(self[3,2]))
-        let c3 = SIMD4<Float>(Float(self[0,3]), Float(self[1,3]), Float(self[2,3]), Float(self[3,3]))
-        return simd_float4x4(c0, c1, c2, c3)
+        let c0 = SIMD4<Double>(self[0,0], self[1,0], self[2,0], self[3,0])
+        let c1 = SIMD4<Double>(self[0,1], self[1,1], self[2,1], self[3,1])
+        let c2 = SIMD4<Double>(self[0,2], self[1,2], self[2,2], self[3,2])
+        let c3 = SIMD4<Double>(self[0,3], self[1,3], self[2,3], self[3,3])
+        return simd_double4x4(c0, c1, c2, c3)
     }
 
     static func * (lhs: Matrix4x4, rhs: Tuple) -> Tuple {
-        // Use manual multiplication instead of SIMD to avoid precision issues
-        let x = lhs[0, 0] * rhs.x + lhs[0, 1] * rhs.y + lhs[0, 2] * rhs.z + lhs[0, 3] * rhs.w
-        let y = lhs[1, 0] * rhs.x + lhs[1, 1] * rhs.y + lhs[1, 2] * rhs.z + lhs[1, 3] * rhs.w
-        let z = lhs[2, 0] * rhs.x + lhs[2, 1] * rhs.y + lhs[2, 2] * rhs.z + lhs[2, 3] * rhs.w
-        let w = lhs[3, 0] * rhs.x + lhs[3, 1] * rhs.y + lhs[3, 2] * rhs.z + lhs[3, 3] * rhs.w
-        return Tuple(x: x, y: y, z: z, w: w)
+        let M = lhs.simdMatrix
+        let v = SIMD4<Double>(rhs.x, rhs.y, rhs.z, rhs.w)
+        let r = M * v
+        return Tuple(x: r.x, y: r.y, z: r.z, w: r.w)
     }
 
     static func * (lhs: Matrix4x4, rhs: Ray) -> Ray {

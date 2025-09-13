@@ -54,7 +54,7 @@ struct Tuple: Equatable, AdditiveArithmetic {
     }
 
     internal init(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0, w: Double = 0.0) {
-        self.backingSIMD = SIMD4<Float>(Float(x), Float(y), Float(z), Float(w))
+        self.backingSIMD = SIMD4<Double>(x, y, z, w)
     }
 
     static func *= (lhs: inout Tuple, rhs: Double) {
@@ -335,20 +335,20 @@ struct Tuple: Equatable, AdditiveArithmetic {
 
     var x: Double {
         get { Double(backingSIMD.x) }
-        set { backingSIMD.x = Float(newValue) }
+        set { backingSIMD.x = newValue }
     }
     var y: Double {
         get { Double(backingSIMD.y) }
-        set { backingSIMD.y = Float(newValue) }
+        set { backingSIMD.y = newValue }
     }
     var z: Double {
         get { Double(backingSIMD.z) }
-        set { backingSIMD.z = Float(newValue) }
+        set { backingSIMD.z = newValue }
     }
     var w: Double {
         get { Double(backingSIMD.w) }
-        set { backingSIMD.w = Float(newValue) }
+        set { backingSIMD.w = newValue }
     }
 
-    private var backingSIMD: SIMD4<Float> = SIMD4<Float>(0, 0, 0, 0)
+    private var backingSIMD: SIMD4<Double> = SIMD4<Double>(0, 0, 0, 0)
 }
