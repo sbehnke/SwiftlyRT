@@ -7,7 +7,9 @@
 //
 
 import Foundation
+#if canImport(simd)
 import simd
+#endif
 
 struct Color: Equatable, AdditiveArithmetic, Sendable {
     static let zero = Color(r: 0.0, g: 0.0, b: 0.0 /*, a: 1.0 */)
@@ -146,6 +148,7 @@ struct Color: Equatable, AdditiveArithmetic, Sendable {
         return value
     }
 
+#if canImport(simd)
     var r: Float {
         @inline(__always) get { backing.x }
         @inline(__always) set { backing.x = newValue }
@@ -159,10 +162,31 @@ struct Color: Equatable, AdditiveArithmetic, Sendable {
         @inline(__always) get { backing.z }
         @inline(__always) set { backing.z = newValue }
     }
+#else
+    var r: Float {
+        @inline(__always) get { backing[0] }
+        @inline(__always) set { backing[0] = newValue }
+    }
+    var g: Float {
+        @inline(__always) get { backing[1] }
+        @inline(__always) set { backing[1] = newValue }
+    }
+
+    var b: Float {
+        @inline(__always) get { backing[2] }
+        @inline(__always) set { backing[2] = newValue }
+    }
+#endif
+
+
 
     var description: String {
         return "(\(rByte), \(gByte), \(bByte))"
     }
 
+#if canImport(simd)
     private var backing: SIMD3<Float> = SIMD3<Float>(0, 0, 0)
+#else
+    private var backing = [Float](repeating: 0.0, count: 3)
+#endif
 }

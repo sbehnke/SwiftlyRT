@@ -7,7 +7,10 @@
 //
 
 import Foundation
+
+#if canImport(simd)
 import simd
+#endif
 
 struct Matrix4x4: Equatable, AdditiveArithmetic {
     static let identity = Matrix4x4(
@@ -95,6 +98,7 @@ struct Matrix4x4: Equatable, AdditiveArithmetic {
         return lhs
     }
 
+#if canImport(simd)
     private var simdMatrix: simd_double4x4 {
         // Build by COLUMNS: each SIMD4 is a column (m00, m10, m20, m30), etc.
         let c0 = SIMD4<Double>(self[0,0], self[1,0], self[2,0], self[3,0])
@@ -110,6 +114,21 @@ struct Matrix4x4: Equatable, AdditiveArithmetic {
         let r = M * v
         return Tuple(x: r.x, y: r.y, z: r.z, w: r.w)
     }
+#else
+    static func * (lhs: Matrix4x4, rhs: Tuple) -> Tuple {
+        var value = Tuple.zero
+
+        for col in 0..<columns {
+            var sum = 0.0
+            for row in 0..<rows {
+                sum += lhs[row, col] * rhs[col]
+            }
+            value[row] = sum
+        }
+
+        return value
+    }
+#endif
 
     static func * (lhs: Matrix4x4, rhs: Ray) -> Ray {
         return Ray(origin: lhs * rhs.origin, direction: lhs * rhs.direction)
@@ -340,28 +359,33 @@ struct Matrix4x4: Equatable, AdditiveArithmetic {
     }
 
     #if canImport(simd)
-    func viewTransformedSIMD(from: vector_float3, to: vector_float3, up: vector_float3)
-        -> matrix_float4x4
+    func viewTransformedSIMD(from: vector_double3, to: vector_double3, up: vector_double3)
+        -> Matrix4x4
     {
         let forward = simd_normalize(to - from)
         let upn = simd_normalize(up)
         let left = simd_cross(forward, upn)
         let true_up = simd_cross(left, forward)
 
-        let orientation = matrix_float4x4(
-            vector_float4(arrayLiteral: left.x, left.y, left.z, 0),
-            vector_float4(arrayLiteral: true_up.x, true_up.y, true_up.z, 0),
-            vector_float4(arrayLiteral: -forward.x, -forward.y, -forward.z, 0),
-            vector_float4(arrayLiteral: 0, 0, 0, 1))
+        let orientation = matrix_double4x4(
+            vector_double4(arrayLiteral: left.x, left.y, left.z, 0),
+            vector_double4(arrayLiteral: true_up.x, true_up.y, true_up.z, 0),
+            vector_double4(arrayLiteral: -forward.x, -forward.y, -forward.z, 0),
+            vector_double4(arrayLiteral: 0, 0, 0, 1))
 
-        var translation = matrix_identity_float4x4
+        var translation = matrix_identity_double4x4
         translation[0, 3] = -from.x
         translation[1, 3] = -from.y
         translation[2, 3] = -from.z
-        return orientation * translation
+        let transformed = orientation * translation
+
+        return Matrix4x4(a0: transformed[0].x, a1: transformed[0].y, a2: transformed[0].z, a3: transformed[0].w,
+                  b0: transformed[1].x, b1: transformed[1].y, b2: transformed[1].z, b3: transformed[1].w,
+                  c0: transformed[2].x, c1: transformed[2].y, c2: transformed[2].z, c3: transformed[2].w,
+                  d0: transformed[3].x, d1: transformed[3].y, d2: transformed[3].z, d3: transformed[3].w)
     }
     #endif
-    
+
     static func viewTransformed(from: Tuple, to: Tuple, up: Tuple) -> Matrix4x4 {
         assert(from.isPoint())
         assert(to.isPoint())

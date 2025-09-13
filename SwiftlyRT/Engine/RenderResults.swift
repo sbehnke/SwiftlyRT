@@ -110,7 +110,6 @@ actor RenderResults {
         }
     }
     
-    // Highly optimized pixel copying with SIMD-friendly operations
     private func copyChunkPixels(from chunk: CanvasChunk, to destination: Canvas) {
         let source = chunk.canvas
         let destX = chunk.x

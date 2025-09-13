@@ -7,7 +7,9 @@
 //
 
 import Foundation
+#if canImport(simd)
 import simd
+#endif
 
 extension Double {
     func modulo(_ b: Double) -> Double {
@@ -53,9 +55,18 @@ struct Tuple: Equatable, AdditiveArithmetic {
         return w == 1.0
     }
 
+#if canImport(simd)
     internal init(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0, w: Double = 0.0) {
         self.backingSIMD = SIMD4<Double>(x, y, z, w)
     }
+#else
+    internal init(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0, w: Double = 0.0) {
+        self.x = x
+        self.y = y
+        self.z = z
+        self.w = w
+    }
+#endif
 
     static func *= (lhs: inout Tuple, rhs: Double) {
         lhs.x *= rhs
@@ -308,6 +319,7 @@ struct Tuple: Equatable, AdditiveArithmetic {
         }
     }
 
+#if canImport(simd)
     subscript(index: Int) -> Double {
         get {
             assert(index >= 0 && index < 4, "Index out of range")
@@ -328,27 +340,59 @@ struct Tuple: Equatable, AdditiveArithmetic {
             }
         }
     }
+#else
+    subscript(index: Int) -> Double {
+        get {
+            assert(index >= 0 && index < backing.count, "Index out of range")
+            return backing[index]
+        }
+        set {
+            assert(index >= 0 && index < backing.count, "Index out of range")
+            backing[index] = newValue
+        }
+    }
+#endif
 
     var description: String {
         return "[ \(x), \(y), \(z), \(w) ]"
     }
 
+    #if canImport(simd)
     var x: Double {
-        get { Double(backingSIMD.x) }
+        get { backingSIMD.x }
         set { backingSIMD.x = newValue }
     }
     var y: Double {
-        get { Double(backingSIMD.y) }
+        get { backingSIMD.y }
         set { backingSIMD.y = newValue }
     }
     var z: Double {
-        get { Double(backingSIMD.z) }
+        get { backingSIMD.z }
         set { backingSIMD.z = newValue }
     }
     var w: Double {
-        get { Double(backingSIMD.w) }
+        get { backingSIMD.w }
         set { backingSIMD.w = newValue }
     }
 
     private var backingSIMD: SIMD4<Double> = SIMD4<Double>(0, 0, 0, 0)
+    #else
+    var x: Double {
+        get { backing[0] }
+        set { backing[0] = newValue }
+    }
+    var y: Double {
+        get { backing[1] }
+        set { backing[1] = newValue }
+    }
+    var z: Double {
+        get { backing[2] }
+        set { backing[2] = newValue }
+    }
+    var w: Double {
+        get { backing[3] }
+        set { backing[0] = newValue }
+    }
+    private var backing = [Double](repeating: 0.0, count: 4)
+    #endif
 }
