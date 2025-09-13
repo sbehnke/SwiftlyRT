@@ -122,7 +122,7 @@ struct ObjParser {
         var currentObjectName = ""
 
         objFileData.enumerateLines(invoking: { (line: String, stop: inout Bool) -> Void in
-            os_log("%{public}@", log: OSLog.objLoaderLogger, type: .info, line)
+//            os_log("%{public}@", log: OSLog.objLoaderLogger, type: .info, line)
             let components = line.split(separator: " ")
 
             if components.count > 1 {
